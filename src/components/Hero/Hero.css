@@ -1,120 +1,150 @@
-/* Hero — Full viewport hero section */
+/* src/components/Hero/Hero.css (Código propuesto) */
+
 .hero {
-  min-height: 100vh;
+  height: 100vh; /* Ocupa el 100% del alto de la pantalla del usuario */
+  width: 100%;
+  position: relative;
   display: flex;
-  align-items: center;
-  padding-top: calc(var(--navbar-height) + var(--space-2xl));
-  background: linear-gradient(to bottom, #ffffff, #fdfaf7); /* Fondo sutilmente cálido */
+  align-items: center; /* Centra el contenido verticalmente */
+  justify-content: center; /* Centra el contenido horizontalmente */
+  overflow: hidden;
+  
+  /* LA IMAGEN DE FONDO. 
+     Asegurate de que 'hero_mate_grande.png' sea una foto de muy buena calidad.
+  */
+  background-image: url('../../assets/hero_mate_grande.png'); 
+  background-size: cover; /* Cubre todo el espacio sin deformarse */
+  background-position: center; /* Centra la imagen */
+  background-attachment: fixed; /* Opcional: Da un efecto parallax sutil */
+}
+
+/* Capa oscura sutil para mejorar la lectura del texto blanco */
+.hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Negro con 40% de opacidad */
+  z-index: 1;
 }
 
 .hero__container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3xl);
-  align-items: center;
+  position: relative;
+  z-index: 2; /* Por encima de la capa oscura */
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 var(--space-lg);
+  display: flex;
+  justify-content: flex-start; /* Alinea el contenido a la izquierda */
+}
+
+.hero__content {
+  max-width: 600px; /* Ancho máximo para el bloque de texto */
+  color: var(--color-white); /* Texto blanco para el fondo oscuro */
+  text-align: left; /* Alineado a la izquierda */
 }
 
 .hero__title {
-  font-size: clamp(2.2rem, 5vw, 3.5rem);
-  line-height: 1.15;
-  margin-bottom: var(--space-lg);
-  color: #2d1b0d; /* Color madera oscuro para la marca */
+  font-size: clamp(3.5rem, 8vw, 6.5rem); /* Título GIGANTE y responsivo */
+  line-height: 0.9;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  margin-bottom: var(--space-xl);
+}
+
+.hero__title br {
+  display: none; /* Para PC, ocultamos los cortes de línea */
+}
+
+.hero__title b {
+  color: var(--color-gold-dark); /* La palabra "Identidad" en dorado */
 }
 
 .hero__subtitle {
-  font-size: 1.15rem;
-  color: var(--color-text-light);
-  margin-bottom: var(--space-xl);
-  max-width: 480px;
-  line-height: 1.7;
+  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: var(--space-3xl);
+  max-width: 500px;
 }
 
 .hero__actions {
   display: flex;
-  gap: var(--space-md);
-  margin-bottom: var(--space-xl);
+  gap: var(--space-lg);
   flex-wrap: wrap;
 }
 
-/* --- BOTONES REDONDOS PARA CUYO CEBADO --- */
-.btn {
-  border-radius: 50px !important; /* Fuerza el redondeado completo */
-  padding: 14px 32px;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
+/* --- BOTONES PREMIUM DE CUYO CEBADO --- */
+.hero .btn {
+  border-radius: 50px;
+  padding: 16px 36px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
 }
 
-.btn--primary {
-  background-color: #2d1b0d;
-  color: #ffffff;
+.hero .btn--gold {
+  background-color: var(--color-gold-dark);
+  color: var(--color-black);
   border: none;
 }
 
-.btn--secondary {
-  border: 2px solid #2d1b0d;
-  color: #2d1b0d;
-  background: transparent;
-}
-
-/* NUEVO: Botón verde oficial de WhatsApp respetando el estilo redondeado */
-.btn--whatsapp-hero {
-  background-color: #25D366;
-  color: #ffffff !important;
-  border: 2px solid #25D366;
-}
-
-.btn:hover {
+.hero .btn--gold:hover {
+  background-color: var(--color-white);
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(45, 27, 13, 0.15);
-  filter: brightness(1.1);
 }
 
-.hero__proof {
-  font-size: 0.9rem;
-  color: var(--color-text-light);
-  padding-top: var(--space-md);
-  border-top: 1px solid rgba(45, 27, 13, 0.1);
+.hero .btn--outline-gold {
+  background-color: transparent;
+  color: var(--color-gold-dark);
+  border: 2px solid var(--color-gold-dark);
 }
 
-.hero__image {
-  display: flex;
-  justify-content: center;
+.hero .btn--outline-gold:hover {
+  background-color: var(--color-gold-dark);
+  color: var(--color-black);
+  transform: translateY(-3px);
 }
 
-.hero__image img {
-  max-width: 100%;
-  max-height: 520px;
-  object-fit: contain;
-  border-radius: 40px; /* Redondeado también para la imagen del mate */
-  filter: drop-shadow(0 20px 40px rgba(44, 36, 32, 0.15));
-}
-
-/* Adaptación para celulares */
+/* --- ADAPTACIÓN PARA CELULARES --- */
 @media (max-width: 768px) {
-  .hero__container {
-    grid-template-columns: 1fr;
-    text-align: center;
+  .hero {
+    height: 90vh; /* Un poco menos alto en móvil */
   }
-
+  
+  .hero__title br {
+    display: block; /* En móvil sí forzamos el corte de línea */
+  }
+  
+  .hero__content {
+    text-align: center; /* Texto centrado para móvil */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .hero__title {
+    font-size: clamp(2.5rem, 10vw, 3.8rem);
+    letter-spacing: -1px;
+  }
+  
   .hero__subtitle {
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 1rem;
+    margin-bottom: var(--space-xl);
   }
-
+  
   .hero__actions {
     justify-content: center;
+    width: 100%;
   }
-
-  .hero__image {
-    order: -1;
-  }
-
-  .hero__image img {
-    max-height: 320px;
+  
+  .hero .btn {
+    width: 100%; /* Botón de ancho completo en móvil */
+    justify-content: center;
   }
 }
