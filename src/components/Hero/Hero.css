@@ -1,71 +1,97 @@
 /* src/components/Hero/Hero.css */
 
 .hero {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
   overflow: hidden;
-  
-  /* FONDO: Asegurate de tener una foto de alta calidad en esta ruta */
-  background-image: url('../../assets/hero_mate_grande.png'); 
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  /* Color marrón oscuro base (por si la imagen no carga) */
+  background-color: #2b1d14; 
 }
 
-/* Capa oscura para asegurar lectura */
-.hero__overlay {
+/* Contenedor absoluto para el fondo */
+.hero__bg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Oscurecido al 50% */
   z-index: 1;
 }
 
+/* La foto real del mate y el viñedo */
+.hero__image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/hero_mate_grande.png'); 
+  background-size: cover;
+  background-position: center right; /* Alineamos la foto a la derecha */
+}
+
+/* LA MAGIA: El gradiente curvo color marrón oscuro */
+.hero__curve {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* 
+    Esto crea un degradado radial (circular/elíptico). 
+    El centro del círculo invisible está a la izquierda.
+    El color sólido es marrón oscuro (#2b1d14), y se va desvaneciendo
+    hasta hacerse transparente hacia la derecha.
+  */
+  background: radial-gradient(
+    ellipse 120% 100% at -10% 50%, 
+    #2b1d14 45%,      /* Marrón sólido hasta casi la mitad */
+    rgba(43, 29, 20, 0.8) 55%, /* Transición suave */
+    rgba(43, 29, 20, 0) 80%    /* Totalmente transparente dejando ver la foto */
+  );
+}
+
+/* Contenido (Textos y botones) */
 .hero__container {
   position: relative;
-  z-index: 2;
+  z-index: 2; /* Por encima de las capas de fondo */
   max-width: 1200px;
   width: 100%;
   padding: 0 24px;
-  display: flex;
-  justify-content: flex-start;
 }
 
 .hero__content {
-  max-width: 600px;
-  color: #ffffff; /* Texto blanco puro */
-  text-align: left;
+  max-width: 550px;
+  color: #f4ece4; /* Un blanco/crema muy suave para que no chille contra el marrón */
 }
 
 .hero__title {
-  font-size: clamp(3.5rem, 8vw, 6.5rem);
-  line-height: 0.9;
+  font-size: clamp(3.2rem, 7vw, 5.5rem);
+  line-height: 0.95;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
   margin-bottom: 24px;
 }
 
 .hero__title br {
-  display: none;
+  display: none; /* En PC ocultamos el salto, lo manejamos en el diseño responsivo */
 }
 
 .hero__title b {
-  color: #d4af37; /* Dorado cálido (Gold) */
+  color: #d4af37; /* El dorado "Identidad" */
+  display: block; /* Para que baje a otra línea */
 }
 
 .hero__subtitle {
-  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
   line-height: 1.6;
   font-weight: 300;
-  margin-bottom: 48px;
-  max-width: 500px;
+  margin-bottom: 40px;
+  color: #dcd3cb; /* Gris claro/crema */
 }
 
 .hero__actions {
@@ -74,12 +100,11 @@
   flex-wrap: wrap;
 }
 
-/* --- BOTONES DEL HERO --- */
+/* --- BOTONES --- */
 .hero .btn {
   border-radius: 50px;
-  padding: 16px 36px;
-  font-weight: 700;
-  text-transform: uppercase;
+  padding: 14px 32px;
+  font-weight: 600;
   font-size: 0.9rem;
   letter-spacing: 1px;
   transition: all 0.3s ease;
@@ -91,64 +116,59 @@
 }
 
 .hero .btn--gold {
-  background-color: #d4af37; /* Dorado */
-  color: #1a1a1a; /* Casi negro */
+  background-color: #d4af37;
+  color: #1a1a1a;
   border: none;
 }
 
 .hero .btn--gold:hover {
-  background-color: #ffffff;
-  color: #1a1a1a;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  background-color: #f4ece4;
+  transform: translateY(-2px);
 }
 
 .hero .btn--outline-gold {
   background-color: transparent;
-  color: #d4af37; /* Letras doradas */
-  border: 2px solid #d4af37; /* Borde dorado */
+  color: #d4af37;
+  border: 2px solid #d4af37;
 }
 
 .hero .btn--outline-gold:hover {
   background-color: #d4af37;
   color: #1a1a1a;
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 }
 
 /* --- ADAPTACIÓN PARA CELULARES --- */
 @media (max-width: 768px) {
   .hero {
-    height: 90vh;
+    align-items: flex-end; /* Bajamos el texto en el celular */
+    padding-bottom: 40px;
   }
-  
+
+  /* En celular, cambiamos el gradiente para que venga desde ABAJO,
+     porque la foto suele quedar arriba. */
+  .hero__curve {
+    background: linear-gradient(
+      to top, 
+      #2b1d14 0%, 
+      #2b1d14 50%, 
+      rgba(43, 29, 20, 0) 100%
+    );
+  }
+
   .hero__title br {
-    display: block;
+    display: block; /* Forzamos saltos de línea */
   }
-  
+
   .hero__content {
     text-align: center;
-    width: 100%;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
-  
-  .hero__title {
-    font-size: clamp(2.8rem, 12vw, 3.8rem);
-    letter-spacing: -1px;
-  }
-  
-  .hero__subtitle {
-    font-size: 1.1rem;
-    margin-bottom: 32px;
-  }
-  
+
   .hero__actions {
     justify-content: center;
-    width: 100%;
   }
-  
+
   .hero .btn {
     width: 100%;
   }
