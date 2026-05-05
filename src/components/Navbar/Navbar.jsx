@@ -1,7 +1,5 @@
 /**
- * Navbar — Fixed navigation bar.
- * Features: backdrop blur, golden border, compact mode on scroll,
- * cart counter from context, WhatsApp CTA. [SF]
+ * Navbar — Barra de navegación fija para Cuyo Cebado.
  */
 import { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
@@ -12,7 +10,7 @@ export default function Navbar() {
   const [isCompact, setIsCompact] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  /* Detect scroll to toggle compact mode [RM - listener cleaned up] */
+  /* Detectar scroll para el modo compacto */
   useEffect(() => {
     const handleScroll = () => {
       setIsCompact(window.scrollY > 80);
@@ -21,7 +19,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  /* Navigation links — smooth scroll to section */
+  /* Enlaces de navegación */
   const navLinks = [
     { label: 'Inicio', href: '#hero' },
     { label: 'Productos', href: '#productos' },
@@ -32,10 +30,10 @@ export default function Navbar() {
 
   return (
     <nav className={`navbar ${isCompact ? 'navbar--compact' : ''}`} id="navbar">
-      {/* Logo */}
-      <a href="#hero" className="navbar__logo">Mates Mendoza</a>
+      {/* Logo con el nuevo nombre de marca */}
+      <a href="#hero" className="navbar__logo">Cuyo Cebado</a>
 
-      {/* Mobile hamburger toggle */}
+      {/* Menú hamburguesa para celulares */}
       <button
         className="navbar__toggle"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
@@ -46,7 +44,7 @@ export default function Navbar() {
         </span>
       </button>
 
-      {/* Navigation links — centered */}
+      {/* Enlaces de navegación */}
       <ul className={`navbar__links ${isMobileOpen ? 'navbar__links--open' : ''}`}>
         {navLinks.map(link => (
           <li key={link.href}>
@@ -60,7 +58,7 @@ export default function Navbar() {
         ))}
       </ul>
 
-      {/* Right side actions: cart + WhatsApp */}
+      {/* Acciones: Carrito + Tu WhatsApp real */}
       <div className="navbar__actions">
         <button className="navbar__cart" aria-label="Carrito de compras">
           <span className="material-symbols-outlined">shopping_bag</span>
@@ -68,7 +66,7 @@ export default function Navbar() {
         </button>
 
         <a
-          href="https://wa.me/5492615555555?text=Hola!%20Quiero%20consultar%20sobre%20sus%20mates"
+          href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web%20y%20quiero%20consultar%20por%20un%20mate"
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn--whatsapp"
