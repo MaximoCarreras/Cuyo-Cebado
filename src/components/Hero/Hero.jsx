@@ -3,8 +3,15 @@ import './Hero.css';
 export default function Hero() {
   return (
     <section className="hero" id="hero">
-      <div className="hero__overlay"></div> 
       
+      {/* CAPAS DE FONDO PARA EL EFECTO CURVO */}
+      <div className="hero__bg">
+        {/* Aquí va la imagen de fondo (Mendoza + Mate) */}
+        <div className="hero__image"></div>
+        {/* Esta es la capa que genera el color marrón y la curva suave */}
+        <div className="hero__curve"></div>
+      </div>
+
       <div className="hero__container section__container">
         <div className="hero__content">
           <h1 className="hero__title">
