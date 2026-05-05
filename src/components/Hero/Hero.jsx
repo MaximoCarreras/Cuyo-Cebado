@@ -21,12 +21,15 @@ export default function Hero() {
               Ver Catálogo
             </a>
             
-            {/* Botón de WhatsApp con icono SVG oficial */}
+            {/* 
+              CAMBIO APLICADO: 
+              Se cambió la clase a "btn--whatsapp-hero" para que sea verde 
+            */}
             <a 
               href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web%20y%20quiero%20consultar%20por%20un%20mate" 
               target="_blank" 
               rel="noreferrer" 
-              className="btn btn--secondary"
+              className="btn btn--whatsapp-hero"
             >
               <svg 
                 width="20" 
