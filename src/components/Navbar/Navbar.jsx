@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Importante para la navegación fluida
 import './Navbar.css';
 
 export default function Navbar() {
@@ -13,23 +14,23 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Definimos las rutas a las nuevas páginas que creaste
   const navLinks = [
-    { label: 'Inicio', href: '#hero' },
-    { label: 'Productos', href: '#productos' },
-    { label: 'Nosotros', href: '#nuestra-historia' },
-    { label: 'Preguntas', href: '#faq' },
+    { label: 'Inicio', to: '/' },
+    { label: 'Nosotros', to: '/nosotros' },
+    { label: 'Guía de Curado', to: '/guia-curado' },
   ];
 
   return (
     <nav className={`navbar ${isCompact ? 'navbar--compact' : ''}`} id="navbar">
-      {/* Reemplazamos el texto por el logo transparente */}
-      <a href="#hero" className="navbar__logo">
+      {/* El logo ahora nos devuelve siempre al Inicio */}
+      <Link to="/" className="navbar__logo">
         <img 
           src="/logo.png" 
           alt="Cuyo Cebado" 
           className="navbar__logo-img"
         />
-      </a>
+      </Link>
 
       <button
         className="navbar__toggle"
@@ -43,12 +44,25 @@ export default function Navbar() {
 
       <ul className={`navbar__links ${isMobileOpen ? 'navbar__links--open' : ''}`}>
         {navLinks.map(link => (
-          <li key={link.href}>
-            <a href={link.href} onClick={() => setIsMobileOpen(false)}>
+          <li key={link.to}>
+            <Link to={link.to} onClick={() => setIsMobileOpen(false)}>
               {link.label}
-            </a>
+            </Link>
           </li>
         ))}
+        
+        {/* Agregamos el acceso directo al Carrito */}
+        <li>
+          <Link 
+            to="/carrito" 
+            className="navbar__cart-link" 
+            onClick={() => setIsMobileOpen(false)}
+            style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+          >
+            <span className="material-symbols-outlined">shopping_cart</span>
+            <span className="cart-text">Carrito</span>
+          </Link>
+        </li>
       </ul>
     </nav>
   );
