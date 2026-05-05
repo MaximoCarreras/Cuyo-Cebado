@@ -1,4 +1,4 @@
-/* Navbar — Sticky navigation with backdrop blur */
+/* Navbar — Sticky navigation with dark premium aesthetic */
 .navbar {
   position: fixed;
   top: 0;
@@ -10,7 +10,8 @@
   justify-content: space-between;
   padding: 0 var(--space-xl);
   height: var(--navbar-height);
-  background: rgba(251, 249, 245, 0.9);
+  /* Cambiado a un fondo oscuro para que el logo dorado destaque */
+  background: rgba(26, 26, 26, 0.95); 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-gold);
@@ -19,20 +20,27 @@
 
 /* Compact mode — reduced height on scroll */
 .navbar--compact {
-  height: 56px;
+  height: 65px; /* Un poco más alto para que el logo luzca */
   box-shadow: var(--shadow-sm);
 }
 
 .navbar__logo {
-  font-family: var(--font-heading);
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--color-dark);
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
+  text-decoration: none;
 }
 
-.navbar--compact .navbar__logo {
-  font-size: 1.2rem;
+/* Estilos para tu nuevo logo PNG */
+.navbar__logo-img {
+  height: 55px; /* Tamaño ideal para que se vea el detalle de las montañas */
+  width: auto;
+  display: block;
+  transition: height var(--transition);
+}
+
+.navbar--compact .navbar__logo-img {
+  height: 45px; /* Se achica sutilmente al hacer scroll */
 }
 
 /* Center links */
@@ -43,11 +51,13 @@
 }
 
 .navbar__links a {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  color: var(--color-text);
+  /* Texto en blanco/crema para contrastar con el fondo oscuro */
+  color: #fbf9f5; 
   transition: color var(--transition);
   position: relative;
+  text-decoration: none;
 }
 
 .navbar__links a::after {
@@ -69,7 +79,7 @@
   width: 100%;
 }
 
-/* Right side actions */
+/* Right side actions (si tenés carrito o botones) */
 .navbar__actions {
   display: flex;
   align-items: center;
@@ -77,37 +87,13 @@
   flex-shrink: 0;
 }
 
-.navbar__cart {
-  position: relative;
-  padding: var(--space-sm);
-  color: var(--color-dark);
-  transition: color var(--transition);
-}
-
-.navbar__cart:hover {
-  color: var(--color-gold);
-}
-
-.navbar__cart-count {
-  position: absolute;
-  top: 0;
-  right: -2px;
-  background: var(--color-forest);
-  color: var(--color-white);
-  font-size: 0.65rem;
-  font-weight: 700;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Mobile hamburger */
+/* Mobile hamburger color */
 .navbar__toggle {
   display: none;
-  color: var(--color-dark);
+  color: #fbf9f5; /* Hamburguesa en blanco */
+  background: none;
+  border: none;
+  cursor: pointer;
   padding: var(--space-sm);
 }
 
@@ -123,28 +109,25 @@
 
   .navbar__links {
     position: fixed;
-    top: var(--navbar-height);
+    top: 0; /* Cambiado para que cubra mejor */
+    padding-top: 80px;
     left: 0;
     right: 0;
+    height: 100vh; /* Pantalla completa en móvil */
     flex-direction: column;
-    background: rgba(251, 249, 245, 0.98);
+    /* Fondo oscuro sólido para el menú móvil */
+    background: rgba(26, 26, 26, 0.98); 
     backdrop-filter: blur(12px);
-    padding: var(--space-lg);
-    gap: var(--space-lg);
-    transform: translateY(-100%);
+    gap: var(--space-xl);
+    transform: translateX(100%); /* Aparece desde la derecha */
     opacity: 0;
     pointer-events: none;
     transition: all var(--transition);
-    border-bottom: 1px solid var(--color-gold);
   }
 
   .navbar__links--open {
-    transform: translateY(0);
+    transform: translateX(0);
     opacity: 1;
     pointer-events: all;
-  }
-
-  .btn--whatsapp span {
-    display: none;
   }
 }
