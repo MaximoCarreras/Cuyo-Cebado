@@ -1,8 +1,3 @@
-/**
- * Hero — Full-screen hero section with two columns.
- * Left: heading, subtitle, CTAs, social proof.
- * Right: premium mate image. [SF]
- */
 import heroImage from '../../assets/hero_mate.png';
 import './Hero.css';
 
@@ -10,38 +5,39 @@ export default function Hero() {
   return (
     <section className="hero section" id="hero">
       <div className="hero__container section__container">
-        {/* Left column — content */}
+        {/* Columna izquierda — Contenido de marca */}
         <div className="hero__content">
           <h1 className="hero__title">
-            El mate perfecto, hecho en Mendoza
+            Cuyo Cebado: El mate perfecto hecho en Mendoza
           </h1>
           <p className="hero__subtitle">
-            Piezas únicas talladas a mano. Envío a todo el país en 48hs.
+            Piezas únicas talladas a mano que cuentan nuestra historia. Envío a todo el país.
           </p>
 
-          {/* Dual CTA buttons */}
+          {/* Botones de acción con tu WhatsApp real */}
           <div className="hero__actions">
             <a href="#productos" className="btn btn--primary">
               <span className="material-symbols-outlined">storefront</span>
-              Ver productos
+              Ver Catálogo
             </a>
-            <a href="#kit-regalo" className="btn btn--secondary">
-              <span className="material-symbols-outlined">redeem</span>
-              Kits de regalo
+            {/* Link directo al WhatsApp del emprendimiento */}
+            <a href="https://wa.me/5492625597956" target="_blank" rel="noreferrer" className="btn btn--secondary">
+              <span className="material-symbols-outlined">chat</span>
+              WhatsApp
             </a>
           </div>
 
-          {/* Social proof line */}
+          {/* Prueba social — Genera confianza en el cliente */}
           <p className="hero__proof">
-            ⭐ +15 materos satisfechos · Envío gratis desde $80.000
+            ⭐ +100 materos cebados en todo el país · Envío gratis en Mendoza
           </p>
         </div>
 
-        {/* Right column — image */}
+        {/* Columna derecha — Imagen del producto */}
         <div className="hero__image">
           <img
             src={heroImage}
-            alt="Mate artesanal de madera tallado a mano en Mendoza"
+            alt="Mate artesanal premium de Cuyo Cebado hecho en Mendoza"
             loading="eager"
           />
         </div>
