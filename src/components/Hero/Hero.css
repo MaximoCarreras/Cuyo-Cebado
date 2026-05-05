@@ -7,106 +7,98 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  /* Color marrón oscuro base (por si la imagen no carga) */
-  background-color: #2b1d14; 
+  /* Fondo por defecto por si falla la imagen */
+  background-color: #fdfaf7; 
 }
 
-/* Contenedor absoluto para el fondo */
-.hero__bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-/* La foto real del mate y el viñedo */
-.hero__image {
+/* --- 1. LA IMAGEN DE FONDO (Lado Derecho) --- */
+.hero__image-bg {
   position: absolute;
   top: 0;
   right: 0;
-  width: 100%;
+  width: 100%; /* Ocupa todo el ancho inicialmente... */
   height: 100%;
   background-image: url('../../assets/hero_mate_grande.png'); 
   background-size: cover;
-  background-position: center right; /* Alineamos la foto a la derecha */
+  background-position: center right;
+  z-index: 1;
 }
 
-/* LA MAGIA: El gradiente curvo color marrón oscuro */
-.hero__curve {
+/* --- 2. LA FORMA CURVA MARRÓN (La panza) --- */
+.hero__shape {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* 
-    Esto crea un degradado radial (circular/elíptico). 
-    El centro del círculo invisible está a la izquierda.
-    El color sólido es marrón oscuro (#2b1d14), y se va desvaneciendo
-    hasta hacerse transparente hacia la derecha.
-  */
-  background: radial-gradient(
-    ellipse 120% 100% at -10% 50%, 
-    #2b1d14 45%,      /* Marrón sólido hasta casi la mitad */
-    rgba(43, 29, 20, 0.8) 55%, /* Transición suave */
-    rgba(43, 29, 20, 0) 80%    /* Totalmente transparente dejando ver la foto */
-  );
+  top: -10%; /* Lo hacemos un poco más alto que la pantalla */
+  left: -20%; /* Lo corremos a la izquierda */
+  width: 75%; /* Ancho de la zona marrón */
+  height: 120%; /* Alto exagerado para que la curva sea suave */
+  
+  /* TU MARRÓN ORIGINAL */
+  background-color: #2c2016; 
+  
+  /* AQUÍ ESTÁ EL TRUCO DE LA CURVA: 
+     Hacemos que solo el borde derecho (arriba y abajo) sea redondo */
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  
+  /* Sombra sutil para separar la curva de la foto */
+  box-shadow: 20px 0 50px rgba(0,0,0,0.4);
+  z-index: 2;
 }
 
-/* Contenido (Textos y botones) */
+/* --- 3. CONTENIDO (Textos y Botones) --- */
 .hero__container {
   position: relative;
-  z-index: 2; /* Por encima de las capas de fondo */
+  z-index: 3; /* Por encima de la curva marrón */
   max-width: 1200px;
   width: 100%;
   padding: 0 24px;
 }
 
 .hero__content {
-  max-width: 550px;
-  color: #f4ece4; /* Un blanco/crema muy suave para que no chille contra el marrón */
+  max-width: 500px;
+  padding-left: 5%; /* Lo empujamos un poco a la derecha */
 }
 
+/* --- TEXTOS (En blanco como pediste) --- */
 .hero__title {
-  font-size: clamp(3.2rem, 7vw, 5.5rem);
-  line-height: 0.95;
+  font-size: clamp(3.2rem, 6vw, 5rem);
+  line-height: 1;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: -1px;
   margin-bottom: 24px;
 }
 
-.hero__title br {
-  display: none; /* En PC ocultamos el salto, lo manejamos en el diseño responsivo */
+.text-white {
+  color: #ffffff; /* Letras principales en BLANCO */
+  opacity: 0.9; /* Un poquito menos brillante para que sea elegante */
 }
 
 .hero__title b {
-  color: #d4af37; /* El dorado "Identidad" */
-  display: block; /* Para que baje a otra línea */
+  color: #d4af37; /* IDENTIDAD en Dorado */
+  display: block;
 }
 
 .hero__subtitle {
-  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
   line-height: 1.6;
-  font-weight: 300;
+  font-weight: 400;
   margin-bottom: 40px;
-  color: #dcd3cb; /* Gris claro/crema */
+  color: #ffffff; /* Subtítulo en BLANCO */
+  opacity: 0.85; /* Ligera transparencia para jerarquía visual */
 }
 
+/* --- BOTONES --- */
 .hero__actions {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
 }
 
-/* --- BOTONES --- */
 .hero .btn {
   border-radius: 50px;
   padding: 14px 32px;
   font-weight: 600;
   font-size: 0.9rem;
-  letter-spacing: 1px;
   transition: all 0.3s ease;
   cursor: pointer;
   text-decoration: none;
@@ -122,14 +114,14 @@
 }
 
 .hero .btn--gold:hover {
-  background-color: #f4ece4;
+  background-color: #ffffff;
   transform: translateY(-2px);
 }
 
 .hero .btn--outline-gold {
   background-color: transparent;
   color: #d4af37;
-  border: 2px solid #d4af37;
+  border: 1px solid #d4af37;
 }
 
 .hero .btn--outline-gold:hover {
@@ -139,30 +131,35 @@
 }
 
 /* --- ADAPTACIÓN PARA CELULARES --- */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  /* En tablets/celulares, la curva no tiene sentido porque no hay ancho. 
+     Cambiamos a un diseño vertical apilado. */
+  
   .hero {
-    align-items: flex-end; /* Bajamos el texto en el celular */
-    padding-bottom: 40px;
+    align-items: flex-end; /* Bajamos el contenido */
   }
 
-  /* En celular, cambiamos el gradiente para que venga desde ABAJO,
-     porque la foto suele quedar arriba. */
-  .hero__curve {
-    background: linear-gradient(
-      to top, 
-      #2b1d14 0%, 
-      #2b1d14 50%, 
-      rgba(43, 29, 20, 0) 100%
-    );
-  }
-
-  .hero__title br {
-    display: block; /* Forzamos saltos de línea */
+  .hero__shape {
+    /* Transformamos la curva lateral en un degradado inferior recto */
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    border-radius: 0; /* Quitamos la curva */
+    background: linear-gradient(to top, #2c2016 40%, rgba(44, 32, 22, 0) 100%);
+    box-shadow: none;
   }
 
   .hero__content {
+    max-width: 100%;
+    padding-left: 0;
     text-align: center;
-    margin: 0 auto;
+    padding-bottom: 40px;
+  }
+
+  .hero__title {
+    font-size: clamp(2.8rem, 10vw, 3.5rem);
   }
 
   .hero__actions {
