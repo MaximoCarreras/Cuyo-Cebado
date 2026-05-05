@@ -1,15 +1,15 @@
 /* SpecialOffer — Barra de beneficios y comunidad */
 .offer {
-  background: var(--color-gold-dark);
-  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-gold-dark); /* El dorado que ya tenías */
+  padding: 10px 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .offer__container {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Separa el texto a la izquierda y el botón a la derecha */
-  gap: var(--space-md);
+  justify-content: space-between; /* Texto a la izquierda, botón a la derecha */
+  gap: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -19,45 +19,38 @@
   font-weight: 500;
   font-size: 0.9rem;
   line-height: 1.4;
-  flex: 1; /* Permite que el texto ocupe el espacio necesario */
+  margin: 0;
 }
 
 .offer__text b {
-  font-weight: 700;
-  color: #2d1b0d; /* Un tono oscuro para resaltar "Beneficio Cuyo" */
+  font-weight: 800;
+  color: #2d1b0d; /* Resalta "Beneficio Cuyo" con un tono madera oscuro */
 }
 
-.offer__actions {
-  display: flex;
-  align-items: center;
-}
-
-/* Ajuste específico para el botón dentro de la barra de oferta */
+/* Ajustes para el botón dentro de la barra */
 .offer .btn--dark {
   background-color: #2d1b0d;
-  color: var(--color-white);
-  white-space: nowrap; /* Evita que el texto del botón se rompa en dos líneas */
+  color: #fff;
   padding: 8px 16px;
-  font-size: 0.85rem;
-  border: none;
-  transition: transform 0.2s ease;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
 .offer .btn--dark:hover {
-  transform: translateY(-2px);
   background-color: #000;
+  transform: scale(1.05);
 }
 
-/* Diseño para celulares */
+/* Diseño para celulares (Responsive) */
 @media (max-width: 768px) {
-  .offer {
-    padding: var(--space-md);
-  }
-
   .offer__container {
-    flex-direction: column; /* Apila el texto sobre el botón */
+    flex-direction: column; /* Apila el texto arriba y el botón abajo */
     text-align: center;
-    gap: var(--space-sm);
+    gap: 12px;
   }
 
   .offer__text {
@@ -65,7 +58,7 @@
   }
 
   .offer .btn--dark {
-    width: 100%; /* Botón de ancho completo para que sea más fácil de tocar */
+    width: 100%; /* Botón ancho en celular para que sea fácil de tocar */
     justify-content: center;
   }
 }
