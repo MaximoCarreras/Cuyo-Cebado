@@ -17,7 +17,10 @@
   right: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../../assets/hero_mate_grande.png'); 
+  
+  /* ¡LÍNEA DE BACKGROUND-IMAGE ELIMINADA! 
+     La inyectamos desde Hero.jsx para evitar errores de ruta. */
+  
   background-size: cover;
   background-position: center right;
   z-index: 1;
