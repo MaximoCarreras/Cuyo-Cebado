@@ -32,12 +32,9 @@ export default function CareGuide() {
             </div>
           ))}
         </div>
-
-        <div className="careguide__link">
-          <a href="#" className="btn btn--outline-gold btn--small">
-            Ver guía completa →
-          </a>
-        </div>
+        
+        {/* El botón "Ver guía completa" fue eliminado intencionalmente
+            para mantener la sección limpia y evitar redundancia. */}
       </div>
     </section>
   );
