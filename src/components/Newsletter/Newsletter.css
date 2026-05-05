@@ -77,3 +77,32 @@
     gap: 10px;
   }
 }
+/* --- AJUSTE PARA COMPACTAR EL CIERRE DE PÁGINA --- */
+
+/* 1. Quitamos el aire extra del Newsletter */
+.newsletter {
+  padding-top: 50px !important;   /* Espacio justo arriba del título */
+  padding-bottom: 0 !important;    /* Eliminamos el espacio de abajo por completo */
+  min-height: auto !important;     /* Evitamos que la sección ocupe toda la pantalla */
+}
+
+/* 2. Pegamos el Footer a la sección de arriba */
+.footer {
+  padding-top: 20px !important;    /* Pegamos los links al formulario del Club del Mate */
+  padding-bottom: 40px !important; /* Espacio final de la web */
+  margin-top: 0 !important;
+}
+
+/* 3. Ajustamos la grilla de links para que no tenga márgenes internos */
+.footer__grid, 
+.footer__container {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* 4. El copyright (el texto final de 2026) */
+.footer__bottom {
+  margin-top: 20px !important;    /* Distancia corta con los links de arriba */
+  padding-top: 20px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Una línea sutil para separar */
+}
