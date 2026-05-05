@@ -1,5 +1,13 @@
-/* App — Minimal root styles */
-/* Main content starts below the fixed navbar */
+/* App.css */
 main {
-  min-height: 100vh;
+  /* Ajustá este valor (100px o 120px) según la altura de tu Navbar */
+  padding-top: 100px; 
+  min-height: 80vh;
+}
+
+/* En móviles, si el Navbar es más alto, podés ajustarlo */
+@media (max-width: 768px) {
+  main {
+    padding-top: 80px;
+  }
 }
