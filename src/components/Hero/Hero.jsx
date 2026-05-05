@@ -4,19 +4,17 @@ export default function Hero() {
   return (
     <section className="hero" id="hero">
       
-      {/* CAPAS DE FONDO PARA EL EFECTO CURVO */}
-      <div className="hero__bg">
-        {/* Aquí va la imagen de fondo (Mendoza + Mate) */}
-        <div className="hero__image"></div>
-        {/* Esta es la capa que genera el color marrón y la curva suave */}
-        <div className="hero__curve"></div>
-      </div>
+      {/* 1. Capa de la imagen (Fondo del lado derecho) */}
+      <div className="hero__image-bg"></div>
 
+      {/* 2. Capa que dibuja la gran curva marrón oscuro */}
+      <div className="hero__shape"></div>
+
+      {/* 3. Contenedor del texto (Se superpone a la curva) */}
       <div className="hero__container section__container">
         <div className="hero__content">
           <h1 className="hero__title">
-            Mates <br />
-            con <br />
+            <span className="text-white">Mates con</span> <br />
             <b>Identidad</b>
           </h1>
           
