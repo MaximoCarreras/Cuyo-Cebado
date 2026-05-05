@@ -9,7 +9,7 @@ const COMPROMISOS = [
   },
   {
     id: 2,
-    icon: 'mfg_cp7',
+    icon: 'terrain', // Este es el nombre correcto para el icono de montañas
     title: 'Origen Cuyano',
     text: '"Nacimos entre Mendoza y San Luis. Nuestra misión es llevar el ritual del mate artesanal desde el corazón de la Cordillera a cada rincón del país."'
   },
@@ -20,6 +20,7 @@ const COMPROMISOS = [
     text: '"No somos una máquina. Te atendemos por WhatsApp, te mandamos fotos reales del stock y te asesoramos para que elijas el mate que mejor va con vos."'
   }
 ];
+
 
 export default function Testimonials() {
   return (
