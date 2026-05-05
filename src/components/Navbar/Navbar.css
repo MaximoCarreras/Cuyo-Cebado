@@ -9,8 +9,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--space-xl);
-  height: var(--navbar-height);
-  /* Cambiado a un fondo oscuro para que el logo dorado destaque */
+  /* Aumentamos la altura base para que el logo grande entre cómodo */
+  height: 120px; 
   background: rgba(26, 26, 26, 0.95); 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -18,9 +18,9 @@
   transition: all var(--transition);
 }
 
-/* Compact mode — reduced height on scroll */
+/* Compact mode — se achica al hacer scroll */
 .navbar--compact {
-  height: 65px; /* Un poco más alto para que el logo luzca */
+  height: 85px; 
   box-shadow: var(--shadow-sm);
 }
 
@@ -29,18 +29,20 @@
   align-items: center;
   flex-shrink: 0;
   text-decoration: none;
+  padding: 10px 0;
 }
 
-/* Estilos para tu nuevo logo PNG */
+/* Estilos para el logo PNG — Ahora con tamaño imponente */
 .navbar__logo-img {
-  height: 55px; /* Tamaño ideal para que se vea el detalle de las montañas */
+  height: 100px; /* Aumentado para que se luzca el diseño */
   width: auto;
   display: block;
   transition: height var(--transition);
 }
 
+/* Tamaño del logo en modo compacto */
 .navbar--compact .navbar__logo-img {
-  height: 45px; /* Se achica sutilmente al hacer scroll */
+  height: 70px; 
 }
 
 /* Center links */
@@ -51,9 +53,8 @@
 }
 
 .navbar__links a {
-  font-size: 0.95rem;
+  font-size: 1rem; /* Un pelín más grande para equilibrar el logo */
   font-weight: 500;
-  /* Texto en blanco/crema para contrastar con el fondo oscuro */
   color: #fbf9f5; 
   transition: color var(--transition);
   position: relative;
@@ -79,7 +80,7 @@
   width: 100%;
 }
 
-/* Right side actions (si tenés carrito o botones) */
+/* Right side actions */
 .navbar__actions {
   display: flex;
   align-items: center;
@@ -90,7 +91,7 @@
 /* Mobile hamburger color */
 .navbar__toggle {
   display: none;
-  color: #fbf9f5; /* Hamburguesa en blanco */
+  color: #fbf9f5; 
   background: none;
   border: none;
   cursor: pointer;
@@ -101,6 +102,11 @@
 @media (max-width: 768px) {
   .navbar {
     padding: 0 var(--space-md);
+    height: 90px; /* Altura fija en móvil */
+  }
+
+  .navbar__logo-img {
+    height: 75px; /* Logo un poco más chico en celulares */
   }
 
   .navbar__toggle {
@@ -109,17 +115,16 @@
 
   .navbar__links {
     position: fixed;
-    top: 0; /* Cambiado para que cubra mejor */
-    padding-top: 80px;
+    top: 0; 
+    padding-top: 100px;
     left: 0;
     right: 0;
-    height: 100vh; /* Pantalla completa en móvil */
+    height: 100vh; 
     flex-direction: column;
-    /* Fondo oscuro sólido para el menú móvil */
     background: rgba(26, 26, 26, 0.98); 
     backdrop-filter: blur(12px);
     gap: var(--space-xl);
-    transform: translateX(100%); /* Aparece desde la derecha */
+    transform: translateX(100%); 
     opacity: 0;
     pointer-events: none;
     transition: all var(--transition);
