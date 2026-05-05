@@ -1,12 +1,11 @@
 /**
  * Navbar — Barra de navegación fija para Cuyo Cebado.
+ * Se eliminó el carrito para priorizar el contacto directo por WhatsApp.
  */
 import { useState, useEffect } from 'react';
-import { useCart } from '../../context/CartContext';
 import './Navbar.css';
 
 export default function Navbar() {
-  const { itemCount } = useCart();
   const [isCompact, setIsCompact] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -19,21 +18,20 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  /* Enlaces de navegación */
+  /* Enlaces de navegación actualizados a las secciones del sitio */
   const navLinks = [
     { label: 'Inicio', href: '#hero' },
     { label: 'Productos', href: '#productos' },
-    { label: 'Kits Regalo', href: '#kit-regalo' },
-    { label: 'Nosotros', href: '#nosotros' },
-    { label: 'Contacto', href: '#contacto' },
+    { label: 'Nosotros', href: '#nuestra-historia' },
+    { label: 'Preguntas', href: '#faq' },
   ];
 
   return (
     <nav className={`navbar ${isCompact ? 'navbar--compact' : ''}`} id="navbar">
-      {/* Logo con el nuevo nombre de marca */}
+      {/* Logo de marca */}
       <a href="#hero" className="navbar__logo">Cuyo Cebado</a>
 
-      {/* Menú hamburguesa para celulares */}
+      {/* Menú hamburguesa para dispositivos móviles */}
       <button
         className="navbar__toggle"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
@@ -44,7 +42,7 @@ export default function Navbar() {
         </span>
       </button>
 
-      {/* Enlaces de navegación */}
+      {/* Lista de enlaces */}
       <ul className={`navbar__links ${isMobileOpen ? 'navbar__links--open' : ''}`}>
         {navLinks.map(link => (
           <li key={link.href}>
@@ -58,13 +56,8 @@ export default function Navbar() {
         ))}
       </ul>
 
-      {/* Acciones: Carrito + Tu WhatsApp real */}
+      {/* Acción principal: WhatsApp Directo */}
       <div className="navbar__actions">
-        <button className="navbar__cart" aria-label="Carrito de compras">
-          <span className="material-symbols-outlined">shopping_bag</span>
-          {itemCount > 0 && <span className="navbar__cart-count">{itemCount}</span>}
-        </button>
-
         <a
           href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web%20y%20quiero%20consultar%20por%20un%20mate"
           target="_blank"
