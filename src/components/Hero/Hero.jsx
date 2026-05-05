@@ -1,16 +1,24 @@
 import './Hero.css';
+// IMPORTANTE: Asegurate de que el nombre del archivo coincida exactamente con el tuyo
+import heroMateImg from '../../assets/hero_mate_grande.png'; 
 
 export default function Hero() {
   return (
     <section className="hero" id="hero">
       
-      {/* 1. Capa de la imagen (Fondo del lado derecho) */}
-      <div className="hero__image-bg"></div>
+      {/* 
+        AQUÍ ESTÁ LA SOLUCIÓN:
+        Inyectamos la imagen directamente mediante la propiedad 'style'
+      */}
+      <div 
+        className="hero__image-bg"
+        style={{ backgroundImage: `url(${heroMateImg})` }}
+      ></div>
 
-      {/* 2. Capa que dibuja la gran curva marrón oscuro */}
+      {/* Capa que dibuja la curva marrón oscuro */}
       <div className="hero__shape"></div>
 
-      {/* 3. Contenedor del texto (Se superpone a la curva) */}
+      {/* Contenedor del texto */}
       <div className="hero__container section__container">
         <div className="hero__content">
           <h1 className="hero__title">
