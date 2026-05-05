@@ -1,0 +1,50 @@
+/* OurStory — Dark background with wood texture feel */
+.ourstory {
+  background: var(--color-brown-dark);
+  color: var(--color-white);
+}
+
+.ourstory__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3xl);
+  align-items: center;
+}
+
+.ourstory__image img {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.ourstory__overline {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--color-gold);
+  margin-bottom: var(--space-md);
+}
+
+.ourstory__title {
+  color: var(--color-white);
+  margin-bottom: var(--space-xl);
+}
+
+.ourstory__content p {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.8;
+  margin-bottom: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .ourstory__container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .ourstory__image {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}

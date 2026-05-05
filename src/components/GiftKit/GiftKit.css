@@ -1,0 +1,79 @@
+/* GiftKit — Featured product with darker bg */
+.giftkit {
+  background: var(--color-bg-dark);
+}
+
+.giftkit__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3xl);
+  align-items: center;
+}
+
+.giftkit__image-wrapper {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.giftkit__image-wrapper img {
+  width: 100%;
+  border-radius: var(--radius-lg);
+}
+
+.giftkit__badge {
+  position: absolute;
+  top: var(--space-lg);
+  left: var(--space-lg);
+}
+
+.giftkit__title {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin-bottom: var(--space-xl);
+  line-height: 1.25;
+}
+
+.giftkit__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.giftkit__items li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.giftkit__items .material-symbols-outlined {
+  color: var(--color-forest);
+  font-size: 1.2rem;
+}
+
+.giftkit__price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  margin-bottom: var(--space-lg);
+  font-family: var(--font-heading);
+}
+
+.giftkit__trust {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-top: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .giftkit__container {
+    grid-template-columns: 1fr;
+  }
+
+  .giftkit__image-wrapper {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}

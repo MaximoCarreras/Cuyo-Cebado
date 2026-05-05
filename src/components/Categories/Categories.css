@@ -1,0 +1,62 @@
+/* Categories — Square visual cards */
+.categories__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-md);
+}
+
+.categories__card {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.categories__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.categories__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(44, 36, 32, 0.7) 0%, rgba(44, 36, 32, 0.1) 60%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--space-lg);
+  transition: background var(--transition);
+}
+
+/* Hover illumination effect */
+.categories__card:hover .categories__overlay {
+  background: linear-gradient(to top, rgba(197, 160, 89, 0.6) 0%, rgba(44, 36, 32, 0.05) 60%);
+}
+
+.categories__name {
+  color: var(--color-white);
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .categories__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .categories__grid > :last-child {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .categories__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

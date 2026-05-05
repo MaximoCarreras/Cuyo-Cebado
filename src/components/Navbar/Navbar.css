@@ -1,0 +1,150 @@
+/* Navbar — Sticky navigation with backdrop blur */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-xl);
+  height: var(--navbar-height);
+  background: rgba(251, 249, 245, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-gold);
+  transition: all var(--transition);
+}
+
+/* Compact mode — reduced height on scroll */
+.navbar--compact {
+  height: 56px;
+  box-shadow: var(--shadow-sm);
+}
+
+.navbar__logo {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  flex-shrink: 0;
+}
+
+.navbar--compact .navbar__logo {
+  font-size: 1.2rem;
+}
+
+/* Center links */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.navbar__links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+  transition: color var(--transition);
+  position: relative;
+}
+
+.navbar__links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--color-gold);
+  transition: width var(--transition);
+}
+
+.navbar__links a:hover {
+  color: var(--color-gold);
+}
+
+.navbar__links a:hover::after {
+  width: 100%;
+}
+
+/* Right side actions */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-shrink: 0;
+}
+
+.navbar__cart {
+  position: relative;
+  padding: var(--space-sm);
+  color: var(--color-dark);
+  transition: color var(--transition);
+}
+
+.navbar__cart:hover {
+  color: var(--color-gold);
+}
+
+.navbar__cart-count {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  background: var(--color-forest);
+  color: var(--color-white);
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile hamburger */
+.navbar__toggle {
+  display: none;
+  color: var(--color-dark);
+  padding: var(--space-sm);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 var(--space-md);
+  }
+
+  .navbar__toggle {
+    display: flex;
+  }
+
+  .navbar__links {
+    position: fixed;
+    top: var(--navbar-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: rgba(251, 249, 245, 0.98);
+    backdrop-filter: blur(12px);
+    padding: var(--space-lg);
+    gap: var(--space-lg);
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: all var(--transition);
+    border-bottom: 1px solid var(--color-gold);
+  }
+
+  .navbar__links--open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .btn--whatsapp span {
+    display: none;
+  }
+}

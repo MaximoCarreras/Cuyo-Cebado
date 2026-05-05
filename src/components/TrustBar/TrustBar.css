@@ -1,0 +1,44 @@
+/* TrustBar — Dark band with trust indicators */
+.trustbar {
+  background: var(--color-brown-dark);
+  padding: var(--space-lg) var(--space-lg);
+}
+
+.trustbar__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+.trustbar__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-white);
+}
+
+.trustbar__icon {
+  color: var(--color-gold);
+  font-size: 1.4rem;
+}
+
+.trustbar__text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .trustbar__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+
+  .trustbar__text {
+    font-size: 0.78rem;
+    white-space: normal;
+  }
+}

@@ -1,0 +1,5 @@
+/* App — Minimal root styles */
+/* Main content starts below the fixed navbar */
+main {
+  min-height: 100vh;
+}

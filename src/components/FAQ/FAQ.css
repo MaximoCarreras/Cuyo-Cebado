@@ -1,0 +1,50 @@
+/* FAQ — Accordion with golden separators */
+.faq__list {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.faq__item {
+  border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+}
+
+.faq__question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg) 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-dark);
+  text-align: left;
+  transition: color var(--transition);
+}
+
+.faq__question:hover {
+  color: var(--color-gold);
+}
+
+.faq__icon {
+  color: var(--color-gold);
+  flex-shrink: 0;
+  transition: transform var(--transition);
+}
+
+/* Animate answer expand/collapse */
+.faq__answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.faq__item--open .faq__answer {
+  max-height: 300px;
+  padding-bottom: var(--space-lg);
+}
+
+.faq__answer p {
+  font-size: 0.92rem;
+  color: var(--color-text-light);
+  line-height: 1.7;
+}

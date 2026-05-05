@@ -1,0 +1,65 @@
+/* CareGuide — Bordered section with step cards */
+.careguide {
+  background: var(--color-bg);
+  border-top: 1px solid rgba(197, 160, 89, 0.2);
+  border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+}
+
+.careguide__steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.careguide__card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  background: var(--color-white);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition);
+}
+
+.careguide__card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.careguide__number {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.careguide__text h3 {
+  font-size: 0.95rem;
+  margin-bottom: var(--space-xs);
+}
+
+.careguide__text p {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  line-height: 1.5;
+}
+
+.careguide__link {
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .careguide__steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .careguide__steps {
+    grid-template-columns: 1fr;
+  }
+}
