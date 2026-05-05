@@ -1,8 +1,11 @@
 /**
  * Navbar — Barra de navegación fija para Cuyo Cebado.
- * Se eliminó el carrito para priorizar el contacto directo por WhatsApp.
+ * Se eliminó el botón redundante de WhatsApp.
+ * Preparado para mostrar el logo en imagen.
  */
 import { useState, useEffect } from 'react';
+// IMPORTANTE: Asegurate de tener tu logo guardado como logo.png en src/assets/
+import logo from '../../assets/logo.png'; 
 import './Navbar.css';
 
 export default function Navbar() {
@@ -28,8 +31,20 @@ export default function Navbar() {
 
   return (
     <nav className={`navbar ${isCompact ? 'navbar--compact' : ''}`} id="navbar">
-      {/* Logo de marca */}
-      <a href="#hero" className="navbar__logo">Cuyo Cebado</a>
+      
+      {/* 
+        LOGOTIPO COMO IMAGEN 
+        Si aún no tenés la imagen en assets, podés comentar la etiqueta <img> 
+        y descomentar el texto "Cuyo Cebado" hasta que la tengas.
+      */}
+      <a href="#hero" className="navbar__logo">
+        <img 
+          src={logo} 
+          alt="Cuyo Cebado Logo" 
+          style={{ height: '40px', width: 'auto' }} /* Controla que no se vea gigante */
+        />
+        {/* Cuyo Cebado */} 
+      </a>
 
       {/* Menú hamburguesa para dispositivos móviles */}
       <button
@@ -42,7 +57,7 @@ export default function Navbar() {
         </span>
       </button>
 
-      {/* Lista de enlaces */}
+      {/* Lista de enlaces centrada (sin el botón de WhatsApp a la derecha) */}
       <ul className={`navbar__links ${isMobileOpen ? 'navbar__links--open' : ''}`}>
         {navLinks.map(link => (
           <li key={link.href}>
@@ -56,18 +71,8 @@ export default function Navbar() {
         ))}
       </ul>
 
-      {/* Acción principal: WhatsApp Directo */}
-      <div className="navbar__actions">
-        <a
-          href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web%20y%20quiero%20consultar%20por%20un%20mate"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn--whatsapp"
-        >
-          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>chat</span>
-          WhatsApp
-        </a>
-      </div>
+      {/* EL BOTÓN DE WHATSAPP FUE ELIMINADO DE ESTA SECCIÓN */}
+
     </nav>
   );
 }
