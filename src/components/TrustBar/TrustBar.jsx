@@ -1,30 +1,19 @@
-/**
- * TrustBar — Horizontal bar with 4 trust indicators.
- * Dark background with golden icons and white text. [SF]
- */
-import './TrustBar.css';
-
-/* Trust indicators data — constants to avoid magic strings [CMV] */
-const TRUST_ITEMS = [
-  { icon: 'local_shipping', text: 'Envíos a todo el país' },
-  { icon: 'verified_user', text: 'Pago 100% seguro – Mercado Pago' },
-  { icon: 'groups', text: '+500 clientes satisfechos' },
-  { icon: 'workspace_premium', text: 'Garantía de calidad 30 días' },
-];
-
-export default function TrustBar() {
-  return (
-    <section className="trustbar">
-      <div className="trustbar__container section__container">
-        {TRUST_ITEMS.map((item, index) => (
-          <div className="trustbar__item" key={index}>
-            <span className="material-symbols-outlined trustbar__icon">
-              {item.icon}
-            </span>
-            <span className="trustbar__text">{item.text}</span>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
+// Nuevo código propuesto
+<div className="trust-features">
+  <div className="feature">
+    <span className="icon">local_shipping</span>
+    <p>Envíos a todo el país</p>
+  </div>
+  <div className="feature">
+    <span className="icon">forum</span> {/* O usá el icono de WhatsApp si lo tenés */}
+    <p>Asesoramiento por WhatsApp</p>
+  </div>
+  <div className="feature">
+    <span className="icon">handshake</span> {/* Ícono de trato directo/apretón de manos */}
+    <p>Atención directa y personal</p>
+  </div>
+  <div className="feature">
+    <span className="icon">search_check</span> {/* O "visibility" o mantené "workspace_premium" */}
+    <p>Revisión pieza por pieza</p>
+  </div>
+</div>
