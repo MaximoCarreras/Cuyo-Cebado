@@ -1,35 +1,48 @@
-// src/components/Hero/Hero.jsx
 import './Hero.css';
-
-// 1. Importamos la imagen (Asumiendo que el componente Hero está en src/components/Hero/)
-// Si Hero.jsx está en otra carpeta, la cantidad de "../" puede variar.
-import heroMateImg from '../../assets/hero_mate_grande.png'; 
+// Importamos la imagen usando la ruta relativa correcta y el NUEVO nombre
+import heroBgImage from '../../assets/fondo_hero_principal.png'; 
 
 export default function Hero() {
-  
-  // 2. Imprimimos en consola para ver si React encontró la imagen
-  console.log("Ruta de la imagen:", heroMateImg);
-
   return (
     <section className="hero" id="hero">
       
-      {/* 
-        3. LA PRUEBA: Usamos una etiqueta <img> normal.
-        Si la ruta está bien, la imagen va a aparecer enorme en la pantalla. 
-      */}
-      <img 
-        src={heroMateImg} 
-        alt="Prueba de carga" 
-        style={{ width: '100%', height: 'auto', zIndex: 9999, position: 'relative' }} 
-      />
+      {/* 1. Capa de la imagen (Inyectada directamente) */}
+      <div 
+        className="hero__image-bg"
+        style={{ backgroundImage: `url(${heroBgImage})` }}
+      ></div>
 
-      {/* Dejamos el resto comentado temporalmente para que no estorbe */}
-      {/* 
+      {/* 2. Capa que dibuja la gran curva marrón oscuro */}
       <div className="hero__shape"></div>
+
+      {/* 3. Contenedor del texto (Superpuesto a la curva) */}
       <div className="hero__container section__container">
-        ... contenido ...
-      </div> 
-      */}
+        <div className="hero__content">
+          <h1 className="hero__title">
+            <span className="text-white">Mates con</span> <br />
+            <b>Identidad</b>
+          </h1>
+          
+          <p className="hero__subtitle">
+            Curaduría premium de mates imperiales tallados a mano en Mendoza. 
+            🏔️ Una pieza de arte en cada cebada.
+          </p>
+
+          <div className="hero__actions">
+            <a href="#productos" className="btn btn--gold">
+              Ver Catálogo
+            </a>
+            <a 
+              href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn btn--outline-gold"
+            >
+              Consultar por WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
