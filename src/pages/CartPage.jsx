@@ -1,9 +1,8 @@
 import React from 'react';
 
 /**
- * CartPage — Cuyo Cebado e-commerce.
- * Componente principal para la gestión de compras.
- * El "export default" permite que React Router lo reconozca.
+ * CartPage — Vista principal del carrito de compras.
+ * Este archivo es el componente completo que React Router necesita.
  */
 export default function CartPage() {
     return (
@@ -14,7 +13,8 @@ export default function CartPage() {
                 paddingBottom: '80px',
                 textAlign: 'center',
                 minHeight: '70vh',
-                background: 'var(--color-brown-dark)'
+                background: 'var(--color-brown-dark)',
+                color: 'white'
             }}
         >
             <div className="container">
@@ -26,7 +26,7 @@ export default function CartPage() {
                 </h2>
 
                 <p style={{ color: 'rgba(255, 255, 255, 0.8)', marginBottom: '40px', fontSize: '1.1rem' }}>
-                    Todavía no agregaste productos a tu selección.
+                    Todavía no agregaste productos a tu selección premium.
                 </p>
 
                 <a
