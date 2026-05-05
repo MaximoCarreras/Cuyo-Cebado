@@ -43,7 +43,7 @@ export default function Hero() {
           </div>
 
           <p className="hero__proof">
-            ⭐ +100 materos cebados en todo el país · Envío gratis en Mendoza
+            🏔️ Selección artesanal en Mendoza · Envío protegido a todo el país · Atención personalizada
           </p>
         </div>
 
