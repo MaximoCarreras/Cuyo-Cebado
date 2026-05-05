@@ -21,7 +21,7 @@ export default function BestSellers() {
     <section className="bestsellers section" id="productos">
       <div className="section__container">
         <div className="section__title">
-          <h2>Nuestros más vendidos</h2>
+          <h2>Nuestros productos más vendidos</h2>
           <div className="gold-line"></div>
         </div>
 
