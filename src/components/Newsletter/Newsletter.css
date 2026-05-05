@@ -2,29 +2,34 @@
 .newsletter {
   background: var(--color-brown-dark);
   text-align: center;
+  /* Reducimos el padding vertical: 60px arriba y abajo es ideal */
+  padding: 60px var(--space-md);
 }
 
 .newsletter__title {
   color: var(--color-white);
-  margin-bottom: var(--space-sm);
+  /* Margen más ajustado */
+  margin-bottom: 10px;
 }
 
 .newsletter__subtitle {
   color: rgba(255, 255, 255, 0.7);
   font-size: 1.05rem;
-  margin-bottom: var(--space-xl);
+  /* Reducimos el espacio excesivo antes del formulario */
+  margin-bottom: 25px;
 }
 
 .newsletter__form {
   display: flex;
   gap: var(--space-md);
   max-width: 480px;
-  margin: 0 auto var(--space-lg);
+  /* Reducimos el margen inferior para acercar el aviso de 'Sin spam' */
+  margin: 0 auto 15px;
 }
 
 .newsletter__input {
   flex: 1;
-  padding: 14px 18px;
+  padding: 12px 18px; /* Un pelín más bajo para compactar */
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.08);
@@ -44,7 +49,8 @@
 
 .newsletter__message {
   font-size: 0.9rem;
-  margin-bottom: var(--space-md);
+  /* Menos espacio entre mensaje y disclaimer */
+  margin-bottom: 10px;
 }
 
 .newsletter__message--success {
@@ -58,10 +64,16 @@
 .newsletter__disclaimer {
   color: rgba(255, 255, 255, 0.4);
   font-size: 0.8rem;
+  display: block;
 }
 
 @media (max-width: 480px) {
+  .newsletter {
+    padding: 40px var(--space-md);
+  }
+  
   .newsletter__form {
     flex-direction: column;
+    gap: 10px;
   }
 }
