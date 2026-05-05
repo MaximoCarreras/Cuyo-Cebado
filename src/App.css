@@ -1,16 +1,5 @@
 /* App — Minimal root styles */
-/* Main content starts below the fixed navbar with enough space */
+/* Main content starts below the fixed navbar */
 main {
   min-height: 100vh;
-  /* El padding-top debe ser igual o un poco mayor a la altura de tu Navbar */
-  padding-top: 100px;
-  box-sizing: border-box;
-  /* Asegura que el padding no sume tamaño extra al ancho */
-}
-
-/* Ajuste para celulares: el Navbar suele ser un poco más petiso en pantallas chicas */
-@media (max-width: 768px) {
-  main {
-    padding-top: 80px;
-  }
 }
