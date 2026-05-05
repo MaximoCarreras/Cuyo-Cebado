@@ -1,7 +1,19 @@
-import { createClient } from '@supabase/supabase-js'
+/**
+ * Supabase Admin Client — Server-side (service role key).
+ * Has full access to all tables, bypasses RLS.
+ */
+import { createClient } from '@supabase/supabase-js';
 
-// Cliente Público seguro para Vite / React
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.warn(
+    '⚠️  SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not set. ' +
+    'Server will run but Supabase operations will fail.'
+  );
+}
+
+export const supabaseAdmin = (supabaseUrl && supabaseServiceKey)
+  ? createClient(supabaseUrl, supabaseServiceKey)
+  : null;
