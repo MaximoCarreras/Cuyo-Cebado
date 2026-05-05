@@ -1,82 +1,80 @@
-/* src/components/Hero/Hero.css (Código propuesto) */
+/* src/components/Hero/Hero.css */
 
 .hero {
-  height: 100vh; /* Ocupa el 100% del alto de la pantalla del usuario */
+  height: 100vh;
   width: 100%;
   position: relative;
   display: flex;
-  align-items: center; /* Centra el contenido verticalmente */
-  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   
-  /* LA IMAGEN DE FONDO. 
-     Asegurate de que 'hero_mate_grande.png' sea una foto de muy buena calidad.
-  */
+  /* FONDO: Asegurate de tener una foto de alta calidad en esta ruta */
   background-image: url('../../assets/hero_mate_grande.png'); 
-  background-size: cover; /* Cubre todo el espacio sin deformarse */
-  background-position: center; /* Centra la imagen */
-  background-attachment: fixed; /* Opcional: Da un efecto parallax sutil */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
-/* Capa oscura sutil para mejorar la lectura del texto blanco */
+/* Capa oscura para asegurar lectura */
 .hero__overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* Negro con 40% de opacidad */
+  background: rgba(0, 0, 0, 0.5); /* Oscurecido al 50% */
   z-index: 1;
 }
 
 .hero__container {
   position: relative;
-  z-index: 2; /* Por encima de la capa oscura */
+  z-index: 2;
   max-width: 1200px;
   width: 100%;
-  padding: 0 var(--space-lg);
+  padding: 0 24px;
   display: flex;
-  justify-content: flex-start; /* Alinea el contenido a la izquierda */
+  justify-content: flex-start;
 }
 
 .hero__content {
-  max-width: 600px; /* Ancho máximo para el bloque de texto */
-  color: var(--color-white); /* Texto blanco para el fondo oscuro */
-  text-align: left; /* Alineado a la izquierda */
+  max-width: 600px;
+  color: #ffffff; /* Texto blanco puro */
+  text-align: left;
 }
 
 .hero__title {
-  font-size: clamp(3.5rem, 8vw, 6.5rem); /* Título GIGANTE y responsivo */
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
   line-height: 0.9;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: -2px;
-  margin-bottom: var(--space-xl);
+  margin-bottom: 24px;
 }
 
 .hero__title br {
-  display: none; /* Para PC, ocultamos los cortes de línea */
+  display: none;
 }
 
 .hero__title b {
-  color: var(--color-gold-dark); /* La palabra "Identidad" en dorado */
+  color: #d4af37; /* Dorado cálido (Gold) */
 }
 
 .hero__subtitle {
   font-size: clamp(1.1rem, 1.5vw, 1.4rem);
   line-height: 1.6;
   font-weight: 300;
-  margin-bottom: var(--space-3xl);
+  margin-bottom: 48px;
   max-width: 500px;
 }
 
 .hero__actions {
   display: flex;
-  gap: var(--space-lg);
+  gap: 16px;
   flex-wrap: wrap;
 }
 
-/* --- BOTONES PREMIUM DE CUYO CEBADO --- */
+/* --- BOTONES DEL HERO --- */
 .hero .btn {
   border-radius: 50px;
   padding: 16px 36px;
@@ -85,57 +83,65 @@
   font-size: 0.9rem;
   letter-spacing: 1px;
   transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero .btn--gold {
-  background-color: var(--color-gold-dark);
-  color: var(--color-black);
+  background-color: #d4af37; /* Dorado */
+  color: #1a1a1a; /* Casi negro */
   border: none;
 }
 
 .hero .btn--gold:hover {
-  background-color: var(--color-white);
+  background-color: #ffffff;
+  color: #1a1a1a;
   transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .hero .btn--outline-gold {
   background-color: transparent;
-  color: var(--color-gold-dark);
-  border: 2px solid var(--color-gold-dark);
+  color: #d4af37; /* Letras doradas */
+  border: 2px solid #d4af37; /* Borde dorado */
 }
 
 .hero .btn--outline-gold:hover {
-  background-color: var(--color-gold-dark);
-  color: var(--color-black);
+  background-color: #d4af37;
+  color: #1a1a1a;
   transform: translateY(-3px);
 }
 
 /* --- ADAPTACIÓN PARA CELULARES --- */
 @media (max-width: 768px) {
   .hero {
-    height: 90vh; /* Un poco menos alto en móvil */
+    height: 90vh;
   }
   
   .hero__title br {
-    display: block; /* En móvil sí forzamos el corte de línea */
+    display: block;
   }
   
   .hero__content {
-    text-align: center; /* Texto centrado para móvil */
-    justify-content: center;
-    align-items: center;
+    text-align: center;
     width: 100%;
-    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .hero__title {
-    font-size: clamp(2.5rem, 10vw, 3.8rem);
+    font-size: clamp(2.8rem, 12vw, 3.8rem);
     letter-spacing: -1px;
   }
   
   .hero__subtitle {
-    font-size: 1rem;
-    margin-bottom: var(--space-xl);
+    font-size: 1.1rem;
+    margin-bottom: 32px;
   }
   
   .hero__actions {
@@ -144,7 +150,6 @@
   }
   
   .hero .btn {
-    width: 100%; /* Botón de ancho completo en móvil */
-    justify-content: center;
+    width: 100%;
   }
 }
