@@ -2,6 +2,9 @@ import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 
+// 1. Importamos el componente de Scroll
+import ScrollToTop from './components/ScrollToTop';
+
 // Importamos las nuevas páginas
 import Home from './pages/Home';
 import CartPage from './pages/CartPage';
@@ -13,6 +16,9 @@ import './App.css';
 export default function App() {
   return (
     <>
+      {/* 2. Lo colocamos aquí arriba: no se ve, pero "limpia" el scroll en cada cambio */}
+      <ScrollToTop />
+
       <Navbar />
       <main>
         <Routes>
