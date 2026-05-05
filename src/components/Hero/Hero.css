@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   padding-top: calc(var(--navbar-height) + var(--space-2xl));
+  background: linear-gradient(to bottom, #ffffff, #fdfaf7); /* Fondo sutilmente cálido */
 }
 
 .hero__container {
@@ -17,7 +18,7 @@
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   line-height: 1.15;
   margin-bottom: var(--space-lg);
-  color: var(--color-dark);
+  color: #2d1b0d; /* Color madera oscuro para la marca */
 }
 
 .hero__subtitle {
@@ -35,11 +36,42 @@
   flex-wrap: wrap;
 }
 
+/* --- BOTONES REDONDOS PARA CUYO CEBADO --- */
+.btn {
+  border-radius: 50px !important; /* Fuerza el redondeado completo */
+  padding: 14px 32px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn--primary {
+  background-color: #2d1b0d;
+  color: #ffffff;
+  border: none;
+}
+
+.btn--secondary {
+  border: 2px solid #2d1b0d;
+  color: #2d1b0d;
+  background: transparent;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(45, 27, 13, 0.15);
+  filter: brightness(1.1);
+}
+
 .hero__proof {
   font-size: 0.9rem;
   color: var(--color-text-light);
   padding-top: var(--space-md);
-  border-top: 1px solid rgba(197, 160, 89, 0.2);
+  border-top: 1px solid rgba(45, 27, 13, 0.1);
 }
 
 .hero__image {
@@ -51,10 +83,11 @@
   max-width: 100%;
   max-height: 520px;
   object-fit: contain;
-  border-radius: var(--radius-lg);
+  border-radius: 40px; /* Redondeado también para la imagen del mate */
   filter: drop-shadow(0 20px 40px rgba(44, 36, 32, 0.15));
 }
 
+/* Adaptación para celulares */
 @media (max-width: 768px) {
   .hero__container {
     grid-template-columns: 1fr;
