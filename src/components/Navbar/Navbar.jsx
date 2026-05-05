@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import './Navbar.css';
 
-// Comentamos la importación del logo para que no tire error si el archivo no está
-// import logo from '../../assets/logo.png'; 
-
 export default function Navbar() {
   const [isCompact, setIsCompact] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -25,8 +22,14 @@ export default function Navbar() {
 
   return (
     <nav className={`navbar ${isCompact ? 'navbar--compact' : ''}`} id="navbar">
-      {/* Usamos texto por ahora. Cuando tengas el logo, cambiaremos esto por la <img> */}
-      <a href="#hero" className="navbar__logo">Cuyo Cebado</a>
+      {/* Reemplazamos el texto por el logo transparente */}
+      <a href="#hero" className="navbar__logo">
+        <img 
+          src="/logo.png" 
+          alt="Cuyo Cebado" 
+          className="navbar__logo-img"
+        />
+      </a>
 
       <button
         className="navbar__toggle"
