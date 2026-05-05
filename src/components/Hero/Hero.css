@@ -61,6 +61,13 @@
   background: transparent;
 }
 
+/* NUEVO: Botón verde oficial de WhatsApp respetando el estilo redondeado */
+.btn--whatsapp-hero {
+  background-color: #25D366;
+  color: #ffffff !important;
+  border: 2px solid #25D366;
+}
+
 .btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 20px rgba(45, 27, 13, 0.15);
@@ -111,26 +118,3 @@
     max-height: 320px;
   }
 }
-/* ... código anterior ... */
-
-.btn--primary {
-  background-color: #2d1b0d;
-  color: #ffffff;
-  border: none;
-}
-
-.btn--secondary {
-  border: 2px solid #2d1b0d;
-  color: #2d1b0d;
-  background: transparent;
-}
-
-/* --- NUEVO BOTÓN DE WHATSAPP (Verde, respetando bordes redondos) --- */
-.btn--whatsapp-hero {
-  background-color: #25D366;
-  color: #ffffff !important;
-  border: 2px solid #25D366; /* Mantiene la misma estructura que los otros botones */
-}
-
-.btn:hover {
-/* ... código siguiente ... */
