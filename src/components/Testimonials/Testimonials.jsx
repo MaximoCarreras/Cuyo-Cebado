@@ -1,72 +1,50 @@
-/**
- * Testimonials — Customer reviews with ratings.
- * 3 review cards + aggregate metrics below. [SF]
- */
 import './Testimonials.css';
 
-const REVIEWS = [
+const COMPROMISOS = [
   {
-    text: 'El mate de lapacho es una obra de arte. Se nota la dedicación en cada detalle. Lo uso todos los días y cada vez me gusta más.',
-    name: 'Martín Gutiérrez',
-    city: 'Buenos Aires',
-    stars: 5,
+    id: 1,
+    icon: 'verified',
+    title: 'Selección Personal',
+    text: '"Elegimos cada mate como si fuera para nosotros. Revisamos la madera, la virola y la terminación para asegurarnos de que recibas una pieza de exportación."'
   },
   {
-    text: 'Compré el kit regalo para mi viejo y quedó encantado. La caja de madera, la bombilla... todo premium. Van a repetir.',
-    name: 'Lucía Fernández',
-    city: 'Córdoba',
-    stars: 5,
+    id: 2,
+    icon: 'mfg_cp7',
+    title: 'Origen Cuyano',
+    text: '"Nacimos entre Mendoza y San Luis. Nuestra misión es llevar el ritual del mate artesanal desde el corazón de la Cordillera a cada rincón del país."'
   },
   {
-    text: 'Llegó en 48hs tal cual prometieron. El mate de calabaza es hermoso, bien curado y con un acabado impecable. Súper recomendable.',
-    name: 'Santiago Morales',
-    city: 'Rosario',
-    stars: 5,
-  },
+    id: 3,
+    icon: 'support_agent',
+    title: 'Atención Directa',
+    text: '"No somos una máquina. Te atendemos por WhatsApp, te mandamos fotos reales del stock y te asesoramos para que elijas el mate que mejor va con vos."'
+  }
 ];
 
 export default function Testimonials() {
   return (
-    <section className="testimonials section">
+    <section className="testimonials section" id="compromiso">
       <div className="section__container">
-        <div className="section__title">
-          <h2>Lo que dicen nuestros materos</h2>
-          <div className="gold-line"></div>
-        </div>
-
+        <h2 className="section__title">Nuestra Garantía</h2>
+        
         <div className="testimonials__grid">
-          {REVIEWS.map((review, i) => (
-            <div className="testimonials__card" key={i}>
-              {/* Star rating */}
-              <div className="testimonials__stars">
-                {Array.from({ length: review.stars }).map((_, j) => (
-                  <span key={j} className="material-symbols-outlined testimonials__star">
-                    star
-                  </span>
-                ))}
-              </div>
-
-              {/* Review text in italics */}
-              <p className="testimonials__text">"{review.text}"</p>
-
-              {/* Reviewer info */}
-              <div className="testimonials__author">
-                <div className="testimonials__avatar">
-                  {review.name.charAt(0)}
-                </div>
-                <div>
-                  <p className="testimonials__name">{review.name}</p>
-                  <p className="testimonials__city">{review.city}</p>
-                </div>
-              </div>
+          {COMPROMISOS.map((item) => (
+            <div key={item.id} className="testimonial__card">
+              <span className="material-symbols-outlined" style={{ fontSize: '40px', color: '#c5a059', marginBottom: '1rem' }}>
+                {item.icon}
+              </span>
+              <h3 style={{ marginBottom: '0.5rem', color: '#2d1b0d' }}>{item.title}</h3>
+              <p className="testimonial__text" style={{ fontStyle: 'normal' }}>
+                {item.text}
+              </p>
             </div>
           ))}
         </div>
 
-        {/* Aggregate metrics */}
-        <p className="testimonials__metrics">
-          ⭐ 4.9/5 promedio · 127 reseñas verificadas · 98% recomendaría
-        </p>
+        {/* Eliminamos el contador de 4.9 estrellas por ahora para ser honestos */}
+        <div className="testimonials__footer">
+          <p>Sumate a la comunidad de <b>Cuyo Cebado</b></p>
+        </div>
       </div>
     </section>
   );
