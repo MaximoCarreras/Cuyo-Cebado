@@ -1,49 +1,46 @@
-/**
- * Hero — Full-screen hero section with two columns.
- * Left: heading, subtitle, CTAs, social proof.
- * Right: premium mate image. [SF]
- */
-import heroImage from '../../assets/hero_mate.png';
 import './Hero.css';
+// Importamos la imagen usando la ruta relativa correcta y el NUEVO nombre
+import heroBgImage from '../../assets/fondo_hero_principal.png'; 
 
 export default function Hero() {
   return (
-    <section className="hero section" id="hero">
+    <section className="hero" id="hero">
+      
+      {/* 1. Capa de la imagen (Inyectada directamente) */}
+      <div 
+        className="hero__image-bg"
+        style={{ backgroundImage: `url(${heroBgImage})` }}
+      ></div>
+
+      {/* 2. Capa que dibuja la gran curva marrón oscuro */}
+      <div className="hero__shape"></div>
+
+      {/* 3. Contenedor del texto (Superpuesto a la curva) */}
       <div className="hero__container section__container">
-        {/* Left column — content */}
         <div className="hero__content">
           <h1 className="hero__title">
-            El mate perfecto, hecho en Mendoza
+            <span className="text-white">Mates con</span> <br />
+            <b>Identidad</b>
           </h1>
+          
           <p className="hero__subtitle">
-            Piezas únicas talladas a mano. Envío a todo el país en 48hs.
+            Curaduría premium de mates imperiales tallados a mano en Mendoza. 
+            🏔️ Una pieza de arte en cada cebada.
           </p>
 
-          {/* Dual CTA buttons */}
           <div className="hero__actions">
-            <a href="#productos" className="btn btn--primary">
-              <span className="material-symbols-outlined">storefront</span>
-              Ver productos
+            <a href="#productos" className="btn btn--gold">
+              Ver Catálogo
             </a>
-            <a href="#kit-regalo" className="btn btn--secondary">
-              <span className="material-symbols-outlined">redeem</span>
-              Kits de regalo
+            <a 
+              href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn btn--outline-gold"
+            >
+              Consultar por WhatsApp
             </a>
           </div>
-
-          {/* Social proof line */}
-          <p className="hero__proof">
-            ⭐ +15 materos satisfechos · Envío gratis desde $80.000
-          </p>
-        </div>
-
-        {/* Right column — image */}
-        <div className="hero__image">
-          <img
-            src={heroImage}
-            alt="Mate artesanal de madera tallado a mano en Mendoza"
-            loading="eager"
-          />
         </div>
       </div>
     </section>

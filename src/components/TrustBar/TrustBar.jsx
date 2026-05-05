@@ -1,27 +1,46 @@
 /**
- * TrustBar — Horizontal bar with 4 trust indicators.
- * Dark background with golden icons and white text. [SF]
+ * TrustBar — Barra de confianza y beneficios reales de Cuyo Cebado.
+ * Fondo oscuro, iconos claros. Ajustado para reflejar atención directa y calidad.
  */
-import './TrustBar.css';
-
-/* Trust indicators data — constants to avoid magic strings [CMV] */
-const TRUST_ITEMS = [
-  { icon: 'local_shipping', text: 'Envíos a todo el país' },
-  { icon: 'verified_user', text: 'Pago 100% seguro – Mercado Pago' },
-  { icon: 'groups', text: '+500 clientes satisfechos' },
-  { icon: 'workspace_premium', text: 'Garantía de calidad 30 días' },
-];
+import './TrustBar.css'; // Asegurate de que el nombre del CSS coincida con el tuyo
 
 export default function TrustBar() {
+  const trustFeatures = [
+    {
+      icon: 'local_shipping',
+      title: 'Envíos a todo el país',
+      desc: 'Despachos seguros desde Cuyo.'
+    },
+    {
+      icon: 'forum',
+      title: 'Atención por WhatsApp',
+      desc: 'Trato directo y personal.'
+    },
+    {
+      icon: 'handshake',
+      title: 'Selección Personal',
+      desc: 'Elegimos tu mate con vos.'
+    },
+    {
+      icon: 'workspace_premium',
+      title: 'Calidad Artesanal',
+      desc: 'Revisión pieza por pieza.'
+    }
+  ];
+
   return (
     <section className="trustbar">
       <div className="trustbar__container section__container">
-        {TRUST_ITEMS.map((item, index) => (
+        {trustFeatures.map((feature, index) => (
           <div className="trustbar__item" key={index}>
             <span className="material-symbols-outlined trustbar__icon">
-              {item.icon}
+              {feature.icon}
             </span>
-            <span className="trustbar__text">{item.text}</span>
+            <div className="trustbar__text">
+              <h4 className="trustbar__title">{feature.title}</h4>
+              {/* Opcional: Si antes no tenías descripción (desc), podés borrar esta línea de abajo */}
+              <p className="trustbar__desc">{feature.desc}</p>
+            </div>
           </div>
         ))}
       </div>

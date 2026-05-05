@@ -1,40 +1,30 @@
-/**
- * OurStory — Brand story section with dark background.
- * Left: artisan image. Right: narrative text + CTA. [SF]
- */
-import artesanoImage from '../../assets/artesano_taller.png';
 import './OurStory.css';
 
 export default function OurStory() {
   return (
-    <section className="ourstory section" id="nosotros">
-      <div className="ourstory__container section__container">
-        {/* Left — Image */}
-        <div className="ourstory__image">
-          <img src={artesanoImage} alt="Artesano mendocino tallando un mate" loading="lazy" />
-        </div>
-
-        {/* Right — Story content */}
-        <div className="ourstory__content">
-          <span className="ourstory__overline">NUESTRA HISTORIA</span>
-          <h2 className="ourstory__title">Nacimos del amor al mate</h2>
-
-          <p>
-            En un pequeño taller al pie de la Cordillera mendocina, nuestro abuelo Don Carlos 
-            comenzó a tallar sus primeros mates hace más de 40 años. Con paciencia infinita y 
-            manos curtidas por el sol, transformaba troncos de lapacho en verdaderas obras de arte.
+    <section className="story section" id="nuestra-historia">
+      <div className="story__container section__container">
+        <div className="story__content">
+          <h2 className="section__title">Nuestra Historia</h2>
+          
+          <p className="story__text">
+            <b>Cuyo Cebado</b> nació de una charla entre dos amigos, uno de Mendoza y otro de San Luis, 
+            con una idea clara: encontrar el mate que nos represente. Lo que empezó como un proyecto para 
+            generar nuestro propio camino, se convirtió en una búsqueda por la calidad artesanal.
           </p>
 
-          <p>
-            Hoy, tres generaciones después, seguimos honrando esa tradición. Cada mate que sale 
-            de nuestro taller lleva consigo horas de trabajo artesanal, el aroma de la madera 
-            mendocina y el orgullo de una familia que vive para crear piezas que acompañen 
-            tus mejores momentos.
+          <p className="story__text">
+            No somos una gran corporación, somos un emprendimiento que está naciendo. Por eso, nos tomamos 
+            el tiempo de <b>seleccionar personalmente cada pieza</b>. Estamos en la etapa de buscar y 
+            elegir a los mejores artesanos de nuestra región, asegurándonos de que cada mate que llegue 
+            a tus manos sea el mismo que elegiríamos para nosotros.
           </p>
 
-          <a href="#contacto" className="btn btn--outline-gold">
-            Conocé más sobre nosotros
-          </a>
+          <p className="story__text">
+            Nuestra misión es simple: unir la tradición de Cuyo con el ritual diario de compartir un mate. 
+            Creemos en la transparencia y en el valor del esfuerzo compartido. Gracias por ser parte de 
+            este comienzo.
+          </p>
         </div>
       </div>
     </section>
