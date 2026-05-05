@@ -1,13 +1,14 @@
 import './Hero.css';
+import heroBgImage from '../../assets/fondo_hero_principal.png'; 
 
 export default function Hero() {
   return (
     <section className="hero" id="hero">
       
-      {/* 1. Capa de la imagen (Inyectada con foto 4K de viñedos para probar la resolución) */}
+      {/* 1. Capa de la imagen (Conectada a tu archivo local) */}
       <div 
         className="hero__image-bg"
-        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1596431940984-7eebefb1a4cb?q=80&w=2500&auto=format&fit=crop')` }}
+        style={{ backgroundImage: `url(${heroBgImage})` }}
       ></div>
 
       {/* 2. Capa que dibuja la gran curva marrón oscuro */}
