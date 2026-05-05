@@ -1,32 +1,33 @@
 /**
- * SpecialOffer — Barra de beneficios y comunidad para Cuyo Cebado.
- * Fondo dorado con enfoque en el canal de difusión y envíos regionales.
+ * SpecialOffer — Barra de beneficios y acceso al canal de difusión.
+ * Ubicación: src/components/SpecialOffer/SpecialOffer.jsx
  */
 import './SpecialOffer.css';
 
 export default function SpecialOffer() {
-  /* 
-     Eliminamos la lógica del countdown para priorizar la honestidad de la marca.
-     Transformamos la sección en un anuncio de beneficios reales.
-  */
+  /* URL oficial de tu nuevo canal de WhatsApp */
+  const CANAL_WHATSAPP_URL = "https://whatsapp.com/channel/0029Vb7fvirADTOLBlLu1m2m";
 
   return (
     <section className="offer">
       <div className="offer__container section__container">
+        {/* Mensaje de beneficio regional y logística */}
         <div className="offer__content">
           <p className="offer__text">
             🏔️ <b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.
           </p>
         </div>
 
+        {/* Botón de acceso al canal de difusión */}
         <div className="offer__actions">
           <a 
-            href="https://wa.me/5492625597956?text=Hola!%20Quiero%20sumarme%20al%20canal%20de%20difusión%20para%20ver%20los%20nuevos%20ingresos" 
+            href={CANAL_WHATSAPP_URL} 
             target="_blank" 
             rel="noopener noreferrer"
             className="btn btn--dark btn--small"
             style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
           >
+            {/* Logo oficial de WhatsApp (SVG) */}
             <svg 
               width="16" 
               height="16" 
