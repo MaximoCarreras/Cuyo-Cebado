@@ -1,14 +1,9 @@
-/**
- * useProducts — Hook para obtener productos de Cuyo Cebado.
- * Apunta directamente a la carpeta public/images/.
- */
 import { useState, useEffect } from 'react';
 
 const FALLBACK_PRODUCTS = [
   {
     id: '1',
     name: 'Mate Lapacho Imperial',
-    slug: 'mate-lapacho-imperial',
     description: 'Tallado a mano en madera de lapacho. Acabado natural con aceite de tung.',
     price: 45000,
     category: 'madera',
@@ -20,7 +15,6 @@ const FALLBACK_PRODUCTS = [
   {
     id: '2',
     name: 'Mate Calabaza Gaucho',
-    slug: 'mate-calabaza-gaucho',
     description: 'Calabaza curada con virola de alpaca y base de cuero repujado.',
     price: 35000,
     category: 'calabaza',
@@ -32,7 +26,6 @@ const FALLBACK_PRODUCTS = [
   {
     id: '3',
     name: 'Mate Cerámica Tierra',
-    slug: 'mate-ceramica-tierra',
     description: 'Cerámica artesanal con esmalte en tonos tierra. Hecho a mano en Mendoza.',
     price: 28000,
     category: 'ceramica',
@@ -44,7 +37,6 @@ const FALLBACK_PRODUCTS = [
   {
     id: '4',
     name: 'Kit Regalo Premium',
-    slug: 'kit-regalo-premium',
     description: 'Mate lapacho + bombilla alpaca + yerba orgánica + caja de madera.',
     price: 89000,
     category: 'kit',
@@ -55,30 +47,30 @@ const FALLBACK_PRODUCTS = [
   },
 ];
 
-export function useProducts(category = null) {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Usamos los datos locales con las rutas corregidas
-    const data = category
-      ? FALLBACK_PRODUCTS.filter(p => p.category === category)
-      : FALLBACK_PRODUCTS;
-    setProducts(data);
-    setLoading(false);
-  }, [category]);
-
-  return { products, loading };
-}
-
 export function useFeaturedProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Forzamos el uso de los datos locales que tienen las rutas correctas
     setProducts(FALLBACK_PRODUCTS.filter(p => p.is_featured));
     setLoading(false);
   }, []);
+
+  return { products, loading };
+}
+
+export function useProducts(category = null) {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const filtered = category
+      ? FALLBACK_PRODUCTS.filter(p => p.category === category)
+      : FALLBACK_PRODUCTS;
+    setProducts(filtered);
+    setLoading(false);
+  }, [category]);
 
   return { products, loading };
 }

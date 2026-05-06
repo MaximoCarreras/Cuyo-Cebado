@@ -23,7 +23,7 @@ export default function BestSellers() {
         </div>
 
         {loading ? (
-          <p style={{ textAlign: 'center' }}>Cargando mates...</p>
+          <p style={{ textAlign: 'center' }}>Cargando...</p>
         ) : (
           <div className="bestsellers__grid">
             {products.map(product => (
@@ -33,7 +33,6 @@ export default function BestSellers() {
                     src={product.image_url}
                     alt={product.name}
                     className="product-card__image"
-                    loading="lazy"
                   />
                   {product.badge && (
                     <span className="badge badge--green product-card__badge">
@@ -50,18 +49,6 @@ export default function BestSellers() {
                   <button
                     onClick={() => addToCart(product)}
                     className="btn btn--primary product-card__btn"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                      width: '100%',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: '12px',
-                      borderRadius: '50px',
-                      fontWeight: 'bold'
-                    }}
                   >
                     <span className="material-symbols-outlined">add_shopping_cart</span>
                     Agregar al Carrito

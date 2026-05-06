@@ -18,7 +18,6 @@ export default function CartPage() {
             <div className="cart-empty section__container" style={{ paddingTop: '150px', textAlign: 'center' }}>
                 <span className="material-symbols-outlined" style={{ fontSize: '60px', color: '#ccc' }}>shopping_basket</span>
                 <h2>Tu carrito está vacío</h2>
-                <p>Parece que todavía no has sumado ningún mate.</p>
                 <Link to="/" className="btn btn--gold">Ir a ver productos</Link>
             </div>
         );
@@ -27,7 +26,6 @@ export default function CartPage() {
     return (
         <div className="cart-page section__container">
             <h1 className="cart-page__title">Tu Carrito</h1>
-
             <div className="cart-page__grid">
                 <div className="cart-items">
                     {cart.map((item) => (
@@ -35,57 +33,29 @@ export default function CartPage() {
                             <div className="cart-item__image">
                                 <img src={item.image_url} alt={item.name} />
                             </div>
-
                             <div className="cart-item__info">
                                 <h3>{item.name}</h3>
                                 <p className="cart-item__unit-price">{formatCurrency(item.price)} c/u</p>
-
                                 <div className="cart-item__controls">
                                     <div className="quantity-selector">
                                         <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
                                         <span>{item.quantity}</span>
                                         <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                                     </div>
-                                    <button className="btn-remove" onClick={() => removeFromCart(item.id)}>
-                                        Eliminar
-                                    </button>
+                                    <button className="btn-remove" onClick={() => removeFromCart(item.id)}>Eliminar</button>
                                 </div>
                             </div>
-
-                            <div className="cart-item__subtotal">
-                                {formatCurrency(item.price * item.quantity)}
-                            </div>
+                            <div className="cart-item__subtotal">{formatCurrency(item.price * item.quantity)}</div>
                         </div>
                     ))}
                 </div>
-
                 <aside className="cart-summary">
                     <div className="summary-card">
                         <h3>Resumen del pedido</h3>
-
-                        <div className="summary-row">
-                            <span>Subtotal</span>
-                            <span>{formatCurrency(cartTotal)}</span>
-                        </div>
-
-                        <div className="summary-row total">
-                            <span>Total</span>
-                            <span>{formatCurrency(cartTotal)}</span>
-                        </div>
-
-                        <button className="btn-checkout">
-                            CONTINUAR COMPRA
-                        </button>
-
-                        <p className="cart-notice">
-                            <span className="material-symbols-outlined">verified_user</span>
-                            Compra protegida y segura
-                        </p>
+                        <div className="summary-row"><span>Subtotal</span><span>{formatCurrency(cartTotal)}</span></div>
+                        <div className="summary-row total"><span>Total</span><span>{formatCurrency(cartTotal)}</span></div>
+                        <button className="btn-checkout">CONTINUAR COMPRA</button>
                     </div>
-
-                    <Link to="/" className="continue-shopping">
-                        ← Seguir comprando
-                    </Link>
                 </aside>
             </div>
         </div>
