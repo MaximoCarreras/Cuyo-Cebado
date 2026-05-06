@@ -1,120 +1,111 @@
-/**
- * CartContext — Gestión global del carrito para Cuyo Cebado.
- * Usa useReducer para actualizaciones predecibles y persiste los datos en localStorage.
- */
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { useCart } from '../../context/CartContext';
+import { Link } from 'react-router-dom';
+import './CartPage.css';
 
-const CartContext = createContext(null);
+export default function CartPage() {
+  // 1. IMPORTACIONES CORREGIDAS: Usamos 'cart' y 'cartTotal' exacto como está en tu Context
+  const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
 
-const STORAGE_KEY = 'cuyo_cebado_cart_v1';
+  // Formateador de moneda argentina (AR$ 00.000)
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'ARS',
+      minimumFractionDigits: 0,
+    }).format(value);
+  };
 
-const ACTIONS = {
-  ADD_ITEM: 'ADD_ITEM',
-  REMOVE_ITEM: 'REMOVE_ITEM',
-  UPDATE_QUANTITY: 'UPDATE_QUANTITY',
-  CLEAR_CART: 'CLEAR_CART',
-  LOAD_CART: 'LOAD_CART',
-};
-
-function cartReducer(state, action) {
-  switch (action.type) {
-    case ACTIONS.LOAD_CART:
-      return { ...state, items: action.payload };
-
-    case ACTIONS.ADD_ITEM: {
-      const existing = state.items.find(item => item.id === action.payload.id);
-      if (existing) {
-        // No exceder el stock disponible si existe el dato
-        const newQty = action.payload.stock
-          ? Math.min(existing.quantity + 1, action.payload.stock)
-          : existing.quantity + 1;
-
-        return {
-          ...state,
-          items: state.items.map(item =>
-            item.id === action.payload.id ? { ...item, quantity: newQty } : item
-          ),
-        };
-      }
-      return {
-        ...state,
-        items: [...state.items, { ...action.payload, quantity: 1 }],
-      };
-    }
-
-    case ACTIONS.REMOVE_ITEM:
-      return {
-        ...state,
-        items: state.items.filter(item => item.id !== action.payload),
-      };
-
-    case ACTIONS.UPDATE_QUANTITY:
-      return {
-        ...state,
-        items: state.items.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: Math.max(0, action.payload.quantity) }
-            : item
-        ).filter(item => item.quantity > 0),
-      };
-
-    case ACTIONS.CLEAR_CART:
-      return { ...state, items: [] };
-
-    default:
-      return state;
+  // 2. CORREGIDO: Revisamos si 'cart' está vacío
+  if (!cart || cart.length === 0) {
+    return (
+      <div className="cart-empty section__container">
+        <span className="material-symbols-outlined empty-icon">shopping_basket</span>
+        <h2>Tu carrito está vacío</h2>
+        <p>Parece que todavía no has sumado ningún mate a tu pedido.</p>
+        <Link to="/" className="btn btn--gold">Ir a ver productos</Link>
+      </div>
+    );
   }
-}
-
-export function CartProvider({ children }) {
-  const [state, dispatch] = useReducer(cartReducer, { items: [] });
-
-  // Carga inicial desde localStorage
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        dispatch({ type: ACTIONS.LOAD_CART, payload: JSON.parse(saved) });
-      }
-    } catch (error) {
-      console.error("Error cargando el carrito:", error);
-    }
-  }, []);
-
-  // Persistencia automática
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
-  }, [state.items]);
-
-  // Valores calculados para exportar
-  const cartCount = state.items.reduce((sum, item) => sum + item.quantity, 0);
-  const cartTotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  // Funciones de despacho (renombradas para coincidir con tus componentes)
-  const addToCart = (product) => dispatch({ type: ACTIONS.ADD_ITEM, payload: product });
-  const removeFromCart = (id) => dispatch({ type: ACTIONS.REMOVE_ITEM, payload: id });
-  const updateQuantity = (id, quantity) => dispatch({ type: ACTIONS.UPDATE_QUANTITY, payload: { id, quantity } });
-  const clearCart = () => dispatch({ type: ACTIONS.CLEAR_CART });
 
   return (
-    <CartContext.Provider value={{
-      cart: state.items,
-      cartCount,
-      cartTotal,
-      addToCart,
-      removeFromCart,
-      updateQuantity,
-      clearCart,
-    }}>
-      {children}
-    </CartContext.Provider>
-  );
-}
+    <div className="cart-page section__container">
+      <h1 className="cart-page__title">Tu Carrito</h1>
 
-export function useCart() {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart debe usarse dentro de un CartProvider');
-  }
-  return context;
+      <div className="cart-page__grid">
+        {/* COLUMNA IZQUIERDA: Lista de productos */}
+        <div className="cart-items">
+          {/* 3. CORREGIDO: Mapeamos la lista 'cart' */}
+          {cart.map((item) => (
+            <div key={item.id} className="cart-item">
+              <div className="cart-item__image">
+                <img src={item.image_url} alt={item.name} />
+              </div>
+
+              <div className="cart-item__info">
+                <h3>{item.name}</h3>
+                <p className="cart-item__unit-price">{formatCurrency(item.price)} c/u</p>
+
+                <div className="cart-item__controls">
+                  <div className="quantity-selector">
+                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
+                    <span>{item.quantity}</span>
+                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                  </div>
+
+                  <button
+                    className="btn-remove"
+                    onClick={() => removeFromCart(item.id)}
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+
+              <div className="cart-item__subtotal">
+                {formatCurrency(item.price * item.quantity)}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* COLUMNA DERECHA: Resumen de compra */}
+        <aside className="cart-summary">
+          <div className="summary-card">
+            <h3>Resumen del pedido</h3>
+
+            <div className="summary-row">
+              <span>Subtotal</span>
+              {/* 4. CORREGIDO: Usamos el número 'cartTotal' directamente */}
+              <span>{formatCurrency(cartTotal)}</span>
+            </div>
+
+            <div className="summary-row">
+              <span>Envío</span>
+              <span className="text-free">A calcular</span>
+            </div>
+
+            <hr />
+
+            <div className="summary-row total">
+              <span>Total</span>
+              <span>{formatCurrency(cartTotal)}</span>
+            </div>
+
+            <button className="btn btn--gold btn-checkout">
+              Continuar compra
+            </button>
+
+            <p className="cart-notice">
+              <span className="material-symbols-outlined">verified_user</span>
+              Compra protegida y segura
+            </p>
+          </div>
+
+          <Link to="/" className="continue-shopping">
+            ← Seguir comprando
+          </Link>
+        </aside>
+      </div>
+    </div>
+  );
 }
