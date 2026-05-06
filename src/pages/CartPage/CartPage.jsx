@@ -33,14 +33,7 @@ export default function CartPage() {
                     {cart.map((item) => (
                         <div key={item.id} className="cart-item">
                             <div className="cart-item__image">
-                                <img
-                                    src={`/images/product_${item.id}.png`}
-                                    alt={item.name}
-                                    onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = 'https://placehold.co/100x100?text=Mate';
-                                    }}
-                                />
+                                <img src={item.image_url} alt={item.name} />
                             </div>
 
                             <div className="cart-item__info">
@@ -81,7 +74,7 @@ export default function CartPage() {
                         </div>
 
                         <button className="btn-checkout">
-                            Continuar compra
+                            CONTINUAR COMPRA
                         </button>
 
                         <p className="cart-notice">

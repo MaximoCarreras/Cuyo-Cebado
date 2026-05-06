@@ -1,7 +1,3 @@
-/**
- * BestSellers — Grilla de productos para Cuyo Cebado.
- * Conectado al CartContext y con rutas de imagen sincronizadas con la carpeta public/images.
- */
 import { useFeaturedProducts } from '../../hooks/useProducts';
 import { useCart } from '../../context/CartContext';
 import './BestSellers.css';
@@ -10,7 +6,6 @@ export default function BestSellers() {
   const { products, loading } = useFeaturedProducts();
   const { addToCart } = useCart();
 
-  /* Formato de moneda para Argentina (AR$ 00.000) */
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-AR', {
       style: 'currency',
@@ -28,27 +23,18 @@ export default function BestSellers() {
         </div>
 
         {loading ? (
-          <div className="loading-container">
-            <p>Cargando mates seleccionados...</p>
-          </div>
+          <p style={{ textAlign: 'center' }}>Cargando mates...</p>
         ) : (
           <div className="bestsellers__grid">
             {products.map(product => (
               <article className="product-card" key={product.id}>
-
-                {/* Imagen del producto sincronizada con public/images/product_X.png */}
                 <div className="product-card__image-wrapper">
                   <img
-                    src={`/images/product_${product.id}.png`}
+                    src={product.image_url}
                     alt={product.name}
                     className="product-card__image"
                     loading="lazy"
-                    onError={(e) => {
-                      e.target.onerror = null; // Evita bucles infinitos si falla el placeholder
-                      e.target.src = 'https://placehold.co/400x400?text=Cuyo+Cebado+Mate';
-                    }}
                   />
-
                   {product.badge && (
                     <span className="badge badge--green product-card__badge">
                       {product.badge}
@@ -80,24 +66,11 @@ export default function BestSellers() {
                     <span className="material-symbols-outlined">add_shopping_cart</span>
                     Agregar al Carrito
                   </button>
-
-                  {/* Indicador de stock crítico */}
-                  {product.stock > 0 && product.stock <= 3 && (
-                    <p className="product-card__stock">
-                      ⚠️ ¡Solo quedan {product.stock} unidades!
-                    </p>
-                  )}
                 </div>
               </article>
             ))}
           </div>
         )}
-
-        <div className="bestsellers__cta">
-          <a href="/nosotros" className="btn btn--outline-gold">
-            Conocé nuestra historia →
-          </a>
-        </div>
       </div>
     </section>
   );
