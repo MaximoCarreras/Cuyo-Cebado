@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  background-color: #fdfaf7; 
+  background-color: #fdfaf7;
 }
 
 /* --- 1. LA IMAGEN DE FONDO (Lado Derecho) --- */
@@ -17,31 +17,39 @@
   right: 0;
   width: 100%;
   height: 100%;
-  
-  /* ¡LÍNEA DE BACKGROUND-IMAGE ELIMINADA! 
-     La inyectamos desde Hero.jsx para evitar errores de ruta. */
-  
   background-size: cover;
   background-position: center right;
   z-index: 1;
 }
 
-/* --- 2. LA FORMA CURVA MARRÓN (La panza) --- */
+/* --- 2. LA FORMA CURVA (Ahora contiene el WebGL) --- */
 .hero__shape {
   position: absolute;
   top: -10%;
   left: -20%;
   width: 75%;
   height: 120%;
-  
-  /* MARRÓN ORIGINAL */
-  background-color: #2c2016; 
-  
+
+  /* Fallback color por si tarda unos milisegundos en cargar el 3D */
+  background-color: #2c2016;
+
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
-  
-  box-shadow: 20px 0 50px rgba(0,0,0,0.4);
+
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
   z-index: 2;
+
+  /* ¡CLAVE! Esto recorta el lienzo cuadrado del fondo animado a la forma curva */
+  overflow: hidden;
+}
+
+/* Para asegurar que el canvas ocupe toda la forma */
+.hero__grainient {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* --- 3. CONTENIDO (Textos y Botones) --- */
@@ -67,12 +75,12 @@
 }
 
 .text-white {
-  color: #ffffff; /* Texto blanco puro */
-  opacity: 0.95; 
+  color: #ffffff;
+  opacity: 0.95;
 }
 
 .hero__title b {
-  color: #d4af37; /* IDENTIDAD en Dorado */
+  color: #d4af37;
   display: block;
 }
 
@@ -81,7 +89,7 @@
   line-height: 1.6;
   font-weight: 400;
   margin-bottom: 40px;
-  color: #ffffff; /* Subtítulo en blanco */
+  color: #ffffff;
   opacity: 0.85;
 }
 
@@ -140,8 +148,13 @@
     width: 100%;
     height: 70%;
     border-radius: 0;
-    background: linear-gradient(to top, #2c2016 40%, rgba(44, 32, 22, 0) 100%);
+    background: transparent;
     box-shadow: none;
+
+    /* REEMPLAZO DEL GRADIENTE: Usamos una máscara para que el fondo animado 
+       se vaya haciendo transparente hacia arriba y se fusione con la foto */
+    -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 100%);
   }
 
   .hero__content {
