@@ -5,15 +5,18 @@ import { mpClient } from '../lib/mercadopago.js';
 
 const router = Router();
 
+// URL fija para la prueba en tu PC
+const FRONTEND_URL = 'http://localhost:5173';
+
 router.post('/', async (req, res) => {
   try {
     if (!supabaseAdmin || !mpClient) {
-      return res.status(503).json({ error: 'Configuración incompleta.' });
+      return res.status(503).json({ error: 'Configuración de Supabase o MP ausente.' });
     }
 
     const { items, email, name } = req.body;
 
-    // 1. Verificar Stock en Supabase
+    // 1. Verificación de Stock en Supabase
     const productIds = items.map(i => i.id);
     const { data: products, error: fetchErr } = await supabaseAdmin
       .from('products')
@@ -61,19 +64,16 @@ router.post('/', async (req, res) => {
         items: orderItems,
         payer: { email, name },
         back_urls: {
-          // URLs ultra-limpias (sin parámetros raros para que MP no se queje)
-          success: "http://localhost:5173",
-          failure: "http://localhost:5173/carrito",
-          pending: "http://localhost:5173"
+          success: `${FRONTEND_URL}/`,
+          failure: `${FRONTEND_URL}/carrito`,
+          pending: `${FRONTEND_URL}/`
         },
-        auto_return: "approved",
-        external_reference: order.id,
-        // Comentamos la notificación para evitar errores de validación en local
-        // notification_url: "https://tu-url.com/webhook" 
+        // Sacamos el auto_return para que MP no se ponga exquisito con la validación
+        external_reference: order.id
       }
     });
 
-    // 4. Actualizar orden con el ID de la preferencia
+    // 4. Actualizar orden
     await supabaseAdmin
       .from('orders')
       .update({ mp_preference_id: response.id })
