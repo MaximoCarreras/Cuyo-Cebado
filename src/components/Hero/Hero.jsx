@@ -15,25 +15,25 @@ export default function Hero() {
       {/* 2. Capa que dibuja la gran curva marrón oscuro (AHORA CON ANIMACIÓN) */}
       <div className="hero__shape">
         <Grainient
-          color1="#1a110a"   /* Marrón café muy oscuro */
-          color2="#d4af37"   /* Dorado Cuyo Cebado */
-          color3="#4a3525"   /* Tono madera */
-          timeSpeed={0.15}   /* Sutil y elegante */
+          color1="#0f0a07"   /* Marrón súper oscuro, casi negro (da profundidad) */
+          color2="#2c2016"   /* El marrón original de tu marca */
+          color3="#3d2a1b"   /* Un tono madera un poco más cálido para el movimiento */
+          timeSpeed={0.15}   /* Movimiento lento y elegante */
           colorBalance={0}
           warpStrength={1.5}
           warpFrequency={3}
           warpSpeed={1}
           warpAmplitude={40}
           blendAngle={0}
-          blendSoftness={0.1}
+          blendSoftness={0.6} /* Suavizamos la mezcla para que parezca luz sobre madera */
           rotationAmount={100}
           noiseScale={1.5}
-          grainAmount={0.08}
+          grainAmount={0.06} /* Grano un pelín más suave para no ensuciar la lectura */
           grainScale={1.5}
           grainAnimated={true}
-          contrast={1.2}
+          contrast={1.1}     /* Contraste ajustado para tonos oscuros */
           gamma={1}
-          saturation={0.8}
+          saturation={0.6}   /* Bajamos la saturación para que quede sobrio, no rojizo */
           zoom={1}
           className="hero__grainient"
         />
