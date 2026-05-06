@@ -4,6 +4,7 @@
     min-height: 80vh;
     padding-bottom: 80px;
     background-color: #fdfaf7;
+    transition: all 0.3s ease;
 }
 
 .cart-page__title {
@@ -16,6 +17,7 @@
 .cart-page__grid {
     display: grid;
     grid-template-columns: 1fr 380px;
+    /* PC: Productos izquierda, resumen derecha */
     gap: 40px;
     align-items: flex-start;
 }
@@ -40,26 +42,26 @@
     border-radius: 10px;
 }
 
-/* --- Tarjeta de Resumen (La parte que no se veía) --- */
+/* --- Tarjeta de Resumen --- */
 .summary-card {
     background: #1a1a1a;
-    /* Fondo oscuro premium */
     color: white;
     padding: 35px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    /* Se queda quieta al scrollear en PC */
+    top: 120px;
 }
 
 .summary-card h3 {
     margin-bottom: 25px;
     font-size: 1.5rem;
     color: #ffffff !important;
-    /* Forzamos blanco para el título */
 }
 
 .fields-title {
     color: #d4af37 !important;
-    /* Dorado para "Tus Datos" */
     font-size: 0.85rem;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -74,9 +76,8 @@
     border: none;
     border-bottom: 1px solid #333;
     color: white !important;
-    /* Texto que escribís en blanco */
     font-size: 1rem;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .cart-input-dark:focus {
@@ -112,10 +113,87 @@
     gap: 12px;
     cursor: pointer;
     margin-top: 25px;
+    transition: background 0.3s ease;
+}
+
+.btn-mercadopago:hover {
+    background-color: #0081ba;
 }
 
 .mp-icon-local {
     height: 25px;
     width: auto;
-    /* Eliminamos filtros para que se vea el color original celeste/blanco */
+}
+
+/* ============================================================
+   ADAPTACIÓN PARA CELULARES (Responsive Design)
+   ============================================================ */
+
+@media (max-width: 992px) {
+    .cart-page__grid {
+        grid-template-columns: 1fr;
+        /* Una sola columna en tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .cart-page {
+        padding-top: 100px;
+        /* Menos espacio arriba en el celu */
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .cart-page__title {
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    /* El producto se reacomoda para no quedar apretado */
+    .cart-item {
+        grid-template-columns: 100px 1fr;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .cart-item__subtotal {
+        grid-column: 1 / -1;
+        /* El precio total del item pasa abajo */
+        text-align: right;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+        font-weight: 700;
+    }
+
+    /* El resumen oscuro ocupa todo el ancho */
+    .summary-card {
+        padding: 25px;
+        position: static;
+        /* No se queda pegado arriba */
+    }
+
+    .total-amount {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Para celus muy chiquitos */
+    .cart-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .cart-item__image {
+        width: 120px;
+        margin-bottom: 10px;
+    }
+
+    .quantity-selector {
+        justify-content: center;
+    }
 }
