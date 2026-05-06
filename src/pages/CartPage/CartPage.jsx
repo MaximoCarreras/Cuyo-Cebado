@@ -13,19 +13,19 @@ export default function CartPage() {
         }).format(value);
     };
 
-    // FUNCIÓN DE PAGO: Aquí es donde ocurre la magia con Mercado Pago
-    const handleCheckout = async () => {
-        console.log("Iniciando pago para:", cart);
-        // En el siguiente paso, conectaremos esto con tu backend de Node.js
-        // para generar el link real. Por ahora, simula la acción.
+    // Función que se ejecutará al tocar el botón de pago
+    const handleCheckoutMP = async () => {
+        console.log("Iniciando flujo de pago para:", cart);
+        // En el futuro, aquí conectaremos con Node.js
         alert("Redirigiendo a la plataforma segura de Mercado Pago...");
     };
 
     if (!cart || cart.length === 0) {
         return (
-            <div className="cart-empty section__container">
-                <span className="material-symbols-outlined empty-icon">shopping_basket</span>
+            <div className="cart-empty section__container" style={{ paddingTop: '150px', textAlign: 'center' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: '60px', color: '#ccc' }}>shopping_basket</span>
                 <h2>Tu carrito está vacío</h2>
+                <p>Parece que todavía no has sumado ningún mate.</p>
                 <Link to="/" className="btn btn--gold">Ir a ver productos</Link>
             </div>
         );
@@ -36,6 +36,7 @@ export default function CartPage() {
             <h1 className="cart-page__title">Tu Carrito</h1>
 
             <div className="cart-page__grid">
+                {/* COLUMNA IZQUIERDA: Lista de productos (Tarjetas blancas) */}
                 <div className="cart-items">
                     {cart.map((item) => (
                         <div key={item.id} className="cart-item">
@@ -66,6 +67,7 @@ export default function CartPage() {
                     ))}
                 </div>
 
+                {/* COLUMNA DERECHA: Resumen de compra (Tarjeta oscura) */}
                 <aside className="cart-summary">
                     <div className="summary-card">
                         <h3>Resumen del pedido</h3>
@@ -75,25 +77,30 @@ export default function CartPage() {
                             <span>{formatCurrency(cartTotal)}</span>
                         </div>
 
-                        <div className="summary-row total">
-                            <span>Total</span>
-                            <span>{formatCurrency(cartTotal)}</span>
+                        <div className="summary-row">
+                            <span>Envío</span>
+                            <span className="text-free">A calcular</span>
                         </div>
 
-                        {/* BOTÓN DE MERCADO PAGO */}
-                        <button className="btn-mp" onClick={handleCheckout}>
+                        <hr style={{ borderColor: '#444', margin: '15px 0' }} />
+
+                        <div className="summary-row total">
+                            <span>Total</span>
+                            {/* PRECIO EN DORADO */}
+                            <span style={{ color: '#d4af37', fontWeight: 'bold', fontSize: '1.4rem' }}>
+                                {formatCurrency(cartTotal)}
+                            </span>
+                        </div>
+
+                        {/* BOTÓN CELESTE DE MERCADO PAGO */}
+                        <button className="btn-mercadopago" onClick={handleCheckoutMP}>
                             <img
                                 src="https://logotipous.com/wp-content/uploads/2019/02/mercado-pago-logo.png"
-                                alt="Mercado Pago"
-                                className="mp-logo-btn"
+                                alt="MP"
+                                className="mp-logo-icon"
                             />
                             Pagar con Mercado Pago
                         </button>
-
-                        <p className="cart-notice">
-                            <span className="material-symbols-outlined">shield_check</span>
-                            Pago procesado por Mercado Pago
-                        </p>
                     </div>
 
                     <Link to="/" className="continue-shopping">

@@ -1,39 +1,214 @@
-/* BOTÓN MERCADO PAGO PROFESIONAL */
-.btn-mp {
+/* src/pages/CartPage/CartPage.css */
+
+.cart-page {
+    padding-top: 160px;
+    /* Asegura espacio para el navbar */
+    min-height: 80vh;
+    padding-bottom: 80px;
+    background-color: #fdfaf7;
+    /* Fondo sutil general */
+}
+
+.cart-page__title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #1a1a1a;
+}
+
+.cart-page__grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* --- LISTA DE ITEMS (Tarjetas Blancas) --- */
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 24px;
+    background: white;
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    align-items: center;
+}
+
+.cart-item__image img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+}
+
+.cart-item__info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: #1a1a1a;
+}
+
+.cart-item__unit-price {
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.cart-item__controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    padding: 5px 15px;
+    gap: 15px;
+}
+
+.quantity-selector button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1a1a1a;
+}
+
+.btn-remove {
+    background: none;
+    border: none;
+    color: #c0392b;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.cart-item__subtotal {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #1a1a1a;
+}
+
+/* --- RESUMEN DE PAGO (Tarjeta Oscura) --- */
+.cart-summary {
+    position: sticky;
+    top: 140px;
+}
+
+.summary-card {
+    background: #1a1a1a;
+    color: white;
+    padding: 30px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.summary-card h3 {
+    margin-bottom: 25px;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: #e0e0e0;
+}
+
+.text-free {
+    color: #d4af37;
+    /* Dorado */
+    font-weight: 600;
+}
+
+.summary-row.total {
+    margin-top: 15px;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+/* El precio total en sí está hardcodeado en el JSX para asegurar el color dorado */
+
+/* --- BOTÓN MERCADO PAGO PROFESIONAL (El único cambio) --- */
+.btn-mercadopago {
     width: 100%;
     margin-top: 25px;
-    padding: 14px;
-    font-size: 1rem;
+    padding: 16px;
+    font-size: 1.1rem;
     font-weight: 700;
+    text-transform: uppercase;
+
+    /* El Celeste Mercado Pago */
     background-color: #009ee3;
-    /* Azul oficial Mercado Pago */
-    color: white;
+    color: #ffffff;
+
     border: none;
-    border-radius: 6px;
+    border-radius: 50px;
+    /* Manteniendo la forma redondeada de tus botones */
     cursor: pointer;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    transition: background 0.3s ease;
+    gap: 10px;
+    transition: all 0.3s ease;
 }
 
-.btn-mp:hover {
+.btn-mercadopago:hover {
     background-color: #007eb5;
+    /* Un tono más oscuro en hover */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 158, 227, 0.3);
 }
 
-.mp-logo-btn {
-    height: 25px;
+.mp-logo-icon {
+    height: 22px;
     filter: brightness(0) invert(1);
-    /* Pone el logo en blanco */
+    /* Logo en blanco para contraste */
 }
 
-.cart-notice {
+/* --- DETALLES FINALES --- */
+.continue-shopping {
+    display: block;
+    text-align: center;
     margin-top: 20px;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: #666;
+    color: #1a1a1a;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.continue-shopping:hover {
+    text-decoration: underline;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+    .cart-page__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-item {
+        grid-template-columns: 80px 1fr;
+        gap: 15px;
+    }
+
+    .cart-item__subtotal {
+        grid-column: 1 / -1;
+        text-align: right;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+    }
 }
