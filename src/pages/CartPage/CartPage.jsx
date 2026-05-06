@@ -5,13 +5,10 @@ import './CartPage.css';
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
+
+    // Estados para los datos necesarios del cliente
     const [customer, setCustomer] = useState({ name: '', email: '' });
     const [isProcessing, setIsProcessing] = useState(false);
-
-    // Detectamos si estamos en local o en Vercel para saber a qué servidor llamar
-    const API_URL = window.location.hostname === 'localhost'
-        ? 'http://localhost:3001'
-        : 'https://tu-servidor-desplegado.com'; // Aquí irá tu URL de Render/Railways luego
 
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('es-AR', {
@@ -19,29 +16,42 @@ export default function CartPage() {
         }).format(value);
     };
 
+    // Función principal de pago
     const handleCheckoutMP = async () => {
+        // Validación sutil antes de intentar pagar
         if (!customer.name || !customer.email) {
-            alert("Por favor, completá tu nombre y email.");
+            alert("Por favor, completá tu nombre y email para preparar el despacho.");
             return;
         }
 
         setIsProcessing(true);
         try {
-            const response = await fetch(`${API_URL}/api/checkout`, {
+            // Llamada al backend en localhost para LOCALHOST testing
+            const response = await fetch("http://localhost:3001/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ items: cart, name: customer.name, email: customer.email }),
+                body: JSON.stringify({
+                    items: cart,
+                    name: customer.name,
+                    email: customer.email
+                }),
             });
 
-            if (!response.ok) throw new Error("Error en el servidor");
-
             const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Error al crear la orden");
+            }
+
+            // Si el servidor nos devuelve el link, redirigimos
             if (data.init_point) {
+                console.log("Redirigiendo a:", data.init_point);
                 window.location.href = data.init_point;
             }
+
         } catch (error) {
-            console.error(error);
-            alert("Hubo un problema de conexión. ¿Tenés el servidor de Node prendido en el puerto 3001?");
+            console.error("Error completo en checkout:", error);
+            alert(`Logística: ${error.message}. Revisá la terminal del servidor.`);
         } finally {
             setIsProcessing(false);
         }
@@ -60,7 +70,9 @@ export default function CartPage() {
     return (
         <div className="cart-page section__container">
             <h1 className="cart-page__title">Tu Carrito</h1>
+
             <div className="cart-page__grid">
+                {/* COLUMNA IZQUIERDA: Tarjetas blancas de productos */}
                 <div className="cart-items">
                     {cart.map((item) => (
                         <div key={item.id} className="cart-item">
@@ -84,38 +96,57 @@ export default function CartPage() {
                     ))}
                 </div>
 
+                {/* COLUMNA DERECHA: Tarjeta oscura premium (Resumen) */}
                 <aside className="cart-summary">
                     <div className="summary-card">
                         <h3>Resumen del pedido</h3>
-                        <div className="checkout-fields" style={{ marginBottom: '20px' }}>
-                            <input
-                                type="text" placeholder="Nombre completo" value={customer.name}
-                                onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-                                className="cart-input"
-                            />
-                            <input
-                                type="email" placeholder="Email" value={customer.email}
-                                onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
-                                className="cart-input"
-                            />
-                        </div>
-                        <div className="summary-row"><span>Subtotal</span><span>{formatCurrency(cartTotal)}</span></div>
-                        <div className="summary-row"><span>Envío</span><span className="text-free">Gratis</span></div>
-                        <hr style={{ borderColor: '#444', margin: '15px 0' }} />
-                        <div className="summary-row total">
-                            <span>Total</span>
-                            <span style={{ color: '#d4af37', fontWeight: 'bold', fontSize: '1.4rem' }}>{formatCurrency(cartTotal)}</span>
+
+                        {/* DISEÑO PREMIUM DE INPUTS: Integrados con el estilo dorado */}
+                        <div className="checkout-fields">
+                            <h4>Datos de Despacho</h4>
+                            <div className="customer-form-group">
+                                <input
+                                    type="text"
+                                    placeholder="Nombre completo"
+                                    value={customer.name}
+                                    onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
+                                    className="cart-input-dark"
+                                />
+                            </div>
+                            <div className="customer-form-group">
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    value={customer.email}
+                                    onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
+                                    className="cart-input-dark"
+                                />
+                            </div>
                         </div>
 
+                        <div className="summary-row"><span>Subtotal</span><span>{formatCurrency(cartTotal)}</span></div>
+                        <div className="summary-row"><span>Envío</span><span className="text-free">Gratis</span></div>
+
+                        <hr style={{ borderColor: '#444', margin: '15px 0' }} />
+
+                        <div className="summary-row total">
+                            <span>Total</span>
+                            <span style={{ color: '#d4af37', fontWeight: 'bold', fontSize: '1.4rem' }}>
+                                {formatCurrency(cartTotal)}
+                            </span>
+                        </div>
+
+                        {/* BOTÓN CELESTE CON EL LOGO DE LAS MANOS RESTAURADO */}
                         <button className="btn-mercadopago" onClick={handleCheckoutMP} disabled={isProcessing}>
-                            {/* LOGO MP EN SVG (Más confiable) */}
-                            <svg width="25" height="25" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M36 24C36 30.6274 30.6274 36 24 36C17.3726 36 12 30.6274 12 24C12 17.3726 17.3726 12 24 12C30.6274 12 36 17.3726 36 24Z" fill="white" />
-                                <path d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" stroke="white" strokeWidth="4" />
-                            </svg>
-                            {isProcessing ? "Procesando..." : "Pagar con Mercado Pago"}
+                            <img
+                                src="https://logotipous.com/wp-content/uploads/2019/02/mercado-pago-logo.png"
+                                alt="Mercado Pago"
+                                className="mp-logo-hands"
+                            />
+                            {isProcessing ? "Despachando..." : "Pagar con Mercado Pago"}
                         </button>
                     </div>
+                    <Link to="/" className="continue-shopping">← Seguir comprando</Link>
                 </aside>
             </div>
         </div>

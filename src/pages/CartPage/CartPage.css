@@ -212,3 +212,58 @@
         padding-top: 10px;
     }
 }
+
+/* --- src/pages/CartPage/CartPage.css (Añadir al final) --- */
+
+/* Estilos para los campos de datos integrados en la tarjeta oscura */
+.checkout-fields {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.checkout-fields h4 {
+    color: #d4af37;
+    /* Dorado */
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.customer-form-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.cart-input-dark {
+    width: 100%;
+    padding: 12px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #444;
+    /* Borde sutil oscuro */
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.cart-input-dark:focus {
+    outline: none;
+    border-bottom: 1px solid #d4af37;
+    /* Línea dorada al hacer foco */
+}
+
+.cart-input-dark::placeholder {
+    color: #666;
+    /* Placeholder sutil */
+}
+
+/* Nuevo logo de Mercado Pago (Manos) */
+.mp-logo-hands {
+    height: 25px;
+    /* Ajuste para que se vea premium */
+    filter: brightness(0) invert(1);
+    /* Logo en blanco para contraste */
+}
+
+/* El botón celeste de Mercado Pago se mantiene con la clase .btn-mercadopago definida antes */
