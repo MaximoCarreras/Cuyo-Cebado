@@ -15,26 +15,26 @@ export default function Hero() {
       {/* 2. Capa que dibuja la gran curva marrón oscuro (AHORA CON ANIMACIÓN) */}
       <div className="hero__shape">
         <Grainient
-          color1="#0a0604"   /* Negro café muy profundo (da la oscuridad necesaria) */
-          color2="#704423"   /* Marrón caramelo/madera (este es el que va a dibujar las ondas) */
-          color3="#2b170a"   /* Chocolate oscuro (tono de transición) */
-          timeSpeed={0.20}   /* Un poquito más rápido para que notes que está vivo */
+          color1="#140d07"   /* Base casi negra */
+          color2="#3e2715"   /* Marrón nogal vivo */
+          color3="#26170d"   /* Sombra de madera */
+          timeSpeed={0.18}
           colorBalance={0}
-          warpStrength={2}   /* Le damos más fuerza a la deformación de las manchas */
-          warpFrequency={4}
-          warpSpeed={1.5}
-          warpAmplitude={60} /* Hacemos que las ondas de color sean más grandes */
+          warpStrength={1.5}
+          warpFrequency={3}
+          warpSpeed={1.2}
+          warpAmplitude={40}
           blendAngle={0}
-          blendSoftness={0.15} /* Reducimos la mezcla para que el caramelo resalte más sobre el negro */
+          blendSoftness={0.4} /* Mezcla más suave para que parezcan vetas */
           rotationAmount={100}
           noiseScale={1.5}
-          grainAmount={0.05} /* Un granulado más fino y sutil */
+          grainAmount={0.06}
           grainScale={1.5}
           grainAnimated={true}
-          contrast={1.4}     /* Subimos el contraste para que los tres colores no se fundan en uno solo */
-          gamma={1.1}
-          saturation={0.9}
-          zoom={1.2}
+          contrast={1.2}      /* Contraste equilibrado */
+          gamma={1}
+          saturation={0.8}
+          zoom={1}
           className="hero__grainient"
         />
       </div>
