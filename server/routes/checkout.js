@@ -9,8 +9,9 @@ import { mpClient } from '../lib/mercadopago.js';
 
 const router = Router();
 
-/* Aseguramos que la URL del frente sea absoluta */
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+// Limpiamos la URL para evitar dobles barras (//) que rompen Mercado Pago
+const RAW_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+const FRONTEND_URL = RAW_URL.replace(/\/$/, "");
 
 router.post('/', async (req, res) => {
   try {
@@ -56,7 +57,7 @@ router.post('/', async (req, res) => {
 
     const total = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    /* Paso 2: Crear orden en Supabase (status: pending) */
+    /* Paso 2: Crear orden en Supabase */
     const { data: order, error: orderErr } = await supabaseAdmin
       .from('orders')
       .insert({
@@ -74,7 +75,6 @@ router.post('/', async (req, res) => {
     /* Paso 3: Crear Preferencia de Mercado Pago */
     const preference = new Preference(mpClient);
 
-    // IMPORTANTE: Agregamos una "/" antes de los parámetros "?" en las back_urls
     const mpPreference = await preference.create({
       body: {
         items: orderItems.map(item => ({
@@ -83,29 +83,25 @@ router.post('/', async (req, res) => {
           unit_price: item.price,
           currency_id: 'ARS',
         })),
-        payer: {
-          email,
-          name,
-        },
+        payer: { email, name },
         back_urls: {
+          // Usamos la URL limpia para evitar el error de "back_url.success"
           success: `${FRONTEND_URL}/?payment=success&order=${order.id}`,
-          failure: `${FRONTEND_URL}/carrito/?payment=failure&order=${order.id}`,
-          pending: `${FRONTEND_URL}/carrito/?payment=pending&order=${order.id}`,
+          failure: `${FRONTEND_URL}/carrito/?payment=failure`,
+          pending: `${FRONTEND_URL}/carrito/?payment=pending`,
         },
         auto_return: 'approved',
         external_reference: order.id,
-        // La notificación solo funcionará cuando el servidor esté online (no en localhost)
         notification_url: `${process.env.BACKEND_URL || 'http://localhost:3001'}/api/webhooks/mercadopago`,
       },
     });
 
-    /* Paso 4: Actualizar la orden con el ID de la preferencia */
+    /* Paso 4: Actualizar orden */
     await supabaseAdmin
       .from('orders')
       .update({ mp_preference_id: mpPreference.id })
       .eq('id', order.id);
 
-    /* Devolvemos el init_point para que React redirija */
     res.json({
       init_point: mpPreference.init_point,
       order_id: order.id,
