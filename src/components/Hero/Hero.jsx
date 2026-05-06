@@ -15,26 +15,26 @@ export default function Hero() {
       {/* 2. Capa que dibuja la gran curva marrón oscuro (AHORA CON ANIMACIÓN) */}
       <div className="hero__shape">
         <Grainient
-          color1="#0f0a07"   /* Marrón súper oscuro, casi negro (da profundidad) */
-          color2="#2c2016"   /* El marrón original de tu marca */
-          color3="#3d2a1b"   /* Un tono madera un poco más cálido para el movimiento */
-          timeSpeed={0.15}   /* Movimiento lento y elegante */
+          color1="#0a0604"   /* Negro café muy profundo (da la oscuridad necesaria) */
+          color2="#704423"   /* Marrón caramelo/madera (este es el que va a dibujar las ondas) */
+          color3="#2b170a"   /* Chocolate oscuro (tono de transición) */
+          timeSpeed={0.20}   /* Un poquito más rápido para que notes que está vivo */
           colorBalance={0}
-          warpStrength={1.5}
-          warpFrequency={3}
-          warpSpeed={1}
-          warpAmplitude={40}
+          warpStrength={2}   /* Le damos más fuerza a la deformación de las manchas */
+          warpFrequency={4}
+          warpSpeed={1.5}
+          warpAmplitude={60} /* Hacemos que las ondas de color sean más grandes */
           blendAngle={0}
-          blendSoftness={0.6} /* Suavizamos la mezcla para que parezca luz sobre madera */
+          blendSoftness={0.15} /* Reducimos la mezcla para que el caramelo resalte más sobre el negro */
           rotationAmount={100}
           noiseScale={1.5}
-          grainAmount={0.06} /* Grano un pelín más suave para no ensuciar la lectura */
+          grainAmount={0.05} /* Un granulado más fino y sutil */
           grainScale={1.5}
           grainAnimated={true}
-          contrast={1.1}     /* Contraste ajustado para tonos oscuros */
-          gamma={1}
-          saturation={0.6}   /* Bajamos la saturación para que quede sobrio, no rojizo */
-          zoom={1}
+          contrast={1.4}     /* Subimos el contraste para que los tres colores no se fundan en uno solo */
+          gamma={1.1}
+          saturation={0.9}
+          zoom={1.2}
           className="hero__grainient"
         />
       </div>
