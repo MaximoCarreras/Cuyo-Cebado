@@ -15,26 +15,26 @@ export default function Hero() {
       {/* 2. Capa que dibuja la gran curva marrón oscuro (AHORA CON ANIMACIÓN) */}
       <div className="hero__shape">
         <Grainient
-          color1="#140d07"   /* Base casi negra */
-          color2="#3e2715"   /* Marrón nogal vivo */
-          color3="#26170d"   /* Sombra de madera */
-          timeSpeed={0.18}
+          color1="#1a0f0a"   /* Base oscura cálida */
+          color2="#542e14"   /* Marrón cuero intenso */
+          color3="#331b0c"   /* Tono intermedio de transición */
+          timeSpeed={0.20}
           colorBalance={0}
-          warpStrength={1.5}
-          warpFrequency={3}
-          warpSpeed={1.2}
-          warpAmplitude={40}
+          warpStrength={2}
+          warpFrequency={4}
+          warpSpeed={1.5}
+          warpAmplitude={50}
           blendAngle={0}
-          blendSoftness={0.4} /* Mezcla más suave para que parezcan vetas */
-          rotationAmount={100}
-          noiseScale={1.5}
-          grainAmount={0.06}
+          blendSoftness={0.3}
+          rotationAmount={150}
+          noiseScale={1.2}
+          grainAmount={0.05}
           grainScale={1.5}
           grainAnimated={true}
-          contrast={1.2}      /* Contraste equilibrado */
-          gamma={1}
-          saturation={0.8}
-          zoom={1}
+          contrast={1.3}
+          gamma={1.1}
+          saturation={0.9}
+          zoom={1.1}
           className="hero__grainient"
         />
       </div>
