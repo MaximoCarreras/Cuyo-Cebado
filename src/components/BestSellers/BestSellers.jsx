@@ -1,16 +1,16 @@
 /**
  * BestSellers — Grilla de productos para Cuyo Cebado.
- * Reintegra la funcionalidad de agregar al carrito para el modelo híbrido.
+ * Conectado al CartContext y con rutas de imagen optimizadas.
  */
 import { useFeaturedProducts } from '../../hooks/useProducts';
-import { useCart } from '../../context/CartContext'; // Importamos el contexto del carrito
+import { useCart } from '../../context/CartContext';
 import './BestSellers.css';
 
 export default function BestSellers() {
   const { products, loading } = useFeaturedProducts();
-  const { addToCart } = useCart(); // Traemos la función para sumar productos
+  const { addToCart } = useCart();
 
-  /* Formato de moneda para Argentina */
+  /* Formato de moneda para Argentina (AR$ 00.000) */
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-AR', {
       style: 'currency',
@@ -28,23 +28,32 @@ export default function BestSellers() {
         </div>
 
         {loading ? (
-          <p style={{ textAlign: 'center', color: 'var(--color-text-light)' }}>
-            Cargando productos...
-          </p>
+          <div className="loading-container">
+            <p>Cargando mates seleccionados...</p>
+          </div>
         ) : (
           <div className="bestsellers__grid">
             {products.map(product => (
               <article className="product-card" key={product.id}>
-                {/* Imagen del producto */}
+
+                {/* Imagen del producto con GPS de ruta corregido */}
                 <div className="product-card__image-wrapper">
                   <img
-                    /* Si la imagen no carga, usamos un placeholder para que no quede el hueco vacío */
-                    src={product.image_url || '/placeholder-mate.jpg'}
+                    /* Lógica de ruta: 
+                       Si la imagen ya tiene la ruta completa, la usa. 
+                       Si no, la busca dentro de /images/ en la carpeta public.
+                    */
+                    src={product.image_url.startsWith('/')
+                      ? product.image_url
+                      : `/images/${product.image_url.split('/').pop()}`}
                     alt={product.name}
                     className="product-card__image"
                     loading="lazy"
-                    onError={(e) => { e.target.src = 'https://via.placeholder.com/300x300?text=Cuyo+Cebado'; }}
+                    onError={(e) => {
+                      e.target.src = 'https://via.placeholder.com/400x400?text=Cuyo+Cebado+Mate';
+                    }}
                   />
+
                   {product.badge && (
                     <span className="badge badge--green product-card__badge">
                       {product.badge}
@@ -57,7 +66,6 @@ export default function BestSellers() {
                   <p className="product-card__description">{product.description}</p>
                   <p className="product-card__price">{formatPrice(product.price)}</p>
 
-                  {/* CAMBIO CLAVE: Botón de agregar al carrito en lugar de consulta directa */}
                   <button
                     onClick={() => addToCart(product)}
                     className="btn btn--primary product-card__btn"
@@ -68,17 +76,20 @@ export default function BestSellers() {
                       gap: '8px',
                       width: '100%',
                       border: 'none',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      padding: '12px',
+                      borderRadius: '50px',
+                      fontWeight: 'bold'
                     }}
                   >
-                    <span className="material-symbols-outlined">shopping_cart</span>
+                    <span className="material-symbols-outlined">add_shopping_cart</span>
                     Agregar al Carrito
                   </button>
 
-                  {/* Indicador de escasez */}
+                  {/* Indicador de stock crítico */}
                   {product.stock > 0 && product.stock <= 3 && (
                     <p className="product-card__stock">
-                      ¡Últimas {product.stock} unidades!
+                      ⚠️ ¡Solo quedan {product.stock} unidades!
                     </p>
                   )}
                 </div>
