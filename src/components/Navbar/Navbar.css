@@ -1,58 +1,66 @@
-/* Navbar — Sticky navigation with dark premium aesthetic */
+/* Navbar — Estática, centrada y premium */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  display: flex;
+  /* Usamos GRID para dividir la barra en 3 partes y que el centro sea exacto */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   padding: 0 var(--space-xl);
-  height: 120px;
-  background: rgba(26, 26, 26, 0.95);
+  height: 110px;
+  /* Altura firme, cero animaciones al escrolear */
+  background: rgba(26, 26, 26, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-gold);
-  transition: all var(--transition);
 }
 
-/* Compact mode — se achica al hacer scroll */
-.navbar--compact {
-  height: 85px;
-  box-shadow: var(--shadow-sm);
+/* Alineaciones de los 3 bloques */
+.navbar__left {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.navbar__center {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar__right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
 }
 
 .navbar__logo {
   display: flex;
   align-items: center;
-  flex-shrink: 0;
   text-decoration: none;
-  padding: 10px 0;
 }
 
 .navbar__logo-img {
-  height: 100px;
+  height: 85px;
+  /* Tamaño estático, ya no cambia */
   width: auto;
   display: block;
-  transition: height var(--transition);
 }
 
-.navbar--compact .navbar__logo-img {
-  height: 70px;
-}
-
-/* Center links */
+/* Links centrales */
 .navbar__links {
   display: flex;
   align-items: center;
   gap: var(--space-xl);
   list-style: none;
-  /* Aseguramos que no haya puntos de lista */
+  margin: 0;
+  padding: 0;
 }
 
 .navbar__links a {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 500;
   color: #fbf9f5;
   transition: color var(--transition);
@@ -80,18 +88,23 @@
   color: var(--color-gold);
 }
 
-/* --- ESTILOS ESPECÍFICOS DEL CARRITO --- */
+/* Ocultar botón de la cruz en computadora */
+.navbar__close-mobile {
+  display: none;
+}
 
+/* --- ESTILOS ESPECÍFICOS DEL CARRITO --- */
 .navbar__cart-link {
   position: relative;
-  /* Permite que el badge se ubique respecto al link */
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 10px 16px;
   border-radius: 8px;
   background: rgba(212, 175, 55, 0.1);
-  /* Un fondo sutil dorado */
+  color: #fbf9f5;
+  text-decoration: none;
+  font-weight: 500;
   transition: background var(--transition) !important;
 }
 
@@ -102,15 +115,14 @@
 /* El círculo con el número */
 .cart-badge {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: -6px;
+  right: -6px;
   background-color: var(--color-gold);
   color: #1a1a1a;
-  /* Texto oscuro para contraste sobre el dorado */
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 800;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -119,7 +131,6 @@
   animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Animación para cuando aparece un producto nuevo */
 @keyframes popIn {
   0% {
     transform: scale(0);
@@ -138,47 +149,87 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: var(--space-sm);
+  padding: 5px;
 }
 
-@media (max-width: 768px) {
+/* --- VISTA CELULAR (MOBILE RESPONSIVE) --- */
+@media (max-width: 950px) {
   .navbar {
-    padding: 0 var(--space-md);
+    display: flex;
+    /* Cambiamos a flex en móvil para simplificar */
+    justify-content: space-between;
     height: 90px;
+    padding: 0 var(--space-md);
   }
 
   .navbar__logo-img {
-    height: 75px;
+    height: 70px;
   }
 
   .navbar__toggle {
-    display: flex;
+    display: block;
+  }
+
+  .cart-text {
+    display: none;
+    /* Ocultamos el texto "Carrito" en celu, solo queda el ícono */
+  }
+
+  .navbar__cart-link {
+    padding: 8px;
+    /* Reducimos el padding del botón carrito */
+  }
+
+  /* PANEL LATERAL: Ya no ocupa toda la pantalla */
+  .navbar__center {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    /* Inicia escondido afuera de la pantalla derecha */
+    width: 280px;
+    /* Ancho máximo del menú */
+    height: 100vh;
+    background: rgba(26, 26, 26, 0.98);
+    border-left: 1px solid var(--color-gold);
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 80px 30px;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    box-shadow: -10px 0 20px rgba(0, 0, 0, 0.5);
+    /* Sombra para que flote sobre la web */
+  }
+
+  .navbar__center--open {
+    right: 0;
+    /* Al abrir, el menú se desplaza a la posición 0 */
   }
 
   .navbar__links {
-    position: fixed;
-    top: 0;
-    padding-top: 100px;
-    left: 0;
-    right: 0;
-    height: 100vh;
     flex-direction: column;
-    background: rgba(26, 26, 26, 0.98);
-    backdrop-filter: blur(12px);
-    gap: var(--space-xl);
-    transform: translateX(100%);
-    opacity: 0;
-    pointer-events: none;
-    transition: all var(--transition);
+    align-items: flex-start;
+    gap: 30px;
   }
 
-  .navbar__links--open {
-    transform: translateX(0);
-    opacity: 1;
-    pointer-events: all;
+  /* BOTÓN CRUZ PARA CERRAR */
+  .navbar__close-mobile {
+    display: block;
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: none;
+    border: none;
+    color: var(--color-gold);
+    cursor: pointer;
+    padding: 5px;
   }
 
-  /* Ajuste de badge en móvil para que no se pegue al borde */
+  .navbar__close-mobile span {
+    font-size: 32px;
+    /* Cruz grande y fácil de tocar */
+  }
+
+  /* Ajuste de badge en móvil */
   .cart-badge {
     top: 0;
     right: 0;
