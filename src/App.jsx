@@ -5,11 +5,13 @@ import Footer from './components/Footer/Footer';
 // 1. Importamos el componente de Scroll
 import ScrollToTop from './components/ScrollToTop';
 
-// Importamos las nuevas páginas
+// Importamos las páginas
 import Home from './pages/Home';
-import CartPage from './pages/CartPage';
 import About from './pages/About';
 import Guide from './pages/Guide';
+
+// IMPORTACIÓN CORREGIDA: Apuntamos al archivo exacto dentro de la nueva carpeta
+import CartPage from './pages/CartPage/CartPage';
 
 import './App.css';
 
