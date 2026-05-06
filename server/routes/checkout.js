@@ -5,18 +5,18 @@ import { mpClient } from '../lib/mercadopago.js';
 
 const router = Router();
 
-// Definimos la URL base sin vueltas
+// Definimos la URL de forma estática para la prueba local
 const FRONTEND_URL = 'http://localhost:5173';
 
 router.post('/', async (req, res) => {
   try {
     if (!supabaseAdmin || !mpClient) {
-      return res.status(503).json({ error: 'Configuración incompleta.' });
+      return res.status(503).json({ error: 'Falta configuración de Supabase/MP' });
     }
 
     const { items, email, name } = req.body;
 
-    // 1. Verificación de Stock
+    // 1. Verificar Stock
     const productIds = items.map(i => i.id);
     const { data: products, error: fetchErr } = await supabaseAdmin
       .from('products')
@@ -29,20 +29,20 @@ router.post('/', async (req, res) => {
     for (const item of items) {
       const product = products.find(p => p.id === item.id);
       if (!product || product.stock < item.quantity) {
-        return res.status(400).json({ error: `Sin stock para ${item.name}` });
+        return res.status(400).json({ error: `Stock insuficiente para ${item.name}` });
       }
       orderItems.push({
         id: product.id,
         title: product.name,
-        unit_price: product.price,
-        quantity: item.quantity,
+        unit_price: Number(product.price),
+        quantity: Number(item.quantity),
         currency_id: 'ARS'
       });
     }
 
     const total = orderItems.reduce((sum, i) => sum + i.unit_price * i.quantity, 0);
 
-    // 2. Crear orden en Supabase
+    // 2. Crear Orden
     const { data: order, error: orderErr } = await supabaseAdmin
       .from('orders')
       .insert({
@@ -56,30 +56,35 @@ router.post('/', async (req, res) => {
 
     if (orderErr) throw orderErr;
 
-    // 3. Crear Preferencia de Mercado Pago
+    // 3. Crear Preferencia (CON URLS LIMPIAS)
     const preference = new Preference(mpClient);
 
-    // IMPORTANTE: Definimos las URLs de forma ultra-limpia aquí
-    const successUrl = `${FRONTEND_URL}/?payment=success&order=${order.id}`;
-    const failureUrl = `${FRONTEND_URL}/carrito/?payment=failure`;
+    // Creamos los strings de las URLs antes de meterlos al objeto
+    const success_url = `${FRONTEND_URL}/?payment=success&order=${order.id}`;
+    const failure_url = `${FRONTEND_URL}/carrito`;
 
     const response = await preference.create({
       body: {
-        items: orderItems,
+        items: orderItems.map(item => ({
+          title: item.title,
+          quantity: item.quantity,
+          unit_price: item.unit_price,
+          currency_id: 'ARS'
+        })),
         payer: { email, name },
         back_urls: {
-          success: successUrl,
-          failure: failureUrl,
-          pending: successUrl
+          success: success_url,
+          failure: failure_url,
+          pending: success_url
         },
-        auto_return: 'approved', // Esto obliga a que success funcione
+        auto_return: 'approved',
         external_reference: order.id,
-        // En localhost el webhook no va a avisar, pero lo dejamos para producción
-        notification_url: `https://webhook.site/test`
+        // Usamos una URL de prueba genérica para el webhook en local
+        notification_url: 'https://webhook.site/cuyo-cebado-test'
       }
     });
 
-    // 4. Actualizar orden
+    // 4. Actualizar Orden con el ID de preferencia
     await supabaseAdmin
       .from('orders')
       .update({ mp_preference_id: response.id })
@@ -88,8 +93,8 @@ router.post('/', async (req, res) => {
     res.json({ init_point: response.init_point });
 
   } catch (err) {
-    console.error('Checkout error:', err);
-    res.status(500).json({ error: 'Falla en el servidor de Cuyo Cebado.' });
+    console.error('Checkout error detallado:', err);
+    res.status(500).json({ error: 'Falla en el servidor. Revisá la terminal.' });
   }
 });
 
