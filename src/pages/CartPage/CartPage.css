@@ -1,8 +1,11 @@
+/* src/pages/CartPage/CartPage.css */
+
 .cart-page {
     padding-top: 160px;
-    /* Para que el navbar no lo tape */
     min-height: 80vh;
     padding-bottom: 80px;
+    background-color: #fdfaf7;
+    /* Fondo sutil para que resalten las tarjetas blancas */
 }
 
 .cart-page__title {
@@ -19,7 +22,7 @@
     align-items: flex-start;
 }
 
-/* LISTA DE ITEMS */
+/* --- LISTA DE ITEMS --- */
 .cart-items {
     display: flex;
     flex-direction: column;
@@ -42,11 +45,14 @@
     aspect-ratio: 1;
     object-fit: cover;
     border-radius: var(--radius-md);
+    background-color: #f0f0f0;
+    /* Fondo por si la imagen tarda en cargar */
 }
 
 .cart-item__info h3 {
     font-size: 1.2rem;
     margin-bottom: 5px;
+    color: #1a1a1a;
 }
 
 .cart-item__unit-price {
@@ -76,6 +82,7 @@
     cursor: pointer;
     font-size: 1.2rem;
     font-weight: bold;
+    color: #1a1a1a;
 }
 
 .btn-remove {
@@ -93,7 +100,7 @@
     color: #1a1a1a;
 }
 
-/* RESUMEN DE PAGO */
+/* --- RESUMEN DE PAGO (CORREGIDO) --- */
 .cart-summary {
     position: sticky;
     top: 140px;
@@ -105,47 +112,75 @@
     padding: 30px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
 }
 
 .summary-card h3 {
     margin-bottom: 25px;
     font-family: var(--font-heading);
+    font-size: 1.6rem;
+    color: #ffffff;
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
 }
 
 .summary-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
-    font-size: 1rem;
+    font-size: 1.05rem;
+    color: #e0e0e0;
 }
 
 .text-free {
-    color: var(--color-gold);
+    color: #d4af37;
     font-weight: 600;
 }
 
 .summary-row.total {
-    margin-top: 15px;
-    font-size: 1.4rem;
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 1px dashed #444;
+    font-size: 1.5rem;
     font-weight: 800;
-    color: var(--color-gold);
+    color: #d4af37;
+    /* Dorado resaltado */
 }
 
+/* BOTÓN CONTINUAR COMPRA (CORREGIDO) */
 .btn-checkout {
     width: 100%;
     margin-top: 25px;
-    padding: 16px;
-    font-size: 1rem;
+    padding: 18px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background-color: #d4af37;
+    /* Dorado Cuyo Cebado */
+    color: #1a1a1a;
+    /* Texto oscuro para que se lea perfecto */
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.btn-checkout:hover {
+    background-color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
 }
 
 .cart-notice {
-    margin-top: 20px;
-    font-size: 0.8rem;
+    margin-top: 25px;
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    opacity: 0.7;
+    opacity: 0.8;
+    color: #aaa;
 }
 
 .continue-shopping {
@@ -154,10 +189,16 @@
     margin-top: 20px;
     color: #1a1a1a;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
-/* ESTADO VACÍO */
+.continue-shopping:hover {
+    text-decoration: underline;
+    color: #d4af37;
+}
+
+/* --- ESTADO VACÍO --- */
 .cart-empty {
     text-align: center;
     padding: 150px 20px;
@@ -169,14 +210,19 @@
     margin-bottom: 20px;
 }
 
-/* RESPONSIVE */
+/* --- RESPONSIVE --- */
 @media (max-width: 900px) {
+    .cart-page {
+        padding-top: 120px;
+    }
+
     .cart-page__grid {
         grid-template-columns: 1fr;
     }
 
     .cart-item {
         grid-template-columns: 80px 1fr;
+        gap: 15px;
     }
 
     .cart-item__subtotal {
