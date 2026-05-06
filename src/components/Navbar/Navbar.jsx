@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Importante para la navegación fluida
+import { Link } from 'react-router-dom';
+import { useCart } from '../../context/CartContext'; // 1. Conectamos con el cerebro del carrito
 import './Navbar.css';
 
 export default function Navbar() {
   const [isCompact, setIsCompact] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  // 2. Traemos el contador de productos
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,7 +18,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Definimos las rutas a las nuevas páginas que creaste
   const navLinks = [
     { label: 'Inicio', to: '/' },
     { label: 'Nosotros', to: '/nosotros' },
@@ -23,11 +26,10 @@ export default function Navbar() {
 
   return (
     <nav className={`navbar ${isCompact ? 'navbar--compact' : ''}`} id="navbar">
-      {/* El logo ahora nos devuelve siempre al Inicio */}
       <Link to="/" className="navbar__logo">
-        <img 
-          src="/logo.png" 
-          alt="Cuyo Cebado" 
+        <img
+          src="/logo.png"
+          alt="Cuyo Cebado"
           className="navbar__logo-img"
         />
       </Link>
@@ -50,16 +52,23 @@ export default function Navbar() {
             </Link>
           </li>
         ))}
-        
-        {/* Agregamos el acceso directo al Carrito */}
+
         <li>
-          <Link 
-            to="/carrito" 
-            className="navbar__cart-link" 
+          <Link
+            to="/carrito"
+            className="navbar__cart-link"
             onClick={() => setIsMobileOpen(false)}
-            style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+            style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '5px' }}
           >
             <span className="material-symbols-outlined">shopping_cart</span>
+
+            {/* 3. El círculo con el número de productos */}
+            {cartCount > 0 && (
+              <span className="cart-badge">
+                {cartCount}
+              </span>
+            )}
+
             <span className="cart-text">Carrito</span>
           </Link>
         </li>

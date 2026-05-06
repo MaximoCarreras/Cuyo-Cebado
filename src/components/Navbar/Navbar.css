@@ -9,9 +9,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--space-xl);
-  /* Aumentamos la altura base para que el logo grande entre cómodo */
-  height: 120px; 
-  background: rgba(26, 26, 26, 0.95); 
+  height: 120px;
+  background: rgba(26, 26, 26, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-gold);
@@ -20,7 +19,7 @@
 
 /* Compact mode — se achica al hacer scroll */
 .navbar--compact {
-  height: 85px; 
+  height: 85px;
   box-shadow: var(--shadow-sm);
 }
 
@@ -32,17 +31,15 @@
   padding: 10px 0;
 }
 
-/* Estilos para el logo PNG — Ahora con tamaño imponente */
 .navbar__logo-img {
-  height: 100px; /* Aumentado para que se luzca el diseño */
+  height: 100px;
   width: auto;
   display: block;
   transition: height var(--transition);
 }
 
-/* Tamaño del logo en modo compacto */
 .navbar--compact .navbar__logo-img {
-  height: 70px; 
+  height: 70px;
 }
 
 /* Center links */
@@ -50,18 +47,21 @@
   display: flex;
   align-items: center;
   gap: var(--space-xl);
+  list-style: none;
+  /* Aseguramos que no haya puntos de lista */
 }
 
 .navbar__links a {
-  font-size: 1rem; /* Un pelín más grande para equilibrar el logo */
+  font-size: 1rem;
   font-weight: 500;
-  color: #fbf9f5; 
+  color: #fbf9f5;
   transition: color var(--transition);
   position: relative;
   text-decoration: none;
 }
 
-.navbar__links a::after {
+/* Subrayado animado para links normales */
+.navbar__links a:not(.navbar__cart-link)::after {
   content: '';
   position: absolute;
   bottom: -4px;
@@ -72,41 +72,83 @@
   transition: width var(--transition);
 }
 
+.navbar__links a:not(.navbar__cart-link):hover::after {
+  width: 100%;
+}
+
 .navbar__links a:hover {
   color: var(--color-gold);
 }
 
-.navbar__links a:hover::after {
-  width: 100%;
-}
+/* --- ESTILOS ESPECÍFICOS DEL CARRITO --- */
 
-/* Right side actions */
-.navbar__actions {
+.navbar__cart-link {
+  position: relative;
+  /* Permite que el badge se ubique respecto al link */
   display: flex;
   align-items: center;
-  gap: var(--space-md);
-  flex-shrink: 0;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(212, 175, 55, 0.1);
+  /* Un fondo sutil dorado */
+  transition: background var(--transition) !important;
 }
 
-/* Mobile hamburger color */
+.navbar__cart-link:hover {
+  background: rgba(212, 175, 55, 0.2);
+}
+
+/* El círculo con el número */
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: var(--color-gold);
+  color: #1a1a1a;
+  /* Texto oscuro para contraste sobre el dorado */
+  font-size: 0.7rem;
+  font-weight: 800;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Animación para cuando aparece un producto nuevo */
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* --- FIN ESTILOS CARRITO --- */
+
 .navbar__toggle {
   display: none;
-  color: #fbf9f5; 
+  color: #fbf9f5;
   background: none;
   border: none;
   cursor: pointer;
   padding: var(--space-sm);
 }
 
-/* Mobile responsive */
 @media (max-width: 768px) {
   .navbar {
     padding: 0 var(--space-md);
-    height: 90px; /* Altura fija en móvil */
+    height: 90px;
   }
 
   .navbar__logo-img {
-    height: 75px; /* Logo un poco más chico en celulares */
+    height: 75px;
   }
 
   .navbar__toggle {
@@ -115,16 +157,16 @@
 
   .navbar__links {
     position: fixed;
-    top: 0; 
+    top: 0;
     padding-top: 100px;
     left: 0;
     right: 0;
-    height: 100vh; 
+    height: 100vh;
     flex-direction: column;
-    background: rgba(26, 26, 26, 0.98); 
+    background: rgba(26, 26, 26, 0.98);
     backdrop-filter: blur(12px);
     gap: var(--space-xl);
-    transform: translateX(100%); 
+    transform: translateX(100%);
     opacity: 0;
     pointer-events: none;
     transition: all var(--transition);
@@ -134,5 +176,11 @@
     transform: translateX(0);
     opacity: 1;
     pointer-events: all;
+  }
+
+  /* Ajuste de badge en móvil para que no se pegue al borde */
+  .cart-badge {
+    top: 0;
+    right: 0;
   }
 }

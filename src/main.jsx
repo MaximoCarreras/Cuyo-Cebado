@@ -1,20 +1,23 @@
 /**
- * Main entry point — wraps App in BrowserRouter and CartProvider for global state.
- * Imports design system CSS.
+ * Main entry point — Cuyo Cebado.
+ * Configuración global: Enrutamiento (React Router) y Estado del Carrito (Context API).
  */
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom'; // Importamos el enrutador
+import { BrowserRouter } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import App from './App';
 import './index.css';
 
-createRoot(document.getElementById('root')).render(
+const rootElement = document.getElementById('root');
+const root = createRoot(rootElement);
+
+root.render(
   <StrictMode>
-    <BrowserRouter> {/* El BrowserRouter envuelve todo para habilitar las rutas */}
-      <CartProvider> {/* El CartProvider sigue envolviendo a App para el carrito */}
+    <BrowserRouter>
+      <CartProvider>
         <App />
       </CartProvider>
     </BrowserRouter>
-  </StrictMode>,
+  </StrictMode>
 );
