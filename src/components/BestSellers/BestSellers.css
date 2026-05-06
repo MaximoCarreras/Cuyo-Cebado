@@ -3,6 +3,8 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-xl);
+  align-items: stretch;
+  /* Asegura que todas las filas tengan la misma altura */
 }
 
 .product-card {
@@ -11,6 +13,10 @@
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: all var(--transition);
+  /* --- MAGIA DE ALINEACIÓN AQUÍ --- */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* Hover shadow intensification */
@@ -23,6 +29,8 @@
   position: relative;
   aspect-ratio: 1;
   overflow: hidden;
+  flex-shrink: 0;
+  /* Evita que la foto se aplaste si el texto es muy largo */
 }
 
 .product-card__image {
@@ -44,6 +52,11 @@
 
 .product-card__info {
   padding: var(--space-lg);
+  /* --- MAGIA DE ALINEACIÓN AQUÍ --- */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  /* Obliga a este bloque a estirarse hasta el fondo de la tarjeta */
 }
 
 .product-card__name {
@@ -57,6 +70,9 @@
   color: var(--color-text-light);
   margin-bottom: var(--space-md);
   line-height: 1.5;
+  /* --- MAGIA DE ALINEACIÓN AQUÍ --- */
+  flex-grow: 1;
+  /* Funciona como un resorte que empuja todo lo que está abajo hacia el final */
 }
 
 .product-card__price {
@@ -70,6 +86,8 @@
   width: 100%;
   font-size: 0.85rem;
   padding: 12px;
+  margin-top: auto;
+  /* Mantiene el botón pegado abajo si no hay stock */
 }
 
 .product-card__stock {
