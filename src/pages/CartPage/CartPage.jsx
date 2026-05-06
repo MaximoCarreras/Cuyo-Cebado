@@ -3,25 +3,33 @@ import { useCart } from '../../context/CartContext';
 import { Link } from 'react-router-dom';
 import './CartPage.css';
 
+// Importamos el logo local que bajaste
+import mpLogo from '../../assets/mp-logo.png';
+
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
+
+    // Datos del cliente para la orden en Supabase
     const [customer, setCustomer] = useState({ name: '', email: '' });
     const [isProcessing, setIsProcessing] = useState(false);
 
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('es-AR', {
-            style: 'currency', currency: 'ARS', minimumFractionDigits: 0,
+            style: 'currency',
+            currency: 'ARS',
+            minimumFractionDigits: 0,
         }).format(value);
     };
 
     const handleCheckoutMP = async () => {
         if (!customer.name || !customer.email) {
-            alert("Por favor, completá tu nombre y email para continuar.");
+            alert("Por favor, completá tu nombre y email para preparar el pedido.");
             return;
         }
 
         setIsProcessing(true);
         try {
+            // Llamada a tu servidor local en el puerto 3001
             const response = await fetch("http://localhost:3001/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -33,14 +41,16 @@ export default function CartPage() {
             });
 
             const data = await response.json();
+
             if (data.init_point) {
+                // Redirección al sitio seguro de Mercado Pago
                 window.location.href = data.init_point;
             } else {
-                alert("Error al conectar con Mercado Pago.");
+                alert("Error al generar el pago. Revisá el stock en el servidor.");
             }
         } catch (error) {
-            console.error(error);
-            alert("Hubo un problema de conexión con el servidor.");
+            console.error("Error en checkout:", error);
+            alert("Error de conexión. ¿Tenés el servidor de Node prendido?");
         } finally {
             setIsProcessing(false);
         }
@@ -61,6 +71,7 @@ export default function CartPage() {
             <h1 className="cart-page__title">Tu Carrito</h1>
 
             <div className="cart-page__grid">
+                {/* Lista de Productos */}
                 <div className="cart-items">
                     {cart.map((item) => (
                         <div key={item.id} className="cart-item">
@@ -84,6 +95,7 @@ export default function CartPage() {
                     ))}
                 </div>
 
+                {/* Resumen de Compra */}
                 <aside className="cart-summary">
                     <div className="summary-card">
                         <h3>Resumen del pedido</h3>
@@ -121,13 +133,8 @@ export default function CartPage() {
                         </div>
 
                         <button className="btn-mercadopago" onClick={handleCheckoutMP} disabled={isProcessing}>
-                            {/* Logo oficial de MP (las manitos) */}
-                            <img
-                                src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/5.32.1/mercadopago/logo__small.png"
-                                alt=""
-                                className="mp-icon"
-                            />
-                            <span>{isProcessing ? "Procesando..." : "PAGAR CON MERCADO PAGO"}</span>
+                            <img src={mpLogo} alt="" className="mp-icon-local" />
+                            <span>{isProcessing ? "PROCESANDO..." : "PAGAR CON MERCADO PAGO"}</span>
                         </button>
                     </div>
                     <Link to="/" className="continue-shopping">← Seguir comprando</Link>

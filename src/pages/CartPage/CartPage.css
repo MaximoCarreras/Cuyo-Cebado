@@ -1,4 +1,3 @@
-/* --- Estructura General --- */
 .cart-page {
     padding-top: 160px;
     min-height: 80vh;
@@ -20,7 +19,7 @@
     align-items: flex-start;
 }
 
-/* --- Tarjetas de Productos (Lado Izquierdo) --- */
+/* --- Items --- */
 .cart-items {
     display: flex;
     flex-direction: column;
@@ -35,7 +34,6 @@
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    align-items: center;
 }
 
 .cart-item__image img {
@@ -47,20 +45,14 @@
 
 .cart-item__info h3 {
     font-size: 1.2rem;
-    margin-bottom: 5px;
     color: #1a1a1a;
-}
-
-.cart-item__unit-price {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 15px;
 }
 
 .cart-item__controls {
     display: flex;
     align-items: center;
     gap: 20px;
+    margin-top: 10px;
 }
 
 .quantity-selector {
@@ -77,24 +69,9 @@
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 1.1rem;
 }
 
-.btn-remove {
-    background: none;
-    border: none;
-    color: #c0392b;
-    font-size: 0.85rem;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-.cart-item__subtotal {
-    font-weight: 700;
-    font-size: 1.2rem;
-}
-
-/* --- Tarjeta de Resumen Premium (Lado Derecho) --- */
+/* --- Resumen Oscuro --- */
 .cart-summary {
     position: sticky;
     top: 140px;
@@ -105,38 +82,31 @@
     color: white;
     padding: 35px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .summary-card h3 {
-    margin-bottom: 30px;
-    font-size: 1.5rem;
-    color: #ffffff;
+    margin-bottom: 25px;
+    font-size: 1.4rem;
 }
 
-/* --- Formulario "Tus Datos" Integrado --- */
+/* --- Formulario Premium --- */
 .fields-title {
     color: #d4af37 !important;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    margin-bottom: 20px;
-    display: block;
-}
-
-.customer-form-group {
     margin-bottom: 15px;
 }
 
 .cart-input-dark {
     width: 100%;
-    padding: 12px 5px;
+    padding: 10px 0;
     background: transparent;
     border: none;
     border-bottom: 1px solid #333;
     color: white;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    transition: 0.3s;
 }
 
 .cart-input-dark:focus {
@@ -148,18 +118,16 @@
     color: #555;
 }
 
-/* --- Filas de Totales --- */
+/* --- Totales --- */
 .summary-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
-    font-size: 1rem;
+    margin-bottom: 10px;
     color: #ccc;
 }
 
 .text-free {
     color: #d4af37;
-    font-weight: 600;
 }
 
 .summary-divider {
@@ -168,79 +136,42 @@
     margin: 20px 0;
 }
 
-.summary-row.total {
-    margin-top: 10px;
-    font-size: 1.4rem;
-}
-
 .total-amount {
     color: #d4af37;
     font-weight: 800;
     font-size: 1.6rem;
 }
 
-/* --- Botón Mercado Pago Definitivo --- */
+/* --- Botón Mercado Pago --- */
 .btn-mercadopago {
     width: 100%;
     background-color: #009ee3;
     color: white;
-    padding: 18px;
+    padding: 16px;
     border: none;
     border-radius: 12px;
     font-weight: 700;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
     margin-top: 25px;
 }
 
-.btn-mercadopago:hover:not(:disabled) {
-    background-color: #0086c3;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 158, 227, 0.4);
-}
-
-.btn-mercadopago:disabled {
-    background-color: #444;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-.mp-icon {
+.mp-icon-local {
     height: 22px;
     width: auto;
+    /* Si tu logo bajado es oscuro, este filtro lo pone blanco */
     filter: brightness(0) invert(1);
-    /* Hace que las manitos sean blancas */
 }
 
 .continue-shopping {
     display: block;
     text-align: center;
-    margin-top: 25px;
+    margin-top: 20px;
     color: #1a1a1a;
     text-decoration: none;
     font-size: 0.9rem;
-    opacity: 0.7;
-    transition: opacity 0.3s;
-}
-
-.continue-shopping:hover {
-    opacity: 1;
-    text-decoration: underline;
-}
-
-/* --- Responsive --- */
-@media (max-width: 950px) {
-    .cart-page__grid {
-        grid-template-columns: 1fr;
-    }
-
-    .cart-summary {
-        position: static;
-    }
+    opacity: 0.6;
 }
