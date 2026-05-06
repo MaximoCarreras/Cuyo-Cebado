@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import './CartPage.css';
 
 export default function CartPage() {
-    const { cartItems, removeFromCart, updateQuantity, getTotalPrice } = useCart();
+    // Conectamos exactamente con los nombres que exporta tu CartContext
+    const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
 
     // Formateador de moneda argentina (AR$ 00.000)
     const formatCurrency = (value) => {
@@ -14,7 +15,8 @@ export default function CartPage() {
         }).format(value);
     };
 
-    if (cartItems.length === 0) {
+    // Verificamos usando 'cart'
+    if (!cart || cart.length === 0) {
         return (
             <div className="cart-empty section__container">
                 <span className="material-symbols-outlined empty-icon">shopping_basket</span>
@@ -32,7 +34,8 @@ export default function CartPage() {
             <div className="cart-page__grid">
                 {/* COLUMNA IZQUIERDA: Lista de productos */}
                 <div className="cart-items">
-                    {cartItems.map((item) => (
+                    {/* Mapeamos usando 'cart' */}
+                    {cart.map((item) => (
                         <div key={item.id} className="cart-item">
                             <div className="cart-item__image">
                                 <img src={item.image_url} alt={item.name} />
@@ -72,7 +75,8 @@ export default function CartPage() {
 
                         <div className="summary-row">
                             <span>Subtotal</span>
-                            <span>{formatCurrency(getTotalPrice())}</span>
+                            {/* Usamos el cálculo directo de 'cartTotal' */}
+                            <span>{formatCurrency(cartTotal)}</span>
                         </div>
 
                         <div className="summary-row">
@@ -84,7 +88,7 @@ export default function CartPage() {
 
                         <div className="summary-row total">
                             <span>Total</span>
-                            <span>{formatCurrency(getTotalPrice())}</span>
+                            <span>{formatCurrency(cartTotal)}</span>
                         </div>
 
                         <button className="btn btn--gold btn-checkout">
