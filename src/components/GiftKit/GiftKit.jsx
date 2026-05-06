@@ -2,21 +2,19 @@
  * GiftKit — Sección de Kit de Regalo para Cuyo Cebado.
  * Actualizado para agregar directamente al carrito de compras.
  */
-import { useCart } from '../../context/CartContext'; // 1. Importamos el cerebro del carrito
+import { useCart } from '../../context/CartContext';
 import kitImage from '../../assets/kit_regalo.png';
 import './GiftKit.css';
 
 export default function GiftKit() {
-  // 2. Traemos la función para despachar al carrito
   const { addToCart } = useCart();
 
-  // 3. Armamos los datos del producto exacto como los necesita el chango
   const kitProduct = {
-    id: 'kit-regalo-premium', // Un ID único para que no se pise con otros mates
+    id: 'kit-regalo-premium',
     name: 'Kit Regalo Premium',
     price: 89000,
-    image_url: kitImage, // Usamos la misma imagen que ya tenés importada
-    stock: 10 // Un stock base para que el sistema permita la compra
+    image_url: kitImage,
+    stock: 10
   };
 
   return (
@@ -57,7 +55,7 @@ export default function GiftKit() {
 
           <p className="giftkit__price">$89.000</p>
 
-          {/* 4. NUEVO BOTÓN: Agregar al Carrito */}
+          {/* Botón limpio: Agregar al Carrito */}
           <button
             onClick={() => addToCart(kitProduct)}
             className="btn btn--primary"
@@ -75,7 +73,7 @@ export default function GiftKit() {
             }}
           >
             <span className="material-symbols-outlined">shopping_cart_checkout</span>
-            Agregar al carrito — $89.000
+            Agregar al carrito
           </button>
 
           <p className="giftkit__trust">
