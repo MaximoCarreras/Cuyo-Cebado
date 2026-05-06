@@ -23,7 +23,7 @@ export default function BestSellers() {
         </div>
 
         {loading ? (
-          <p style={{ textAlign: 'center' }}>Cargando...</p>
+          <p style={{ textAlign: 'center', padding: '50px' }}>Cargando mates seleccionados...</p>
         ) : (
           <div className="bestsellers__grid">
             {products.map(product => (
@@ -33,6 +33,7 @@ export default function BestSellers() {
                     src={product.image_url}
                     alt={product.name}
                     className="product-card__image"
+                    loading="lazy"
                   />
                   {product.badge && (
                     <span className="badge badge--green product-card__badge">
