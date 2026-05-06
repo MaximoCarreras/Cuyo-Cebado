@@ -1,9 +1,14 @@
+import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import { Link } from 'react-router-dom';
 import './CartPage.css';
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
+
+    // Estados para cumplir con los requisitos de tu backend (routes/checkout.js)
+    const [customer, setCustomer] = useState({ name: '', email: '' });
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('es-AR', {
@@ -13,11 +18,41 @@ export default function CartPage() {
         }).format(value);
     };
 
-    // Función que se ejecutará al tocar el botón de pago
     const handleCheckoutMP = async () => {
-        console.log("Iniciando flujo de pago para:", cart);
-        // En el futuro, aquí conectaremos con Node.js
-        alert("Redirigiendo a la plataforma segura de Mercado Pago...");
+        // Validación previa antes de llamar al servidor
+        if (!customer.name || !customer.email) {
+            alert("Por favor, ingresá tu nombre y email para procesar el envío.");
+            return;
+        }
+
+        setIsProcessing(true);
+
+        try {
+            // Llamamos a tu API en el puerto 3001 como definiste en index.js
+            const response = await fetch("http://localhost:3001/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    items: cart,
+                    name: customer.name,
+                    email: customer.email
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.init_point) {
+                // Redirección directa al Checkout Pro de Mercado Pago
+                window.location.href = data.init_point;
+            } else {
+                alert("Error: " + (data.error || "No se pudo generar el pago. Verificá el stock."));
+            }
+        } catch (error) {
+            console.error("Error en el flujo de pago:", error);
+            alert("Hubo un problema de conexión con el servidor de Cuyo Cebado.");
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     if (!cart || cart.length === 0) {
@@ -36,7 +71,7 @@ export default function CartPage() {
             <h1 className="cart-page__title">Tu Carrito</h1>
 
             <div className="cart-page__grid">
-                {/* COLUMNA IZQUIERDA: Lista de productos (Tarjetas blancas) */}
+                {/* COLUMNA IZQUIERDA: Ítems del carrito */}
                 <div className="cart-items">
                     {cart.map((item) => (
                         <div key={item.id} className="cart-item">
@@ -67,10 +102,29 @@ export default function CartPage() {
                     ))}
                 </div>
 
-                {/* COLUMNA DERECHA: Resumen de compra (Tarjeta oscura) */}
+                {/* COLUMNA DERECHA: Resumen y Formulario de Pago */}
                 <aside className="cart-summary">
                     <div className="summary-card">
                         <h3>Resumen del pedido</h3>
+
+                        {/* Datos del cliente requeridos por el backend */}
+                        <div className="checkout-fields" style={{ marginBottom: '20px' }}>
+                            <p style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '8px' }}>DATOS DE ENVÍO</p>
+                            <input
+                                type="text"
+                                placeholder="Nombre completo"
+                                value={customer.name}
+                                onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
+                                style={{ width: '100%', padding: '12px', marginBottom: '10px', borderRadius: '8px', border: 'none', background: '#2a2a2a', color: 'white' }}
+                            />
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                value={customer.email}
+                                onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
+                                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: 'none', background: '#2a2a2a', color: 'white' }}
+                            />
+                        </div>
 
                         <div className="summary-row">
                             <span>Subtotal</span>
@@ -79,27 +133,30 @@ export default function CartPage() {
 
                         <div className="summary-row">
                             <span>Envío</span>
-                            <span className="text-free">A calcular</span>
+                            <span className="text-free">Gratis</span>
                         </div>
 
                         <hr style={{ borderColor: '#444', margin: '15px 0' }} />
 
                         <div className="summary-row total">
                             <span>Total</span>
-                            {/* PRECIO EN DORADO */}
                             <span style={{ color: '#d4af37', fontWeight: 'bold', fontSize: '1.4rem' }}>
                                 {formatCurrency(cartTotal)}
                             </span>
                         </div>
 
-                        {/* BOTÓN CELESTE DE MERCADO PAGO */}
-                        <button className="btn-mercadopago" onClick={handleCheckoutMP}>
+                        <button
+                            className="btn-mercadopago"
+                            onClick={handleCheckoutMP}
+                            disabled={isProcessing}
+                            style={{ opacity: isProcessing ? 0.7 : 1 }}
+                        >
                             <img
                                 src="https://logotipous.com/wp-content/uploads/2019/02/mercado-pago-logo.png"
                                 alt="MP"
                                 className="mp-logo-icon"
                             />
-                            Pagar con Mercado Pago
+                            {isProcessing ? "Procesando..." : "Pagar con Mercado Pago"}
                         </button>
                     </div>
 
