@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './CartPage.css';
 
 export default function CartPage() {
-    // Conectamos exactamente con los nombres que exporta tu CartContext
+    // 1. Cambiamos cartItems por cart y getTotalPrice por cartTotal
     const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
 
     // Formateador de moneda argentina (AR$ 00.000)
@@ -15,7 +15,7 @@ export default function CartPage() {
         }).format(value);
     };
 
-    // Verificamos usando 'cart'
+    // 2. Usamos cart.length
     if (!cart || cart.length === 0) {
         return (
             <div className="cart-empty section__container">
@@ -34,7 +34,7 @@ export default function CartPage() {
             <div className="cart-page__grid">
                 {/* COLUMNA IZQUIERDA: Lista de productos */}
                 <div className="cart-items">
-                    {/* Mapeamos usando 'cart' */}
+                    {/* 3. Usamos cart.map */}
                     {cart.map((item) => (
                         <div key={item.id} className="cart-item">
                             <div className="cart-item__image">
@@ -75,7 +75,7 @@ export default function CartPage() {
 
                         <div className="summary-row">
                             <span>Subtotal</span>
-                            {/* Usamos el cálculo directo de 'cartTotal' */}
+                            {/* 4. Usamos cartTotal directamente */}
                             <span>{formatCurrency(cartTotal)}</span>
                         </div>
 
