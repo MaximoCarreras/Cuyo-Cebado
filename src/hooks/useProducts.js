@@ -1,9 +1,8 @@
 /**
- * useProducts — Hook para obtener productos.
- * Sincronizado con la carpeta public/images/
+ * useProducts — Hook para obtener productos de Cuyo Cebado.
+ * Apunta directamente a la carpeta public/images/.
  */
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
 
 const FALLBACK_PRODUCTS = [
   {
@@ -61,8 +60,11 @@ export function useProducts(category = null) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Por ahora usamos siempre los datos locales para asegurar que las fotos se vean
-    setProducts(category ? FALLBACK_PRODUCTS.filter(p => p.category === category) : FALLBACK_PRODUCTS);
+    // Usamos los datos locales con las rutas corregidas
+    const data = category
+      ? FALLBACK_PRODUCTS.filter(p => p.category === category)
+      : FALLBACK_PRODUCTS;
+    setProducts(data);
     setLoading(false);
   }, [category]);
 
