@@ -267,3 +267,76 @@
 }
 
 /* El botón celeste de Mercado Pago se mantiene con la clase .btn-mercadopago definida antes */
+/* --- Mejoras en la tarjeta de resumen --- */
+.fields-title {
+    color: #d4af37 !important;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.cart-input-dark {
+    width: 100%;
+    padding: 12px 5px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #333;
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    transition: border-color 0.3s;
+}
+
+.cart-input-dark:focus {
+    outline: none;
+    border-bottom: 1px solid #d4af37;
+}
+
+.summary-divider {
+    borderColor: #333;
+    margin: 20px 0;
+    opacity: 0.3;
+}
+
+.total-amount {
+    color: #d4af37;
+    font-weight: 800;
+    font-size: 1.6rem;
+}
+
+/* --- Botón Mercado Pago Limpio --- */
+.btn-mercadopago {
+    width: 100%;
+    background-color: #009ee3;
+    color: white;
+    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    margin-top: 20px;
+}
+
+.btn-mercadopago:hover:not(:disabled) {
+    background-color: #0086c3;
+    transform: translateY(-2px);
+}
+
+.btn-mercadopago:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.mp-icon {
+    height: 20px;
+    width: auto;
+    /* Invertimos el color del logo si es necesario para que sea blanco sobre azul */
+    filter: brightness(0) invert(1);
+}
