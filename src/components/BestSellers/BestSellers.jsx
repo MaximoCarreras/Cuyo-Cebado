@@ -1,6 +1,6 @@
 /**
  * BestSellers — Grilla de productos para Cuyo Cebado.
- * Conectado al CartContext y con rutas de imagen optimizadas.
+ * Conectado al CartContext y con rutas de imagen sincronizadas con la carpeta public/images.
  */
 import { useFeaturedProducts } from '../../hooks/useProducts';
 import { useCart } from '../../context/CartContext';
@@ -36,21 +36,16 @@ export default function BestSellers() {
             {products.map(product => (
               <article className="product-card" key={product.id}>
 
-                {/* Imagen del producto con GPS de ruta corregido */}
+                {/* Imagen del producto sincronizada con public/images/product_X.png */}
                 <div className="product-card__image-wrapper">
                   <img
-                    /* Lógica de ruta: 
-                       Si la imagen ya tiene la ruta completa, la usa. 
-                       Si no, la busca dentro de /images/ en la carpeta public.
-                    */
-                    src={product.image_url.startsWith('/')
-                      ? product.image_url
-                      : `/images/${product.image_url.split('/').pop()}`}
+                    src={`/images/product_${product.id}.png`}
                     alt={product.name}
                     className="product-card__image"
                     loading="lazy"
                     onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/400x400?text=Cuyo+Cebado+Mate';
+                      e.target.onerror = null; // Evita bucles infinitos si falla el placeholder
+                      e.target.src = 'https://placehold.co/400x400?text=Cuyo+Cebado+Mate';
                     }}
                   />
 

@@ -15,8 +15,8 @@ export default function CartPage() {
 
     if (!cart || cart.length === 0) {
         return (
-            <div className="cart-empty section__container">
-                <span className="material-symbols-outlined empty-icon">shopping_basket</span>
+            <div className="cart-empty section__container" style={{ paddingTop: '150px', textAlign: 'center' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: '60px', color: '#ccc' }}>shopping_basket</span>
                 <h2>Tu carrito está vacío</h2>
                 <p>Parece que todavía no has sumado ningún mate.</p>
                 <Link to="/" className="btn btn--gold">Ir a ver productos</Link>
@@ -33,7 +33,14 @@ export default function CartPage() {
                     {cart.map((item) => (
                         <div key={item.id} className="cart-item">
                             <div className="cart-item__image">
-                                <img src={item.image_url} alt={item.name} />
+                                <img
+                                    src={`/images/product_${item.id}.png`}
+                                    alt={item.name}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = 'https://placehold.co/100x100?text=Mate';
+                                    }}
+                                />
                             </div>
 
                             <div className="cart-item__info">
@@ -59,7 +66,6 @@ export default function CartPage() {
                     ))}
                 </div>
 
-                {/* RESUMEN - Ahora con las clases que coinciden con tu CSS */}
                 <aside className="cart-summary">
                     <div className="summary-card">
                         <h3>Resumen del pedido</h3>
@@ -83,6 +89,10 @@ export default function CartPage() {
                             Compra protegida y segura
                         </p>
                     </div>
+
+                    <Link to="/" className="continue-shopping">
+                        ← Seguir comprando
+                    </Link>
                 </aside>
             </div>
         </div>
