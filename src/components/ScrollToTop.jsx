@@ -5,9 +5,19 @@ export default function ScrollToTop() {
     const { pathname } = useLocation();
 
     useEffect(() => {
-        // Esto fuerza al navegador a ir a la coordenada 0,0 (arriba de todo)
-        window.scrollTo(0, 0);
-    }, [pathname]); // Se ejecuta cada vez que cambia la ruta (pathname)
+        // 1. Fuerza la ventana principal (Lo normal)
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+        // 2. Fuerza el HTML y el Body (Por si hay estilos bloqueando)
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+
+        // 3. Busca el contenedor de la App de React y lo sube a la fuerza
+        const rootElement = document.getElementById('root');
+        if (rootElement) {
+            rootElement.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        }
+    }, [pathname]);
 
     return null;
 }

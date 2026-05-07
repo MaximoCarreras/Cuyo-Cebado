@@ -28,8 +28,10 @@ export default function BestSellers() {
           <p style={{ textAlign: 'center', padding: '50px' }}>Cargando mates seleccionados...</p>
         ) : (
           <div className="bestsellers__grid">
-            {products.map(product => (
+            {products.map((product) => (
               <article className="product-card" key={product.id}>
+
+                {/* Contenedor de la Imagen y el Badge */}
                 <div className="product-card__image-wrapper">
                   <img
                     src={product.image_url}
@@ -37,8 +39,10 @@ export default function BestSellers() {
                     className="product-card__image"
                     loading="lazy"
                   />
-                  {product.badge && (
-                    <span className="badge badge--green product-card__badge">
+
+                  {/* Etiqueta "Más vendido". Solo se muestra si product.badge existe y tiene contenido */}
+                  {product.badge && product.badge.trim() !== '' && (
+                    <span className="product-card__badge">
                       {product.badge}
                     </span>
                   )}

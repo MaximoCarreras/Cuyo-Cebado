@@ -46,6 +46,8 @@
   flex-direction: column;
   height: 100%;
   border: 1px solid rgba(165, 129, 58, 0.1);
+  /* Fundamental para que el badge se posicione relativo a la tarjeta, NO a la imagen */
+  position: relative;
 }
 
 .product-card:hover {
@@ -53,15 +55,17 @@
   transform: translateY(-8px);
 }
 
-/* --- CONTENEDOR DE IMAGEN (EL ARREGLO) --- */
+/* --- CONTENEDOR DE IMAGEN (EL FIX DEL ZOOM) --- */
 .product-card__image-wrapper {
   position: relative;
+  /* Contenedor para el corte */
   aspect-ratio: 1 / 1.1;
-  /* --- ACÁ ESTÁ LA CLAVE --- */
-  overflow: hidden;
-  /* Esto corta la imagen cuando se agranda */
-  /* ------------------------- */
   background-color: #f9f6f2;
+  overflow: hidden;
+  /* Corta la imagen al hacer zoom */
+  /* TRUCO PARA FORZAR EL CORTE EN TODOS LOS NAVEGADORES (Safari/iOS) */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .product-card__image {
@@ -69,7 +73,6 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s ease;
-  /* Animación suave */
 }
 
 /* Animación de zoom controlada */
@@ -78,11 +81,28 @@
   /* Se agranda un poco, pero se corta por el overflow */
 }
 
-/* Insignia */
+/* --- ETIQUETA "MÁS VENDIDO" (EL BADGE DORADO) --- */
 .product-card__badge {
   position: absolute;
   top: 15px;
-  right: 15px;
+  left: 15px;
+  /* Lo muevo a la izquierda para que no choque con nada */
+  background-color: #a5813a !important;
+  /* Fuerza el color dorado */
+  color: #fdfaf7 !important;
+  /* Fuerza el color blanco */
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 10;
+  /* Asegura que esté por encima de la imagen */
+  box-shadow: 0 5px 15px rgba(43, 37, 32, 0.3);
+  /* Reseteo de estilos basura que pueda heredar */
+  border: none;
+  margin: 0;
 }
 
 /* --- INFORMACIÓN --- */
@@ -118,7 +138,7 @@
   margin-bottom: 20px;
 }
 
-/* --- EL BOTÓN PREMIUM --- */
+/* --- EL BOTÓN --- */
 .product-card__btn {
   background-color: #2b2520;
   color: #fdfaf7;
@@ -136,7 +156,6 @@
   justify-content: center;
   gap: 8px;
   margin-top: auto;
-  /* Empuja el botón al fondo de la tarjeta */
 }
 
 .product-card__btn:hover {
