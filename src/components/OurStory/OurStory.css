@@ -1,8 +1,8 @@
-/* --- SECCIÓN CON FONDO LIMPIO Y AIRE --- */
+/* --- SECCIÓN CON FONDO LIMPIO --- */
 .ourstory--light {
   background-color: #fdfaf7;
-  /* Aumentamos el padding superior para que no se pegue al Navbar */
-  padding: 140px 20px 100px 20px;
+  /* Reducimos el padding top porque WhyUs ya da el espacio arriba */
+  padding: 60px 20px 100px 20px;
   display: flex;
   justify-content: center;
 }

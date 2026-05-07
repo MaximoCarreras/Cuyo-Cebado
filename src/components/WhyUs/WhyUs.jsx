@@ -26,7 +26,9 @@ export default function WhyUs() {
   return (
     <section className="whyus section">
       <div className="section__container">
-        <div className="section__title">
+
+        {/* DOMAMOS EL TÍTULO CON UNA CLASE ESPECÍFICA */}
+        <div className="section__title whyus__header">
           <h2>¿Por qué elegirnos?</h2>
           <div className="gold-line"></div>
         </div>
