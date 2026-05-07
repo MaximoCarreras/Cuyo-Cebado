@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import './Navbar.css';
 
 export default function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const { cartCount } = useCart();
+  const location = useLocation(); // Escuchamos la ubicación actual
 
   const navLinks = [
     { label: 'Inicio', to: '/' },
@@ -13,11 +14,20 @@ export default function Navbar() {
     { label: 'Guía de Curado', to: '/guia-curado' },
   ];
 
-  // NUEVA FUNCIÓN: Cierra el menú en móviles Y fuerza la subida al tope
+  // FUNCIÓN MAESTRA: Cierra menú Y fuerza la subida al tope instantáneamente
   const handleNavClick = () => {
     setIsMobileOpen(false);
-    window.scrollTo(0, 0);
+    // Usamos el método moderno y decisivo con behavior: 'instant'
+    window.scrollTo({
+      top: 0,
+      behavior: 'instant' // Ni 'smooth' ni nada, ARRIBA YA.
+    });
   };
+
+  // Extra de seguridad: Cada vez que cambie la URL (location), forzamos subida.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [location.pathname]);
 
   return (
     <>
@@ -31,7 +41,6 @@ export default function Navbar() {
       <nav className="navbar" id="navbar">
         {/* 1. IZQUIERDA: Logo */}
         <div className="navbar__left">
-          {/* Aplicamos handleNavClick al logo */}
           <Link to="/" className="navbar__logo" onClick={handleNavClick}>
             <img
               src="/logo.png"
@@ -46,7 +55,6 @@ export default function Navbar() {
           <ul className="navbar__links">
             {navLinks.map(link => (
               <li key={link.to}>
-                {/* Aplicamos handleNavClick a cada link del menú */}
                 <Link to={link.to} onClick={handleNavClick}>
                   {link.label}
                 </Link>
@@ -57,7 +65,6 @@ export default function Navbar() {
 
         {/* 3. DERECHA: Carrito y Botón Acción */}
         <div className="navbar__right">
-          {/* Aplicamos handleNavClick al carrito */}
           <Link
             to="/carrito"
             className="navbar__cart-link"
