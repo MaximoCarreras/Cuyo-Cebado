@@ -15,9 +15,11 @@ body {
   min-height: 100vh;
 }
 
+/* Buscá esto en tu App.css y cambiale el valor: */
 main {
   flex: 1;
-  padding-top: 100px;
+  padding-top: 136px;
+  /* Ajustado para la barra de anuncio + navbar */
   background-color: #fdfaf7;
 }
 

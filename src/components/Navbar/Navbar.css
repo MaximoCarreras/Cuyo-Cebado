@@ -1,14 +1,34 @@
-/* --- VARIABLES ACTUALIZADAS --- */
+/* --- VARIABLES --- */
 :root {
   --color-cuyo-brown: #2b2520;
-  --color-gold: #a5813a; /* Dorado Cuyo Oficial */
+  --color-gold: #a5813a;
   --color-bone: #fdfaf7;
-  --nav-height: 110px;
+  --nav-height: 100px;
+  /* Un poco más fina porque sumamos la barra de anuncio */
 }
 
-.navbar {
+/* --- ANNOUNCEMENT BAR --- */
+.announcement-bar {
+  background-color: var(--color-gold);
+  color: var(--color-bone);
+  text-align: center;
+  padding: 8px 15px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
   position: fixed;
   top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1001;
+  /* Sobre el navbar */
+}
+
+/* --- NAVBAR --- */
+.navbar {
+  position: fixed;
+  top: 36px;
+  /* Empieza justo debajo de la announcement bar */
   left: 0;
   right: 0;
   z-index: 1000;
@@ -23,33 +43,51 @@
   -webkit-backdrop-filter: blur(10px);
 }
 
-/* --- LOGO --- */
-.navbar__left { display: flex; justify-content: flex-start; }
-.navbar__logo-img { height: 85px; width: auto; display: block; }
+.navbar__left {
+  display: flex;
+  justify-content: flex-start;
+}
 
-/* --- LINKS ESCRITORIO --- */
-.navbar__center { display: flex; justify-content: center; }
+.navbar__logo-img {
+  height: 75px;
+  width: auto;
+  display: block;
+}
+
+/* Logo apenas más chico */
+
+.navbar__center {
+  display: flex;
+  justify-content: center;
+}
+
 .navbar__links {
   display: flex;
   gap: 40px;
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
+
 .navbar__links a {
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--color-bone);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
+  font-family: 'Inter', sans-serif;
 }
-.navbar__links a:hover { color: var(--color-gold); }
 
-/* --- ACCIONES (CARRITO Y TOGGLE) --- */
+.navbar__links a:hover {
+  color: var(--color-gold);
+}
+
 .navbar__right {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 15px; /* Espacio fijo para que nunca se encimen */
-  z-index: 1100; /* Siempre por encima del menú lateral */
+  gap: 15px;
+  z-index: 1100;
 }
 
 .navbar__cart-link {
@@ -63,6 +101,11 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  transition: background 0.3s;
+}
+
+.navbar__cart-link:hover {
+  background: rgba(165, 129, 58, 0.25);
 }
 
 .cart-badge {
@@ -81,38 +124,43 @@
   justify-content: center;
 }
 
-/* --- BOTÓN HAMBURGUESA / X --- */
 .navbar__toggle {
-  display: none; /* Oculto en PC */
+  display: none;
   background: none;
   border: none;
   color: var(--color-bone);
   cursor: pointer;
   padding: 5px;
-  transition: color 0.3s;
 }
 
-/* Cuando el menú está abierto, el botón se vuelve dorado */
 .navbar__toggle--active {
   color: var(--color-gold);
 }
 
-.navbar__toggle span { font-size: 35px; }
+.navbar__toggle span {
+  font-size: 35px;
+}
 
-/* --- VISTA MÓVIL --- */
 @media (max-width: 950px) {
+  .announcement-bar p {
+    font-size: 0.75rem;
+  }
+
   .navbar {
     display: flex;
     justify-content: space-between;
-    height: 85px;
+    height: 80px;
     padding: 0 20px;
   }
 
-  .navbar__logo-img { height: 65px; }
+  .navbar__logo-img {
+    height: 60px;
+  }
 
-  .navbar__toggle { display: block; }
+  .navbar__toggle {
+    display: block;
+  }
 
-  /* Menú lateral (Drawer) */
   .navbar__center {
     position: fixed;
     top: 0;
@@ -125,11 +173,13 @@
     padding-top: 100px;
     padding-left: 30px;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1050; /* Por debajo de navbar__right */
-    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    z-index: 1050;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
   }
 
-  .navbar__center--open { right: 0; }
+  .navbar__center--open {
+    right: 0;
+  }
 
   .navbar__links {
     flex-direction: column;

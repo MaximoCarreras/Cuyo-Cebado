@@ -1,6 +1,4 @@
 import Hero from '../components/Hero/Hero';
-import TrustBar from '../components/TrustBar/TrustBar';
-import SpecialOffer from '../components/SpecialOffer/SpecialOffer';
 import Categories from '../components/Categories/Categories';
 import BestSellers from '../components/BestSellers/BestSellers';
 import GiftKit from '../components/GiftKit/GiftKit';
@@ -12,14 +10,12 @@ export default function Home() {
     return (
         <>
             <Hero />
-            <TrustBar />
-            <SpecialOffer />
+            {/* Se eliminó TrustBar y SpecialOffer para limpiar visualmente */}
             <Categories />
             <BestSellers />
             <GiftKit />
             <HowToBuy />
             <Testimonials />
-            {/* La Galería fue removida para mantener la prolijidad visual */}
             <Newsletter />
         </>
     );
