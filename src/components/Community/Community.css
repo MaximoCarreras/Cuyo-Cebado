@@ -1,32 +1,21 @@
 .community {
     padding: 80px 20px;
     background-color: #fdfaf7;
-    /* Fondo blanco hueso */
     text-align: center;
-}
-
-.community__title {
-    font-size: 2.5rem;
-    color: #2b2520;
-    margin-bottom: 50px;
-    text-transform: uppercase;
-    font-weight: 800;
 }
 
 .community__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* Dos columnas en PC */
     gap: 30px;
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
 .community__card {
     background: #2b2520;
-    /* El marrón de tu marca */
-    padding: 40px;
-    border-radius: 20px;
+    padding: 45px 35px;
+    border-radius: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,12 +29,18 @@
 
 .community__icon-box {
     color: #a5813a;
-    /* Dorado bronce */
-    margin-bottom: 20px;
+    /* Dorado Cuyo */
+    margin-bottom: 25px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.community__icon-box span {
-    font-size: 45px;
+.community__svg {
+    width: 100%;
+    height: 100%;
 }
 
 .community__card h3 {
@@ -53,6 +48,7 @@
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 15px;
+    font-weight: 700;
 }
 
 .community__card p {
@@ -60,35 +56,32 @@
     opacity: 0.8;
     margin-bottom: 30px;
     line-height: 1.5;
-}
-
-.community__handle {
-    color: #a5813a;
-    font-weight: 700;
-    text-decoration: underline;
+    font-size: 0.95rem;
+    min-height: 48px;
+    /* Para que las tarjetas midan lo mismo si el texto varía un poco */
 }
 
 .community__btn {
     background-color: #a5813a;
     color: #2b2520;
-    padding: 12px 30px;
+    padding: 14px 40px;
     border-radius: 50px;
     text-decoration: none;
     font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
     transition: 0.3s;
+    display: inline-block;
 }
 
 .community__btn:hover {
     background-color: #fdfaf7;
+    transform: scale(1.05);
 }
 
-/* RESPONSIVE: En celu se pone uno abajo del otro */
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .community__grid {
         grid-template-columns: 1fr;
-    }
-
-    .community__title {
-        font-size: 1.8rem;
     }
 }
