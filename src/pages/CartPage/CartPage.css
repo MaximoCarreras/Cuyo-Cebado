@@ -3,13 +3,15 @@
     padding-top: 160px;
     min-height: 80vh;
     padding-bottom: 80px;
+    /* Usamos el Blanco Hueso de la marca */
     background-color: #fdfaf7;
 }
 
 .cart-page__title {
     font-size: 2.5rem;
     margin-bottom: 40px;
-    color: #1a1a1a;
+    /* Marrón Cuyo para el título */
+    color: #2b2520;
     font-weight: 800;
 }
 
@@ -28,9 +30,11 @@
     background: white;
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    /* Sombra más suave y elegante */
+    box-shadow: 0 10px 30px rgba(43, 37, 32, 0.05);
     align-items: center;
     margin-bottom: 20px;
+    border: 1px solid rgba(43, 37, 32, 0.05);
 }
 
 .cart-item__image img {
@@ -38,6 +42,11 @@
     aspect-ratio: 1;
     object-fit: cover;
     border-radius: 10px;
+}
+
+.cart-item__info h3 {
+    color: #2b2520;
+    margin-bottom: 5px;
 }
 
 /* --- Selector de Cantidad y Eliminar --- */
@@ -62,19 +71,21 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    border: 1px solid #1a1a1a;
+    /* Borde en Marrón Cuyo */
+    border: 1px solid #2b2520;
     background: white;
-    color: #1a1a1a;
+    color: #2b2520;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .qty-btn:hover:not(:disabled) {
-    background: #1a1a1a;
+    /* Fondo Marrón y texto Dorado al pasar el mouse */
+    background: #2b2520;
     color: #d4af37;
 }
 
@@ -85,7 +96,7 @@
 
 .qty-number {
     font-weight: 800;
-    color: #1a1a1a;
+    color: #2b2520;
     min-width: 20px;
     text-align: center;
 }
@@ -106,27 +117,34 @@
     color: #c0392b;
 }
 
-/* --- Tarjeta de Resumen --- */
+/* --- Tarjeta de Resumen (Unificada con la marca) --- */
 .summary-card {
-    background: #1a1a1a;
-    color: white;
+    /* Cambiado de Negro a Marrón Cuyo */
+    background: #2b2520;
+    color: #fdfaf7;
     padding: 35px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     position: sticky;
-    top: 120px;
+    top: 130px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
 }
 
 .summary-card h3 {
     margin-bottom: 25px;
     font-size: 1.5rem;
-    color: #fff !important;
+    color: #fdfaf7 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .fields-title {
+    /* Dorado Cuyo para etiquetas */
     color: #d4af37 !important;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 1.5px;
     margin-bottom: 15px;
     display: block;
 }
@@ -136,9 +154,11 @@
     padding: 12px 5px;
     background: transparent;
     border: none;
-    border-bottom: 1px solid #333;
-    color: white !important;
+    /* Borde sutil para los inputs */
+    border-bottom: 1px solid rgba(253, 250, 247, 0.2);
+    color: #fdfaf7 !important;
     margin-bottom: 15px;
+    font-size: 1rem;
 }
 
 .cart-input-dark:focus {
@@ -149,18 +169,22 @@
 .total-amount {
     color: #d4af37;
     font-weight: 800;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
 }
 
-/* --- BOTÓN MERCADO PAGO (ARREGLADO) --- */
+.summary-row span {
+    opacity: 0.9;
+}
+
+/* --- BOTÓN MERCADO PAGO --- */
 .btn-mercadopago {
     width: 100%;
     background-color: #009ee3;
     color: white;
-    padding: 12px 15px;
+    padding: 16px;
     border: none;
     border-radius: 12px;
-    font-weight: 700;
+    font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,15 +192,18 @@
     cursor: pointer;
     margin-top: 25px;
     transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .btn-mercadopago:hover {
     background-color: #0081ba;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 158, 227, 0.3);
 }
 
-/* El logo ahora tiene correa corta */
 .mp-icon-local {
-    height: 30px;
+    height: 28px;
     width: auto;
     object-fit: contain;
     flex-shrink: 0;
@@ -194,8 +221,14 @@
         padding: 100px 15px 50px;
     }
 
+    .cart-page__title {
+        font-size: 2rem;
+        text-align: center;
+    }
+
     .cart-item {
         grid-template-columns: 100px 1fr;
+        gap: 15px;
     }
 
     .cart-item__subtotal {
@@ -203,9 +236,12 @@
         text-align: right;
         border-top: 1px solid #eee;
         padding-top: 10px;
+        font-weight: 800;
+        color: #2b2520;
     }
 
     .summary-card {
         position: static;
+        padding: 25px;
     }
 }
