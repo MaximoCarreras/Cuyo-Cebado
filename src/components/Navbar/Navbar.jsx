@@ -25,7 +25,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* BARRA DORADA: Ahora fluye con la página para ocultarse al bajar */}
+      {/* Barra dorada: fluye con la página (se oculta al bajar) */}
       <div className="announcement-bar">
         <p>
           <b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.
@@ -58,6 +58,7 @@ export default function Navbar() {
           <button
             className={`navbar__toggle ${isMobileOpen ? 'navbar__toggle--active' : ''}`}
             onClick={() => setIsMobileOpen(!isMobileOpen)}
+            aria-label="Cerrar menú"
           >
             <span className="material-symbols-outlined">
               {isMobileOpen ? 'close' : 'menu'}

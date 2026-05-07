@@ -13,11 +13,10 @@ body {
   min-height: 100vh;
 }
 
-/* FIX MARGEN BLANCO: Al usar sticky navbar, eliminamos el padding extra */
+/* FIX MARGEN BLANCO DEFINITIVO: Pegamos el contenido a la Navbar sticky */
 main {
   flex: 1;
   padding-top: 0 !important;
-  /* El contenido ahora toca la Navbar */
   background-color: #fdfaf7;
 }
 
@@ -32,6 +31,7 @@ main {
   font-family: 'Noto Serif', serif;
 }
 
+/* BOTONES GLOBALES: Sin efecto "pegajoso" en móviles */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -47,7 +47,6 @@ main {
   border: none;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  /* Limpieza para móviles */
 }
 
 .btn--gold {
@@ -55,14 +54,9 @@ main {
   color: #fdfaf7;
 }
 
-.btn--gold:hover {
-  background-color: #2b2520;
-  transform: translateY(-2px);
-}
-
-/* Fix específico para que el botón no se quede marrón después de tocarlo */
+/* FIX: El color cambia solo mientras se toca el botón */
 .btn--gold:active {
-  background-color: #2b2520;
+  background-color: #2b2520 !important;
 }
 
 .whatsapp-float {
@@ -78,7 +72,6 @@ main {
   align-items: center;
   justify-content: center;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: 1px solid rgba(165, 129, 58, 0.2);
 }
 
@@ -86,28 +79,4 @@ main {
   width: 30px;
   height: 30px;
   fill: #a5813a;
-  transition: fill 0.3s ease;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.08) rotate(5deg);
-  background-color: #a5813a;
-}
-
-.whatsapp-float:hover .wa-icon {
-  fill: #2b2520;
-}
-
-@media (max-width: 768px) {
-  .whatsapp-float {
-    width: 48px;
-    height: 48px;
-    bottom: 20px;
-    right: 20px;
-  }
-
-  .wa-icon {
-    width: 26px;
-    height: 26px;
-  }
 }
