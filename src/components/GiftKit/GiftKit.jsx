@@ -1,6 +1,6 @@
 /**
- * GiftKit — Sección de Kit de Regalo para Cuyo Cebado.
- * Actualizado para agregar directamente al carrito de compras.
+ * GiftKit — Sección de Kit de Regalo Premium.
+ * Actualizado con el diseño de Cuyo Cebado.
  */
 import { useCart } from '../../context/CartContext';
 import kitImage from '../../assets/kit_regalo.png';
@@ -24,7 +24,7 @@ export default function GiftKit() {
         {/* Izquierda — Imagen con insignia */}
         <div className="giftkit__image-wrapper">
           <img src={kitImage} alt="Kit Regalo Premium Cuyo Cebado" loading="lazy" />
-          <span className="badge badge--gold giftkit__badge">La opción más elegida</span>
+          <span className="giftkit__badge">La opción más elegida</span>
         </div>
 
         {/* Derecha — Detalles del producto */}
@@ -36,43 +36,31 @@ export default function GiftKit() {
           {/* Lista de ítems incluidos */}
           <ul className="giftkit__items">
             <li>
-              <span className="material-symbols-outlined">check_circle</span>
+              <span className="material-symbols-outlined">done</span>
               Mate de madera noble seleccionado
             </li>
             <li>
-              <span className="material-symbols-outlined">check_circle</span>
+              <span className="material-symbols-outlined">done</span>
               Bombilla de alpaca o acero premium
             </li>
             <li>
-              <span className="material-symbols-outlined">check_circle</span>
+              <span className="material-symbols-outlined">done</span>
               Caja artesanal de madera
             </li>
             <li>
-              <span className="material-symbols-outlined">check_circle</span>
+              <span className="material-symbols-outlined">done</span>
               Guía de curado y cuidado paso a paso
             </li>
           </ul>
 
-          <p className="giftkit__price">$89.000</p>
+          <p className="giftkit__price">$ 89.000</p>
 
-          {/* Botón limpio: Agregar al Carrito */}
+          {/* Botón Premium igual al de los productos */}
           <button
             onClick={() => addToCart(kitProduct)}
-            className="btn btn--primary"
-            style={{
-              width: '100%',
-              padding: '16px',
-              fontWeight: 'bold',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              fontSize: '1rem',
-              border: 'none',
-              cursor: 'pointer'
-            }}
+            className="btn btn--gold giftkit__btn"
           >
-            <span className="material-symbols-outlined">shopping_cart_checkout</span>
+            <span className="material-symbols-outlined">shopping_cart</span>
             Agregar al carrito
           </button>
 

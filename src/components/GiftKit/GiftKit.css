@@ -1,79 +1,132 @@
-/* GiftKit — Featured product with darker bg */
+/* GiftKit — Sección Premium */
 .giftkit {
-  background: var(--color-bg-dark);
+  background-color: #fdfaf7;
+  /* Fondo hueso igual al resto */
+  padding: 80px 20px;
 }
 
 .giftkit__container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-3xl);
+  gap: 50px;
   align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
+/* --- IMAGEN Y BADGE --- */
 .giftkit__image-wrapper {
   position: relative;
-  border-radius: var(--radius-lg);
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: 0 15px 35px rgba(43, 37, 32, 0.08);
+  /* Sombra elegante */
 }
 
 .giftkit__image-wrapper img {
   width: 100%;
-  border-radius: var(--radius-lg);
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.giftkit__image-wrapper:hover img {
+  transform: scale(1.03);
 }
 
 .giftkit__badge {
   position: absolute;
-  top: var(--space-lg);
-  left: var(--space-lg);
+  top: 20px;
+  left: 20px;
+  background-color: #a5813a;
+  /* Dorado Cuyo */
+  color: #fdfaf7;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
+/* --- CONTENIDO --- */
 .giftkit__title {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  margin-bottom: var(--space-xl);
-  line-height: 1.25;
+  font-family: 'Noto Serif', serif;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  color: #2b2520;
+  margin-bottom: 25px;
+  line-height: 1.2;
+  font-weight: 800;
 }
 
 .giftkit__items {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
-  margin-bottom: var(--space-xl);
+  gap: 15px;
+  margin-bottom: 30px;
+  list-style: none;
+  padding: 0;
 }
 
 .giftkit__items li {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  font-size: 1rem;
-  color: var(--color-text);
+  gap: 12px;
+  font-size: 1.05rem;
+  color: #5a5048;
+  /* Gris oscuro elegante */
 }
 
 .giftkit__items .material-symbols-outlined {
-  color: var(--color-forest);
+  color: #a5813a;
+  /* Checkmarks dorados */
   font-size: 1.2rem;
+  font-weight: 700;
 }
 
 .giftkit__price {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--color-gold);
-  margin-bottom: var(--space-lg);
-  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #a5813a;
+  margin-bottom: 30px;
+  font-family: 'Noto Serif', serif;
 }
 
+/* --- BOTÓN --- */
+.giftkit__btn {
+  width: 100%;
+  /* Botón ancho para destacar la acción */
+  padding: 16px;
+  font-size: 1rem;
+  border-radius: 50px;
+}
+
+/* --- TRUST BADGE --- */
 .giftkit__trust {
   font-size: 0.85rem;
-  color: var(--color-text-light);
-  margin-top: var(--space-lg);
+  color: #8c8076;
+  margin-top: 20px;
+  text-align: center;
+  font-weight: 500;
 }
 
-@media (max-width: 768px) {
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
   .giftkit__container {
     grid-template-columns: 1fr;
+    gap: 40px;
   }
 
   .giftkit__image-wrapper {
-    max-width: 400px;
+    max-width: 500px;
     margin: 0 auto;
+  }
+
+  .giftkit__content {
+    text-align: center;
+  }
+
+  .giftkit__items li {
+    justify-content: center;
   }
 }
