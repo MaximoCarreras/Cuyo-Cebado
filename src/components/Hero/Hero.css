@@ -54,46 +54,52 @@
   max-width: 1200px;
   width: 100%;
   padding: 0 24px;
+  display: flex;
+  align-items: center;
 }
 
+/* --- CORRECCIÓN DE POSICIÓN: Empujamos el texto a la derecha --- */
 .hero__content {
-  max-width: 550px;
-  padding-left: 5%;
+  max-width: 600px;
+  /* Aumentamos el padding izquierdo para acercarlo a la curva */
+  padding-left: 15%;
 }
 
-/* --- TÍTULO RESTAURADO (ESTÉTICA VIEJA) --- */
+/* --- TÍTULO RESTAURADO (ESTÉTICA ORIGINAL) --- */
 .hero__title {
-  /* Tamaño grande y clamp de la versión original */
-  font-size: clamp(3.2rem, 6vw, 5rem);
-  line-height: 1.1;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  line-height: 1;
+  margin-bottom: 24px;
+  /* FORZAMOS SANS-SERIF (Inter) para todo el título */
+  font-family: 'Inter', sans-serif;
   font-weight: 800;
   text-transform: uppercase;
-  margin-bottom: 24px;
   /* BASE EN BLANCO HUESO (Como la foto vieja) */
   color: #fdfaf7;
 }
 
-/* RESALTADO DORADO NUEVO (Noto Serif para el toque boutique) */
+/* RESALTADO DORADO: Misma fuente Sans-Serif, solo cambia color y bold */
 .hero__title b,
-.hero__title span.gold {
+.hero__title span.highlight {
   color: #a5813a;
   /* Tu dorado de marca oficial */
-  font-family: 'Noto Serif', serif;
+  font-family: 'Inter', sans-serif;
+  /* Mantenemos Sans-Serif */
+  font-weight: 800;
   display: block;
-  /* Para que baje si hay <br/> */
 }
 
 .hero__subtitle {
-  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  font-size: 1.1rem;
   line-height: 1.6;
   font-weight: 400;
-  margin-bottom: 40px;
-  color: #fdfaf7;
-  /* Blanco Hueso */
-  opacity: 0.95;
+  margin-bottom: 35px;
+  font-family: 'Inter', sans-serif;
+  color: rgba(253, 250, 247, 0.9);
+  /* Blanco Hueso con opacidad */
 }
 
-/* --- BOTONES --- */
+/* --- BOTONES (Mantenemos los fixes técnicos) --- */
 .hero__actions {
   display: flex;
   gap: 20px;
@@ -102,17 +108,17 @@
 
 .hero .btn {
   border-radius: 50px;
-  padding: 16px 35px;
+  padding: 15px 30px;
   font-weight: 700;
-  font-size: 0.95rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   -webkit-tap-highlight-color: transparent;
   /* Fix móvil */
 }
@@ -124,7 +130,7 @@
   border: none;
 }
 
-/* FIX: Evita que se quede marrón en móviles tras el touch */
+/* FIX: Evita que se quede marrón tras el touch en móvil */
 .hero .btn--gold:focus,
 .hero .btn--gold:active {
   background-color: #a5813a !important;
@@ -166,6 +172,7 @@
 
   .hero__content {
     max-width: 100%;
+    /* Reset de padding para centrar en móvil */
     padding: 0 20px 40px;
     text-align: center;
   }
