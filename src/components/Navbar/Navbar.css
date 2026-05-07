@@ -5,7 +5,6 @@
   --nav-height: 100px;
 }
 
-/* BARRA DORADA: Posición relativa para que se oculte al bajar */
 .announcement-bar {
   background-color: var(--color-gold);
   color: var(--color-bone);
@@ -13,17 +12,13 @@
   padding: 10px 15px;
   font-size: 0.85rem;
   font-weight: 500;
-  letter-spacing: 0.5px;
-  width: 100%;
   position: relative;
-  /* Clave: no es fixed */
+  width: 100%;
   z-index: 1001;
 }
 
-/* NAVBAR: 'Sticky' para que se pegue arriba después de la barra */
 .navbar {
   position: sticky;
-  /* Cambio clave para la barra oculta */
   top: 0;
   left: 0;
   right: 0;
@@ -69,7 +64,6 @@
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
-  font-family: 'Inter', sans-serif;
 }
 
 .navbar__links a:hover {
@@ -94,8 +88,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
-  transition: background 0.3s;
 }
 
 .cart-badge {
@@ -132,10 +124,6 @@
 }
 
 @media (max-width: 950px) {
-  .announcement-bar p {
-    font-size: 0.75rem;
-  }
-
   .navbar {
     display: flex;
     justify-content: space-between;
@@ -161,10 +149,8 @@
     flex-direction: column;
     justify-content: flex-start;
     padding-top: 100px;
-    padding-left: 30px;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1050;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
   }
 
   .navbar__center--open {
@@ -173,7 +159,6 @@
 
   .navbar__links {
     flex-direction: column;
-    align-items: flex-start;
     gap: 30px;
   }
 }

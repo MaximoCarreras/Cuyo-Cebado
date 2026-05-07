@@ -16,10 +16,7 @@ export default function Navbar() {
 
   const handleNavClick = () => {
     setIsMobileOpen(false);
-    window.scrollTo({
-      top: 0,
-      behavior: 'instant'
-    });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   useEffect(() => {
@@ -28,11 +25,8 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Barra de anuncios: Fluye con la página (se oculta al bajar) */}
       <div className="announcement-bar">
-        <p>
-          <b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.
-        </p>
+        <p><b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.</p>
       </div>
 
       <nav className="navbar" id="navbar">
@@ -61,11 +55,8 @@ export default function Navbar() {
           <button
             className={`navbar__toggle ${isMobileOpen ? 'navbar__toggle--active' : ''}`}
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            aria-label={isMobileOpen ? "Cerrar menú" : "Abrir menú"}
           >
-            <span className="material-symbols-outlined">
-              {isMobileOpen ? 'close' : 'menu'}
-            </span>
+            <span className="material-symbols-outlined">{isMobileOpen ? 'close' : 'menu'}</span>
           </button>
         </div>
       </nav>
