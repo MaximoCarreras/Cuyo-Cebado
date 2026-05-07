@@ -1,87 +1,107 @@
-/* Testimonials — Review cards */
+/* Nuestra Garantía — Sección unificada */
+.testimonials {
+  background-color: #fdfaf7;
+  /* Fondo hueso */
+  padding: 80px 20px;
+}
+
+/* --- TÍTULO DOMADO --- */
+.testimonials__header h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem) !important;
+  color: #2b2520;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  font-family: 'Noto Serif', serif;
+  font-weight: 800;
+}
+
+.gold-line {
+  width: 50px;
+  height: 3px;
+  background-color: #a5813a;
+  margin: 0 auto 40px auto;
+  border-radius: 5px;
+}
+
+/* --- GRILLA DE COMPROMISOS --- */
 .testimonials__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-xl);
-  margin-bottom: var(--space-2xl);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
 }
 
 .testimonials__card {
-  background: var(--color-white);
-  padding: var(--space-xl);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition);
+  background: #ffffff;
+  padding: 40px 30px;
+  /* Acá está el aire que le faltaba a los costados */
+  border-radius: 20px;
+  /* Bordes redondeados premium */
+  box-shadow: 0 10px 25px rgba(43, 37, 32, 0.05);
+  /* Sombra suave */
+  border: 1px solid rgba(165, 129, 58, 0.1);
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .testimonials__card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(43, 37, 32, 0.1);
+  transform: translateY(-5px);
 }
 
-.testimonials__stars {
-  display: flex;
-  gap: 2px;
-  margin-bottom: var(--space-md);
+.testimonials__icon {
+  font-size: 3rem !important;
+  color: #a5813a;
+  /* Dorado oficial */
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
 }
 
-.testimonials__star {
-  color: var(--color-gold);
+.testimonials__card:hover .testimonials__icon {
+  transform: scale(1.1);
+}
+
+.testimonials__card h3 {
   font-size: 1.2rem;
-  font-variation-settings: 'FILL' 1;
+  color: #2b2520;
+  margin-bottom: 15px;
+  font-weight: 700;
+  font-family: 'Noto Serif', serif;
 }
 
 .testimonials__text {
-  font-style: italic;
-  color: var(--color-text);
+  color: #5a5048;
+  /* Gris oscuro para lectura */
   line-height: 1.7;
-  margin-bottom: var(--space-lg);
   font-size: 0.95rem;
+  margin: 0;
 }
 
-.testimonials__author {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-}
-
-.testimonials__avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--color-gold);
-  color: var(--color-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.testimonials__name {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.testimonials__city {
-  font-size: 0.8rem;
-  color: var(--color-text-light);
-}
-
-.testimonials__metrics {
+/* --- FOOTER DE LA SECCIÓN --- */
+.testimonials__footer {
   text-align: center;
-  font-size: 0.95rem;
-  color: var(--color-text-light);
-  padding-top: var(--space-lg);
-  border-top: 1px solid rgba(197, 160, 89, 0.2);
+  font-size: 1.05rem;
+  color: #2b2520;
+  padding-top: 30px;
+  border-top: 1px solid rgba(165, 129, 58, 0.2);
+  max-width: 400px;
+  margin: 0 auto;
 }
 
-@media (max-width: 768px) {
+.testimonials__footer b {
+  color: #a5813a;
+  font-weight: 700;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
   .testimonials__grid {
     grid-template-columns: 1fr;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 500px;
   }
 }

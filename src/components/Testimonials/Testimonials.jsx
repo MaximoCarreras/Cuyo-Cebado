@@ -1,3 +1,6 @@
+/**
+ * Testimonials / Nuestra Garantía — Compromisos de Cuyo Cebado.
+ */
 import './Testimonials.css';
 
 const COMPROMISOS = [
@@ -9,7 +12,7 @@ const COMPROMISOS = [
   },
   {
     id: 2,
-    icon: 'terrain', // Este es el nombre correcto para el icono de montañas
+    icon: 'terrain',
     title: 'Origen Cuyano',
     text: '"Nacimos entre Mendoza y San Luis. Nuestra misión es llevar el ritual del mate artesanal desde el corazón de la Cordillera a cada rincón del país."'
   },
@@ -21,28 +24,31 @@ const COMPROMISOS = [
   }
 ];
 
-
 export default function Testimonials() {
   return (
     <section className="testimonials section" id="compromiso">
       <div className="section__container">
-        <h2 className="section__title">Nuestra Garantía</h2>
-        
+
+        {/* Título domado y unificado */}
+        <div className="section__title testimonials__header">
+          <h2>Nuestra Garantía</h2>
+          <div className="gold-line"></div>
+        </div>
+
         <div className="testimonials__grid">
           {COMPROMISOS.map((item) => (
-            <div key={item.id} className="testimonial__card">
-              <span className="material-symbols-outlined" style={{ fontSize: '40px', color: '#c5a059', marginBottom: '1rem' }}>
+            <div key={item.id} className="testimonials__card">
+              <span className="material-symbols-outlined testimonials__icon">
                 {item.icon}
               </span>
-              <h3 style={{ marginBottom: '0.5rem', color: '#2d1b0d' }}>{item.title}</h3>
-              <p className="testimonial__text" style={{ fontStyle: 'normal' }}>
+              <h3>{item.title}</h3>
+              <p className="testimonials__text">
                 {item.text}
               </p>
             </div>
           ))}
         </div>
 
-        {/* Eliminamos el contador de 4.9 estrellas por ahora para ser honestos */}
         <div className="testimonials__footer">
           <p>Sumate a la comunidad de <b>Cuyo Cebado</b></p>
         </div>

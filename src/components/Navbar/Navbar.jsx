@@ -17,10 +17,10 @@ export default function Navbar() {
 
   return (
     <>
-      {/* --- ANNOUNCEMENT BAR (Barra Dorada Superior) --- */}
+      {/* --- ANNOUNCEMENT BAR (Sin emoji) --- */}
       <div className="announcement-bar">
         <p>
-          🏔️ <b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.
+          <b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.
         </p>
       </div>
 

@@ -1,6 +1,5 @@
 /**
  * GiftKit — Sección de Kit de Regalo Premium.
- * Actualizado con el diseño de Cuyo Cebado.
  */
 import { useCart } from '../../context/CartContext';
 import kitImage from '../../assets/kit_regalo.png';
@@ -55,7 +54,7 @@ export default function GiftKit() {
 
           <p className="giftkit__price">$ 89.000</p>
 
-          {/* Botón Premium igual al de los productos */}
+          {/* Botón Premium igual al de los productos (Sin la leyenda abajo) */}
           <button
             onClick={() => addToCart(kitProduct)}
             className="btn btn--gold giftkit__btn"
@@ -63,10 +62,6 @@ export default function GiftKit() {
             <span className="material-symbols-outlined">shopping_cart</span>
             Agregar al carrito
           </button>
-
-          <p className="giftkit__trust">
-            🏔️ Selección en Mendoza · Envío protegido a todo el país · Atención personal
-          </p>
         </div>
       </div>
     </section>
