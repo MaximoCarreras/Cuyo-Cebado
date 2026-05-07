@@ -15,7 +15,6 @@ export default function CareGuide() {
     <section className="careguide section">
       <div className="section__container">
 
-        {/* Usamos una clase específica para domar el tamaño del h2 */}
         <div className="section__title careguide__header">
           <h2>¿Cómo curar tu mate nuevo?</h2>
           <p>Un mate bien curado dura toda la vida</p>
@@ -25,7 +24,8 @@ export default function CareGuide() {
         <div className="careguide__steps">
           {CARE_STEPS.map(step => (
             <div className="careguide__card" key={step.number}>
-              <span className="careguide__number">0{step.number}</span>
+              {/* ACÁ LE SACAMOS EL CERO */}
+              <span className="careguide__number">{step.number}</span>
               <div className="careguide__text">
                 <h3>{step.title}</h3>
                 <p>{step.desc}</p>
