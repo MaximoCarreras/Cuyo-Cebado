@@ -1,18 +1,22 @@
 /* --- Estructura General --- */
 .cart-page {
-    padding-top: 160px;
+    /* Padding exterior para el Navbar */
+    padding: 140px 20px 80px 20px;
     min-height: 80vh;
-    padding-bottom: 80px;
-    /* Usamos el Blanco Hueso de la marca */
     background-color: #fdfaf7;
+    /* Blanco Hueso */
 }
 
-.cart-page__title {
-    font-size: 2.5rem;
-    margin-bottom: 40px;
-    /* Marrón Cuyo para el título */
+/* --- TÍTULO DOMADO --- */
+.cart__header h2 {
+    font-size: clamp(2rem, 4vw, 2.5rem) !important;
     color: #2b2520;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    font-family: 'Noto Serif', serif;
     font-weight: 800;
+    text-align: center;
 }
 
 .cart-page__grid {
@@ -20,6 +24,28 @@
     grid-template-columns: 1fr 380px;
     gap: 40px;
     align-items: flex-start;
+    /* Limitamos el ancho para que no se pegue a los bordes de la pantalla */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- ESTADO VACÍO --- */
+.cart-empty {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.cart-empty__icon {
+    font-size: 80px !important;
+    color: rgba(165, 129, 58, 0.3);
+    margin-bottom: 20px;
+}
+
+.cart-empty__title {
+    font-family: 'Noto Serif', serif;
+    font-size: 2rem;
+    color: #2b2520;
+    margin-bottom: 30px;
 }
 
 /* --- Tarjetas de Productos --- */
@@ -27,14 +53,13 @@
     display: grid;
     grid-template-columns: 120px 1fr auto;
     gap: 24px;
-    background: white;
+    background: #ffffff;
     padding: 20px;
     border-radius: 15px;
-    /* Sombra más suave y elegante */
     box-shadow: 0 10px 30px rgba(43, 37, 32, 0.05);
     align-items: center;
     margin-bottom: 20px;
-    border: 1px solid rgba(43, 37, 32, 0.05);
+    border: 1px solid rgba(165, 129, 58, 0.1);
 }
 
 .cart-item__image img {
@@ -45,8 +70,23 @@
 }
 
 .cart-item__info h3 {
+    font-family: 'Noto Serif', serif;
     color: #2b2520;
     margin-bottom: 5px;
+    font-size: 1.2rem;
+}
+
+.cart-item__unit-price {
+    color: #5a5048;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+.cart-item__subtotal {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #a5813a;
+    /* Dorado Cuyo */
 }
 
 /* --- Selector de Cantidad y Eliminar --- */
@@ -60,20 +100,19 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    background: #f8f8f8;
+    background: #fdfaf7;
     padding: 5px 10px;
     border-radius: 50px;
     width: fit-content;
-    border: 1px solid #eee;
+    border: 1px solid rgba(43, 37, 32, 0.1);
 }
 
 .qty-btn {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    /* Borde en Marrón Cuyo */
     border: 1px solid #2b2520;
-    background: white;
+    background: #ffffff;
     color: #2b2520;
     font-size: 1.1rem;
     cursor: pointer;
@@ -84,9 +123,9 @@
 }
 
 .qty-btn:hover:not(:disabled) {
-    /* Fondo Marrón y texto Dorado al pasar el mouse */
     background: #2b2520;
-    color: #d4af37;
+    color: #a5813a;
+    border-color: #2b2520;
 }
 
 .qty-btn:disabled {
@@ -107,40 +146,41 @@
     gap: 5px;
     background: none;
     border: none;
-    color: #888;
+    color: #8c8076;
     font-size: 0.85rem;
     cursor: pointer;
     transition: 0.2s;
+    font-weight: 600;
 }
 
 .btn-remove:hover {
-    color: #c0392b;
+    color: #c62828;
 }
 
-/* --- Tarjeta de Resumen (Unificada con la marca) --- */
+/* --- Tarjeta de Resumen --- */
 .summary-card {
-    /* Cambiado de Negro a Marrón Cuyo */
     background: #2b2520;
     color: #fdfaf7;
     padding: 35px;
     border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 40px rgba(43, 37, 32, 0.15);
     position: sticky;
-    top: 130px;
-    border: 1px solid rgba(212, 175, 55, 0.1);
+    top: 150px;
+    /* Ajustado para no chocar con el navbar */
+    border: 1px solid rgba(165, 129, 58, 0.2);
 }
 
 .summary-card h3 {
     margin-bottom: 25px;
-    font-size: 1.5rem;
-    color: #fdfaf7 !important;
+    font-size: 1.3rem;
+    color: #fdfaf7;
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-family: 'Noto Serif', serif;
 }
 
 .fields-title {
-    /* Dorado Cuyo para etiquetas */
-    color: #d4af37 !important;
+    color: #a5813a;
     font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -154,26 +194,41 @@
     padding: 12px 5px;
     background: transparent;
     border: none;
-    /* Borde sutil para los inputs */
     border-bottom: 1px solid rgba(253, 250, 247, 0.2);
     color: #fdfaf7 !important;
     margin-bottom: 15px;
     font-size: 1rem;
+    font-family: 'Inter', sans-serif;
 }
 
 .cart-input-dark:focus {
     outline: none;
-    border-bottom: 1px solid #d4af37;
+    border-bottom: 1px solid #a5813a;
 }
 
-.total-amount {
-    color: #d4af37;
-    font-weight: 800;
-    font-size: 1.8rem;
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 1.05rem;
 }
 
 .summary-row span {
     opacity: 0.9;
+}
+
+.text-free {
+    color: #4caf50;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.total-amount {
+    color: #a5813a !important;
+    font-weight: 800;
+    font-size: 1.8rem;
+    opacity: 1 !important;
 }
 
 /* --- BOTÓN MERCADO PAGO --- */
@@ -213,17 +268,13 @@
 @media (max-width: 992px) {
     .cart-page__grid {
         grid-template-columns: 1fr;
+        gap: 30px;
     }
 }
 
 @media (max-width: 768px) {
     .cart-page {
-        padding: 100px 15px 50px;
-    }
-
-    .cart-page__title {
-        font-size: 2rem;
-        text-align: center;
+        padding: 120px 15px 50px;
     }
 
     .cart-item {
@@ -234,10 +285,8 @@
     .cart-item__subtotal {
         grid-column: 1 / -1;
         text-align: right;
-        border-top: 1px solid #eee;
-        padding-top: 10px;
-        font-weight: 800;
-        color: #2b2520;
+        border-top: 1px solid rgba(43, 37, 32, 0.05);
+        padding-top: 15px;
     }
 
     .summary-card {
