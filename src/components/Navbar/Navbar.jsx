@@ -25,11 +25,8 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Barra dorada: fluye con la página (se oculta al bajar) */}
       <div className="announcement-bar">
-        <p>
-          <b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.
-        </p>
+        <p><b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.</p>
       </div>
 
       <nav className="navbar" id="navbar">
@@ -60,9 +57,7 @@ export default function Navbar() {
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             aria-label="Cerrar menú"
           >
-            <span className="material-symbols-outlined">
-              {isMobileOpen ? 'close' : 'menu'}
-            </span>
+            <span className="material-symbols-outlined">{isMobileOpen ? 'close' : 'menu'}</span>
           </button>
         </div>
       </nav>

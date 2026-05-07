@@ -13,15 +13,16 @@ body {
   min-height: 100vh;
 }
 
-/* FIX MARGEN BLANCO DEFINITIVO: Pegamos el contenido a la Navbar sticky */
+/* FIX MARGEN BLANCO: El contenido toca la Navbar */
 main {
   flex: 1;
   padding-top: 0 !important;
   background-color: #fdfaf7;
 }
 
+/* TÍTULOS DE TODA LA WEB */
 .section__title {
-  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   color: #2b2520;
   text-align: center;
   text-transform: uppercase;
@@ -31,7 +32,6 @@ main {
   font-family: 'Noto Serif', serif;
 }
 
-/* BOTONES GLOBALES: Sin efecto "pegajoso" en móviles */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -54,7 +54,7 @@ main {
   color: #fdfaf7;
 }
 
-/* FIX: El color cambia solo mientras se toca el botón */
+/* FIX BOTÓN: No se queda marrón */
 .btn--gold:active {
   background-color: #2b2520 !important;
 }
