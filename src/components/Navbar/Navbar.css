@@ -1,15 +1,11 @@
-/* --- VARIABLES DE COLOR CUYO CEBADO --- */
+/* --- VARIABLES ACTUALIZADAS --- */
 :root {
   --color-cuyo-brown: #2b2520;
-  /* Marrón cálido, tono madera/tabaco */
-  --color-gold: #d4af37;
-  /* Dorado premium */
+  --color-gold: #a5813a; /* Dorado Cuyo Oficial */
   --color-bone: #fdfaf7;
-  /* Blanco hueso para textos */
   --nav-height: 110px;
 }
 
-/* --- ESTRUCTURA BASE --- */
 .navbar {
   position: fixed;
   top: 0;
@@ -18,101 +14,55 @@
   z-index: 1000;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  /* Divide en 3: logo al centro exacto */
   align-items: center;
   padding: 0 5%;
   height: var(--nav-height);
   background-color: var(--color-cuyo-brown);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+  border-bottom: 1px solid rgba(165, 129, 58, 0.15);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
-/* --- BLOQUES DE ALINEACIÓN --- */
-.navbar__left {
-  display: flex;
-  justify-content: flex-start;
-}
+/* --- LOGO --- */
+.navbar__left { display: flex; justify-content: flex-start; }
+.navbar__logo-img { height: 85px; width: auto; display: block; }
 
-.navbar__center {
+/* --- LINKS ESCRITORIO --- */
+.navbar__center { display: flex; justify-content: center; }
+.navbar__links {
   display: flex;
-  justify-content: center;
+  gap: 40px;
+  list-style: none;
 }
+.navbar__links a {
+  font-size: 1.05rem;
+  color: var(--color-bone);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.navbar__links a:hover { color: var(--color-gold); }
 
+/* --- ACCIONES (CARRITO Y TOGGLE) --- */
 .navbar__right {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  gap: 15px; /* Espacio fijo para que nunca se encimen */
+  z-index: 1100; /* Siempre por encima del menú lateral */
 }
 
-/* --- LOGO --- */
-.navbar__logo-img {
-  height: 85px;
-  width: auto;
-  display: block;
-}
-
-/* --- LINKS (ESCRITORIO) --- */
-.navbar__links {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.navbar__links a {
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: var(--color-bone);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  position: relative;
-}
-
-.navbar__links a:hover {
-  color: var(--color-gold);
-}
-
-/* Subrayado elegante al pasar el mouse */
-.navbar__links a:not(.navbar__cart-link)::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0;
-  height: 1.5px;
-  background: var(--color-gold);
-  transition: width 0.3s ease;
-}
-
-.navbar__links a:not(.navbar__cart-link):hover::after {
-  width: 100%;
-}
-
-/* --- CARRITO (ESCRITORIO Y MÓVIL) --- */
 .navbar__cart-link {
   position: relative;
+  width: 48px;
+  height: 48px;
+  background: rgba(165, 129, 58, 0.1);
+  border-radius: 50%;
+  color: var(--color-bone);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: rgba(212, 175, 55, 0.1);
-  /* Fondo dorado muy suave */
-  border-radius: 50%;
-  color: var(--color-bone);
-  transition: background 0.3s ease !important;
-}
-
-.navbar__cart-link:hover {
-  background: rgba(212, 175, 55, 0.25);
-}
-
-/* Escondemos la palabra "Carrito" por completo */
-.cart-text {
-  display: none !important;
+  text-decoration: none;
 }
 
 .cart-badge {
@@ -120,7 +70,7 @@
   top: -2px;
   right: -2px;
   background-color: var(--color-gold);
-  color: #1a1612;
+  color: var(--color-cuyo-brown);
   font-size: 0.75rem;
   font-weight: 800;
   width: 22px;
@@ -129,81 +79,61 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
-/* --- ELEMENTOS QUE SOLO SE VEN EN CELULAR --- */
-.navbar__toggle,
-.navbar__close-mobile {
-  display: none !important;
-  /* Totalmente ocultos en PC */
+/* --- BOTÓN HAMBURGUESA / X --- */
+.navbar__toggle {
+  display: none; /* Oculto en PC */
+  background: none;
+  border: none;
+  color: var(--color-bone);
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.3s;
 }
 
-/* --- VISTA CELULAR (MÓVIL) --- */
+/* Cuando el menú está abierto, el botón se vuelve dorado */
+.navbar__toggle--active {
+  color: var(--color-gold);
+}
+
+.navbar__toggle span { font-size: 35px; }
+
+/* --- VISTA MÓVIL --- */
 @media (max-width: 950px) {
   .navbar {
     display: flex;
-    /* Cambiamos a flex para espacio entre logo y botones */
     justify-content: space-between;
     height: 85px;
     padding: 0 20px;
   }
 
-  .navbar__logo-img {
-    height: 65px;
-  }
+  .navbar__logo-img { height: 65px; }
 
-  /* Mostramos el menú hamburguesa */
-  .navbar__toggle {
-    display: block !important;
-    background: none;
-    border: none;
-    color: var(--color-bone);
-    cursor: pointer;
-    order: 3;
-    /* Lo manda al final a la derecha */
-  }
+  .navbar__toggle { display: block; }
 
-  /* El panel que se desliza desde la derecha */
+  /* Menú lateral (Drawer) */
   .navbar__center {
     position: fixed;
     top: 0;
     right: -100%;
-    /* Empieza afuera */
     width: 280px;
     height: 100vh;
     background: var(--color-cuyo-brown);
-    border-left: 1px solid rgba(212, 175, 55, 0.2);
     flex-direction: column;
     justify-content: flex-start;
-    padding: 100px 30px;
+    padding-top: 100px;
+    padding-left: 30px;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    z-index: 1050; /* Por debajo de navbar__right */
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
   }
 
-  .navbar__center--open {
-    right: 0;
-    /* Se desliza hacia adentro */
-  }
+  .navbar__center--open { right: 0; }
 
   .navbar__links {
     flex-direction: column;
     align-items: flex-start;
-    gap: 35px;
-  }
-
-  /* Mostramos la cruz de cierre SOLO cuando el menú está abierto */
-  .navbar__center--open .navbar__close-mobile {
-    display: block !important;
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    background: none;
-    border: none;
-    color: var(--color-gold);
-  }
-
-  .navbar__close-mobile span {
-    font-size: 35px;
+    gap: 30px;
   }
 }
