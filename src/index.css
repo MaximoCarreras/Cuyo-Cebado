@@ -1,56 +1,30 @@
 /* ============================================================
-   DESIGN SYSTEM — Mates Mendoza
-   Tactile Minimalism · Earth Tones · Luxury Austere
+    DESIGN SYSTEM — Cuyo Cebado Corregido
    ============================================================ */
 
-/* --- Design Tokens --- */
 :root {
-  /* Colors */
-  --color-bg: #fbf9f5;
-  --color-bg-dark: #f5f0e8;
-  --color-gold: #c5a059;
-  --color-gold-dark: #a8863e;
-  --color-brown: #745853;
-  --color-brown-dark: #2c2420;
-  --color-forest: #4f644f;
-  --color-dark: #2c2420;
+  /* Colores Oficiales */
+  --color-bg: #fdfaf7;
+  /* Blanco Hueso */
+  --color-gold: #a5813a;
+  /* Dorado Cuyo */
+  --color-gold-dark: #8c6d31;
+  --color-brown-dark: #2b2520;
+  /* Marrón Madera */
+  --color-text: #2b2520;
+  --color-text-light: #5a5048;
   --color-white: #ffffff;
-  --color-text: #3a3330;
-  --color-text-light: #8a817a;
 
   /* Typography */
   --font-heading: 'Noto Serif', Georgia, serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-
-  /* Spacing scale (4px base) */
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
-  --space-2xl: 48px;
-  --space-3xl: 64px;
-  --space-4xl: 96px;
-
-  /* Border radius */
-  --radius: 4px;
-  --radius-lg: 8px;
-  --radius-full: 999px;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(44, 36, 32, 0.06);
-  --shadow-md: 0 4px 12px rgba(44, 36, 32, 0.08);
-  --shadow-lg: 0 8px 24px rgba(44, 36, 32, 0.12);
-
-  /* Transitions */
-  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-body: 'Inter', sans-serif;
 
   /* Layout */
   --max-width: 1200px;
-  --navbar-height: 72px;
+  --navbar-height: 80px;
+  --space-4xl: 100px;
 }
 
-/* --- CSS Reset --- */
 *,
 *::before,
 *::after {
@@ -59,212 +33,37 @@
   box-sizing: border-box;
 }
 
-html {
+html,
+body {
+  height: 100%;
+  /* Fundamental para que no haya huecos */
   scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* --- Linen texture background --- */
 body {
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.6;
   color: var(--color-text);
   background-color: var(--color-bg);
-  /* Subtle linen texture using CSS pattern */
-  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+  /* Fondo Hueso por defecto */
+  line-height: 1.6;
+  overflow-x: hidden;
+  /* Mantenemos tu textura de ruido sutil */
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+/* --- Ajuste para que el Footer no flote --- */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+  /* Esto empuja el footer hacia abajo si hay poco contenido */
 }
 
 a {
-  color: inherit;
   text-decoration: none;
-}
-
-ul, ol {
-  list-style: none;
-}
-
-button {
-  cursor: pointer;
-  border: none;
-  background: none;
-  font-family: inherit;
-  font-size: inherit;
-}
-
-input {
-  font-family: inherit;
-  font-size: inherit;
-}
-
-/* --- Typography --- */
-h1, h2, h3, h4 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--color-dark);
-}
-
-h1 { font-size: clamp(2rem, 5vw, 3.2rem); }
-h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
-h3 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); }
-
-/* --- Button System --- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
-  padding: 14px 28px;
-  border-radius: var(--radius);
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-  transition: all var(--transition);
-  white-space: nowrap;
-}
-
-/* Micro-animation: elevation on hover [DM - using CSS only, no external libs] */
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.btn:active {
-  transform: translateY(0);
-}
-
-.btn--primary {
-  background: var(--color-gold);
-  color: var(--color-white);
-}
-.btn--primary:hover {
-  background: var(--color-gold-dark);
-}
-
-.btn--secondary {
-  background: transparent;
-  color: var(--color-dark);
-  border: 1.5px solid var(--color-dark);
-}
-.btn--secondary:hover {
-  background: var(--color-dark);
-  color: var(--color-white);
-}
-
-.btn--outline-gold {
-  background: transparent;
-  color: var(--color-gold);
-  border: 1.5px solid var(--color-gold);
-}
-.btn--outline-gold:hover {
-  background: var(--color-gold);
-  color: var(--color-white);
-}
-
-.btn--dark {
-  background: var(--color-brown-dark);
-  color: var(--color-white);
-}
-.btn--dark:hover {
-  background: var(--color-dark);
-}
-
-.btn--whatsapp {
-  background: #25d366;
-  color: var(--color-white);
-  padding: 10px 18px;
-  font-size: 0.85rem;
-}
-.btn--whatsapp:hover {
-  background: #1fb855;
-}
-
-.btn--small {
-  padding: 10px 20px;
-  font-size: 0.85rem;
-}
-
-.btn--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* --- Section Utilities --- */
-.section {
-  padding: var(--space-4xl) var(--space-lg);
-}
-
-.section__container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-}
-
-.section__title {
-  text-align: center;
-  margin-bottom: var(--space-2xl);
-}
-
-.section__title h2 {
-  margin-bottom: var(--space-sm);
-}
-
-.section__title p {
-  color: var(--color-text-light);
-  font-size: 1.05rem;
-}
-
-/* Gold decorative line under titles */
-.gold-line {
-  width: 60px;
-  height: 2px;
-  background: var(--color-gold);
-  margin: var(--space-md) auto 0;
-  border-radius: var(--radius-full);
-}
-
-/* --- Material Symbols sizing --- */
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-  vertical-align: middle;
-}
-
-/* --- Badge --- */
-.badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.badge--green {
-  background: var(--color-forest);
-  color: var(--color-white);
-}
-
-.badge--gold {
-  background: var(--color-gold);
-  color: var(--color-white);
-}
-
-/* --- Responsive --- */
-@media (max-width: 768px) {
-  .section {
-    padding: var(--space-3xl) var(--space-md);
-  }
-
-  :root {
-    --navbar-height: 60px;
-  }
+  color: inherit;
 }
