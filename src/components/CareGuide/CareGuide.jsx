@@ -1,6 +1,5 @@
 /**
- * CareGuide — 4-step mate curing guide.
- * Builds trust and reduces purchase objections. [SF]
+ * CareGuide — Guía de curado premium.
  */
 import './CareGuide.css';
 
@@ -15,7 +14,9 @@ export default function CareGuide() {
   return (
     <section className="careguide section">
       <div className="section__container">
-        <div className="section__title">
+
+        {/* Usamos una clase específica para domar el tamaño del h2 */}
+        <div className="section__title careguide__header">
           <h2>¿Cómo curar tu mate nuevo?</h2>
           <p>Un mate bien curado dura toda la vida</p>
           <div className="gold-line"></div>
@@ -24,7 +25,7 @@ export default function CareGuide() {
         <div className="careguide__steps">
           {CARE_STEPS.map(step => (
             <div className="careguide__card" key={step.number}>
-              <span className="careguide__number">{step.number}</span>
+              <span className="careguide__number">0{step.number}</span>
               <div className="careguide__text">
                 <h3>{step.title}</h3>
                 <p>{step.desc}</p>
@@ -32,9 +33,7 @@ export default function CareGuide() {
             </div>
           ))}
         </div>
-        
-        {/* El botón "Ver guía completa" fue eliminado intencionalmente
-            para mantener la sección limpia y evitar redundancia. */}
+
       </div>
     </section>
   );

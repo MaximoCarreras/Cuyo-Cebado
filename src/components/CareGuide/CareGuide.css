@@ -1,64 +1,98 @@
-/* CareGuide — Bordered section with step cards */
+/* CareGuide — Sección Limpia y Elegante */
 .careguide {
-  background: var(--color-bg);
-  border-top: 1px solid rgba(197, 160, 89, 0.2);
-  border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+  background-color: #fdfaf7;
+  padding: 80px 20px;
 }
 
+/* --- DOMANDO LOS TÍTULOS GIGANTES --- */
+.careguide__header h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem) !important;
+  /* Forzamos un tamaño civilizado */
+  color: #2b2520;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  font-family: 'Noto Serif', serif;
+  font-weight: 800;
+}
+
+.careguide__header p {
+  font-size: 1rem;
+  color: #a5813a;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.gold-line {
+  width: 50px;
+  height: 3px;
+  background-color: #a5813a;
+  margin: 0 auto 40px auto;
+  border-radius: 5px;
+}
+
+/* --- TARJETAS DE PASOS --- */
 .careguide__steps {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-lg);
-  margin-bottom: var(--space-xl);
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .careguide__card {
+  background: #ffffff;
+  padding: 30px 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(43, 37, 32, 0.05);
+  /* Sombra suave premium */
+  border: 1px solid rgba(165, 129, 58, 0.1);
   display: flex;
-  align-items: flex-start;
-  gap: var(--space-md);
-  background: var(--color-white);
-  padding: var(--space-lg);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition);
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
 .careguide__card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(43, 37, 32, 0.1);
 }
 
+/* Diseño moderno para el número */
 .careguide__number {
-  font-family: var(--font-heading);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--color-gold);
-  line-height: 1;
-  flex-shrink: 0;
+  font-family: 'Noto Serif', serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: rgba(165, 129, 58, 0.2);
+  /* Dorado transparente */
+  line-height: 0.8;
+  margin-bottom: 15px;
 }
 
 .careguide__text h3 {
-  font-size: 0.95rem;
-  margin-bottom: var(--space-xs);
+  font-size: 1.1rem;
+  color: #2b2520;
+  margin-bottom: 10px;
+  font-weight: 700;
 }
 
 .careguide__text p {
-  font-size: 0.85rem;
-  color: var(--color-text-light);
-  line-height: 1.5;
+  font-size: 0.9rem;
+  color: #6a5f58;
+  line-height: 1.6;
 }
 
-.careguide__link {
-  text-align: center;
-}
-
+/* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
   .careguide__steps {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .careguide__steps {
     grid-template-columns: 1fr;
   }

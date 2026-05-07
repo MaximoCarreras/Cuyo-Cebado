@@ -1,50 +1,109 @@
-/* FAQ — Accordion with golden separators */
+/* FAQ — Diseño Premium, Minimalista y sin botones grises */
+.faq {
+  background-color: #fdfaf7;
+  /* Fondo hueso */
+  padding: 40px 20px 100px 20px;
+}
+
+/* --- DOMANDO EL TÍTULO --- */
+.faq__header h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem) !important;
+  color: #2b2520;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  font-family: 'Noto Serif', serif;
+  font-weight: 800;
+}
+
+/* --- LISTA DE PREGUNTAS (Estilo Tarjeta) --- */
 .faq__list {
-  max-width: 720px;
+  max-width: 850px;
   margin: 0 auto;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(43, 37, 32, 0.05);
+  /* Sombra elegante */
+  padding: 20px 50px;
+  border: 1px solid rgba(165, 129, 58, 0.1);
 }
 
 .faq__item {
-  border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+  border-bottom: 1px solid rgba(165, 129, 58, 0.2);
 }
 
+.faq__item:last-child {
+  border-bottom: none;
+}
+
+/* --- EL BOTÓN DE LA PREGUNTA (Limpieza total) --- */
 .faq__question {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-lg) 0;
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--color-dark);
+  padding: 25px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2b2520;
+  background: none;
+  /* Anula el fondo gris nativo */
+  border: none;
+  /* Anula el borde 3D nativo */
   text-align: left;
-  transition: color var(--transition);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: color 0.3s ease;
 }
 
 .faq__question:hover {
-  color: var(--color-gold);
+  color: #a5813a;
+  /* Dorado al pasar el mouse */
 }
 
 .faq__icon {
-  color: var(--color-gold);
+  color: #a5813a;
   flex-shrink: 0;
-  transition: transform var(--transition);
+  font-weight: 700;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
 }
 
-/* Animate answer expand/collapse */
+/* --- ANIMACIÓN DE LA RESPUESTA --- */
 .faq__answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease, padding 0.4s ease;
+  transition: max-height 0.4s ease, padding 0.4s ease, opacity 0.3s ease;
+  opacity: 0;
 }
 
 .faq__item--open .faq__answer {
-  max-height: 300px;
-  padding-bottom: var(--space-lg);
+  max-height: 400px;
+  padding-bottom: 25px;
+  opacity: 1;
 }
 
 .faq__answer p {
-  font-size: 0.92rem;
-  color: var(--color-text-light);
-  line-height: 1.7;
+  font-size: 0.95rem;
+  color: #5a5048;
+  /* Gris oscuro para lectura cómoda */
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .faq__list {
+    padding: 10px 25px;
+    border-radius: 15px;
+  }
+
+  .faq__question {
+    font-size: 1rem;
+    padding: 20px 0;
+  }
+
+  .faq__answer p {
+    font-size: 0.9rem;
+  }
 }

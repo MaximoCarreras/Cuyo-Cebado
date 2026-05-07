@@ -1,6 +1,5 @@
 /**
- * FAQ — Preguntas frecuentes personalizadas para Cuyo Cebado.
- * Enfoque: Venta directa por WhatsApp, entregas en Mendoza y envíos nacionales.
+ * FAQ — Preguntas frecuentes premium para Cuyo Cebado.
  */
 import { useState } from 'react';
 import './FAQ.css';
@@ -29,17 +28,17 @@ const FAQ_ITEMS = [
 ];
 
 export default function FAQ() {
-  /* Controla qué ítem está abierto. -1 significa todos cerrados. */
   const [openIndex, setOpenIndex] = useState(-1);
 
   const toggleItem = (index) => {
-    setOpenIndex(prev => prev === index ? -1 : index);
+    setOpenIndex(prev => (prev === index ? -1 : index));
   };
 
   return (
     <section className="faq section" id="faq">
       <div className="section__container">
-        <div className="section__title">
+        {/* Clase específica faq__header para domar el tamaño del título */}
+        <div className="section__title faq__header">
           <h2>Preguntas frecuentes</h2>
           <div className="gold-line"></div>
         </div>
@@ -61,7 +60,6 @@ export default function FAQ() {
                 </span>
               </button>
 
-              {/* Respuesta que se despliega */}
               <div className="faq__answer">
                 <p>{item.a}</p>
               </div>
