@@ -1,0 +1,97 @@
+.ourstory {
+  background-color: #2b2520;
+  /* Marrón Madera oficial */
+  padding: 100px 20px;
+  color: #fdfaf7;
+  overflow: hidden;
+}
+
+.ourstory__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- IMAGEN CON ESTILO PREMIUM --- */
+.ourstory__image {
+  position: relative;
+}
+
+.ourstory__image img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  display: block;
+  box-shadow: 20px 20px 0px rgba(165, 129, 58, 0.1);
+  /* Sombra decorativa dorada */
+  border: 1px solid rgba(165, 129, 58, 0.2);
+}
+
+.ourstory__image-badge {
+  position: absolute;
+  bottom: 20px;
+  right: -10px;
+  background-color: #a5813a;
+  color: #2b2520;
+  padding: 8px 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  border-radius: 4px;
+}
+
+/* --- TEXTO Y CONTENIDO --- */
+.ourstory__overline {
+  display: block;
+  color: #a5813a;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.ourstory__title {
+  font-size: 2.8rem;
+  color: #fdfaf7;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.ourstory__content p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.ourstory__content b {
+  color: #a5813a;
+  /* Resaltamos lo importante en dorado */
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 950px) {
+  .ourstory__container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .ourstory__image {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .ourstory__image-badge {
+    right: 20px;
+  }
+
+  .ourstory__title {
+    font-size: 2.2rem;
+  }
+}
