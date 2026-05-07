@@ -1,0 +1,94 @@
+.community {
+    padding: 80px 20px;
+    background-color: #fdfaf7;
+    /* Fondo blanco hueso */
+    text-align: center;
+}
+
+.community__title {
+    font-size: 2.5rem;
+    color: #2b2520;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.community__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Dos columnas en PC */
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.community__card {
+    background: #2b2520;
+    /* El marrón de tu marca */
+    padding: 40px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgba(165, 129, 58, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.community__card:hover {
+    transform: translateY(-5px);
+}
+
+.community__icon-box {
+    color: #a5813a;
+    /* Dorado bronce */
+    margin-bottom: 20px;
+}
+
+.community__icon-box span {
+    font-size: 45px;
+}
+
+.community__card h3 {
+    color: #fdfaf7;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.community__card p {
+    color: #fdfaf7;
+    opacity: 0.8;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.community__handle {
+    color: #a5813a;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.community__btn {
+    background-color: #a5813a;
+    color: #2b2520;
+    padding: 12px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    transition: 0.3s;
+}
+
+.community__btn:hover {
+    background-color: #fdfaf7;
+}
+
+/* RESPONSIVE: En celu se pone uno abajo del otro */
+@media (max-width: 768px) {
+    .community__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .community__title {
+        font-size: 1.8rem;
+    }
+}

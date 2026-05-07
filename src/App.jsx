@@ -1,16 +1,15 @@
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
-
-// 1. Importamos el componente de Scroll
 import ScrollToTop from './components/ScrollToTop';
+
+// Importamos la nueva sección de Comunidad
+import Community from './components/Community/Community';
 
 // Importamos las páginas
 import Home from './pages/Home';
 import About from './pages/About';
 import Guide from './pages/Guide';
-
-// IMPORTACIÓN CORREGIDA: Apuntamos al archivo exacto dentro de la nueva carpeta
 import CartPage from './pages/CartPage/CartPage';
 
 import './App.css';
@@ -18,20 +17,38 @@ import './App.css';
 export default function App() {
   return (
     <>
-      {/* 2. Lo colocamos aquí arriba: no se ve, pero "limpia" el scroll en cada cambio */}
       <ScrollToTop />
-
       <Navbar />
+
       <main>
         <Routes>
-          {/* Aquí definimos qué componente se renderiza en cada URL */}
           <Route path="/" element={<Home />} />
           <Route path="/carrito" element={<CartPage />} />
           <Route path="/nosotros" element={<About />} />
           <Route path="/guia-curado" element={<Guide />} />
         </Routes>
       </main>
+
+      {/* Ponemos la Comunidad acá para que aparezca en todas las páginas 
+          antes del final, llenando ese espacio que querías.
+      */}
+      <Community />
+
       <Footer />
+
+      {/* BURBUJA FLOTANTE DE WHATSAPP (Soporte Personal) */}
+      <a
+        href="https://wa.me/5492625597956"
+        className="whatsapp-float"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+          alt="Soporte Cuyo Cebado"
+        />
+        <span className="tooltip-wa">¿Dudas? Escribinos</span>
+      </a>
     </>
   );
 }

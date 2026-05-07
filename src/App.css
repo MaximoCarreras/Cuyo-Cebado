@@ -1,4 +1,4 @@
-/* --- Reset Global para evitar el margen blanco --- */
+/* --- RESET GLOBAL Y COLORES DE MARCA --- */
 html,
 body {
   margin: 0;
@@ -6,26 +6,89 @@ body {
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
-  /* Esto "mutila" cualquier cosa que quiera salir por el costado */
-  background-color: #1a1612;
-  /* Ponemos el fondo oscuro por defecto para que no haya destellos blancos */
+  /* El marrón cálido que elegimos para Cuyo Cebado */
+  background-color: #2b2520;
+  font-family: 'Inter', sans-serif;
+  /* O la que estés usando */
 }
 
 * {
   box-sizing: border-box;
-  /* Fundamental para que los paddings no ensanchen los elementos */
 }
 
-/* App — Minimal root styles */
+/* --- ESTRUCTURA PRINCIPAL --- */
 main {
   min-height: 100vh;
-  padding-top: 100px;
+  padding-top: 110px;
+  /* Ajustado a la altura de tu Navbar */
   width: 100%;
+  background-color: #fdfaf7;
+  /* Fondo blanco hueso para el contenido */
 }
 
-/* Ajuste para celulares */
+/* --- BURBUJA FLOTANTE DE WHATSAPP --- */
+.whatsapp-float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 30px;
+  right: 30px;
+  background-color: #25d366;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 2000;
+  transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+}
+
+.whatsapp-float img {
+  width: 35px;
+  height: 35px;
+}
+
+/* Tooltip sutil que aparece al lado de la burbuja */
+.tooltip-wa {
+  position: absolute;
+  right: 70px;
+  background-color: #2b2520;
+  color: #fdfaf7;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.whatsapp-float:hover .tooltip-wa {
+  opacity: 1;
+  right: 75px;
+}
+
+/* --- AJUSTES MOBILE --- */
 @media (max-width: 768px) {
   main {
-    padding-top: 80px;
+    padding-top: 90px;
+  }
+
+  .whatsapp-float {
+    width: 55px;
+    height: 55px;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .tooltip-wa {
+    display: none;
+    /* En celu mejor que no estorbe */
   }
 }
