@@ -1,28 +1,36 @@
-/* ... (todo tu código anterior se mantiene igual hasta los botones) ... */
+/* Mantenemos tu diseño original intacto */
+.hero {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #2b2520;
+}
 
-/* BOTONES HERO: Quitamos el comportamiento de "marrón liso" */
+.hero__image-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center right;
+  z-index: 1;
+}
+
+/* FIX DEL BOTÓN: Evita el estado marrón pegajoso */
 .hero .btn {
-  border-radius: 50px;
-  padding: 16px 35px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
   -webkit-tap-highlight-color: transparent;
 }
 
-.hero .btn--gold {
-  background-color: #a5813a;
-  color: #2b2520;
-  border: none;
-}
-
-/* Evitamos que el botón se quede marrón oscuro tras tocarlo en el celu */
+/* Forzamos que los botones mantengan su color incluso si quedan en focus */
 .hero .btn--gold:focus,
 .hero .btn--gold:active {
   background-color: #a5813a !important;
   color: #2b2520 !important;
+  outline: none;
+  box-shadow: 0 5px 15px rgba(165, 129, 58, 0.4);
 }
 
 .hero .btn--outline-gold {
@@ -35,6 +43,51 @@
 .hero .btn--outline-gold:active {
   background-color: transparent !important;
   color: #a5813a !important;
+  outline: none;
 }
 
-/* ... (resto del media query mobile igual) ... */
+/* El resto de tu configuración de Hero (shape, container, etc) se mantiene igual */
+.hero__shape {
+  position: absolute;
+  top: -10%;
+  left: -20%;
+  width: 75%;
+  height: 120%;
+  background-color: #2b2520;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  z-index: 2;
+}
+
+.hero__container {
+  position: relative;
+  z-index: 3;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 24px;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    align-items: flex-end;
+  }
+
+  .hero__shape {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    border-radius: 0;
+    -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .hero__content {
+    padding: 0 20px 40px;
+    text-align: center;
+  }
+
+  .hero .btn {
+    width: 100%;
+  }
+}

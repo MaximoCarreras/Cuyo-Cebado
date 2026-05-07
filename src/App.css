@@ -12,18 +12,16 @@ body {
   min-height: 100vh;
 }
 
-/* ELIMINAMOS EL HUECO BLANCO: 
-   Como la Navbar es sticky, el main ya no necesita padding extra 
-   porque no hay nada "fijo" flotando por encima del flujo normal. */
+/* FIX DEFINITIVO: Eliminamos el padding superior para que la imagen suba */
 main {
   flex: 1;
   background-color: #fdfaf7;
-  /* Quitamos el padding-top de 136px para que todo encaje */
-  padding-top: 0;
+  padding-top: 0 !important;
 }
 
+/* Títulos Noto Serif */
 .section__title {
-  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   color: #2b2520;
   text-align: center;
   text-transform: uppercase;
@@ -33,12 +31,12 @@ main {
   font-family: 'Noto Serif', serif;
 }
 
-/* BOTONES: Fix para el "bloque marrón" en celulares */
+/* Botones Premium */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 24px;
+  padding: 14px 28px;
   border-radius: 50px;
   font-weight: 700;
   font-size: 0.9rem;
@@ -49,14 +47,7 @@ main {
   border: none;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  /* Evita el flash azul/marrón en móvil */
-}
-
-/* Fix para que el foco no rompa el diseño en móvil */
-.btn:focus,
-.btn:active {
-  outline: none;
-  background-color: #a5813a;
+  /* Limpieza para móvil */
 }
 
 .btn--gold {
@@ -64,12 +55,6 @@ main {
   color: #fdfaf7;
 }
 
-.btn--gold:hover {
-  background-color: #2b2520;
-  transform: translateY(-2px);
-}
-
-/* Burbuja WhatsApp */
 .whatsapp-float {
   position: fixed;
   width: 55px;
@@ -82,22 +67,12 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(165, 129, 58, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(165, 129, 58, 0.3);
 }
 
 .wa-icon {
   width: 30px;
   height: 30px;
   fill: #a5813a;
-  transition: fill 0.3s ease;
-}
-
-.whatsapp-float:hover {
-  background-color: #a5813a;
-}
-
-.whatsapp-float:hover .wa-icon {
-  fill: #2b2520;
 }
