@@ -8,10 +8,9 @@
   align-items: center;
   overflow: hidden;
   background-color: #fdfaf7;
-  /* Fondo base blanco hueso */
 }
 
-/* --- 1. LA IMAGEN DE FONDO (Lado Derecho) --- */
+/* --- 1. IMAGEN DE FONDO --- */
 .hero__image-bg {
   position: absolute;
   top: 0;
@@ -23,7 +22,7 @@
   z-index: 1;
 }
 
-/* --- 2. LA FORMA CURVA (Contenedor del WebGL) --- */
+/* --- 2. FORMA CURVA --- */
 .hero__shape {
   position: absolute;
   top: -10%;
@@ -31,7 +30,7 @@
   width: 75%;
   height: 120%;
   background-color: #2b2520;
-  /* Marrón Cuyo Unificado */
+  /* Marrón Madera */
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
@@ -67,15 +66,13 @@
   font-weight: 800;
   text-transform: uppercase;
   margin-bottom: 24px;
-
-  /* CAMBIO CLAVE 1: Todo el título (Mates con...) es Dorado #d4af37 */
-  color: #d4af37;
+  /* CAMBIO: Usamos el dorado exacto de tu imagen (#a5813a) */
+  color: #a5813a;
 }
 
-/* La palabra "Identidad" sigue en su propia línea si tenés el <br/> en el JSX */
 .hero__title b {
-  color: #d4af37;
-  /* Mismo dorado */
+  color: #a5813a;
+  /* Mismo dorado para IDENTIDAD */
   display: block;
 }
 
@@ -84,14 +81,12 @@
   line-height: 1.6;
   font-weight: 400;
   margin-bottom: 40px;
-
-  /* CAMBIO CLAVE 2: El subtítulo también es Dorado #d4af37 */
-  color: #d4af37;
-  opacity: 1;
-  /* Eliminamos la opacidad para que brille al 100% */
+  /* CAMBIO: El subtítulo vuelve al Blanco Hueso para mayor elegancia */
+  color: #fdfaf7;
+  opacity: 0.95;
 }
 
-/* --- BOTONES UNIFICADOS --- */
+/* --- BOTONES --- */
 .hero__actions {
   display: flex;
   gap: 20px;
@@ -114,9 +109,9 @@
 }
 
 .hero .btn--gold {
-  background-color: #d4af37;
+  background-color: #a5813a;
+  /* Dorado de la imagen */
   color: #2b2520;
-  /* Texto en el marrón de la marca */
   border: none;
 }
 
@@ -129,18 +124,18 @@
 
 .hero .btn--outline-gold {
   background-color: transparent;
-  color: #d4af37;
-  border: 2px solid #d4af37;
+  color: #a5813a;
+  border: 2px solid #a5813a;
 }
 
 .hero .btn--outline-gold:hover {
-  background-color: #d4af37;
+  background-color: #a5813a;
   color: #2b2520;
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 10px 20px rgba(165, 129, 58, 0.2);
 }
 
-/* --- ADAPTACIÓN PARA CELULARES --- */
+/* --- ADAPTACIÓN MÓVIL --- */
 @media (max-width: 900px) {
   .hero {
     align-items: flex-end;
@@ -154,7 +149,6 @@
     height: 75%;
     border-radius: 0;
     background: #2b2520;
-    box-shadow: none;
     -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
     mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
   }
