@@ -1,14 +1,29 @@
-/* App — Minimal root styles */
-/* Main content starts below the fixed navbar with enough space */
-main {
-  min-height: 100vh;
-  /* El padding-top debe ser igual o un poco mayor a la altura de tu Navbar */
-  padding-top: 100px;
-  box-sizing: border-box;
-  /* Asegura que el padding no sume tamaño extra al ancho */
+/* --- Reset Global para evitar el margen blanco --- */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  /* Esto "mutila" cualquier cosa que quiera salir por el costado */
+  background-color: #1a1612;
+  /* Ponemos el fondo oscuro por defecto para que no haya destellos blancos */
 }
 
-/* Ajuste para celulares: el Navbar suele ser un poco más petiso en pantallas chicas */
+* {
+  box-sizing: border-box;
+  /* Fundamental para que los paddings no ensanchen los elementos */
+}
+
+/* App — Minimal root styles */
+main {
+  min-height: 100vh;
+  padding-top: 100px;
+  width: 100%;
+}
+
+/* Ajuste para celulares */
 @media (max-width: 768px) {
   main {
     padding-top: 80px;
