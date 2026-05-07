@@ -1,8 +1,8 @@
-/* --- SECCIÓN CON FONDO LIMPIO --- */
+/* --- SECCIÓN CON FONDO LIMPIO Y AIRE --- */
 .ourstory--light {
   background-color: #fdfaf7;
-  /* Fondo Hueso para unificar con la sección anterior */
-  padding: 100px 20px;
+  /* Aumentamos el padding superior para que no se pegue al Navbar */
+  padding: 140px 20px 100px 20px;
   display: flex;
   justify-content: center;
 }
@@ -12,9 +12,7 @@
   max-width: 850px;
   margin: 0 auto;
   text-align: center;
-  /* Mantenemos el marrón oscuro dentro de la tarjeta */
   background-color: #2b2520 !important;
-  /* Agregamos una sombra elegante para que la tarjeta "flote" sobre el blanco */
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(165, 129, 58, 0.2);
   padding: 80px 50px !important;
@@ -28,30 +26,41 @@
 .ourstory__overline {
   display: block;
   color: #a5813a;
-  /* Dorado */
   letter-spacing: 4px;
   text-transform: uppercase;
   font-size: 0.85rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
+/* --- TÍTULO DOMADO (Igual que en la Guía) --- */
 .ourstory__title {
   color: #fdfaf7;
-  /* Texto blanco hueso sobre fondo oscuro */
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(1.5rem, 3vw, 2rem) !important;
+  /* Ahora coincide con la Guía */
   text-transform: uppercase;
   font-weight: 800;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   letter-spacing: 2px;
+  font-family: 'Noto Serif', serif;
 }
 
+/* Divisor sutil */
+.gold-line--small {
+  width: 50px;
+  height: 2px;
+  background-color: #a5813a;
+  margin: 0 auto 30px auto;
+}
+
+/* --- TEXTOS REFINADOS --- */
 .ourstory__text p {
   color: #fdfaf7;
-  line-height: 1.9;
-  margin-bottom: 1.5rem;
-  opacity: 0.95;
-  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+  opacity: 0.9;
+  font-size: 1rem;
+  /* Bajamos de 1.1rem a 1rem para más elegancia */
 }
 
 .ourstory__text b {
@@ -61,21 +70,23 @@
 .ourstory__thanks {
   margin-top: 2.5rem;
   font-style: italic;
-  font-size: 1.2rem !important;
+  font-size: 1.1rem !important;
+  /* Más equilibrado */
   opacity: 1 !important;
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .ourstory--light {
-    padding: 60px 15px;
+    padding: 100px 15px 60px 15px;
+    /* Ajuste para el Navbar mobile */
   }
 
   .ourstory__card {
-    padding: 50px 25px !important;
+    padding: 40px 20px !important;
   }
 
   .ourstory__title {
-    font-size: 1.8rem;
+    font-size: 1.6rem !important;
   }
 }

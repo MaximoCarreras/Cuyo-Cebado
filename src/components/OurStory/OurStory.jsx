@@ -6,11 +6,15 @@ export default function OurStory() {
     <section className="ourstory ourstory--light" id="nuestra-historia">
       <div className="section__container">
 
-        {/* Mantenemos el SpotlightCard con su color dorado de marca */}
         <SpotlightCard className="ourstory__card" spotlightColor="rgba(165, 129, 58, 0.3)">
           <div className="ourstory__content">
             <span className="ourstory__overline">Nuestra Identidad</span>
+
+            {/* Título ahora con tamaño controlado */}
             <h2 className="ourstory__title">Nuestra Historia</h2>
+
+            {/* Divisor dorado para mantener la coherencia con el resto de la web */}
+            <div className="gold-line gold-line--small"></div>
 
             <div className="ourstory__text">
               <p>
