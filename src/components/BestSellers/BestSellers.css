@@ -55,30 +55,40 @@
   transform: translateY(-8px);
 }
 
-/* --- CONTENEDOR DE IMAGEN (EL FIX DEL ZOOM) --- */
+/* --- CONTENEDOR DE IMAGEN (EL FIX DEFINITIVO DEL ZOOM) --- */
 .product-card__image-wrapper {
   position: relative;
-  /* Contenedor para el corte */
   aspect-ratio: 1 / 1.1;
   background-color: #f9f6f2;
   overflow: hidden;
-  /* Corta la imagen al hacer zoom */
-  /* TRUCO PARA FORZAR EL CORTE EN TODOS LOS NAVEGADORES (Safari/iOS) */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+
+  /* Aseguramos el borde redondeado solo arriba */
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+
+  /* La magia "Anti-Desborde" nivel Dios */
+  isolation: isolate;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
 .product-card__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s ease;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  /* Animación más suave y natural */
+
+  /* Le pasamos el redondeo directamente a la foto también por seguridad extrema */
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  will-change: transform;
+  display: block;
 }
 
 /* Animación de zoom controlada */
 .product-card:hover .product-card__image {
   transform: scale(1.08);
-  /* Se agranda un poco, pero se corta por el overflow */
 }
 
 /* --- ETIQUETA "MÁS VENDIDO" (EL BADGE DORADO) --- */
