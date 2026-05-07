@@ -2,57 +2,116 @@
   --color-cuyo-brown: #2b2520;
   --color-gold: #a5813a;
   --color-bone: #fdfaf7;
-  --nav-height: 100px;
 }
 
 .announcement-bar {
   background-color: var(--color-gold);
   color: var(--color-bone);
   text-align: center;
-  padding: 10px 15px;
+  padding: 10px 0;
   font-size: 0.85rem;
-  font-weight: 500;
-  position: relative;
+  font-weight: 600;
   width: 100%;
-  z-index: 1001;
 }
 
 .navbar {
   position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  padding: 0 5%;
-  height: var(--nav-height);
   background-color: var(--color-cuyo-brown);
+  height: 90px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
   border-bottom: 1px solid rgba(165, 129, 58, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+}
+
+.navbar__container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .navbar__logo-img {
-  height: 75px;
-  width: auto;
+  height: 65px;
+  display: block;
 }
 
+/* --- LINKS ESCRITORIO --- */
+.navbar__links {
+  display: flex;
+  gap: 35px;
+  list-style: none;
+}
+
+.navbar__links a {
+  color: var(--color-bone);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.navbar__links a:hover {
+  color: var(--color-gold);
+}
+
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar__cart-link {
+  color: var(--color-bone);
+  text-decoration: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: var(--color-gold);
+  color: var(--color-cuyo-brown);
+  font-size: 0.7rem;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- BOTÓN HAMBURGUESA (FIX CUADRO BLANCO) --- */
+.navbar__toggle {
+  display: none;
+  /* OCULTO EN ESCRITORIO */
+  background: none;
+  /* Elimina fondo blanco */
+  border: none;
+  /* Elimina borde */
+  color: var(--color-bone);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.navbar__toggle span {
+  font-size: 32px;
+}
+
+/* --- RESPONSIVE MÓVIL --- */
 @media (max-width: 950px) {
-  .navbar {
-    height: 80px;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .navbar__logo-img {
-    height: 60px;
-  }
-
   .navbar__toggle {
-    display: block;
+    display: flex;
+    /* SE MUESTRA EN MÓVIL */
   }
 
   .navbar__center {
@@ -62,10 +121,10 @@
     width: 280px;
     height: 100vh;
     background: var(--color-cuyo-brown);
-    flex-direction: column;
-    padding-top: 100px;
-    transition: right 0.4s ease;
-    z-index: 1050;
+    padding: 100px 30px;
+    transition: 0.4s ease;
+    z-index: 2000;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
   }
 
   .navbar__center--open {
@@ -75,6 +134,9 @@
   .navbar__links {
     flex-direction: column;
     gap: 30px;
-    padding-left: 30px;
+  }
+
+  .navbar__links a {
+    font-size: 1.2rem;
   }
 }
