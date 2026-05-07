@@ -1,12 +1,34 @@
+import { useEffect, useState } from 'react';
 import './Hero.css';
 import heroBgImage from '../../assets/fondo_hero_principal.png';
 import Grainient from '../Backgrounds/Grainient'; 
 
 export default function Hero() {
-  return (
-    <section className="hero" id="hero">
+  const [viewHeight, setViewHeight] = useState('100svh');
 
-      {/* 1. Capa de la imagen (Conectada a tu archivo local) */}
+  useEffect(() => {
+    // Función para bloquear la altura en píxeles reales
+    const lockHeight = () => {
+      // Solo aplicamos el bloqueo en celulares/tablets (ancho menor a 900)
+      if (window.innerWidth <= 900) {
+        setViewHeight(`${window.innerHeight}px`);
+      } else {
+        setViewHeight('100vh'); // En PC se mantiene normal
+      }
+    };
+
+    lockHeight();
+    // No escuchamos el evento 'resize' para que el scroll no active cambios de altura
+  }, []);
+
+  return (
+    <section 
+      className="hero" 
+      id="hero" 
+      style={{ height: viewHeight, minHeight: viewHeight }}
+    >
+
+      {/* 1. Capa de la imagen */}
       <div
         className="hero__image-bg"
         style={{ backgroundImage: `url(${heroBgImage})` }}
@@ -15,9 +37,9 @@ export default function Hero() {
       {/* 2. Capa con animación de vetas de madera (Grainient) */}
       <div className="hero__shape">
         <Grainient
-          color1="#140d07"   /* Base casi negra */
-          color2="#3e2715"   /* Marrón nogal vivo */
-          color3="#26170d"   /* Sombra de madera */
+          color1="#140d07"
+          color2="#3e2715"
+          color3="#26170d"
           timeSpeed={0.18}
           colorBalance={0}
           warpStrength={1.5}
