@@ -8,6 +8,7 @@
   align-items: center;
   overflow: hidden;
   background-color: #fdfaf7;
+  /* Fondo base blanco hueso */
 }
 
 /* --- 1. LA IMAGEN DE FONDO (Lado Derecho) --- */
@@ -66,14 +67,15 @@
   font-weight: 800;
   text-transform: uppercase;
   margin-bottom: 24px;
-  /* CAMBIO: Ahora todo el título es Dorado Cuyo */
+
+  /* CAMBIO CLAVE 1: Todo el título (Mates con...) es Dorado #d4af37 */
   color: #d4af37;
 }
 
-/* Eliminamos el 'display: block' si querés que todo fluya, 
-   o lo dejamos si preferís 'IDENTIDAD' abajo */
+/* La palabra "Identidad" sigue en su propia línea si tenés el <br/> en el JSX */
 .hero__title b {
   color: #d4af37;
+  /* Mismo dorado */
   display: block;
 }
 
@@ -82,9 +84,11 @@
   line-height: 1.6;
   font-weight: 400;
   margin-bottom: 40px;
-  color: #fdfaf7;
-  /* Mantenemos el blanco hueso para contraste */
-  opacity: 0.9;
+
+  /* CAMBIO CLAVE 2: El subtítulo también es Dorado #d4af37 */
+  color: #d4af37;
+  opacity: 1;
+  /* Eliminamos la opacidad para que brille al 100% */
 }
 
 /* --- BOTONES UNIFICADOS --- */
@@ -112,6 +116,7 @@
 .hero .btn--gold {
   background-color: #d4af37;
   color: #2b2520;
+  /* Texto en el marrón de la marca */
   border: none;
 }
 
