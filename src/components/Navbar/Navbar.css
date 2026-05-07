@@ -1,34 +1,26 @@
-/* --- VARIABLES --- */
 :root {
   --color-cuyo-brown: #2b2520;
   --color-gold: #a5813a;
   --color-bone: #fdfaf7;
   --nav-height: 100px;
-  /* Un poco más fina porque sumamos la barra de anuncio */
 }
 
-/* --- ANNOUNCEMENT BAR --- */
+/* BARRA DORADA: Ahora se va cuando bajás */
 .announcement-bar {
   background-color: var(--color-gold);
   color: var(--color-bone);
   text-align: center;
-  padding: 8px 15px;
+  padding: 10px 15px;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.5px;
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
-  z-index: 1001;
-  /* Sobre el navbar */
 }
 
-/* --- NAVBAR --- */
+/* NAVBAR: Ahora es Sticky y empieza desde el tope */
 .navbar {
-  position: fixed;
-  top: 36px;
-  /* Empieza justo debajo de la announcement bar */
+  position: sticky;
+  top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
@@ -51,10 +43,7 @@
 .navbar__logo-img {
   height: 75px;
   width: auto;
-  display: block;
 }
-
-/* Logo apenas más chico */
 
 .navbar__center {
   display: flex;
@@ -65,8 +54,6 @@
   display: flex;
   gap: 40px;
   list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 .navbar__links a {
@@ -75,7 +62,6 @@
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
-  font-family: 'Inter', sans-serif;
 }
 
 .navbar__links a:hover {
@@ -87,7 +73,6 @@
   justify-content: flex-end;
   align-items: center;
   gap: 15px;
-  z-index: 1100;
 }
 
 .navbar__cart-link {
@@ -100,12 +85,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
-  transition: background 0.3s;
-}
-
-.navbar__cart-link:hover {
-  background: rgba(165, 129, 58, 0.25);
 }
 
 .cart-badge {
@@ -130,25 +109,10 @@
   border: none;
   color: var(--color-bone);
   cursor: pointer;
-  padding: 5px;
-}
-
-.navbar__toggle--active {
-  color: var(--color-gold);
-}
-
-.navbar__toggle span {
-  font-size: 35px;
 }
 
 @media (max-width: 950px) {
-  .announcement-bar p {
-    font-size: 0.75rem;
-  }
-
   .navbar {
-    display: flex;
-    justify-content: space-between;
     height: 80px;
     padding: 0 20px;
   }
@@ -169,12 +133,8 @@
     height: 100vh;
     background: var(--color-cuyo-brown);
     flex-direction: column;
-    justify-content: flex-start;
     padding-top: 100px;
-    padding-left: 30px;
-    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1050;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    transition: right 0.4s ease;
   }
 
   .navbar__center--open {
@@ -183,7 +143,7 @@
 
   .navbar__links {
     flex-direction: column;
-    align-items: flex-start;
     gap: 30px;
+    padding-left: 30px;
   }
 }
