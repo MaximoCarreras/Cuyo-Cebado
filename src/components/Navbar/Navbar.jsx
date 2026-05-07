@@ -13,7 +13,11 @@ export default function Navbar() {
     { label: 'Guía de Curado', to: '/guia-curado' },
   ];
 
-  const closeMenu = () => setIsMobileOpen(false);
+  // NUEVA FUNCIÓN: Cierra el menú en móviles Y fuerza la subida al tope
+  const handleNavClick = () => {
+    setIsMobileOpen(false);
+    window.scrollTo(0, 0);
+  };
 
   return (
     <>
@@ -27,7 +31,8 @@ export default function Navbar() {
       <nav className="navbar" id="navbar">
         {/* 1. IZQUIERDA: Logo */}
         <div className="navbar__left">
-          <Link to="/" className="navbar__logo" onClick={closeMenu}>
+          {/* Aplicamos handleNavClick al logo */}
+          <Link to="/" className="navbar__logo" onClick={handleNavClick}>
             <img
               src="/logo.png"
               alt="Cuyo Cebado"
@@ -41,7 +46,8 @@ export default function Navbar() {
           <ul className="navbar__links">
             {navLinks.map(link => (
               <li key={link.to}>
-                <Link to={link.to} onClick={closeMenu}>
+                {/* Aplicamos handleNavClick a cada link del menú */}
+                <Link to={link.to} onClick={handleNavClick}>
                   {link.label}
                 </Link>
               </li>
@@ -51,10 +57,11 @@ export default function Navbar() {
 
         {/* 3. DERECHA: Carrito y Botón Acción */}
         <div className="navbar__right">
+          {/* Aplicamos handleNavClick al carrito */}
           <Link
             to="/carrito"
             className="navbar__cart-link"
-            onClick={closeMenu}
+            onClick={handleNavClick}
           >
             <span className="material-symbols-outlined">shopping_cart</span>
             {cartCount > 0 && (
