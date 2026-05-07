@@ -1,4 +1,4 @@
-import { useState } from 'react'; // Eliminamos useEffect porque ya no hay animación de scroll
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import './Navbar.css';
@@ -13,11 +13,14 @@ export default function Navbar() {
     { label: 'Guía de Curado', to: '/guia-curado' },
   ];
 
+  // Función para cerrar el menú al hacer clic en un link
+  const closeMenu = () => setIsMobileOpen(false);
+
   return (
     <nav className="navbar" id="navbar">
       {/* 1. IZQUIERDA: Logo */}
       <div className="navbar__left">
-        <Link to="/" className="navbar__logo" onClick={() => setIsMobileOpen(false)}>
+        <Link to="/" className="navbar__logo" onClick={closeMenu}>
           <img
             src="/logo.png"
             alt="Cuyo Cebado"
@@ -26,22 +29,12 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* 2. CENTRO: Links de navegación (Se convierte en cajón lateral en móvil) */}
+      {/* 2. CENTRO: Menú lateral (Drawer) */}
       <div className={`navbar__center ${isMobileOpen ? 'navbar__center--open' : ''}`}>
-
-        {/* Cruz para cerrar en vista de celular */}
-        <button
-          className="navbar__close-mobile"
-          onClick={() => setIsMobileOpen(false)}
-          aria-label="Cerrar menú"
-        >
-          <span className="material-symbols-outlined">close</span>
-        </button>
-
         <ul className="navbar__links">
           {navLinks.map(link => (
             <li key={link.to}>
-              <Link to={link.to} onClick={() => setIsMobileOpen(false)}>
+              <Link to={link.to} onClick={closeMenu}>
                 {link.label}
               </Link>
             </li>
@@ -49,31 +42,28 @@ export default function Navbar() {
         </ul>
       </div>
 
-      {/* 3. DERECHA: Carrito y Botón Hamburguesa */}
+      {/* 3. DERECHA: Carrito y Botón Acción (Hamburguesa/X) */}
       <div className="navbar__right">
         <Link
           to="/carrito"
           className="navbar__cart-link"
-          onClick={() => setIsMobileOpen(false)}
+          onClick={closeMenu}
         >
           <span className="material-symbols-outlined">shopping_cart</span>
-
           {cartCount > 0 && (
-            <span className="cart-badge">
-              {cartCount}
-            </span>
+            <span className="cart-badge">{cartCount}</span>
           )}
-
-          <span className="cart-text">Carrito</span>
         </Link>
 
-        {/* Botón de las 3 rayitas (solo se ve en celulares) */}
+        {/* Botón único que cambia según el estado */}
         <button
-          className="navbar__toggle"
-          onClick={() => setIsMobileOpen(true)}
-          aria-label="Abrir menú"
+          className={`navbar__toggle ${isMobileOpen ? 'navbar__toggle--active' : ''}`}
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          aria-label={isMobileOpen ? "Cerrar menú" : "Abrir menú"}
         >
-          <span className="material-symbols-outlined">menu</span>
+          <span className="material-symbols-outlined">
+            {isMobileOpen ? 'close' : 'menu'}
+          </span>
         </button>
       </div>
     </nav>
