@@ -1,3 +1,5 @@
+/* src/App.css */
+
 /* --- RESET Y ESTRUCTURA GENERAL --- */
 html,
 body {
@@ -13,14 +15,14 @@ body {
   min-height: 100vh;
 }
 
-/* ARREGLO MARGEN BLANCO: Al ser la Navbar sticky, el contenido no necesita padding extra */
+/* FIX MARGEN BLANCO: El contenido empieza pegado a la Navbar */
 main {
   flex: 1;
-  padding-top: 0 !important;
-  /* Eliminado el margen de 136px */
   background-color: #fdfaf7;
+  padding-top: 0 !important;
 }
 
+/* ... (El resto de tus estilos globales siguen igual) ... */
 /* --- TÍTULOS REFINADOS --- */
 .section__title {
   font-size: clamp(1.5rem, 4vw, 2.2rem);

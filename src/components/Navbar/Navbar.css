@@ -1,3 +1,5 @@
+/* src/components/Navbar/Navbar.css */
+
 /* --- VARIABLES --- */
 :root {
   --color-cuyo-brown: #2b2520;
@@ -6,25 +8,25 @@
   --nav-height: 100px;
 }
 
-/* BARRA DORADA: Ahora NO es fixed. Desaparece al scrollear */
+/* --- ANNOUNCEMENT BAR --- */
 .announcement-bar {
   background-color: var(--color-gold);
   color: var(--color-bone);
   text-align: center;
-  padding: 10px 15px;
+  padding: 8px 15px;
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.5px;
-  width: 100%;
   position: relative;
-  /* Cambiado de fixed */
+  /* No fixed para que se vaya al bajar */
+  width: 100%;
   z-index: 1001;
 }
 
-/* NAVBAR: Sticky para que se pegue arriba al bajar */
+/* --- NAVBAR --- */
 .navbar {
   position: sticky;
-  /* Cambiado de fixed */
+  /* Sticky para que se pegue arriba después de la barra */
   top: 0;
   left: 0;
   right: 0;
@@ -39,6 +41,8 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
+
+/* ... (El resto de los estilos del Navbar siguen exactamente igual a tu base) ... */
 
 .navbar__left {
   display: flex;

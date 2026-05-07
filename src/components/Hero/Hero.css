@@ -1,3 +1,5 @@
+/* src/components/Hero/Hero.css */
+
 .hero {
   width: 100%;
   position: relative;
@@ -5,8 +7,10 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
+  /* Marrón Madera base */
 }
 
+/* --- 1. IMAGEN DE FONDO --- */
 .hero__image-bg {
   position: absolute;
   top: 0;
@@ -20,6 +24,7 @@
   transform: translateZ(0);
 }
 
+/* --- 2. FORMA CURVA --- */
 .hero__shape {
   position: absolute;
   top: -10%;
@@ -34,6 +39,15 @@
   overflow: hidden;
 }
 
+.hero__grainient {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* --- 3. CONTENIDO --- */
 .hero__container {
   position: relative;
   z-index: 3;
@@ -42,18 +56,75 @@
   padding: 0 24px;
 }
 
-/* BOTONES HERO FIX */
-.hero .btn {
-  -webkit-tap-highlight-color: transparent;
+.hero__content {
+  max-width: 550px;
+  padding-left: 5%;
 }
 
+/* --- TÍTULO RESTAURADO (ESTÉTICA VIEJA) --- */
+.hero__title {
+  /* Tamaño grande y clamp de la versión original */
+  font-size: clamp(3.2rem, 6vw, 5rem);
+  line-height: 1.1;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  /* BASE EN BLANCO HUESO (Como la foto vieja) */
+  color: #fdfaf7;
+}
+
+/* RESALTADO DORADO NUEVO (Noto Serif para el toque boutique) */
+.hero__title b,
+.hero__title span.gold {
+  color: #a5813a;
+  /* Tu dorado de marca oficial */
+  font-family: 'Noto Serif', serif;
+  display: block;
+  /* Para que baje si hay <br/> */
+}
+
+.hero__subtitle {
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  line-height: 1.6;
+  font-weight: 400;
+  margin-bottom: 40px;
+  color: #fdfaf7;
+  /* Blanco Hueso */
+  opacity: 0.95;
+}
+
+/* --- BOTONES --- */
+.hero__actions {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.hero .btn {
+  border-radius: 50px;
+  padding: 16px 35px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  -webkit-tap-highlight-color: transparent;
+  /* Fix móvil */
+}
+
+/* Botón Dorado */
 .hero .btn--gold {
   background-color: #a5813a;
   color: #2b2520;
   border: none;
 }
 
-/* Evita que se quede marrón en móviles después del clic */
+/* FIX: Evita que se quede marrón en móviles tras el touch */
 .hero .btn--gold:focus,
 .hero .btn--gold:active {
   background-color: #a5813a !important;
@@ -61,6 +132,7 @@
   box-shadow: none;
 }
 
+/* Botón Outline */
 .hero .btn--outline-gold {
   background-color: transparent;
   color: #a5813a;
@@ -73,6 +145,7 @@
   color: #a5813a !important;
 }
 
+/* --- ADAPTACIÓN MÓVIL --- */
 @media (max-width: 900px) {
   .hero {
     align-items: flex-end;
@@ -86,13 +159,25 @@
     height: 70%;
     border-radius: 0;
     background: #2b2520;
+    box-shadow: none;
     -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
     mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
   }
 
   .hero__content {
+    max-width: 100%;
     padding: 0 20px 40px;
     text-align: center;
+  }
+
+  .hero__title {
+    font-size: clamp(2.2rem, 9vw, 3rem);
+  }
+
+  .hero__actions {
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .hero .btn {
