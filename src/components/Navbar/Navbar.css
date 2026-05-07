@@ -1,4 +1,12 @@
-/* Navbar — Estática, centrada y premium */
+/* --- NUEVA PALETA: Marrón Cálido Premium --- */
+:root {
+  --color-dark-brown: #2b2520;
+  /* Un marrón más visible, menos negro */
+  --color-gold: #d4af37;
+  --color-white-bone: #fdfaf7;
+}
+
+/* Navbar — Estructura Limpia */
 .navbar {
   position: fixed;
   top: 0;
@@ -8,157 +16,78 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 0 var(--space-xl);
+  padding: 0 5%;
   height: 110px;
-
-  /* CAMBIO CLAVE: El color unificado #1a1612 */
-  background: #1a1612;
-
-  /* Mantenemos un efecto sutil de transparencia si querés que se vea el mate al pasar */
-  /* background: rgba(26, 22, 18, 0.98); */
-
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  /* Borde más sutil para no "cortar" la vista */
+  background: var(--color-dark-brown);
+  /* Color unificado más cálido */
   border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+  backdrop-filter: blur(8px);
 }
 
-/* Alineaciones de los 3 bloques */
-.navbar__left {
-  display: flex;
-  justify-content: flex-start;
+/* --- SOLUCIÓN A LOS ICONOS FANTASMA --- */
+
+/* Escondemos la cruz de cierre en escritorio */
+.navbar__close-mobile {
+  display: none !important;
 }
 
-.navbar__center {
-  display: flex;
-  justify-content: center;
+/* Escondemos el menú hamburguesa en escritorio */
+.navbar__toggle {
+  display: none !important;
 }
 
-.navbar__right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 15px;
-}
-
-.navbar__logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
-
+/* Logo */
 .navbar__logo-img {
   height: 85px;
   width: auto;
-  display: block;
 }
 
 /* Links centrales */
 .navbar__links {
   display: flex;
-  align-items: center;
-  gap: var(--space-xl);
+  gap: 40px;
   list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 .navbar__links a {
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: #fbf9f5;
-  transition: color var(--transition);
-  position: relative;
+  color: var(--color-white-bone);
   text-decoration: none;
-}
-
-/* Subrayado animado en Dorado #d4af37 */
-.navbar__links a:not(.navbar__cart-link)::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 1.5px;
-  background: #d4af37;
-  transition: width var(--transition);
-}
-
-.navbar__links a:not(.navbar__cart-link):hover::after {
-  width: 100%;
+  font-weight: 500;
+  transition: 0.3s;
 }
 
 .navbar__links a:hover {
-  color: #d4af37;
+  color: var(--color-gold);
 }
 
-/* --- ESTILOS DEL CARRITO --- */
-.navbar__cart-link {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  background: rgba(212, 175, 55, 0.1);
-  color: #fbf9f5;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.navbar__cart-link:hover {
-  background: rgba(212, 175, 55, 0.2);
-}
-
-.cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background-color: #d4af37;
-  color: #1a1612;
-  /* Texto oscuro sobre círculo dorado */
-  font-size: 0.75rem;
-  font-weight: 800;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* --- VISTA CELULAR --- */
+/* --- VISTA CELULAR (MOBILE) --- */
 @media (max-width: 950px) {
   .navbar {
     display: flex;
     justify-content: space-between;
-    height: 90px;
+    height: 80px;
     padding: 0 20px;
-    background: #1a1612;
-    /* Aseguramos el color en móvil */
   }
 
-  .navbar__logo-img {
-    height: 70px;
+  /* Mostramos el menú hamburguesa SOLO en celu */
+  .navbar__toggle {
+    display: block !important;
+    background: none;
+    border: none;
+    color: var(--color-white-bone);
+    cursor: pointer;
   }
 
-  /* PANEL LATERAL MOBILE */
   .navbar__center {
     position: fixed;
     top: 0;
     right: -100%;
     width: 280px;
     height: 100vh;
-
-    /* CAMBIO: Fondo unificado también en el menú lateral */
-    background: #1a1612;
-
-    border-left: 1px solid rgba(212, 175, 55, 0.2);
+    background: var(--color-dark-brown);
     flex-direction: column;
-    justify-content: flex-start;
     padding: 80px 30px;
+    transition: 0.4s ease-in-out;
     z-index: 1001;
   }
 
@@ -166,13 +95,14 @@
     right: 0;
   }
 
-  .navbar__close-mobile {
-    display: block;
+  /* Mostramos la cruz de cierre SOLO cuando el menú está abierto en celu */
+  .navbar__center--open .navbar__close-mobile {
+    display: block !important;
     position: absolute;
     top: 25px;
     right: 25px;
+    color: var(--color-gold);
     background: none;
     border: none;
-    color: #d4af37;
   }
 }
