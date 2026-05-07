@@ -2,7 +2,17 @@
 .bestsellers {
   padding: 80px 20px;
   background-color: #fdfaf7;
-  /* Fondo hueso para que resalten las tarjetas */
+}
+
+/* --- TÍTULO DOMADO --- */
+.bestsellers__header h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem) !important;
+  color: #2b2520;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  font-family: 'Noto Serif', serif;
+  font-weight: 800;
 }
 
 .bestsellers__grid {
@@ -18,16 +28,13 @@
 .product-card {
   background: #ffffff;
   border-radius: 20px;
-  /* Bordes bien redondeados y modernos */
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(43, 37, 32, 0.05);
-  /* Sombra muy suave */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
   border: 1px solid rgba(165, 129, 58, 0.1);
-  /* Borde dorado imperceptible */
 }
 
 .product-card:hover {
@@ -35,11 +42,9 @@
   transform: translateY(-8px);
 }
 
-/* --- CONTENEDOR DE IMAGEN --- */
 .product-card__image-wrapper {
   position: relative;
   aspect-ratio: 1 / 1.1;
-  /* Un poco más alta que ancha queda más pro */
   overflow: hidden;
   background-color: #f9f6f2;
 }
@@ -55,7 +60,6 @@
   transform: scale(1.08);
 }
 
-/* --- INFORMACIÓN --- */
 .product-card__info {
   padding: 24px;
   display: flex;
@@ -84,18 +88,14 @@
   font-size: 1.4rem;
   font-weight: 800;
   color: #a5813a;
-  /* Dorado de marca */
   margin-bottom: 20px;
 }
 
-/* --- EL BOTÓN (Adiós Windows XP) --- */
 .product-card__btn {
   background-color: #2b2520;
-  /* Marrón oscuro para contraste */
   color: #fdfaf7;
   border: none;
   border-radius: 50px;
-  /* Forma de cápsula */
   padding: 14px 20px;
   font-weight: 700;
   font-size: 0.85rem;
@@ -111,7 +111,6 @@
 
 .product-card__btn:hover {
   background-color: #a5813a;
-  /* Cambia a dorado al pasar el mouse */
   transform: scale(1.02);
   box-shadow: 0 5px 15px rgba(165, 129, 58, 0.4);
 }
@@ -121,7 +120,6 @@
   height: 18px;
 }
 
-/* --- STOCK Y OTROS --- */
 .product-card__stock {
   font-size: 0.75rem;
   color: #a5813a;
@@ -130,7 +128,6 @@
   text-transform: uppercase;
 }
 
-/* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
   .bestsellers__grid {
     grid-template-columns: repeat(2, 1fr);

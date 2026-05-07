@@ -40,10 +40,14 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="newsletter" id="contacto">
+    <section className="newsletter section" id="contacto">
       <div className="newsletter__container">
-        {/* Usamos la clase global section__title */}
-        <h2 className="section__title">Unite al Club del Mate</h2>
+
+        {/* Título unificado con línea dorada */}
+        <div className="section__title newsletter__header">
+          <h2>Unite al Club del Mate</h2>
+          <div className="gold-line"></div>
+        </div>
 
         <p className="newsletter__subtitle">
           Recibí un 10% OFF en tu primera compra + tips de curado exclusivos

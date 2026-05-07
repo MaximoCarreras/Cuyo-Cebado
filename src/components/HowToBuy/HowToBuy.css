@@ -1,16 +1,28 @@
-/* HowToBuy — Process steps */
+/* HowToBuy — Proceso de compra */
 .howtobuy {
-  background: var(--color-bg);
-  border-top: 1px solid rgba(197, 160, 89, 0.15);
-  border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+  background-color: #fdfaf7;
+  padding: 80px 20px;
+}
+
+/* --- TÍTULO DOMADO --- */
+.howtobuy__header h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem) !important;
+  color: #2b2520;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  font-family: 'Noto Serif', serif;
+  font-weight: 800;
 }
 
 .howtobuy__steps {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-xl);
+  gap: 30px;
   text-align: center;
   position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .howtobuy__step {
@@ -21,49 +33,59 @@
 }
 
 .howtobuy__icon-wrapper {
-  width: 64px;
-  height: 64px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  background: var(--color-bg-dark);
-  border: 2px solid var(--color-gold);
+  background: #ffffff;
+  border: 2px solid rgba(165, 129, 58, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-md);
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.howtobuy__step:hover .howtobuy__icon-wrapper {
+  border-color: #a5813a;
+  transform: translateY(-5px);
 }
 
 .howtobuy__icon-wrapper .material-symbols-outlined {
-  font-size: 1.6rem;
-  color: var(--color-gold);
+  font-size: 1.8rem;
+  color: #a5813a;
 }
 
 .howtobuy__number {
-  font-family: var(--font-heading);
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--color-gold);
-  margin-bottom: var(--space-sm);
+  font-family: 'Noto Serif', serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #a5813a;
+  margin-bottom: 10px;
+  line-height: 1;
 }
 
 .howtobuy__step-title {
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  margin-bottom: var(--space-xs);
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: #2b2520;
+  font-weight: 700;
 }
 
 .howtobuy__step-desc {
-  font-size: 0.85rem;
-  color: var(--color-text-light);
-  max-width: 200px;
+  font-size: 0.9rem;
+  color: #5a5048;
+  max-width: 220px;
+  line-height: 1.5;
 }
 
 .howtobuy__arrow {
   display: none;
   position: absolute;
-  right: -28px;
-  top: 32px;
-  color: var(--color-gold);
-  font-size: 1.4rem;
+  right: -30px;
+  top: 25px;
+  color: rgba(165, 129, 58, 0.5);
+  font-size: 1.5rem;
 }
 
 @media (min-width: 769px) {
@@ -75,6 +97,7 @@
 @media (max-width: 768px) {
   .howtobuy__steps {
     grid-template-columns: 1fr 1fr;
+    gap: 40px;
   }
 }
 

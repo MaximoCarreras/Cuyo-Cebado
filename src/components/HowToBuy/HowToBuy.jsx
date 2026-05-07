@@ -1,6 +1,5 @@
 /**
  * HowToBuy — 4-step purchase process visualization.
- * Numbered steps with icons and descriptions. [SF]
  */
 import './HowToBuy.css';
 
@@ -15,7 +14,9 @@ export default function HowToBuy() {
   return (
     <section className="howtobuy section">
       <div className="section__container">
-        <div className="section__title">
+
+        {/* Título unificado */}
+        <div className="section__title howtobuy__header">
           <h2>Comprar es fácil</h2>
           <div className="gold-line"></div>
         </div>
@@ -30,7 +31,6 @@ export default function HowToBuy() {
               <h3 className="howtobuy__step-title">{step.title}</h3>
               <p className="howtobuy__step-desc">{step.desc}</p>
 
-              {/* Connector arrow (not on last step) */}
               {index < STEPS.length - 1 && (
                 <span className="material-symbols-outlined howtobuy__arrow">arrow_forward</span>
               )}

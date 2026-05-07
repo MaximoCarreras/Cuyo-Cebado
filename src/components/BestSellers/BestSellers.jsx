@@ -17,7 +17,9 @@ export default function BestSellers() {
   return (
     <section className="bestsellers section" id="productos">
       <div className="section__container">
-        <div className="section__title">
+
+        {/* Título unificado */}
+        <div className="section__title bestsellers__header">
           <h2>Nuestros productos más vendidos</h2>
           <div className="gold-line"></div>
         </div>

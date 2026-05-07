@@ -1,6 +1,5 @@
 /**
  * Categories — Visual product category filters.
- * 5 square cards with background image and overlay name. [SF]
  */
 import catMadera from '../../assets/cat_madera.png';
 import catCalabaza from '../../assets/cat_calabaza.png';
@@ -21,7 +20,9 @@ export default function Categories() {
   return (
     <section className="categories section" id="categorias">
       <div className="section__container">
-        <div className="section__title">
+
+        {/* Título unificado */}
+        <div className="section__title categories__header">
           <h2>Encontrá tu mate ideal</h2>
           <div className="gold-line"></div>
         </div>
@@ -34,7 +35,6 @@ export default function Categories() {
               className="categories__card"
               style={{ backgroundImage: `url(${cat.image})` }}
             >
-              {/* Dark overlay for text readability */}
               <div className="categories__overlay">
                 <span className="categories__name">{cat.name}</span>
               </div>
