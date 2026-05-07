@@ -3,7 +3,7 @@ import { useCart } from '../../context/CartContext';
 import { Link } from 'react-router-dom';
 import './CartPage.css';
 
-// Importamos el logo que bajaste
+// Importamos el logo
 import mpLogo from '../../assets/mp-logo.png';
 
 export default function CartPage() {
@@ -43,7 +43,7 @@ export default function CartPage() {
             }
         } catch (error) {
             console.error(error);
-            alert("Error de conexión. ¿Tenés el servidor de Node prendido en el puerto 3001?");
+            alert("Error de conexión. ¿Tenés el servidor de Node prendido?");
         } finally {
             setIsProcessing(false);
         }
@@ -129,7 +129,7 @@ export default function CartPage() {
                         </div>
 
                         <button className="btn-mercadopago" onClick={handleCheckoutMP} disabled={isProcessing}>
-                            <img src={mpLogo} alt="" className="mp-icon-local" />
+                            <img src={mpLogo} alt="MP" className="mp-icon-local" />
                             <span>{isProcessing ? "PROCESANDO..." : "PAGAR CON MERCADO PAGO"}</span>
                         </button>
                     </div>
