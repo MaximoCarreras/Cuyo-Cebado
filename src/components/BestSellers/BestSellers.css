@@ -1,118 +1,150 @@
-/* BestSellers — Product grid */
+/* BestSellers — Grilla de Productos Premium */
+.bestsellers {
+  padding: 80px 20px;
+  background-color: #fdfaf7;
+  /* Fondo hueso para que resalten las tarjetas */
+}
+
 .bestsellers__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-xl);
+  gap: 30px;
   align-items: stretch;
-  /* Asegura que todas las filas tengan la misma altura */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
+/* --- TARJETA DE PRODUCTO --- */
 .product-card {
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
+  background: #ffffff;
+  border-radius: 20px;
+  /* Bordes bien redondeados y modernos */
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition);
-  /* --- MAGIA DE ALINEACIÓN AQUÍ --- */
+  box-shadow: 0 10px 25px rgba(43, 37, 32, 0.05);
+  /* Sombra muy suave */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   height: 100%;
+  border: 1px solid rgba(165, 129, 58, 0.1);
+  /* Borde dorado imperceptible */
 }
 
-/* Hover shadow intensification */
 .product-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(43, 37, 32, 0.12);
+  transform: translateY(-8px);
 }
 
+/* --- CONTENEDOR DE IMAGEN --- */
 .product-card__image-wrapper {
   position: relative;
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 1.1;
+  /* Un poco más alta que ancha queda más pro */
   overflow: hidden;
-  flex-shrink: 0;
-  /* Evita que la foto se aplaste si el texto es muy largo */
+  background-color: #f9f6f2;
 }
 
 .product-card__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition);
+  transition: transform 0.6s ease;
 }
 
 .product-card:hover .product-card__image {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
-.product-card__badge {
-  position: absolute;
-  top: var(--space-md);
-  left: var(--space-md);
-}
-
+/* --- INFORMACIÓN --- */
 .product-card__info {
-  padding: var(--space-lg);
-  /* --- MAGIA DE ALINEACIÓN AQUÍ --- */
+  padding: 24px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  /* Obliga a este bloque a estirarse hasta el fondo de la tarjeta */
+  text-align: center;
 }
 
 .product-card__name {
-  font-family: var(--font-heading);
-  font-size: 1.05rem;
-  margin-bottom: var(--space-xs);
+  font-family: 'Noto Serif', serif;
+  font-size: 1.15rem;
+  color: #2b2520;
+  margin-bottom: 8px;
+  font-weight: 700;
 }
 
 .product-card__description {
-  font-size: 0.85rem;
-  color: var(--color-text-light);
-  margin-bottom: var(--space-md);
+  font-size: 0.88rem;
+  color: #6a5f58;
+  margin-bottom: 15px;
   line-height: 1.5;
-  /* --- MAGIA DE ALINEACIÓN AQUÍ --- */
   flex-grow: 1;
-  /* Funciona como un resorte que empuja todo lo que está abajo hacia el final */
 }
 
 .product-card__price {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--color-gold);
-  margin-bottom: var(--space-md);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #a5813a;
+  /* Dorado de marca */
+  margin-bottom: 20px;
 }
 
+/* --- EL BOTÓN (Adiós Windows XP) --- */
 .product-card__btn {
-  width: 100%;
+  background-color: #2b2520;
+  /* Marrón oscuro para contraste */
+  color: #fdfaf7;
+  border: none;
+  border-radius: 50px;
+  /* Forma de cápsula */
+  padding: 14px 20px;
+  font-weight: 700;
   font-size: 0.85rem;
-  padding: 12px;
-  margin-top: auto;
-  /* Mantiene el botón pegado abajo si no hay stock */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
+.product-card__btn:hover {
+  background-color: #a5813a;
+  /* Cambia a dorado al pasar el mouse */
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(165, 129, 58, 0.4);
+}
+
+.product-card__btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* --- STOCK Y OTROS --- */
 .product-card__stock {
-  text-align: center;
-  font-size: 0.78rem;
-  color: var(--color-brown);
+  font-size: 0.75rem;
+  color: #a5813a;
+  margin-top: 12px;
   font-weight: 600;
-  margin-top: var(--space-sm);
+  text-transform: uppercase;
 }
 
-.bestsellers__cta {
-  text-align: center;
-  margin-top: var(--space-2xl);
-}
-
+/* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
   .bestsellers__grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .bestsellers__grid {
     grid-template-columns: 1fr;
-    max-width: 400px;
-    margin: 0 auto;
+    padding: 0 10px;
+  }
+
+  .product-card__info {
+    padding: 20px;
   }
 }
