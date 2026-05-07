@@ -25,7 +25,6 @@ export default function CartPage() {
 
         setIsProcessing(true);
         try {
-            // Importante: El puerto debe ser 3001
             const response = await fetch("http://localhost:3001/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -73,13 +72,28 @@ export default function CartPage() {
                             <div className="cart-item__info">
                                 <h3>{item.name}</h3>
                                 <p className="cart-item__unit-price">{formatCurrency(item.price)} c/u</p>
-                                <div className="cart-item__controls">
+
+                                <div className="cart-item__actions">
                                     <div className="quantity-selector">
-                                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
-                                        <span>{item.quantity}</span>
-                                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                                        <button
+                                            className="qty-btn"
+                                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                            disabled={item.quantity <= 1}
+                                        >
+                                            −
+                                        </button>
+                                        <span className="qty-number">{item.quantity}</span>
+                                        <button
+                                            className="qty-btn"
+                                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                        >
+                                            +
+                                        </button>
                                     </div>
-                                    <button className="btn-remove" onClick={() => removeFromCart(item.id)}>Eliminar</button>
+                                    <button className="btn-remove" onClick={() => removeFromCart(item.id)}>
+                                        <span className="material-symbols-outlined">delete</span>
+                                        Eliminar
+                                    </button>
                                 </div>
                             </div>
                             <div className="cart-item__subtotal">{formatCurrency(item.price * item.quantity)}</div>

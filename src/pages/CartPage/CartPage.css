@@ -17,7 +17,6 @@
 .cart-page__grid {
     display: grid;
     grid-template-columns: 1fr 380px;
-    /* PC: Productos izquierda, resumen derecha */
     gap: 40px;
     align-items: flex-start;
 }
@@ -42,6 +41,100 @@
     border-radius: 10px;
 }
 
+.cart-item__info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 5px;
+}
+
+.cart-item__unit-price {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+/* --- Selector de Cantidad y Eliminar --- */
+.cart-item__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #f8f8f8;
+    padding: 5px 10px;
+    border-radius: 50px;
+    width: fit-content;
+    border: 1px solid #eee;
+}
+
+.qty-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #1a1a1a;
+    background: white;
+    color: #1a1a1a;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.qty-btn:hover:not(:disabled) {
+    background: #1a1a1a;
+    color: #d4af37;
+    transform: scale(1.1);
+}
+
+.qty-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    border-color: #ccc;
+}
+
+.qty-number {
+    font-weight: 800;
+    font-size: 1rem;
+    color: #1a1a1a;
+    min-width: 20px;
+    text-align: center;
+}
+
+.btn-remove {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    width: fit-content;
+    transition: color 0.2s;
+}
+
+.btn-remove span {
+    font-size: 18px;
+}
+
+.btn-remove:hover {
+    color: #c0392b;
+    /* Un rojo suave elegante al borrar */
+}
+
+.cart-item__subtotal {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #1a1a1a;
+}
+
 /* --- Tarjeta de Resumen --- */
 .summary-card {
     background: #1a1a1a;
@@ -50,7 +143,6 @@
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     position: sticky;
-    /* Se queda quieta al scrollear en PC */
     top: 120px;
 }
 
@@ -98,7 +190,6 @@
     font-size: 1.6rem;
 }
 
-/* --- Botón Mercado Pago --- */
 .btn-mercadopago {
     width: 100%;
     background-color: #009ee3;
@@ -116,84 +207,33 @@
     transition: background 0.3s ease;
 }
 
-.btn-mercadopago:hover {
-    background-color: #0081ba;
-}
-
-.mp-icon-local {
-    height: 25px;
-    width: auto;
-}
-
-/* ============================================================
-   ADAPTACIÓN PARA CELULARES (Responsive Design)
-   ============================================================ */
-
+/* --- Responsive --- */
 @media (max-width: 992px) {
     .cart-page__grid {
         grid-template-columns: 1fr;
-        /* Una sola columna en tablets */
     }
 }
 
 @media (max-width: 768px) {
     .cart-page {
         padding-top: 100px;
-        /* Menos espacio arriba en el celu */
-        padding-left: 15px;
-        padding-right: 15px;
+        padding: 15px;
     }
 
     .cart-page__title {
         font-size: 1.8rem;
-        margin-bottom: 25px;
         text-align: center;
     }
 
-    /* El producto se reacomoda para no quedar apretado */
     .cart-item {
         grid-template-columns: 100px 1fr;
         gap: 15px;
-        padding: 15px;
     }
 
     .cart-item__subtotal {
         grid-column: 1 / -1;
-        /* El precio total del item pasa abajo */
         text-align: right;
         border-top: 1px solid #eee;
         padding-top: 10px;
-        font-weight: 700;
-    }
-
-    /* El resumen oscuro ocupa todo el ancho */
-    .summary-card {
-        padding: 25px;
-        position: static;
-        /* No se queda pegado arriba */
-    }
-
-    .total-amount {
-        font-size: 1.4rem;
-    }
-}
-
-@media (max-width: 480px) {
-
-    /* Para celus muy chiquitos */
-    .cart-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .cart-item__image {
-        width: 120px;
-        margin-bottom: 10px;
-    }
-
-    .quantity-selector {
-        justify-content: center;
     }
 }
