@@ -6,7 +6,6 @@ import BestSellers from '../components/BestSellers/BestSellers';
 import GiftKit from '../components/GiftKit/GiftKit';
 import HowToBuy from '../components/HowToBuy/HowToBuy';
 import Testimonials from '../components/Testimonials/Testimonials';
-import Gallery from '../components/Gallery/Gallery';
 import Newsletter from '../components/Newsletter/Newsletter';
 
 export default function Home() {
@@ -20,7 +19,7 @@ export default function Home() {
             <GiftKit />
             <HowToBuy />
             <Testimonials />
-            <Gallery />
+            {/* La Galería fue removida para mantener la prolijidad visual */}
             <Newsletter />
         </>
     );
