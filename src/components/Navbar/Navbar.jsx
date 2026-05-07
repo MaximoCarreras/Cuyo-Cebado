@@ -16,10 +16,7 @@ export default function Navbar() {
 
   const handleNavClick = () => {
     setIsMobileOpen(false);
-    window.scrollTo({
-      top: 0,
-      behavior: 'instant'
-    });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   useEffect(() => {
@@ -28,6 +25,7 @@ export default function Navbar() {
 
   return (
     <>
+      {/* BARRA DORADA: Ahora fluye con la página para ocultarse al bajar */}
       <div className="announcement-bar">
         <p>
           <b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.
@@ -37,11 +35,7 @@ export default function Navbar() {
       <nav className="navbar" id="navbar">
         <div className="navbar__left">
           <Link to="/" className="navbar__logo" onClick={handleNavClick}>
-            <img
-              src="/logo.png"
-              alt="Cuyo Cebado"
-              className="navbar__logo-img"
-            />
+            <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo-img" />
           </Link>
         </div>
 
@@ -49,30 +43,21 @@ export default function Navbar() {
           <ul className="navbar__links">
             {navLinks.map(link => (
               <li key={link.to}>
-                <Link to={link.to} onClick={handleNavClick}>
-                  {link.label}
-                </Link>
+                <Link to={link.to} onClick={handleNavClick}>{link.label}</Link>
               </li>
             ))}
           </ul>
         </div>
 
         <div className="navbar__right">
-          <Link
-            to="/carrito"
-            className="navbar__cart-link"
-            onClick={handleNavClick}
-          >
+          <Link to="/carrito" className="navbar__cart-link" onClick={handleNavClick}>
             <span className="material-symbols-outlined">shopping_cart</span>
-            {cartCount > 0 && (
-              <span className="cart-badge">{cartCount}</span>
-            )}
+            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </Link>
 
           <button
             className={`navbar__toggle ${isMobileOpen ? 'navbar__toggle--active' : ''}`}
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            aria-label={isMobileOpen ? "Cerrar menú" : "Abrir menú"}
           >
             <span className="material-symbols-outlined">
               {isMobileOpen ? 'close' : 'menu'}

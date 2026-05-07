@@ -5,21 +5,25 @@
   --nav-height: 100px;
 }
 
+/* BARRA DORADA: Sin 'fixed' para que desaparezca al bajar */
 .announcement-bar {
   background-color: var(--color-gold);
   color: var(--color-bone);
   text-align: center;
-  padding: 10px 15px;
+  padding: 8px 15px;
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.5px;
-  width: 100%;
   position: relative;
+  /* Cambiado para que sea parte del flujo */
+  width: 100%;
   z-index: 1001;
 }
 
+/* NAVBAR: 'Sticky' para que se pegue al tope del navegador al bajar */
 .navbar {
   position: sticky;
+  /* Cambio clave */
   top: 0;
   left: 0;
   right: 0;

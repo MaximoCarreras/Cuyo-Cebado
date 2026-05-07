@@ -1,3 +1,4 @@
+/* src/components/Hero/Hero.css */
 .hero {
   width: 100%;
   position: relative;
@@ -34,56 +35,73 @@
   overflow: hidden;
 }
 
+.hero__grainient {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .hero__container {
   position: relative;
   z-index: 3;
   max-width: 1200px;
   width: 100%;
   padding: 0 24px;
-  display: flex;
-  align-items: center;
 }
 
-/* --- FIX POSICIÓN Y TIPOGRAFÍA --- */
+/* POSICIÓN Y TIPOGRAFÍA ORIGINALES RESTAURADAS */
 .hero__content {
-  max-width: 600px;
-  /* Aumentamos padding izquierdo para empujar el texto a la derecha */
-  padding-left: 15%;
+  max-width: 550px;
+  padding-left: 5%;
 }
 
 .hero__title {
-  /* Tamaño original de la foto vieja */
-  font-size: clamp(3rem, 5vw, 4.5rem);
-  line-height: 1;
-  margin-bottom: 24px;
-  /* Eliminado Serif, restaurado Sans-Serif original */
-  font-family: 'Inter', sans-serif;
+  font-size: clamp(3.2rem, 6vw, 5rem);
+  line-height: 1.1;
   font-weight: 800;
   text-transform: uppercase;
-  /* Base Off-white de la marca */
+  margin-bottom: 24px;
   color: #fdfaf7;
+  /* Blanco Hueso original */
 }
 
-/* Solo color Dorado y bold en la palabra b o .highlight */
-.hero__title b,
-.hero__title .highlight {
+.hero__title b {
   color: #a5813a;
-  font-family: 'Inter', sans-serif;
-  /* Mantenemos Sans-Serif */
-  font-weight: 800;
+  /* Tu Dorado de marca */
   display: block;
 }
 
 .hero__subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
   line-height: 1.6;
   font-weight: 400;
-  margin-bottom: 35px;
-  font-family: 'Inter', sans-serif;
-  color: rgba(253, 250, 247, 0.9);
+  margin-bottom: 40px;
+  color: #fdfaf7;
+  opacity: 0.95;
+}
+
+/* BOTONES: Fix para el color marrón persistente */
+.hero__actions {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .hero .btn {
+  border-radius: 50px;
+  padding: 16px 35px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -93,12 +111,13 @@
   border: none;
 }
 
-/* Fix para el botón liso marrón en móviles */
+/* FIX: El botón vuelve a su color inmediatamente después del toque */
 .hero .btn--gold:focus,
 .hero .btn--gold:active {
   background-color: #a5813a !important;
   color: #2b2520 !important;
   box-shadow: none;
+  outline: none;
 }
 
 .hero .btn--outline-gold {
@@ -127,12 +146,22 @@
     border-radius: 0;
     background: #2b2520;
     -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
-    mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
   }
 
   .hero__content {
+    max-width: 100%;
     padding: 0 20px 40px;
     text-align: center;
+  }
+
+  .hero__title {
+    font-size: clamp(2.2rem, 9vw, 3rem);
+  }
+
+  .hero__actions {
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .hero .btn {

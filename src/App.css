@@ -1,3 +1,4 @@
+/* src/App.css */
 html,
 body {
   background-color: #fdfaf7;
@@ -12,10 +13,11 @@ body {
   min-height: 100vh;
 }
 
+/* FIX MARGEN BLANCO: Al usar sticky navbar, eliminamos el padding extra */
 main {
   flex: 1;
   padding-top: 0 !important;
-  /* Arreglo definitivo para el margen blanco */
+  /* El contenido ahora toca la Navbar */
   background-color: #fdfaf7;
 }
 
@@ -45,6 +47,7 @@ main {
   border: none;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
+  /* Limpieza para móviles */
 }
 
 .btn--gold {
@@ -55,7 +58,11 @@ main {
 .btn--gold:hover {
   background-color: #2b2520;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(165, 129, 58, 0.3);
+}
+
+/* Fix específico para que el botón no se quede marrón después de tocarlo */
+.btn--gold:active {
+  background-color: #2b2520;
 }
 
 .whatsapp-float {
