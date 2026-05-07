@@ -3,9 +3,10 @@ import './OurStory.css';
 
 export default function OurStory() {
   return (
-    <section className="ourstory" id="nuestra-historia">
+    <section className="ourstory ourstory--light" id="nuestra-historia">
       <div className="section__container">
 
+        {/* Mantenemos el SpotlightCard con su color dorado de marca */}
         <SpotlightCard className="ourstory__card" spotlightColor="rgba(165, 129, 58, 0.3)">
           <div className="ourstory__content">
             <span className="ourstory__overline">Nuestra Identidad</span>
