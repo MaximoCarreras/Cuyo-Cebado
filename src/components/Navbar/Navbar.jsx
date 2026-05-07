@@ -25,6 +25,7 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Barra que fluye (se oculta al bajar) */}
       <div className="announcement-bar">
         <p><b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.</p>
       </div>

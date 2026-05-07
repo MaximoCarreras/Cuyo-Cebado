@@ -1,5 +1,4 @@
 /* src/components/Hero/Hero.css */
-
 .hero {
   width: 100%;
   position: relative;
@@ -7,10 +6,8 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
-  /* Marrón Madera base */
 }
 
-/* --- 1. IMAGEN DE FONDO --- */
 .hero__image-bg {
   position: absolute;
   top: 0;
@@ -24,7 +21,6 @@
   transform: translateZ(0);
 }
 
-/* --- 2. FORMA CURVA Y ROTADA PREMIUM --- */
 .hero__shape {
   position: absolute;
   top: -10%;
@@ -39,15 +35,6 @@
   overflow: hidden;
 }
 
-.hero__grainient {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* --- 3. CONTENIDO --- */
 .hero__container {
   position: relative;
   z-index: 3;
@@ -56,51 +43,48 @@
   padding: 0 24px;
 }
 
-/* FIX POSICIÓN Y ANCHO DE CAJA DEFINITIVO (COPIADO DEL CÓDIGO VIEJO) */
+/* POSICIONAMIENTO Y ANCHO: Caja ancha para flujo de texto largo */
 .hero__content {
-  /* Volvemos a una caja ancha para que el texto fluya "a lo largo" */
   max-width: 1000px;
-  /* Mantenemos el padding izquierdo para empujarlo a la derecha, cerca de la curva */
+  /* Ensanchamos para que la descripción no se corte tanto */
   padding-left: 35%;
 }
 
-/* --- TÍTULO RESTAURADO (TIPOGRAFÍA ORIGINAL SANS-SERIF BOLD) --- */
+/* TÍTULO: FUENTE NOTO SERIF (Como los títulos de la web) */
 .hero__title {
-  /* Tamaño grande de la foto vieja y el primer código */
-  font-size: clamp(3rem, 5.5vw, 4.8rem);
+  font-size: clamp(3.2rem, 5.5vw, 4.8rem);
   line-height: 1.1;
   font-weight: 800;
   text-transform: uppercase;
   margin-bottom: 24px;
-  /* BASE EN BLANCO HUESO (Como la foto vieja) */
   color: #fdfaf7;
-  /* FORZAMOS SANS-SERIF (Inter) para que coincida con el botón */
-  font-family: 'Inter', sans-serif;
+  font-family: 'Noto Serif', serif !important;
+  /* FORZAMOS SERIF */
 }
 
-/* Palabra "IDENTIDAD" en dorado y Sans-Serif Bold */
+/* "IDENTIDAD" abajo y en dorado */
 .hero__title b,
-.hero__title .highlight {
+.hero__title span.gold {
   color: #a5813a;
-  /* Tu Dorado de marca oficial */
-  font-family: 'Inter', sans-serif;
-  /* Mantenemos Sans-Serif */
   display: block;
+  /* Esto hace que baje a la siguiente línea */
+  font-family: 'Noto Serif', serif !important;
 }
 
-/* SUBTÍTULO (LA DESCRIPCIÓN): Fluye más ancho y Sans-Serif */
+/* SUBTÍTULO: Mantenemos la Sans-Serif (Inter) imprenta */
 .hero__subtitle {
-  font-size: 1.1rem;
+  max-width: 700px;
+  /* Permitimos que sea ancho */
+  font-size: 1.15rem;
   line-height: 1.6;
   font-weight: 400;
-  margin-bottom: 35px;
-  /* Mantenemos Sans-Serif (Inter) que pediste para esta parte */
-  font-family: 'Inter', sans-serif;
+  margin-bottom: 40px;
   color: rgba(253, 250, 247, 0.9);
-  /* Blanco Hueso con opacidad */
+  font-family: 'Inter', sans-serif;
+  /* TIPOGRAFÍA IMPRENTA */
 }
 
-/* --- BOTONES HERO --- */
+/* BOTONES HERO */
 .hero__actions {
   display: flex;
   gap: 20px;
@@ -112,80 +96,56 @@
   padding: 16px 35px;
   font-weight: 700;
   font-size: 0.95rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-family: 'Inter', sans-serif;
   -webkit-tap-highlight-color: transparent;
-  /* Fix móvil */
 }
 
-/* Botón Dorado */
 .hero .btn--gold {
   background-color: #a5813a;
   color: #2b2520;
   border: none;
 }
 
-/* FIX: Evita que se quede marrón tras el touch en móvil */
+/* Fix para evitar el marrón permanente en móvil */
 .hero .btn--gold:focus,
 .hero .btn--gold:active {
   background-color: #a5813a !important;
   color: #2b2520 !important;
   box-shadow: none;
+  outline: none;
 }
 
-/* Botón Outline */
 .hero .btn--outline-gold {
   background-color: transparent;
   color: #a5813a;
   border: 2px solid #a5813a;
 }
 
-.hero .btn--outline-gold:focus,
-.hero .btn--outline-gold:active {
-  background-color: transparent !important;
-  color: #a5813a !important;
-}
-
-/* --- ADAPTACIÓN MÓVIL PREMIUM CON CURVA --- */
 @media (max-width: 900px) {
-  /* align-items: flex-end; */
-  /* Eliminado: para que el contenido no baje */
+  .hero {
+    align-items: flex-end;
+  }
 
   .hero__shape {
-    /* Reposicionamos la forma curva y rota incluso en móvil */
     top: -20%;
     left: -50%;
     width: 150%;
     height: 140%;
     border-radius: 50%;
-    /* Mantenemos la curvatura premium */
     background: #2b2520;
-    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
   }
 
   .hero__content {
-    max-width: 100%;
-    /* Reset de padding para centrar en móvil */
     padding: 0 20px 40px;
     text-align: center;
+    max-width: 100%;
+    padding-left: 0;
   }
 
   .hero__title {
     font-size: clamp(2.2rem, 9vw, 3rem);
   }
-
-  .hero__actions {
-    justify-content: center;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  /* .hero .btn { width: 100%; } */
-  /* Eliminado: Botes flexibles en móvil */
 }

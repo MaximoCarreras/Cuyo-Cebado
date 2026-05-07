@@ -13,14 +13,14 @@ body {
   min-height: 100vh;
 }
 
-/* FIX MARGEN BLANCO */
+/* ELIMINACIÓN DEL MARGEN BLANCO */
 main {
   flex: 1;
   padding-top: 0 !important;
   background-color: #fdfaf7;
 }
 
-/* TÍTULOS DE TODA LA WEB (Noto Serif) */
+/* TÍTULOS DE SECCIÓN (Referencia para el Hero) */
 .section__title {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   color: #2b2520;
