@@ -1,29 +1,64 @@
-/* --- RESET Y ESTRUCTURA --- */
+/* --- RESET Y ESTRUCTURA — VOLVIENDO AL DISEÑO PREMIUM --- */
 html,
 body {
   background-color: #fdfaf7;
-  /* Unificamos al Blanco Hueso */
+  margin: 0;
+  padding: 0;
 }
 
-/* --- CONTENEDOR PRINCIPAL --- */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 main {
-  width: 100%;
+  flex: 1;
   padding-top: 100px;
-  /* Espacio para el Navbar */
   background-color: #fdfaf7;
-  /* Eliminamos el min-height de acá porque ya lo maneja el #root */
 }
 
-/* --- TÍTULOS DE SECCIÓN --- */
+/* --- TÍTULOS REFINADOS (No tan gigantes) --- */
 .section__title {
-  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  /* Bajamos el tamaño máximo */
   color: #2b2520;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
+  /* Menos agresivo */
   font-weight: 800;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   font-family: 'Noto Serif', serif;
+}
+
+/* --- BOTONES PREMIUM (Adiós a Windows XP) --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 50px;
+  /* Redondeados modernos */
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.btn--gold {
+  background-color: #a5813a;
+  color: #fdfaf7;
+}
+
+.btn--gold:hover {
+  background-color: #2b2520;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(165, 129, 58, 0.3);
 }
 
 /* --- WHATSAPP FLOAT --- */
@@ -35,61 +70,9 @@ main {
   right: 30px;
   background-color: #25d366;
   border-radius: 50%;
+  z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  z-index: 2000;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.15) rotate(5deg);
-}
-
-.whatsapp-float img {
-  width: 32px;
-  height: 32px;
-}
-
-.tooltip-wa {
-  position: absolute;
-  right: 75px;
-  background-color: #2b2520;
-  color: #fdfaf7;
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.3s;
-}
-
-.whatsapp-float:hover .tooltip-wa {
-  opacity: 1;
-}
-
-/* --- RESPONSIVE --- */
-@media (max-width: 768px) {
-  main {
-    padding-top: 80px;
-  }
-
-  .section__title {
-    font-size: 1.8rem;
-    margin-bottom: 30px;
-  }
-
-  .whatsapp-float {
-    width: 55px;
-    height: 55px;
-    bottom: 20px;
-    right: 20px;
-  }
-
-  .tooltip-wa {
-    display: none;
-  }
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
