@@ -1,78 +1,259 @@
+/* src/App.css */
+
+
+
+/* --- RESET Y ESTRUCTURA GENERAL --- */
+
 html,
+
 body {
+
   background-color: #fdfaf7;
+
   margin: 0;
+
   padding: 0;
+
   overflow-x: hidden;
+
 }
+
+
 
 #root {
+
   display: flex;
+
   flex-direction: column;
+
   min-height: 100vh;
+
 }
 
-/* FIX DEFINITIVO: Eliminamos el padding superior para que la imagen suba */
+
+
+/* Buscá esto en tu App.css y cambiale el valor: */
+
 main {
+
   flex: 1;
+
+  padding-top: 136px;
+
+  /* Ajustado para la barra de anuncio + navbar */
+
   background-color: #fdfaf7;
-  padding-top: 0 !important;
+
 }
 
-/* Títulos Noto Serif */
+
+
+/* --- TÍTULOS REFINADOS --- */
+
 .section__title {
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
+
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+
   color: #2b2520;
+
   text-align: center;
+
   text-transform: uppercase;
+
   letter-spacing: 2px;
+
   font-weight: 800;
+
   margin-bottom: 40px;
+
   font-family: 'Noto Serif', serif;
+
 }
 
-/* Botones Premium */
+
+
+/* --- BOTONES PREMIUM --- */
+
 .btn {
+
   display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
-  padding: 14px 28px;
+
+  padding: 12px 24px;
+
   border-radius: 50px;
+
   font-weight: 700;
+
   font-size: 0.9rem;
+
   text-transform: uppercase;
+
   letter-spacing: 1px;
+
   transition: all 0.3s ease;
+
   cursor: pointer;
+
   border: none;
+
   text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-  /* Limpieza para móvil */
+
 }
+
+
 
 .btn--gold {
+
   background-color: #a5813a;
+
   color: #fdfaf7;
+
 }
+
+
+
+.btn--gold:hover {
+
+  background-color: #2b2520;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 5px 15px rgba(165, 129, 58, 0.3);
+
+}
+
+
+
+/* --- LA BURBUJA DE WHATSAPP DEFINITIVA (Minimalismo Premium) --- */
 
 .whatsapp-float {
+
   position: fixed;
+
   width: 55px;
+
   height: 55px;
+
   bottom: 25px;
+
   right: 25px;
+
   background-color: #2b2520;
+
+  /* Fondo Marrón Madera */
+
   border-radius: 50%;
+
   z-index: 2000;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(165, 129, 58, 0.3);
+
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  border: 1px solid rgba(165, 129, 58, 0.2);
+
+  /* Borde dorado sutil */
+
 }
 
+
+
+/* Transición suave para el icono (SVG) */
+
 .wa-icon {
+
   width: 30px;
+
   height: 30px;
+
   fill: #a5813a;
+
+  /* Icono Dorado Cuyo */
+
+  transition: fill 0.3s ease;
+
+}
+
+
+
+/* Efecto al pasar el mouse: invertimos los colores */
+
+.whatsapp-float:hover {
+
+  transform: scale(1.08) rotate(5deg);
+
+  background-color: #a5813a;
+
+  /* Fondo pasa a dorado */
+
+  box-shadow: 0 12px 25px rgba(165, 129, 58, 0.3);
+
+}
+
+
+
+.whatsapp-float:hover .wa-icon {
+
+  fill: #2b2520;
+
+  /* Icono pasa a marrón oscuro */
+
+}
+
+
+
+/* Ocultamos cualquier rastro del texto anterior por seguridad */
+
+.tooltip-wa,
+
+.whatsapp-float span {
+
+  display: none !important;
+
+  visibility: hidden !important;
+
+  opacity: 0 !important;
+
+  pointer-events: none !important;
+
+}
+
+
+
+/* --- AJUSTE CELULAR --- */
+
+@media (max-width: 768px) {
+
+  .whatsapp-float {
+
+    width: 48px;
+
+    height: 48px;
+
+    bottom: 20px;
+
+    right: 20px;
+
+  }
+
+
+
+  .wa-icon {
+
+    width: 26px;
+
+    height: 26px;
+
+  }
+
 }

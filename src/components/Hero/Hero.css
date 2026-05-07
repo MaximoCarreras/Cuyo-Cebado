@@ -1,36 +1,226 @@
-/* Mantenemos tu diseño original intacto */
+/* src/components/Hero/Hero.css */
+
+
+
 .hero {
+
   width: 100%;
+
   position: relative;
+
   display: flex;
+
   align-items: center;
+
   overflow: hidden;
+
   background-color: #2b2520;
+  /* Marrón Madera */
+
 }
+
+
+
+/* --- 1. IMAGEN DE FONDO --- */
 
 .hero__image-bg {
+
   position: absolute;
+
   top: 0;
+
   right: 0;
+
   width: 100%;
+
   height: 100%;
+
   background-size: cover;
+
   background-position: center right;
+
   z-index: 1;
+
+  /* Evita vibraciones al scrollear */
+
+  will-change: transform;
+
+  transform: translateZ(0);
+
 }
 
-/* FIX DEL BOTÓN: Evita el estado marrón pegajoso */
+
+
+/* --- 2. FORMA CURVA --- */
+
+.hero__shape {
+
+  position: absolute;
+
+  top: -10%;
+
+  left: -20%;
+
+  width: 75%;
+
+  height: 120%;
+
+  background-color: #2b2520;
+
+  border-top-right-radius: 50%;
+
+  border-bottom-right-radius: 50%;
+
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
+
+  z-index: 2;
+
+  overflow: hidden;
+
+}
+
+
+
+.hero__grainient {
+
+  width: 100%;
+
+  height: 100%;
+
+  position: absolute;
+
+  top: 0;
+
+  left: 0;
+
+}
+
+
+
+/* --- 3. CONTENIDO --- */
+
+.hero__container {
+
+  position: relative;
+
+  z-index: 3;
+
+  max-width: 1200px;
+
+  width: 100%;
+
+  padding: 0 24px;
+
+}
+
+
+
+.hero__content {
+
+  max-width: 550px;
+
+  padding-left: 5%;
+
+}
+
+
+
+.hero__title {
+
+  font-size: clamp(3.2rem, 6vw, 5rem);
+
+  line-height: 1.1;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  margin-bottom: 24px;
+
+  color: #a5813a;
+  /* Dorado Bronce */
+
+}
+
+
+
+.hero__title b {
+
+  color: #a5813a;
+
+  display: block;
+
+}
+
+
+
+.hero__subtitle {
+
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+
+  line-height: 1.6;
+
+  font-weight: 400;
+
+  margin-bottom: 40px;
+
+  color: #fdfaf7;
+  /* Blanco Hueso */
+
+  opacity: 0.95;
+
+}
+
+
+
+/* --- BOTONES --- */
+
+.hero__actions {
+
+  display: flex;
+
+  gap: 20px;
+
+  flex-wrap: wrap;
+
+}
+
+
+
 .hero .btn {
-  -webkit-tap-highlight-color: transparent;
+
+  border-radius: 50px;
+
+  padding: 16px 35px;
+
+  font-weight: 700;
+
+  font-size: 0.95rem;
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  cursor: pointer;
+
+  text-decoration: none;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+
 }
 
-/* Forzamos que los botones mantengan su color incluso si quedan en focus */
-.hero .btn--gold:focus,
-.hero .btn--gold:active {
-  background-color: #a5813a !important;
-  color: #2b2520 !important;
-  outline: none;
-  box-shadow: 0 5px 15px rgba(165, 129, 58, 0.4);
+
+
+.hero .btn--gold {
+  background-color: #a5813a;
+  color: #2b2520;
+  border: none;
 }
 
 .hero .btn--outline-gold {
@@ -39,55 +229,81 @@
   border: 2px solid #a5813a;
 }
 
-.hero .btn--outline-gold:focus,
-.hero .btn--outline-gold:active {
-  background-color: transparent !important;
-  color: #a5813a !important;
-  outline: none;
-}
 
-/* El resto de tu configuración de Hero (shape, container, etc) se mantiene igual */
-.hero__shape {
-  position: absolute;
-  top: -10%;
-  left: -20%;
-  width: 75%;
-  height: 120%;
-  background-color: #2b2520;
-  border-top-right-radius: 50%;
-  border-bottom-right-radius: 50%;
-  z-index: 2;
-}
 
-.hero__container {
-  position: relative;
-  z-index: 3;
-  max-width: 1200px;
-  width: 100%;
-  padding: 0 24px;
-}
+/* --- ADAPTACIÓN MÓVIL --- */
 
 @media (max-width: 900px) {
+
   .hero {
+
     align-items: flex-end;
+
   }
+
+
 
   .hero__shape {
+
     top: auto;
+
     bottom: 0;
+
     left: 0;
+
     width: 100%;
+
     height: 70%;
+    /* Altura relativa al contenedor bloqueado */
+
     border-radius: 0;
+
+    background: #2b2520;
+
+    box-shadow: none;
+
     -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
+
+    mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
+
   }
 
+
+
   .hero__content {
+
+    max-width: 100%;
+
     padding: 0 20px 40px;
+
     text-align: center;
+
   }
+
+
+
+  .hero__title {
+
+    font-size: clamp(2.2rem, 9vw, 3rem);
+
+  }
+
+
+
+  .hero__actions {
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+  }
+
+
 
   .hero .btn {
     width: 100%;
   }
+
 }
