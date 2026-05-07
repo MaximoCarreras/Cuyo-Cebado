@@ -2,20 +2,28 @@ import './Gallery.css';
 
 export default function Gallery() {
   return (
-    <section className="gallery section" id="galeria">
-      <div className="gallery__container section__container">
-        {/* Cambiamos el título para que no se repita con la sección de abajo */}
+    <section className="gallery" id="galeria">
+      <div className="gallery__container">
+        {/* Usamos la clase global para que el diseño sea coherente */}
         <h2 className="section__title">Nuestras Piezas en Acción</h2>
 
-        {/* Aquí es donde se muestran las fotos de tus mates */}
         <div className="gallery__grid">
-          {/* Vercel cargará aquí las imágenes que tengas en tu carpeta de assets */}
-          {/* Tip: Podés mapear aquí tus fotos de Instagram o assets locales */}
-        </div>
+          {/* Este párrafo ayuda a que la sección no se vea vacía mientras subís las fotos */}
+          <p style={{
+            textAlign: 'center',
+            color: '#2b2520',
+            opacity: 0.7,
+            gridColumn: '1 / -1',
+            fontSize: '1.1rem',
+            marginBottom: '40px'
+          }}>
+            Momentos compartidos por nuestra comunidad disfrutando el ritual de un buen mate.
+          </p>
 
-        {/* BORRAMOS el bloque gallery__actions porque esa info 
-            ahora está en el componente Community que pusimos en App.jsx 
-        */}
+          {/* Tip para el futuro: Aquí es donde vas a mapear tus imágenes 
+            cuando las tengas listas en tu carpeta public o assets. 
+          */}
+        </div>
       </div>
     </section>
   );

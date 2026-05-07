@@ -1,36 +1,29 @@
 /**
  * Newsletter — "Club del Mate" signup section.
- * Submits email to Supabase (or backend API). [SF]
  */
 import { useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import './Newsletter.css';
 
-/* API base URL for fallback when Supabase is not configured [CMV] */
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export default function Newsletter() {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [status, setStatus] = useState('idle');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    /* Basic email validation [IV] */
     if (!email || !email.includes('@')) return;
 
     setStatus('loading');
 
     try {
       if (supabase) {
-        /* Direct insert to Supabase using anon key + RLS */
         const { error } = await supabase
           .from('newsletter_subscribers')
           .upsert({ email }, { onConflict: 'email' });
-
         if (error) throw error;
       } else {
-        /* Fallback: POST to backend API */
         const res = await fetch(`${API_URL}/api/newsletter`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -38,7 +31,6 @@ export default function Newsletter() {
         });
         if (!res.ok) throw new Error('API error');
       }
-
       setStatus('success');
       setEmail('');
     } catch (err) {
@@ -48,9 +40,11 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="newsletter section" id="contacto">
-      <div className="newsletter__container section__container">
-        <h2 className="newsletter__title">Unite al Club del Mate</h2>
+    <section className="newsletter" id="contacto">
+      <div className="newsletter__container">
+        {/* Usamos la clase global section__title */}
+        <h2 className="section__title">Unite al Club del Mate</h2>
+
         <p className="newsletter__subtitle">
           Recibí un 10% OFF en tu primera compra + tips de curado exclusivos
         </p>
@@ -66,17 +60,16 @@ export default function Newsletter() {
           />
           <button
             type="submit"
-            className="btn btn--primary"
+            className="newsletter__btn"
             disabled={status === 'loading'}
           >
             {status === 'loading' ? 'Enviando...' : 'Suscribirme'}
           </button>
         </form>
 
-        {/* Status messages */}
         {status === 'success' && (
           <p className="newsletter__message newsletter__message--success">
-            ✅ ¡Te suscribiste! Revisá tu email para el cupón de 10% OFF.
+            ✅ ¡Te suscribiste! Revisá tu email para el cupón.
           </p>
         )}
         {status === 'error' && (

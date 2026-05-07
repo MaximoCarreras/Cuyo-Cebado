@@ -1,108 +1,98 @@
-/* Newsletter — Dark wood texture section */
+/* Newsletter — Estilo Unificado con fondo claro */
 .newsletter {
-  background: var(--color-brown-dark);
+  background-color: #fdfaf7;
+  /* Fondo blanco hueso */
   text-align: center;
-  /* Reducimos el padding vertical: 60px arriba y abajo es ideal */
-  padding: 60px var(--space-md);
+  padding: 80px 20px;
+  border-top: 1px solid rgba(43, 37, 32, 0.05);
 }
 
-.newsletter__title {
-  color: var(--color-white);
-  /* Margen más ajustado */
-  margin-bottom: 10px;
+.newsletter__container {
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .newsletter__subtitle {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 1.05rem;
-  /* Reducimos el espacio excesivo antes del formulario */
-  margin-bottom: 25px;
+  color: #2b2520;
+  font-size: 1.1rem;
+  margin-bottom: 35px;
+  opacity: 0.8;
 }
 
 .newsletter__form {
   display: flex;
-  gap: var(--space-md);
-  max-width: 480px;
-  /* Reducimos el margen inferior para acercar el aviso de 'Sin spam' */
-  margin: 0 auto 15px;
+  gap: 15px;
+  max-width: 500px;
+  margin: 0 auto 20px;
 }
 
 .newsletter__input {
   flex: 1;
-  padding: 12px 18px; /* Un pelín más bajo para compactar */
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--color-white);
-  font-size: 0.95rem;
-  transition: border-color var(--transition);
-}
-
-.newsletter__input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  padding: 14px 20px;
+  /* Borde sutil en marrón oscuro */
+  border: 2px solid rgba(43, 37, 32, 0.1);
+  border-radius: 50px;
+  background: white;
+  color: #2b2520;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .newsletter__input:focus {
   outline: none;
-  border-color: var(--color-gold);
+  border-color: #a5813a;
+  /* Dorado al enfocar */
+}
+
+.newsletter__btn {
+  background-color: #a5813a;
+  color: #2b2520;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 50px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.newsletter__btn:hover {
+  background-color: #2b2520;
+  color: #fdfaf7;
+  transform: translateY(-2px);
 }
 
 .newsletter__message {
-  font-size: 0.9rem;
-  /* Menos espacio entre mensaje y disclaimer */
-  margin-bottom: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 15px;
 }
 
 .newsletter__message--success {
-  color: #7dd97d;
+  color: #2e7d32;
 }
 
 .newsletter__message--error {
-  color: #f08080;
+  color: #c62828;
 }
 
 .newsletter__disclaimer {
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.8rem;
-  display: block;
+  color: #2b2520;
+  opacity: 0.5;
+  font-size: 0.85rem;
 }
 
-@media (max-width: 480px) {
+/* --- AJUSTE RESPONSIVE --- */
+@media (max-width: 600px) {
   .newsletter {
-    padding: 40px var(--space-md);
+    padding: 60px 20px;
   }
-  
+
   .newsletter__form {
     flex-direction: column;
-    gap: 10px;
   }
-}
-/* --- AJUSTE PARA COMPACTAR EL CIERRE DE PÁGINA --- */
 
-/* 1. Quitamos el aire extra del Newsletter */
-.newsletter {
-  padding-top: 50px !important;   /* Espacio justo arriba del título */
-  padding-bottom: 0 !important;    /* Eliminamos el espacio de abajo por completo */
-  min-height: auto !important;     /* Evitamos que la sección ocupe toda la pantalla */
-}
-
-/* 2. Pegamos el Footer a la sección de arriba */
-.footer {
-  padding-top: 20px !important;    /* Pegamos los links al formulario del Club del Mate */
-  padding-bottom: 40px !important; /* Espacio final de la web */
-  margin-top: 0 !important;
-}
-
-/* 3. Ajustamos la grilla de links para que no tenga márgenes internos */
-.footer__grid, 
-.footer__container {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-/* 4. El copyright (el texto final de 2026) */
-.footer__bottom {
-  margin-top: 20px !important;    /* Distancia corta con los links de arriba */
-  padding-top: 20px !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Una línea sutil para separar */
+  .newsletter__btn {
+    width: 100%;
+  }
 }

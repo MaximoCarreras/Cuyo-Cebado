@@ -6,10 +6,9 @@ body {
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
-  /* El marrón cálido que elegimos para Cuyo Cebado */
+  /* El marrón cálido unificado de Cuyo Cebado */
   background-color: #2b2520;
   font-family: 'Inter', sans-serif;
-  /* O la que estés usando */
 }
 
 * {
@@ -20,13 +19,26 @@ body {
 main {
   min-height: 100vh;
   padding-top: 110px;
-  /* Ajustado a la altura de tu Navbar */
   width: 100%;
+  /* Fondo blanco hueso para que la tienda respire */
   background-color: #fdfaf7;
-  /* Fondo blanco hueso para el contenido */
 }
 
-/* --- BURBUJA FLOTANTE DE WHATSAPP --- */
+/* --- TÍTULOS DE SECCIÓN UNIFICADOS --- */
+/* Esta clase la vamos a usar en todos los títulos de la página */
+.section__title {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  color: #2b2520;
+  /* Marrón Madera */
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 800;
+  margin-bottom: 40px;
+  padding: 0 20px;
+}
+
+/* --- BURBUJA FLOTANTE DE WHATSAPP (Soporte Personal) --- */
 .whatsapp-float {
   position: fixed;
   width: 60px;
@@ -34,6 +46,7 @@ main {
   bottom: 30px;
   right: 30px;
   background-color: #25d366;
+  /* Verde WA para reconocimiento rápido */
   border-radius: 50px;
   display: flex;
   align-items: center;
@@ -52,10 +65,10 @@ main {
   height: 35px;
 }
 
-/* Tooltip sutil que aparece al lado de la burbuja */
+/* Tooltip sutil */
 .tooltip-wa {
   position: absolute;
-  right: 70px;
+  right: 75px;
   background-color: #2b2520;
   color: #fdfaf7;
   padding: 8px 15px;
@@ -71,7 +84,6 @@ main {
 
 .whatsapp-float:hover .tooltip-wa {
   opacity: 1;
-  right: 75px;
 }
 
 /* --- AJUSTES MOBILE --- */
@@ -87,8 +99,12 @@ main {
     right: 20px;
   }
 
+  .section__title {
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+  }
+
   .tooltip-wa {
     display: none;
-    /* En celu mejor que no estorbe */
   }
 }
