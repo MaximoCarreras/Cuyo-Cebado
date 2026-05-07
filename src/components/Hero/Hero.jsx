@@ -1,6 +1,6 @@
 import './Hero.css';
 import heroBgImage from '../../assets/fondo_hero_principal.png';
-import Grainient from '../Backgrounds/Grainient'; // Asegurate de que la ruta coincida con donde creaste el archivo
+import Grainient from '../Backgrounds/Grainient'; 
 
 export default function Hero() {
   return (
@@ -12,7 +12,7 @@ export default function Hero() {
         style={{ backgroundImage: `url(${heroBgImage})` }}
       ></div>
 
-      {/* 2. Capa que dibuja la gran curva marrón oscuro (AHORA CON ANIMACIÓN) */}
+      {/* 2. Capa con animación de vetas de madera (Grainient) */}
       <div className="hero__shape">
         <Grainient
           color1="#140d07"   /* Base casi negra */
@@ -25,13 +25,13 @@ export default function Hero() {
           warpSpeed={1.2}
           warpAmplitude={40}
           blendAngle={0}
-          blendSoftness={0.4} /* Mezcla más suave para que parezcan vetas */
+          blendSoftness={0.4}
           rotationAmount={100}
           noiseScale={1.5}
           grainAmount={0.06}
           grainScale={1.5}
           grainAnimated={true}
-          contrast={1.2}      /* Contraste equilibrado */
+          contrast={1.2}
           gamma={1}
           saturation={0.8}
           zoom={1}
@@ -39,7 +39,7 @@ export default function Hero() {
         />
       </div>
 
-      {/* 3. Contenedor del texto (Superpuesto a la curva) */}
+      {/* 3. Contenedor del texto (Limpio de emojis) */}
       <div className="hero__container section__container">
         <div className="hero__content">
           <h1 className="hero__title">
@@ -48,8 +48,8 @@ export default function Hero() {
           </h1>
 
           <p className="hero__subtitle">
-            Curaduría premium de mates imperiales tallados a mano en Mendoza.
-            🏔️ Una pieza de arte en cada cebada.
+            Curaduría premium de mates imperiales tallados a mano en Mendoza. 
+            Una pieza de arte en cada cebada.
           </p>
 
           <div className="hero__actions">
