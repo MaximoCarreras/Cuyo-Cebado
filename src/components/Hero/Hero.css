@@ -1,5 +1,3 @@
-/* src/components/Hero/Hero.css */
-
 .hero {
   width: 100%;
   position: relative;
@@ -7,10 +5,8 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
-  /* Marrón Madera base */
 }
 
-/* --- 1. IMAGEN DE FONDO --- */
 .hero__image-bg {
   position: absolute;
   top: 0;
@@ -24,7 +20,6 @@
   transform: translateZ(0);
 }
 
-/* --- 2. FORMA CURVA --- */
 .hero__shape {
   position: absolute;
   top: -10%;
@@ -39,15 +34,6 @@
   overflow: hidden;
 }
 
-.hero__grainient {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* --- 3. CONTENIDO --- */
 .hero__container {
   position: relative;
   z-index: 3;
@@ -58,31 +44,30 @@
   align-items: center;
 }
 
-/* --- CORRECCIÓN DE POSICIÓN: Empujamos el texto a la derecha --- */
+/* --- FIX POSICIÓN Y TIPOGRAFÍA --- */
 .hero__content {
   max-width: 600px;
-  /* Aumentamos el padding izquierdo para acercarlo a la curva */
+  /* Aumentamos padding izquierdo para empujar el texto a la derecha */
   padding-left: 15%;
 }
 
-/* --- TÍTULO RESTAURADO (ESTÉTICA ORIGINAL) --- */
 .hero__title {
+  /* Tamaño original de la foto vieja */
   font-size: clamp(3rem, 5vw, 4.5rem);
   line-height: 1;
   margin-bottom: 24px;
-  /* FORZAMOS SANS-SERIF (Inter) para todo el título */
+  /* Eliminado Serif, restaurado Sans-Serif original */
   font-family: 'Inter', sans-serif;
   font-weight: 800;
   text-transform: uppercase;
-  /* BASE EN BLANCO HUESO (Como la foto vieja) */
+  /* Base Off-white de la marca */
   color: #fdfaf7;
 }
 
-/* RESALTADO DORADO: Misma fuente Sans-Serif, solo cambia color y bold */
+/* Solo color Dorado y bold en la palabra b o .highlight */
 .hero__title b,
-.hero__title span.highlight {
+.hero__title .highlight {
   color: #a5813a;
-  /* Tu dorado de marca oficial */
   font-family: 'Inter', sans-serif;
   /* Mantenemos Sans-Serif */
   font-weight: 800;
@@ -96,41 +81,19 @@
   margin-bottom: 35px;
   font-family: 'Inter', sans-serif;
   color: rgba(253, 250, 247, 0.9);
-  /* Blanco Hueso con opacidad */
-}
-
-/* --- BOTONES (Mantenemos los fixes técnicos) --- */
-.hero__actions {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
 }
 
 .hero .btn {
-  border-radius: 50px;
-  padding: 15px 30px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-transform: uppercase;
-  letter-spacing: 1px;
   -webkit-tap-highlight-color: transparent;
-  /* Fix móvil */
 }
 
-/* Botón Dorado */
 .hero .btn--gold {
   background-color: #a5813a;
   color: #2b2520;
   border: none;
 }
 
-/* FIX: Evita que se quede marrón tras el touch en móvil */
+/* Fix para el botón liso marrón en móviles */
 .hero .btn--gold:focus,
 .hero .btn--gold:active {
   background-color: #a5813a !important;
@@ -138,7 +101,6 @@
   box-shadow: none;
 }
 
-/* Botón Outline */
 .hero .btn--outline-gold {
   background-color: transparent;
   color: #a5813a;
@@ -151,7 +113,6 @@
   color: #a5813a !important;
 }
 
-/* --- ADAPTACIÓN MÓVIL --- */
 @media (max-width: 900px) {
   .hero {
     align-items: flex-end;
@@ -165,26 +126,13 @@
     height: 70%;
     border-radius: 0;
     background: #2b2520;
-    box-shadow: none;
     -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
     mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
   }
 
   .hero__content {
-    max-width: 100%;
-    /* Reset de padding para centrar en móvil */
     padding: 0 20px 40px;
     text-align: center;
-  }
-
-  .hero__title {
-    font-size: clamp(2.2rem, 9vw, 3rem);
-  }
-
-  .hero__actions {
-    justify-content: center;
-    flex-direction: column;
-    gap: 12px;
   }
 
   .hero .btn {

@@ -1,6 +1,3 @@
-/* src/components/Navbar/Navbar.css */
-
-/* --- VARIABLES --- */
 :root {
   --color-cuyo-brown: #2b2520;
   --color-gold: #a5813a;
@@ -8,25 +5,21 @@
   --nav-height: 100px;
 }
 
-/* --- ANNOUNCEMENT BAR --- */
 .announcement-bar {
   background-color: var(--color-gold);
   color: var(--color-bone);
   text-align: center;
-  padding: 8px 15px;
+  padding: 10px 15px;
   font-size: 0.85rem;
   font-weight: 500;
   letter-spacing: 0.5px;
-  position: relative;
-  /* No fixed para que se vaya al bajar */
   width: 100%;
+  position: relative;
   z-index: 1001;
 }
 
-/* --- NAVBAR --- */
 .navbar {
   position: sticky;
-  /* Sticky para que se pegue arriba después de la barra */
   top: 0;
   left: 0;
   right: 0;
@@ -41,8 +34,6 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
-
-/* ... (El resto de los estilos del Navbar siguen exactamente igual a tu base) ... */
 
 .navbar__left {
   display: flex;

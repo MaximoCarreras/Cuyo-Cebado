@@ -28,7 +28,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Barra de anuncios: Ahora fluye con la página */}
       <div className="announcement-bar">
         <p>
           <b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.

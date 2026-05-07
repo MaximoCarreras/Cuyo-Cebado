@@ -1,6 +1,3 @@
-/* src/App.css */
-
-/* --- RESET Y ESTRUCTURA GENERAL --- */
 html,
 body {
   background-color: #fdfaf7;
@@ -15,15 +12,13 @@ body {
   min-height: 100vh;
 }
 
-/* FIX MARGEN BLANCO: El contenido empieza pegado a la Navbar */
 main {
   flex: 1;
-  background-color: #fdfaf7;
   padding-top: 0 !important;
+  /* Arreglo definitivo para el margen blanco */
+  background-color: #fdfaf7;
 }
 
-/* ... (El resto de tus estilos globales siguen igual) ... */
-/* --- TÍTULOS REFINADOS --- */
 .section__title {
   font-size: clamp(1.5rem, 4vw, 2.2rem);
   color: #2b2520;
@@ -35,7 +30,6 @@ main {
   font-family: 'Noto Serif', serif;
 }
 
-/* --- BOTONES PREMIUM --- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -51,7 +45,6 @@ main {
   border: none;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  /* Limpieza para móviles */
 }
 
 .btn--gold {
@@ -59,12 +52,12 @@ main {
   color: #fdfaf7;
 }
 
-/* FIX BOTÓN MÓVIL: Evita que se quede marrón después del toque */
-.btn--gold:active {
+.btn--gold:hover {
   background-color: #2b2520;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(165, 129, 58, 0.3);
 }
 
-/* Burbuja WhatsApp */
 .whatsapp-float {
   position: fixed;
   width: 55px;
