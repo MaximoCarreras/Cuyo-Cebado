@@ -1,9 +1,10 @@
-/* --- RESET Y ESTRUCTURA — VOLVIENDO AL DISEÑO PREMIUM --- */
+/* --- RESET Y ESTRUCTURA — DISEÑO PREMIUM --- */
 html,
 body {
   background-color: #fdfaf7;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 #root {
@@ -18,33 +19,30 @@ main {
   background-color: #fdfaf7;
 }
 
-/* --- TÍTULOS REFINADOS (No tan gigantes) --- */
+/* --- TÍTULOS REFINADOS --- */
 .section__title {
   font-size: clamp(1.5rem, 4vw, 2.2rem);
-  /* Bajamos el tamaño máximo */
   color: #2b2520;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 2px;
-  /* Menos agresivo */
   font-weight: 800;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   font-family: 'Noto Serif', serif;
 }
 
-/* --- BOTONES PREMIUM (Adiós a Windows XP) --- */
+/* --- BOTONES PREMIUM --- */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 24px;
+  padding: 12px 28px;
   border-radius: 50px;
-  /* Redondeados modernos */
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   border: none;
   text-decoration: none;
@@ -57,22 +55,62 @@ main {
 
 .btn--gold:hover {
   background-color: #2b2520;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(165, 129, 58, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(165, 129, 58, 0.3);
 }
 
-/* --- WHATSAPP FLOAT --- */
+/* --- BURBUJA DE WHATSAPP REFINADA (Dorado & Compacto) --- */
 .whatsapp-float {
   position: fixed;
-  width: 60px;
-  height: 60px;
-  bottom: 30px;
-  right: 30px;
-  background-color: #25d366;
+  width: 55px;
+  height: 55px;
+  bottom: 25px;
+  right: 25px;
+  background-color: #a5813a;
+  /* Dorado de marca */
   border-radius: 50%;
   z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1) rotate(8deg);
+  background-color: #2b2520;
+  /* Cambia al marrón oscuro al hover */
+}
+
+/* Forzamos el icono a blanco puro para máxima elegancia */
+.whatsapp-float img {
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) invert(1);
+}
+
+/* --- AJUSTES CELULAR --- */
+@media (max-width: 768px) {
+  main {
+    padding-top: 85px;
+  }
+
+  .section__title {
+    font-size: 1.6rem;
+    margin-bottom: 35px;
+  }
+
+  .whatsapp-float {
+    width: 50px;
+    /* Tamaño ideal para el pulgar en el celu */
+    height: 50px;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .whatsapp-float img {
+    width: 24px;
+    height: 24px;
+  }
 }
