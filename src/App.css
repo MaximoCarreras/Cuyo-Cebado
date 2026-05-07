@@ -1,4 +1,6 @@
-/* --- RESET Y ESTRUCTURA — DISEÑO PREMIUM --- */
+/* src/App.css */
+
+/* --- RESET Y ESTRUCTURA GENERAL (Mantenemos la estabilidad) --- */
 html,
 body {
   background-color: #fdfaf7;
@@ -19,92 +21,60 @@ main {
   background-color: #fdfaf7;
 }
 
-/* --- TÍTULOS REFINADOS --- */
-.section__title {
-  font-size: clamp(1.5rem, 4vw, 2.2rem);
-  color: #2b2520;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: 800;
-  margin-bottom: 50px;
-  font-family: 'Noto Serif', serif;
-}
+/* ... (Mantenés tus .section__title y .btn que ya arreglamos) ... */
 
-/* --- BOTONES PREMIUM --- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 28px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
-}
 
-.btn--gold {
-  background-color: #a5813a;
-  color: #fdfaf7;
-}
-
-.btn--gold:hover {
-  background-color: #2b2520;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(165, 129, 58, 0.3);
-}
-
-/* --- BURBUJA DE WHATSAPP REFINADA (Dorado & Compacto) --- */
+/* --- LA BURBUJA DE WHATSAPP DEFINITIVA (Minimalismo Premium) --- */
 .whatsapp-float {
   position: fixed;
   width: 55px;
   height: 55px;
   bottom: 25px;
   right: 25px;
-  background-color: #a5813a;
-  /* Dorado de marca */
+  /* El marrón cálido unificado de Cuyo Cebado */
+  background-color: #2b2520;
   border-radius: 50%;
   z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(165, 129, 58, 0.15);
+  /* Borde dorado casi invisible */
 }
 
+/* Hover suave, solo crece un poco */
 .whatsapp-float:hover {
-  transform: scale(1.1) rotate(8deg);
-  background-color: #2b2520;
-  /* Cambia al marrón oscuro al hover */
+  transform: scale(1.08) rotate(5deg);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
 }
 
-/* Forzamos el icono a blanco puro para máxima elegancia */
+/* El icono dorado de adentro */
 .whatsapp-float img {
   width: 28px;
   height: 28px;
-  filter: brightness(0) invert(1);
+  /* Ya no usamos filtros, el archivo es dorado nativo */
+  display: block;
 }
 
-/* --- AJUSTES CELULAR --- */
+/* ELIMINAMOS EL TOOLTIP "¿DUDAS? ESCRIBINOS" */
+/* Si tenés una clase para el texto, forzamos su desaparición */
+.tooltip-wa,
+.whatsapp-float span {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+
+/* --- AJUSTE CELULAR --- */
 @media (max-width: 768px) {
-  main {
-    padding-top: 85px;
-  }
-
-  .section__title {
-    font-size: 1.6rem;
-    margin-bottom: 35px;
-  }
-
   .whatsapp-float {
-    width: 50px;
-    /* Tamaño ideal para el pulgar en el celu */
-    height: 50px;
+    width: 48px;
+    /* Un tamaño discreto y elegante en móviles */
+    height: 48px;
     bottom: 20px;
     right: 20px;
   }
