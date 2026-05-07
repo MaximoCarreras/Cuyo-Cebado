@@ -7,7 +7,6 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  /* Fondo base blanco hueso para que resalte el contenido */
   background-color: #fdfaf7;
 }
 
@@ -30,10 +29,8 @@
   left: -20%;
   width: 75%;
   height: 120%;
-
-  /* UNIFICADO: El mismo marrón que la Navbar */
   background-color: #2b2520;
-
+  /* Marrón Cuyo Unificado */
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
@@ -41,7 +38,6 @@
   overflow: hidden;
 }
 
-/* Canvas del fondo animado */
 .hero__grainient {
   width: 100%;
   height: 100%;
@@ -70,11 +66,12 @@
   font-weight: 800;
   text-transform: uppercase;
   margin-bottom: 24px;
-  color: #fdfaf7;
-  /* Blanco hueso */
+  /* CAMBIO: Ahora todo el título es Dorado Cuyo */
+  color: #d4af37;
 }
 
-/* Resaltado Dorado #d4af37 */
+/* Eliminamos el 'display: block' si querés que todo fluya, 
+   o lo dejamos si preferís 'IDENTIDAD' abajo */
 .hero__title b {
   color: #d4af37;
   display: block;
@@ -86,6 +83,7 @@
   font-weight: 400;
   margin-bottom: 40px;
   color: #fdfaf7;
+  /* Mantenemos el blanco hueso para contraste */
   opacity: 0.9;
 }
 
@@ -111,11 +109,9 @@
   letter-spacing: 0.5px;
 }
 
-/* Botón "Ver Catálogo" - Dorado Sólido */
 .hero .btn--gold {
   background-color: #d4af37;
   color: #2b2520;
-  /* Texto en el marrón de la marca */
   border: none;
 }
 
@@ -126,7 +122,6 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Botón "WhatsApp" - Estilo Outline */
 .hero .btn--outline-gold {
   background-color: transparent;
   color: #d4af37;
@@ -152,12 +147,9 @@
     left: 0;
     width: 100%;
     height: 75%;
-    /* Un poco más alto para que respire el texto */
     border-radius: 0;
     background: #2b2520;
     box-shadow: none;
-
-    /* Fusión con la imagen superior */
     -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
     mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
   }
@@ -175,7 +167,6 @@
   .hero__actions {
     justify-content: center;
     flex-direction: column;
-    /* Botones uno arriba del otro en celulares chicos */
   }
 
   .hero .btn {
