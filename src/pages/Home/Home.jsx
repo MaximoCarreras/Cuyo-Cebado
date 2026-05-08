@@ -18,7 +18,7 @@ export default function Home() {
                         <h1 className="hero-title">
                             MATES CON <br />
                             <span>IDENTIDAD</span>
-                        </table>
+                        </h1>
                         <p className="hero-subtitle">
                             Curaduría premium de mates imperiales tallados a mano en Mendoza.
                             Una pieza de arte en cada cebada.
@@ -31,16 +31,15 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="hero-spotlight__right">
-                        {/* EL EFECTO SPOTLIGHT (Círculo) */}
                         <div className="spotlight-circle">
-                            {/* Asegurate de que la ruta a tu imagen del mate imperial sea correcta */}
+                            {/* Asegurate de tener la imagen en public/mate-hero.png */}
                             <img src="/mate-hero.png" alt="Mate Imperial Premium" className="hero-image" />
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 2. CATEGORÍAS (La grilla que te encantó, centrada) */}
+            {/* 2. CATEGORÍAS (Grilla de 2 columnas en móvil) */}
             <section className="home-categories">
                 <h2 className="section__title">Nuestras Colecciones</h2>
                 <div className="products-grid">
@@ -56,7 +55,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* 3. LO MÁS VENDIDO - KIT DE REGALO PRENSADO (Suma de la foto) */}
+            {/* 3. LO MÁS VENDIDO - KIT DE REGALO PRENSADO */}
             <section className="home-best-sellers">
                 <div className="best-sellers__container">
                     <header className="best-sellers__header">
@@ -69,7 +68,6 @@ export default function Home() {
                         {bestSellers.map((product) => (
                             <div key={product.id} className="product-card-premium">
                                 <div className="product-image-container">
-                                    {/* Aquí irá tu <img> cuando tengas las fotos de los kits prensados */}
                                     <span className="category-icon-bg">🎁</span>
                                 </div>
                                 <div className="product-details">
@@ -86,7 +84,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* BOTÓN FLOTANTE WHATSAPP (Asegurate de tener el CSS en App.css) */}
+            {/* WHATSAPP FLOAT */}
             <a href="https://wa.me/tu-numero" className="whatsapp-float" target="_blank" rel="noreferrer">
                 <span className="material-symbols-outlined">chat</span>
             </a>
