@@ -5,8 +5,8 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  background-color: #140d07;
-  /* Fondo base para el Grainient */
+  background-color: #2b2520;
+  /* Fondo base marrón oscuro */
 }
 
 .hero__image-bg {
@@ -20,7 +20,7 @@
   z-index: 1;
 }
 
-/* CAPA DEL GRAINIENT (REACT BITS) */
+/* LA CAPA DEL GRAINIENT (MADERA ANIMADA) */
 .hero__shape {
   position: absolute;
   top: -10%;
@@ -42,7 +42,7 @@
   padding: 0 24px;
 }
 
-/* --- VISTA WEB --- */
+/* VISTA ESCRITORIO */
 .hero__content {
   max-width: 1000px;
   padding-left: 35%;
@@ -74,6 +74,7 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* BOTONES */
 .hero__actions {
   display: flex;
   gap: 32px;
@@ -103,9 +104,7 @@
   border: 2px solid #a5813a;
 }
 
-/* =========================================
-   === ADAPTACIÓN MÓVIL (MANTIENE GRAINIENT) === 
-   ========================================= */
+/* ADAPTACIÓN MÓVIL (MANTIENE MADERA) */
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
@@ -122,7 +121,6 @@
     mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
   }
 
-  /* El Grainient ahora ocupa el fondo del texto en móvil */
   .hero__shape {
     position: relative;
     top: -5vh;
@@ -132,7 +130,6 @@
     min-height: 60vh;
     border-radius: 50% 50% 0 0 / 10% 10% 0 0;
     margin-bottom: -60vh;
-    /* Para que el texto se superponga */
     box-shadow: none;
   }
 

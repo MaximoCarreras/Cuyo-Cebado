@@ -23,13 +23,11 @@ export default function Hero() {
       id="hero"
       style={{ height: viewHeight, minHeight: viewHeight }}
     >
-      {/* 1. Capa de la imagen */}
       <div
         className="hero__image-bg"
         style={{ backgroundImage: `url(${heroBgImage})` }}
       ></div>
 
-      {/* 2. Capa con animación React Bits (Grainient) */}
       <div className="hero__shape">
         <Grainient
           color1="#140d07"
@@ -43,12 +41,10 @@ export default function Hero() {
           noiseScale={1.5}
           grainAmount={0.06}
           grainAnimated={true}
-          zoom={1}
           className="hero__grainient"
         />
       </div>
 
-      {/* 3. Texto */}
       <div className="hero__container">
         <div className="hero__content">
           <h1 className="hero__title">
