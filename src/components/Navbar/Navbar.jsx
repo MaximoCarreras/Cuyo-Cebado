@@ -15,7 +15,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar__container">
 
-        {/* BLOQUE 1: LOGO (Izquierda) */}
+        {/* IZQUIERDA: LOGO */}
         <div className="navbar__left">
           <Link to="/" className="navbar__brand" onClick={closeMenu}>
             <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
@@ -23,7 +23,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* BLOQUE 2: LINKS (Centro - Solo Desktop) */}
+        {/* CENTRO: LINKS (Solo se ven en escritorio) */}
         <ul className="navbar__desktop-menu">
           <li><Link to="/" className="navbar__link">Inicio</Link></li>
           <li><Link to="/productos" className="navbar__link">Productos</Link></li>
@@ -31,7 +31,7 @@ export default function Navbar() {
           <li><Link to="/guia-curado" className="navbar__link">Guía de Curado</Link></li>
         </ul>
 
-        {/* BLOQUE 3: ICONOS (Derecha) */}
+        {/* DERECHA: CARRITO + HAMBURGUESA */}
         <div className="navbar__right">
           <Link to="/carrito" className="navbar__cart-container" onClick={closeMenu}>
             <span className="material-symbols-outlined cart-icon-main">shopping_cart</span>
@@ -46,7 +46,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MENÚ MÓVIL (DRAWER) */}
+      {/* MENÚ MÓVIL (DRAWER) - Completamente separado */}
       <div className={`navbar__mobile-drawer ${isMenuOpen ? 'open' : ''}`}>
         <Link to="/" onClick={closeMenu}>Inicio</Link>
         <Link to="/productos" onClick={closeMenu}>Productos</Link>
