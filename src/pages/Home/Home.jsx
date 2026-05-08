@@ -8,7 +8,9 @@ export default function Home() {
 
     // Productos destacados para la Home
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
-    const mainCategories = categories.slice(0, 6);
+
+    // AHORA: Tomamos TODAS las categorías definidas en products.js
+    const allCategories = categories;
 
     // Buscamos el Kit de Regalo (ID 501 o similar)
     const giftProduct = products.find(p => p.id === 501) || products.find(p => p.category === 'kits');
@@ -29,11 +31,10 @@ export default function Home() {
 
     return (
         <div className="home-mafia">
-            {/* HERO SECTION - RECONSTRUIDO AL 100% CON EFECTO REACT BITS */}
+            {/* HERO SECTION - REACT BITS STYLE */}
             <section className="hero-mafia">
                 <div className="hero-mafia__container">
                     <div className="hero-mafia__left-panel">
-                        {/* El resplandor dinámico del borde */}
                         <div className="react-bits-glow"></div>
 
                         <div className="hero-mafia__content">
@@ -60,12 +61,11 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
-                    {/* Imagen fondo_hero_principal.png cargada desde CSS */}
                     <div className="hero-mafia__right-image"></div>
                 </div>
             </section>
 
-            {/* CATEGORÍAS */}
+            {/* TODAS LAS CATEGORÍAS (Actualizado) */}
             <section id="categorias-home" className="home-section">
                 <div className="home-section__header">
                     <h2 className="home-section__title">Encontrá tu compañero ideal</h2>
@@ -73,17 +73,17 @@ export default function Home() {
                 </div>
 
                 <div className="home-categories-grid">
-                    {mainCategories.map(cat => (
+                    {allCategories.map(cat => (
                         <Link key={cat.id} to={`/productos/${cat.id}`} className="home-cat-card">
                             <span className="home-cat-card__icon">{cat.icon}</span>
                             <h3>{cat.label}</h3>
-                            <span className="home-cat-card__action">Explorar</span>
+                            <span className="home-cat-card__action">Explorar colección</span>
                         </Link>
                     ))}
                 </div>
             </section>
 
-            {/* PRODUCTOS DESTACADOS */}
+            {/* LOS MÁS BUSCADOS (Botones Mejorados) */}
             <section className="home-section home-section--white">
                 <div className="home-section__header">
                     <h2 className="home-section__title">Los Más Buscados</h2>
@@ -102,11 +102,11 @@ export default function Home() {
                                 <h4>{product.name}</h4>
                                 <p className="home-prod-card__price">${product.price.toLocaleString()}</p>
                                 <button
-                                    className="home-prod-card__btn"
+                                    className="btn-premium-cart"
                                     onClick={() => addToCart(product)}
                                 >
-                                    <span className="material-symbols-outlined">add_shopping_cart</span>
-                                    Agregar al Carrito
+                                    <span className="material-symbols-outlined">shopping_bag</span>
+                                    AGREGAR AL CARRITO
                                 </button>
                             </div>
                         </div>
@@ -114,7 +114,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* PROMO BANNER REGALO */}
+            {/* PROMO BANNER REGALO (Botón Imponente) */}
             <section className="home-promo">
                 <div className="home-promo__container">
                     <div className="home-promo__image">
@@ -131,8 +131,9 @@ export default function Home() {
                         </ul>
                         <div className="home-promo__footer">
                             <p className="home-promo__price">$89.000</p>
-                            <button onClick={handleGiftClick} className="home-promo__btn">
-                                Lo quiero ahora
+                            <button onClick={handleGiftClick} className="btn-gift-cta">
+                                <span>LO QUIERO AHORA</span>
+                                <span className="material-symbols-outlined">arrow_forward</span>
                             </button>
                         </div>
                     </div>
