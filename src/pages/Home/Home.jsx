@@ -6,14 +6,15 @@ import './Home.css';
 export default function Home() {
     const { addToCart } = useCart();
 
-    // Filtramos para mostrar solo los Kits de Regalo Prensado como "Lo más vendido"
+    // Filtramos para mostrar los Kits de Regalo Prensado (Lo más vendido)
     const bestSellers = products.filter(p => p.type === 'Prensado').slice(0, 4);
 
     return (
         <div className="home">
-            {/* 1. HERO SPOTLIGHT - Círculo e Imagen a la derecha */}
+            {/* 1. HERO SPOTLIGHT - Texto Izq, Imagen/Círculo Der */}
             <section className="hero-spotlight">
                 <div className="hero-spotlight__container">
+                    {/* LADO IZQUIERDO: TEXTO */}
                     <div className="hero-spotlight__left">
                         <h1 className="hero-title">
                             MATES CON <br />
@@ -30,16 +31,19 @@ export default function Home() {
                             </a>
                         </div>
                     </div>
+
+                    {/* LADO DERECHO: EL CÍRCULO SPOTLIGHT Y LA IMAGEN */}
                     <div className="hero-spotlight__right">
-                        <div className="spotlight-circle">
-                            {/* Asegurate de tener la imagen en public/mate-hero.png */}
-                            <img src="/mate-hero.png" alt="Mate Imperial Premium" className="hero-image" />
+                        {/* EL CONTENEDOR DEL CÍRCULO (Spotlight Card) */}
+                        <div className="spotlight-card-circle">
+                            {/* LA IMAGEN ESPECÍFICA: fondo_hero_principal.jpg */}
+                            <img src="/fondo_hero_principal.jpg" alt="Mate Imperial Premium Cuyo Cebado" className="hero-image" />
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 2. CATEGORÍAS (Grilla de 2 columnas en móvil) */}
+            {/* 2. CATEGORÍAS (Grilla Centrada 2 columnas) */}
             <section className="home-categories">
                 <h2 className="section__title">Nuestras Colecciones</h2>
                 <div className="products-grid">
@@ -68,6 +72,7 @@ export default function Home() {
                         {bestSellers.map((product) => (
                             <div key={product.id} className="product-card-premium">
                                 <div className="product-image-container">
+                                    {/* Aquí irá tu <img> cuando tengas las fotos de los kits */}
                                     <span className="category-icon-bg">🎁</span>
                                 </div>
                                 <div className="product-details">

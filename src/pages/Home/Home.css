@@ -10,9 +10,10 @@
     min-height: 100vh;
 }
 
-/* HERO SPOTLIGHT */
+/* 1. HERO SPOTLIGHT - Estilos */
 .hero-spotlight {
-    height: 90vh;
+    height: 95vh;
+    /* Un poco más alto para impacto */
     background-color: var(--mafia-brown);
     display: flex;
     align-items: center;
@@ -27,6 +28,7 @@
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    /* Texto Der, Imagen Izq */
     align-items: center;
     padding: 0 50px;
 }
@@ -57,6 +59,7 @@
     gap: 15px;
 }
 
+/* EL CÍRCULO CON EFECTO SPOTLIGHT */
 .hero-spotlight__right {
     position: relative;
     display: flex;
@@ -64,25 +67,30 @@
     align-items: center;
 }
 
-.spotlight-circle {
-    width: 500px;
-    height: 500px;
+.spotlight-card-circle {
+    width: 550px;
+    height: 550px;
     border-radius: 50%;
-    background: var(--mafia-brown-light);
+    /* EFECTO SPOTLIGHT: Degradado radial de luz */
+    background: radial-gradient(circle at 30% 30%, rgba(165, 129, 58, 0.2) 0%, rgba(43, 37, 32, 1) 70%);
     border: 1px solid rgba(165, 129, 58, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
 .hero-image {
-    height: 600px;
+    height: 650px;
+    /* La imagen se sale del círculo */
     width: auto;
     position: absolute;
     bottom: -50px;
-    right: 50px;
+    right: 60px;
+    /* Posicionado a la derecha del círculo */
     z-index: 5;
-    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
 }
 
 /* BOTONES */
@@ -108,7 +116,7 @@
     font-size: 0.8rem;
 }
 
-/* CATEGORÍAS */
+/* 2. CATEGORÍAS */
 .home-categories {
     padding: 80px 24px;
     max-width: 1400px;
@@ -161,7 +169,7 @@
     letter-spacing: 1.5px;
 }
 
-/* BEST SELLERS */
+/* 3. LO MÁS VENDIDO */
 .home-best-sellers {
     padding: 80px 24px 120px;
     max-width: 1400px;
@@ -278,13 +286,13 @@
         flex-direction: column;
     }
 
-    .spotlight-circle {
-        width: 300px;
-        height: 300px;
+    .spotlight-card-circle {
+        width: 350px;
+        height: 350px;
     }
 
     .hero-image {
-        height: 350px;
+        height: 400px;
         right: 0;
         bottom: -20px;
     }
