@@ -32,7 +32,7 @@
     width: 100%;
     height: 100%;
     background-image: url('/path-to-your-hero-image.jpg');
-    /* Ajustá la ruta de tu imagen */
+    /* Asegurate de que la ruta sea correcta */
     background-size: cover;
     background-position: center;
     opacity: 0.4;
@@ -107,13 +107,14 @@
     color: var(--mafia-brown);
 }
 
-/* --- SECCIÓN CATEGORÍAS --- */
+/* --- SECCIÓN CATEGORÍAS (EL CORAZÓN DEL CAMBIO) --- */
 .home-categories {
     padding: 80px 24px;
     max-width: 1400px;
     margin: 0 auto;
 }
 
+/* GRILLA SINCRONIZADA CON PRODUCTOS */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -146,6 +147,7 @@
 .category-card__icon {
     font-size: 4.5rem;
     margin-bottom: 25px;
+    transition: 0.3s;
 }
 
 .category-card__info h3 {
@@ -165,33 +167,7 @@
     letter-spacing: 2px;
 }
 
-/* --- SECCIÓN WHY US (NOSOTROS) --- */
-.whyus {
-    padding: 100px 24px;
-    background-color: var(--mafia-cream);
-    text-align: center;
-}
-
-.whyus__container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.whyus__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
-    margin-top: 60px;
-}
-
-.whyus__item h4 {
-    font-family: 'Noto Serif', serif;
-    color: var(--mafia-brown);
-    font-size: 1.3rem;
-    margin-top: 15px;
-}
-
-/* --- RESPONSIVE MÓVIL --- */
+/* --- RESPONSIVE MÓVIL (CENTRADO TOTAL) --- */
 @media (max-width: 768px) {
     .hero {
         height: 80vh;
@@ -209,10 +185,11 @@
         padding: 40px 15px;
     }
 
-    /* 2 COLUMNAS CENTRADAS EN MÓVIL */
+    /* LA GRILLA DE 2 COLUMNAS CENTRADA */
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
+        padding: 0;
     }
 
     .product-category-card {
@@ -225,10 +202,11 @@
     }
 
     .category-card__info h3 {
-        font-size: 0.95rem;
+        font-size: 1rem;
+        letter-spacing: 1px;
     }
 
-    .whyus__grid {
-        grid-template-columns: 1fr;
+    .category-card__info span {
+        font-size: 0.6rem;
     }
 }
