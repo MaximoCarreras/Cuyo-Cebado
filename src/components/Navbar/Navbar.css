@@ -6,24 +6,36 @@
   left: 0;
   width: 100%;
   height: 90px;
-  /* Altura fija para mantener simetría en todas las vistas */
   background-color: #1a1614;
-  /* Marrón Mafia de fondo */
+  /* Marrón Mafia */
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 50px;
   z-index: 1000;
-  border-bottom: 1px solid rgba(165, 129, 58, 0.1);
+  border-bottom: 1px solid rgba(165, 129, 58, 0.2);
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
 }
 
 .navbar__logo {
-  height: 50px;
+  height: 55px;
+  width: auto;
   transition: transform 0.3s;
 }
 
-.navbar__logo:hover {
-  transform: scale(1.05);
+.navbar__brand-text {
+  color: #fdfaf7;
+  /* Blanco Hueso */
+  font-family: 'Noto Serif', serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
 }
 
 .navbar__menu {
@@ -47,7 +59,6 @@
   color: #a5813a;
 }
 
-/* --- CARRITO PREMIUM AGRANDADO --- */
 .navbar__cart-container {
   position: relative;
   display: flex;
@@ -64,14 +75,11 @@
   color: #a5813a;
 }
 
-/* Tamaño del icono aumentado */
 .cart-icon-main {
   font-size: 32px !important;
-  /* El tamaño que pediste */
   cursor: pointer;
 }
 
-/* El contador (burbuja) escalado simétricamente */
 .cart-badge-premium {
   position: absolute;
   top: 0;
@@ -80,28 +88,31 @@
   color: #1a1614;
   font-size: 11px;
   font-weight: 800;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid #1a1614;
-  /* Para que resalte sobre el fondo oscuro */
 }
 
-/* Responsive para que no se rompa en celu */
+/* MÓVIL */
 @media (max-width: 768px) {
   .navbar {
     padding: 0 20px;
     height: 70px;
   }
 
+  .navbar__brand-text {
+    display: none;
+    /* Ocultamos texto en móvil para que entre todo */
+  }
+
   .navbar__menu {
     display: none;
   }
 
-  /* Suponiendo que tenés un menú hamburguesa */
   .cart-icon-main {
     font-size: 28px !important;
   }

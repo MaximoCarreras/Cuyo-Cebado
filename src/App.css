@@ -13,9 +13,11 @@ body {
   min-height: 100vh;
 }
 
+/* EL "COLCHÓN" PARA QUE EL CONTENIDO NO SE PEGUE A LA NAVBAR */
 main {
   flex: 1;
-  padding-top: 0 !important;
+  padding-top: 90px;
+  /* Igual al alto de la Navbar */
   background-color: #fdfaf7;
 }
 
@@ -30,19 +32,16 @@ main {
   font-family: 'Noto Serif', serif;
 }
 
-/* --- BURBUJA DE WHATSAPP DEFINITIVA --- */
+/* --- BURBUJA DE WHATSAPP --- */
 .whatsapp-float {
   position: fixed;
-  /* Clave para que flote */
   width: 60px;
   height: 60px;
   bottom: 25px;
   right: 25px;
   background-color: #2b2520;
-  /* Marrón Cuyo */
   border-radius: 50%;
   z-index: 9999;
-  /* Por encima de TODO */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,46 +54,22 @@ main {
 .whatsapp-float:hover {
   transform: scale(1.1);
   background-color: #a5813a;
-  /* Cambia a dorado al pasar el mouse */
 }
 
 .wa-icon {
   width: 32px;
   height: 32px;
   fill: #a5813a;
-  /* Icono Dorado */
   transition: fill 0.3s ease;
 }
 
 .whatsapp-float:hover .wa-icon {
   fill: #2b2520;
-  /* Icono cambia a marrón al pasar el mouse */
 }
 
-/* Botones Globales */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 24px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.btn--gold {
-  background-color: #a5813a;
-  color: #2b2520;
-}
-
-.btn--gold:hover {
-  background-color: #2b2520;
-  color: #fdfaf7;
+@media (max-width: 768px) {
+  main {
+    padding-top: 70px;
+    /* Ajuste para la barra más chica en móvil */
+  }
 }

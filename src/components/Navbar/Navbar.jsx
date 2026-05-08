@@ -1,18 +1,19 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+// IMPORTAMOS EL LOGO (Asegúrate de que la ruta sea correcta según tu carpeta)
+import logo from '../../assets/logo.png';
 import './Navbar.css';
 
 export default function Navbar() {
   const { cart } = useCart();
-
-  // Sumamos la cantidad total de productos
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <nav className="navbar">
-      {/* Logo de Cuyo Cebado */}
-      <Link to="/">
-        <img src="/src/assets/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
+      {/* Brand: Logo + Texto */}
+      <Link to="/" className="navbar__brand">
+        <img src={logo} alt="Cuyo Cebado" className="navbar__logo" />
+        <span className="navbar__brand-text">CUYO CEBADO</span>
       </Link>
 
       {/* Menú de Navegación */}
@@ -23,10 +24,10 @@ export default function Navbar() {
         <li><Link to="/guia-curado" className="navbar__link">Guía de Curado</Link></li>
       </ul>
 
-      {/* Carrito con tamaño Premium */}
+      {/* Carrito con icono de Carrito */}
       <Link to="/carrito" className="navbar__cart-container">
         <span className="material-symbols-outlined cart-icon-main">
-          shopping_bag
+          shopping_cart
         </span>
         {totalItems > 0 && (
           <div className="cart-badge-premium">
