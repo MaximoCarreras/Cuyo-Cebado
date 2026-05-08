@@ -47,7 +47,14 @@ export default function CategoryPage() {
 
                     <div className="filter-group">
                         <label>Precio máximo: <b>${maxPrice.toLocaleString()}</b></label>
-                        <input type="range" min="0" max="250000" step="5000" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} />
+                        <input
+                            type="range"
+                            min="0"
+                            max="250000"
+                            step="5000"
+                            value={maxPrice}
+                            onChange={(e) => setMaxPrice(Number(e.target.value))}
+                        />
                     </div>
 
                     {getOptions('material').length > 1 && (
@@ -75,7 +82,6 @@ export default function CategoryPage() {
                         <p className="products-count">{filteredProducts.length} piezas encontradas</p>
                     </header>
 
-                    {/* ESTA ES LA GRILLA QUE CAMBIA TODO */}
                     <div className="products-grid">
                         {filteredProducts.map(product => (
                             <div key={product.id} className="product-card">
