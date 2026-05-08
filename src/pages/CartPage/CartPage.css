@@ -1,136 +1,167 @@
-/* --- Estructura General --- */
+/* src/pages/CartPage/CartPage.css */
+
 .cart-page {
-    /* Padding exterior para el Navbar */
-    padding: 140px 20px 80px 20px;
-    min-height: 80vh;
+    padding: 140px 24px 80px;
+    min-height: 100vh;
     background-color: #fdfaf7;
-    /* Blanco Hueso */
+    /* Fondo color hueso */
 }
 
-/* --- TÍTULO DOMADO --- */
-.cart__header h2 {
-    font-size: clamp(2rem, 4vw, 2.5rem) !important;
+.cart-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cart-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.cart-header h2 {
+    font-family: 'Noto Serif', serif;
+    font-size: 2.8rem;
     color: #2b2520;
+    margin-bottom: 15px;
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 10px;
-    font-family: 'Noto Serif', serif;
-    font-weight: 800;
-    text-align: center;
+}
+
+.gold-line {
+    width: 80px;
+    height: 4px;
+    background: #a5813a;
+    margin: 0 auto;
 }
 
 .cart-page__grid {
     display: grid;
-    grid-template-columns: 1fr 380px;
+    grid-template-columns: 1fr 400px;
     gap: 40px;
     align-items: flex-start;
-    /* Limitamos el ancho para que no se pegue a los bordes de la pantalla */
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 /* --- ESTADO VACÍO --- */
 .cart-empty {
     text-align: center;
-    padding: 80px 20px;
+    padding: 100px 20px;
 }
 
 .cart-empty__icon {
-    font-size: 80px !important;
-    color: rgba(165, 129, 58, 0.3);
+    font-size: 100px !important;
+    color: rgba(165, 129, 58, 0.2);
     margin-bottom: 20px;
 }
 
 .cart-empty__title {
     font-family: 'Noto Serif', serif;
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: #2b2520;
+    margin-bottom: 10px;
+}
+
+.cart-empty__text {
+    color: #888;
     margin-bottom: 30px;
 }
 
-/* --- Tarjetas de Productos --- */
-.cart-item {
-    display: grid;
-    grid-template-columns: 120px 1fr auto;
-    gap: 24px;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(43, 37, 32, 0.05);
-    align-items: center;
-    margin-bottom: 20px;
-    border: 1px solid rgba(165, 129, 58, 0.1);
+.btn-gold-link {
+    display: inline-block;
+    background: #a5813a;
+    color: #2b2520;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: 0.3s;
 }
 
-.cart-item__image img {
+.btn-gold-link:hover {
+    transform: scale(1.05);
+    background: #2b2520;
+    color: #a5813a;
+}
+
+/* --- ITEMS DEL CARRITO --- */
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    gap: 24px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid rgba(43, 37, 32, 0.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.02);
+    align-items: center;
+}
+
+.cart-item__image img,
+.item-img-placeholder {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 12px;
+    background: #f4f1ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
 }
 
 .cart-item__info h3 {
     font-family: 'Noto Serif', serif;
     color: #2b2520;
+    font-size: 1.3rem;
     margin-bottom: 5px;
-    font-size: 1.2rem;
+}
+
+.cart-item__material {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #a5813a;
+    text-transform: uppercase;
+    margin-bottom: 10px;
 }
 
 .cart-item__unit-price {
-    color: #5a5048;
-    font-size: 0.95rem;
-    margin-bottom: 15px;
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
 }
 
-.cart-item__subtotal {
-    font-weight: 800;
-    font-size: 1.2rem;
-    color: #a5813a;
-    /* Dorado Cuyo */
-}
-
-/* --- Selector de Cantidad y Eliminar --- */
 .cart-item__actions {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    align-items: center;
+    gap: 25px;
 }
 
 .quantity-selector {
     display: flex;
     align-items: center;
     gap: 15px;
-    background: #fdfaf7;
-    padding: 5px 10px;
+    background: #f9f7f4;
+    padding: 5px 15px;
     border-radius: 50px;
-    width: fit-content;
-    border: 1px solid rgba(43, 37, 32, 0.1);
+    border: 1px solid rgba(43, 37, 32, 0.08);
 }
 
 .qty-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1px solid #2b2520;
-    background: #ffffff;
-    color: #2b2520;
-    font-size: 1.1rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: #2b2520;
+    transition: 0.2s;
 }
 
 .qty-btn:hover:not(:disabled) {
-    background: #2b2520;
     color: #a5813a;
-    border-color: #2b2520;
-}
-
-.qty-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
 }
 
 .qty-number {
@@ -141,156 +172,177 @@
 }
 
 .btn-remove {
+    background: none;
+    border: none;
+    color: #ff4444;
+    font-size: 0.8rem;
+    font-weight: 700;
     display: flex;
     align-items: center;
     gap: 5px;
-    background: none;
-    border: none;
-    color: #8c8076;
-    font-size: 0.85rem;
     cursor: pointer;
+    opacity: 0.7;
     transition: 0.2s;
-    font-weight: 600;
 }
 
 .btn-remove:hover {
-    color: #c62828;
+    opacity: 1;
+    transform: scale(1.05);
 }
 
-/* --- Tarjeta de Resumen --- */
+.cart-item__subtotal {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2b2520;
+}
+
+/* --- RESUMEN DE COMPRA --- */
 .summary-card {
     background: #2b2520;
     color: #fdfaf7;
-    padding: 35px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(43, 37, 32, 0.15);
+    padding: 40px;
+    border-radius: 25px;
     position: sticky;
-    top: 150px;
-    /* Ajustado para no chocar con el navbar */
+    top: 120px;
     border: 1px solid rgba(165, 129, 58, 0.2);
 }
 
 .summary-card h3 {
-    margin-bottom: 25px;
-    font-size: 1.3rem;
-    color: #fdfaf7;
-    text-transform: uppercase;
-    letter-spacing: 1px;
     font-family: 'Noto Serif', serif;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: #a5813a;
+    text-transform: uppercase;
 }
 
 .fields-title {
+    font-size: 0.7rem;
+    font-weight: 800;
     color: #a5813a;
-    font-size: 0.8rem;
-    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     margin-bottom: 15px;
     display: block;
 }
 
+.customer-form-group {
+    margin-bottom: 30px;
+}
+
 .cart-input-dark {
     width: 100%;
-    padding: 12px 5px;
     background: transparent;
     border: none;
     border-bottom: 1px solid rgba(253, 250, 247, 0.2);
-    color: #fdfaf7 !important;
-    margin-bottom: 15px;
+    color: #fdfaf7;
+    padding: 12px 0;
+    margin-bottom: 10px;
     font-size: 1rem;
-    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: 0.3s;
 }
 
 .cart-input-dark:focus {
-    outline: none;
-    border-bottom: 1px solid #a5813a;
+    border-bottom-color: #a5813a;
 }
 
 .summary-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
-    font-size: 1.05rem;
-}
-
-.summary-row span {
-    opacity: 0.9;
+    font-weight: 500;
 }
 
 .text-free {
     color: #4caf50;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.summary-divider {
+    border: 0;
+    border-top: 1px solid rgba(253, 250, 247, 0.1);
+    margin: 25px 0;
+}
+
+.summary-row.total {
+    align-items: center;
 }
 
 .total-amount {
-    color: #a5813a !important;
+    font-size: 2rem;
     font-weight: 800;
-    font-size: 1.8rem;
-    opacity: 1 !important;
+    color: #a5813a;
 }
 
-/* --- BOTÓN MERCADO PAGO --- */
 .btn-mercadopago {
     width: 100%;
-    background-color: #009ee3;
-    color: white;
-    padding: 16px;
+    background: #009ee3;
+    color: #fff;
     border: none;
+    padding: 20px;
     border-radius: 12px;
     font-weight: 800;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     cursor: pointer;
-    margin-top: 25px;
     transition: 0.3s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .btn-mercadopago:hover {
-    background-color: #0081ba;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 158, 227, 0.3);
+    background: #0081ba;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 158, 227, 0.3);
 }
 
 .mp-icon-local {
-    height: 28px;
-    width: auto;
-    object-fit: contain;
-    flex-shrink: 0;
+    height: 25px;
 }
 
-/* --- Responsive --- */
-@media (max-width: 992px) {
+.secure-payment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    font-size: 0.75rem;
+    color: rgba(253, 250, 247, 0.5);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
     .cart-page__grid {
         grid-template-columns: 1fr;
-        gap: 30px;
+    }
+
+    .summary-card {
+        position: relative;
+        top: 0;
     }
 }
 
 @media (max-width: 768px) {
-    .cart-page {
-        padding: 120px 15px 50px;
+    .cart-item {
+        grid-template-columns: 1fr;
+        text-align: center;
     }
 
-    .cart-item {
-        grid-template-columns: 100px 1fr;
-        gap: 15px;
+    .cart-item__image {
+        width: 120px;
+        margin: 0 auto;
+    }
+
+    .cart-item__actions {
+        justify-content: center;
     }
 
     .cart-item__subtotal {
-        grid-column: 1 / -1;
-        text-align: right;
-        border-top: 1px solid rgba(43, 37, 32, 0.05);
-        padding-top: 15px;
+        margin-top: 15px;
     }
 
-    .summary-card {
-        position: static;
-        padding: 25px;
+    .total-amount {
+        font-size: 1.5rem;
     }
 }

@@ -3,7 +3,7 @@ import { useCart } from '../../context/CartContext';
 import { Link } from 'react-router-dom';
 import './CartPage.css';
 
-// Importamos el logo
+// Importamos el logo de Mercado Pago
 import mpLogo from '../../assets/mp-logo.png';
 
 export default function CartPage() {
@@ -13,7 +13,9 @@ export default function CartPage() {
 
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('es-AR', {
-            style: 'currency', currency: 'ARS', minimumFractionDigits: 0,
+            style: 'currency',
+            currency: 'ARS',
+            minimumFractionDigits: 0,
         }).format(value);
     };
 
@@ -25,6 +27,7 @@ export default function CartPage() {
 
         setIsProcessing(true);
         try {
+            // Nota: Cambiar localhost por tu URL de producción en Vercel cuando lances
             const response = await fetch("http://localhost:3001/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -52,10 +55,11 @@ export default function CartPage() {
     if (!cart || cart.length === 0) {
         return (
             <section className="cart-page">
-                <div className="section__container cart-empty">
+                <div className="cart-empty">
                     <span className="material-symbols-outlined cart-empty__icon">shopping_basket</span>
                     <h2 className="cart-empty__title">Tu carrito está vacío</h2>
-                    <Link to="/" className="btn btn--gold">Ir a ver productos</Link>
+                    <p className="cart-empty__text">Parece que todavía no elegiste tu próximo compañero de rutas.</p>
+                    <Link to="/productos" className="btn-gold-link">Explorar Productos</Link>
                 </div>
             </section>
         );
@@ -63,23 +67,29 @@ export default function CartPage() {
 
     return (
         <section className="cart-page">
-            <div className="section__container">
+            <div className="cart-container">
 
-                {/* Título unificado con la línea dorada */}
-                <div className="section__title cart__header">
-                    <h2>Tu Carrito</h2>
+                <div className="cart-header">
+                    <h2>Tu Pedido Cuyo</h2>
                     <div className="gold-line"></div>
                 </div>
 
                 <div className="cart-page__grid">
+                    {/* LISTADO DE PRODUCTOS */}
                     <div className="cart-items">
                         {cart.map((item) => (
                             <div key={item.id} className="cart-item">
                                 <div className="cart-item__image">
-                                    <img src={item.image_url} alt={item.name} />
+                                    {item.image_url ? (
+                                        <img src={item.image_url} alt={item.name} />
+                                    ) : (
+                                        <div className="item-img-placeholder">🧉</div>
+                                    )}
                                 </div>
+
                                 <div className="cart-item__info">
                                     <h3>{item.name}</h3>
+                                    <p className="cart-item__material">{item.material || "Artesanal"}</p>
                                     <p className="cart-item__unit-price">{formatCurrency(item.price)} c/u</p>
 
                                     <div className="cart-item__actions">
@@ -105,42 +115,67 @@ export default function CartPage() {
                                         </button>
                                     </div>
                                 </div>
-                                <div className="cart-item__subtotal">{formatCurrency(item.price * item.quantity)}</div>
+                                <div className="cart-item__subtotal">
+                                    {formatCurrency(item.price * item.quantity)}
+                                </div>
                             </div>
                         ))}
                     </div>
 
+                    {/* RESUMEN DE PAGO */}
                     <aside className="cart-summary">
                         <div className="summary-card">
-                            <h3>Resumen del pedido</h3>
-                            <span className="fields-title">Tus datos</span>
+                            <h3>Resumen de Compra</h3>
+
+                            <span className="fields-title">Datos del Matero</span>
                             <div className="customer-form-group">
                                 <input
-                                    type="text" placeholder="Nombre completo" value={customer.name}
+                                    type="text"
+                                    placeholder="Nombre completo"
+                                    value={customer.name}
                                     onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
                                     className="cart-input-dark"
                                 />
-                            </div>
-                            <div className="customer-form-group">
                                 <input
-                                    type="email" placeholder="Email" value={customer.email}
+                                    type="email"
+                                    placeholder="Tu mejor Email"
+                                    value={customer.email}
                                     onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
                                     className="cart-input-dark"
                                 />
                             </div>
 
-                            <div className="summary-row"><span>Subtotal</span><span>{formatCurrency(cartTotal)}</span></div>
-                            <div className="summary-row"><span>Envío</span><span className="text-free">Gratis</span></div>
-                            <hr style={{ borderColor: 'rgba(253, 250, 247, 0.1)', margin: '20px 0' }} />
+                            <div className="summary-details">
+                                <div className="summary-row">
+                                    <span>Subtotal</span>
+                                    <span>{formatCurrency(cartTotal)}</span>
+                                </div>
+                                <div className="summary-row">
+                                    <span>Envío</span>
+                                    <span className="text-free">¡Sin costo!</span>
+                                </div>
+                            </div>
+
+                            <hr className="summary-divider" />
+
                             <div className="summary-row total">
-                                <span>Total</span>
+                                <span>TOTAL</span>
                                 <span className="total-amount">{formatCurrency(cartTotal)}</span>
                             </div>
 
-                            <button className="btn-mercadopago" onClick={handleCheckoutMP} disabled={isProcessing}>
+                            <button
+                                className="btn-mercadopago"
+                                onClick={handleCheckoutMP}
+                                disabled={isProcessing}
+                            >
                                 <img src={mpLogo} alt="MP" className="mp-icon-local" />
-                                <span>{isProcessing ? "PROCESANDO..." : "PAGAR CON MERCADO PAGO"}</span>
+                                <span>{isProcessing ? "Procesando..." : "Finalizar Compra"}</span>
                             </button>
+
+                            <p className="secure-payment">
+                                <span className="material-symbols-outlined">shield</span>
+                                Pago 100% seguro con Mercado Pago
+                            </p>
                         </div>
                     </aside>
                 </div>
