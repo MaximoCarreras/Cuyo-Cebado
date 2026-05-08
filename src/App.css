@@ -1,10 +1,14 @@
 /* src/App.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Serif:wght@400;700;800&display=swap');
+
 html,
 body {
   background-color: #fdfaf7;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  /* FUENTE DE CUERPO GLOBAL */
+  font-family: 'Inter', sans-serif;
 }
 
 #root {
@@ -13,15 +17,14 @@ body {
   min-height: 100vh;
 }
 
-/* EL "COLCHÓN" PARA SIMETRÍA TOTAL EN TODA LA WEB */
 main {
   flex: 1;
   padding-top: 90px;
-  /* Exactamente el alto de la Navbar */
+  /* Colchón Desktop */
   background-color: #fdfaf7;
 }
 
-/* TAMAÑO DE TÍTULOS ELEGANTE (Tipo "Nosotros/Guía") */
+/* TAMAÑO DE TÍTULOS UNIFICADO (Refinado) */
 .section__title {
   font-family: 'Noto Serif', serif;
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
@@ -31,11 +34,10 @@ main {
   letter-spacing: 2px;
   font-weight: 800;
   margin-top: 0;
-  /* Para que todos los títulos peguen igual arriba */
   margin-bottom: 40px;
 }
 
-/* --- BURBUJA DE WHATSAPP DEFINITIVA --- */
+/* BURBUJA WHATSAPP */
 .whatsapp-float {
   position: fixed;
   width: 60px;
@@ -66,8 +68,15 @@ main {
   transition: fill 0.3s ease;
 }
 
+/* ESCALA MÓVIL */
 @media (max-width: 768px) {
+  html {
+    font-size: 14px;
+    /* Ajuste para que nada se vea gigante */
+  }
+
   main {
     padding-top: 75px;
+    /* Colchón Móvil alineado a la Navbar */
   }
 }
