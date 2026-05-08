@@ -1,4 +1,5 @@
 /* src/components/Hero/Hero.css */
+
 .hero {
   width: 100%;
   position: relative;
@@ -6,9 +7,12 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
-  /* Marrón base */
+  /* Marrón Madera base */
+  min-height: 80vh;
+  /* Asegura un buen tamaño inicial */
 }
 
+/* --- 1. IMAGEN DE FONDO (FOTO DEL MATE) --- */
 .hero__image-bg {
   position: absolute;
   top: 0;
@@ -22,6 +26,7 @@
   transform: translateZ(0);
 }
 
+/* --- 2. FORMA CURVA Y ROTADA PREMIUM --- */
 .hero__shape {
   position: absolute;
   top: -10%;
@@ -44,6 +49,7 @@
   left: 0;
 }
 
+/* --- 3. CONTENIDO (TEXTO Y BOTONES) --- */
 .hero__container {
   position: relative;
   z-index: 3;
@@ -52,13 +58,13 @@
   padding: 0 24px;
 }
 
-/* --- VISTA WEB/DESKTOP (Restauración) --- */
+/* POSICIONAMIENTO Y ANCHO ESCRITORIO (Referencia, no se toca) */
 .hero__content {
-  /* Volvemos a una caja ancha para flujo largo (3-4 líneas) */
   max-width: 1000px;
   padding-left: 35%;
 }
 
+/* TÍTULO ESCRITORIO (Noto Serif) */
 .hero__title {
   font-size: clamp(3.2rem, 5.5vw, 4.8rem);
   line-height: 1.1;
@@ -66,7 +72,6 @@
   text-transform: uppercase;
   margin-bottom: 24px;
   color: #fdfaf7;
-  /* RESTAURADA LA FUENTE DE LOS TÍTULOS */
   font-family: 'Noto Serif', serif !important;
 }
 
@@ -76,6 +81,7 @@
   font-family: 'Noto Serif', serif !important;
 }
 
+/* SUBTÍTULO ESCRITORIO (Inter Sans-Serif) */
 .hero__subtitle {
   max-width: 700px;
   font-size: 1.15rem;
@@ -86,7 +92,7 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* BOTONES HERO */
+/* BOTONES HERO ESCRITORIO (Fix) */
 .hero__actions {
   display: flex;
   gap: 20px;
@@ -127,11 +133,13 @@
 }
 
 /* =========================================
-   === ADAPTACIÓN MÓVIL (La "X", Sin margen y Mate visible arriba) === 
+   === ADAPTACIÓN MÓVIL ESTÉTICA ORIGINAL === 
+   ===   (SUAVIZADO Y APILADO DE LUJO)   ===
    ========================================= */
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
+    /* Apilado vertical */
     justify-content: flex-start;
     padding-top: 0;
     min-height: 100vh;
@@ -140,27 +148,29 @@
   /* La imagen de fondo (mate) se ve arriba en móvil */
   .hero__image-bg {
     position: relative;
-    height: 40vh;
+    height: 45vh;
     /* La imagen ocupa la parte superior */
     background-position: center top;
+    /* EFECTO PRO: Degradado inferior para la "conversión gradual" */
+    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
   }
 
-  /* REDISEÑO MÓVIL: La forma curva (Marrón) sube y contiene el texto */
+  /* REDISEÑO MÓVIL: La forma curva marrón se convierte en el fondo del texto inferior */
   .hero__shape {
     position: relative;
-    top: -50px;
-    /* Sube la forma para "abrazar" el mate */
+    top: -5vh;
+    /* Sube un poco para unirse suavemente a la imagen */
     left: 0;
     width: 100%;
     height: auto;
     border-radius: 50% 50% 0 0 / 10% 10% 0 0;
-    /* Curva premium superior */
+    /* Curva sutil superior */
     background-color: #2b2520;
     /* Color Marrón Madera */
-    margin-bottom: -50px;
+    margin-bottom: -5vh;
     /* Corrige espacio */
-    z-index: 2;
-    /* Sigue abajo del texto */
+    box-shadow: none;
   }
 
   .hero__container {
@@ -170,17 +180,23 @@
 
   /* TEXTO CENTRADO SOBRE LA CURVA OSCURA */
   .hero__content {
-    padding: 20px 24px 60px;
+    padding: 0 24px 60px;
     text-align: center;
     max-width: 100%;
     padding-left: 0;
   }
 
   .hero__title {
-    font-size: clamp(2.3rem, 9vw, 3.2rem);
+    font-size: clamp(2.2rem, 9vw, 3rem);
+    /* Ajustado para pantallas verticales */
     margin-bottom: 20px;
     color: #fdfaf7;
-    /* Mates con... en blanco hueso */
+    /* "Mates con" en blanco hueso */
+  }
+
+  .hero__title b {
+    color: #a5813a;
+    /* "Identidad" en dorado */
   }
 
   .hero__subtitle {
@@ -188,5 +204,22 @@
     margin-bottom: 35px;
     color: rgba(253, 250, 247, 0.95);
     /* Descripción en blanco hueso */
+    padding: 0 10px;
+  }
+
+  /* BOTONES APILADOS Y CÓMODOS (Fix móvil ya aplicado globalmente) */
+  .hero__actions {
+    justify-content: center;
+    flex-direction: column;
+    /* Uno arriba del otro */
+    gap: 15px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero .btn {
+    width: 100%;
+    /* Botes anchos fáciles de tocar */
+    max-width: 300px;
   }
 }
