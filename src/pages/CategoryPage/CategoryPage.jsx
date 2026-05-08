@@ -75,18 +75,20 @@ export default function CategoryPage() {
                         <p className="products-count">{filteredProducts.length} piezas encontradas</p>
                     </header>
 
-                    <div className="products-grid-meli">
+                    {/* ESTA ES LA GRILLA QUE CAMBIA TODO */}
+                    <div className="products-grid">
                         {filteredProducts.map(product => (
-                            <div key={product.id} className="product-card-premium">
+                            <div key={product.id} className="product-card">
+                                {product.bestSeller && <span className="product-badge">Top Ventas</span>}
                                 <div className="product-image-container">
                                     <span className="category-icon-bg">{currentCategory?.icon}</span>
                                 </div>
-                                <div className="product-details">
-                                    <p className="details-material">{product.material}</p>
-                                    <h4 className="details-name">{product.name}</h4>
-                                    <p className="details-price">${product.price.toLocaleString()}</p>
-                                    <button className="btn-add-cart" onClick={() => addToCart(product)}>
-                                        Añadir
+                                <div className="product-info">
+                                    <p className="product-tag">{product.material}</p>
+                                    <h4 className="product-name">{product.name}</h4>
+                                    <p className="product-price">${product.price.toLocaleString()}</p>
+                                    <button className="btn-add-to-cart" onClick={() => addToCart(product)}>
+                                        Añadir al Carrito
                                     </button>
                                 </div>
                             </div>

@@ -1,119 +1,143 @@
-/* --- SIDEBAR MAFIA PREMIUM --- */
+.category-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 24px 80px;
+}
+
+.category-page__main {
+    display: flex;
+    gap: 40px;
+}
+
+/* SIDEBAR REFINADO */
 .sidebar {
     width: 280px;
     flex-shrink: 0;
     background: #1a1614;
-    /* Marrón Mafia profundo */
     padding: 30px;
     border-radius: 15px;
     color: #fdfaf7;
     height: fit-content;
     position: sticky;
     top: 110px;
-    border: 1px solid rgba(165, 129, 58, 0.2);
 }
 
-.sidebar__title {
+/* LA GRILLA DE PRODUCTOS */
+.products-content {
+    flex-grow: 1;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+/* TARJETA DE PRODUCTO ESTILO BOUTIQUE */
+.product-card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
 }
 
-.sidebar h3 {
-    font-family: 'Noto Serif', serif;
-    color: #a5813a;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-    margin: 0;
-}
-
-/* --- CHAU WINDOWS XP: SELECTORES (DROPDOWNS) --- */
-.filter-group select {
-    width: 100%;
-    padding: 12px;
-    background-color: #2b2520;
-    /* Un tono más claro que el sidebar para que resalte */
-    border: 1px solid rgba(165, 129, 58, 0.4);
-    color: #fdfaf7;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    appearance: none;
-    /* Quitamos la flecha fea por defecto */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a5813a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    transition: border-color 0.3s;
-}
-
-.filter-group select:focus {
-    outline: none;
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
     border-color: #a5813a;
 }
 
-/* --- CHAU WINDOWS XP: SLIDER (RANGE) --- */
-.filter-group input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
+.product-image-container {
     width: 100%;
-    background: transparent;
+    aspect-ratio: 1;
+    background-color: #f9f7f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+}
+
+.product-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.product-tag {
+    color: #a5813a;
+    font-weight: 800;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.product-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #1a1614;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.product-price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1a1614;
+    margin-bottom: 20px;
+}
+
+/* BOTÓN DE AÑADIR (Chau gris de Windows XP) */
+.btn-add-to-cart {
+    width: 100%;
+    padding: 14px;
+    background-color: #1a1614;
+    color: #fdfaf7;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
     cursor: pointer;
-    margin: 15px 0;
+    transition: background 0.3s;
 }
 
-/* La pista (el camino) */
-.filter-group input[type="range"]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 4px;
-    background: rgba(165, 129, 58, 0.2);
-    border-radius: 2px;
+.btn-add-to-cart:hover {
+    background-color: #a5813a;
 }
 
-/* El botón (el círculo) */
-.filter-group input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    height: 18px;
-    width: 18px;
-    border-radius: 50%;
-    background: #a5813a;
-    /* Dorado */
-    border: 2px solid #1a1614;
-    margin-top: -7px;
-    /* Centrado */
-    box-shadow: 0 0 10px rgba(165, 129, 58, 0.4);
-    transition: transform 0.2s;
-}
-
-.filter-group input[type="range"]::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-    background: #fdfaf7;
-}
-
-/* Ajustes para Firefox */
-.filter-group input[type="range"]::-moz-range-track {
-    background: rgba(165, 129, 58, 0.2);
-    height: 4px;
-}
-
-.filter-group input[type="range"]::-moz-range-thumb {
-    background: #a5813a;
-    border: 2px solid #1a1614;
-    height: 18px;
-    width: 18px;
-    border-radius: 50%;
-}
-
-/* --- RESPONSIVE --- */
+/* RESPONSIVE MÓVIL (2 COLUMNAS) */
 @media (max-width: 768px) {
+    .category-page__main {
+        flex-direction: column;
+    }
+
     .sidebar {
         width: 100%;
         position: relative;
         top: 0;
-        margin-bottom: 30px;
-        padding: 20px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .product-info {
+        padding: 12px;
+    }
+
+    .product-name {
+        font-size: 0.85rem;
+    }
+
+    .product-price {
+        font-size: 1.1rem;
     }
 }
