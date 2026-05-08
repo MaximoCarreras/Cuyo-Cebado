@@ -2,7 +2,6 @@
 html,
 body {
   background-color: #fdfaf7;
-  /* Fondo original restaurado */
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -16,8 +15,7 @@ body {
 
 main {
   flex: 1;
-  padding-top: 136px;
-  /* Ajustado para la barra de anuncio + navbar fixed */
+  padding-top: 0 !important;
   background-color: #fdfaf7;
 }
 
@@ -32,6 +30,7 @@ main {
   font-family: 'Noto Serif', serif;
 }
 
+/* BOTONES GLOBALES */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -56,31 +55,8 @@ main {
 
 .btn--gold:hover {
   background-color: #2b2520;
-  transform: translateY(-2px);
 }
 
 .btn--gold:active {
   background-color: #2b2520;
-}
-
-.whatsapp-float {
-  position: fixed;
-  width: 55px;
-  height: 55px;
-  bottom: 25px;
-  right: 25px;
-  background-color: #2b2520;
-  border-radius: 50%;
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(165, 129, 58, 0.2);
-}
-
-.wa-icon {
-  width: 30px;
-  height: 30px;
-  fill: #a5813a;
 }

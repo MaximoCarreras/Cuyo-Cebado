@@ -6,7 +6,7 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
-  /* Tu marrón oficial */
+  /* Marrón oficial */
 }
 
 .hero__image-bg {
@@ -18,7 +18,6 @@
   background-size: cover;
   background-position: center right;
   z-index: 1;
-  will-change: transform;
 }
 
 .hero__shape {
@@ -28,7 +27,6 @@
   width: 75%;
   height: 120%;
   background-color: #2b2520;
-  /* Tu marrón oficial */
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
@@ -36,7 +34,7 @@
   overflow: hidden;
 }
 
-/* EFECTO GRANULADO GLOBAL */
+/* EFECTO GRANULADO */
 .hero::after {
   content: "";
   position: absolute;
@@ -58,10 +56,9 @@
   padding: 0 24px;
 }
 
-/* --- VISTA WEB (RESTAURACIÓN TOTAL) --- */
+/* --- VISTA ESCRITORIO (RESTAURACIÓN TOTAL) --- */
 .hero__content {
   max-width: 1000px;
-  /* Caja ancha restaurada */
   padding-left: 35%;
 }
 
@@ -73,7 +70,6 @@
   margin-bottom: 24px;
   color: #fdfaf7;
   font-family: 'Noto Serif', serif !important;
-  /* Fuente de títulos restaurada */
 }
 
 .hero__title b {
@@ -92,11 +88,9 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* BOTONES HERO (Con separación) */
 .hero__actions {
   display: flex;
   gap: 32px;
-  /* Espacio aumentado entre botones */
   flex-wrap: wrap;
 }
 
@@ -109,18 +103,12 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-family: 'Inter', sans-serif;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .hero .btn--gold {
   background-color: #a5813a;
   color: #2b2520;
   border: none;
-}
-
-.hero .btn--gold:active {
-  background-color: #a5813a !important;
-  transform: scale(0.98);
 }
 
 .hero .btn--outline-gold {
@@ -138,61 +126,33 @@
     justify-content: flex-start;
     min-height: 100vh;
     background-color: #2b2520;
-    /* Marrón oficial aplicado */
+    /* El fondo marrón que querías */
   }
 
-  /* La imagen (mate) se ve arriba en móvil */
   .hero__image-bg {
     position: relative;
     height: 45vh;
-    /* La imagen ocupa la parte superior */
+    width: 100%;
     background-position: center top;
-    /* Efecto de degradado inferior para fundirse con el fondo marrón */
     -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
   }
 
-  /* REDISEÑO MÓVIL: La forma curva se elimina para que el fondo sea uniforme */
+  /* ELIMINAMOS EL CÍRCULO EN MÓVIL PARA QUE EL FONDO SEA LISO */
   .hero__shape {
     display: none;
-    /* Curvatura eliminada por completo en móvil */
   }
 
-  .hero__container {
-    z-index: 3;
-    /* Texto por encima del fondo marrón */
-  }
-
-  /* TEXTO CENTRADO SOBRE EL FONDO MARRÓN UNIFORME */
   .hero__content {
-    padding: 20px 24px 60px;
-    /* Ajustado padding */
+    padding: 20px 24px 80px;
     text-align: center;
     max-width: 100%;
     padding-left: 0;
   }
 
-  .hero__title {
-    font-size: clamp(2.3rem, 9vw, 3rem);
-    /* Ajustado para pantallas verticales */
-    margin-bottom: 20px;
-    font-family: 'Noto Serif', serif !important;
-    /* Fuente Serif */
-  }
-
-  .hero__subtitle {
-    font-size: 1rem;
-    margin-bottom: 35px;
-    color: rgba(253, 250, 247, 0.95);
-    /* Descripción en blanco hueso */
-  }
-
   .hero__actions {
-    justify-content: center;
     flex-direction: column;
-    /* Apilados verticalmente */
-    gap: 15px;
-    /* Espacio aumentado entre botones apilados */
+    gap: 20px;
     align-items: center;
     width: 100%;
   }
