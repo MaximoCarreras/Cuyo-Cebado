@@ -1,138 +1,182 @@
-import { useParams, Link } from 'react-router-dom';
-import { useState, useMemo } from 'react';
-import { products, categories } from '../../data/products';
+import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
-import './CategoryPage.css';
+import { Link } from 'react-router-dom';
+import './CartPage.css'; // <--- ACÁ ESTABA EL ERROR, YA ESTÁ ARREGLADO
 
-export default function CategoryPage() {
-    const { categoryId } = useParams();
-    const { addToCart } = useCart();
+// Importamos el logo de Mercado Pago
+import mpLogo from '../../assets/mp-logo.png';
 
-    // Estados para los filtros
-    const [maxPrice, setMaxPrice] = useState(250000);
-    const [selectedMaterial, setSelectedMaterial] = useState('todos');
-    const [selectedType, setSelectedType] = useState('todos');
+export default function CartPage() {
+    const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
+    const [customer, setCustomer] = useState({ name: '', email: '' });
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    const currentCategory = categories.find(cat => cat.id === categoryId);
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('es-AR', {
+            style: 'currency',
+            currency: 'ARS',
+            minimumFractionDigits: 0,
+        }).format(value);
+    };
 
-    // LÓGICA DE FILTRADO DINÁMICO
-    const filteredProducts = useMemo(() => {
-        return products.filter(p => {
-            const matchCategory = p.category === categoryId;
-            const matchPrice = p.price <= maxPrice;
-            const matchMaterial = selectedMaterial === 'todos' || p.material === selectedMaterial;
-            const matchType = selectedType === 'todos' || p.type === selectedType;
-            return matchCategory && matchPrice && matchMaterial && matchType;
-        });
-    }, [categoryId, maxPrice, selectedMaterial, selectedType]);
+    const handleCheckoutMP = async () => {
+        if (!customer.name || !customer.email) {
+            alert("Por favor, completá tus datos para continuar.");
+            return;
+        }
 
-    // Generamos opciones de filtros únicas basadas en los productos actuales de esta categoría
-    const materials = ['todos', ...new Set(products.filter(p => p.category === categoryId).map(p => p.material).filter(Boolean))];
-    const types = ['todos', ...new Set(products.filter(p => p.category === categoryId).map(p => p.type).filter(Boolean))];
+        setIsProcessing(true);
+        try {
+            const response = await fetch("http://localhost:3001/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    items: cart,
+                    name: customer.name,
+                    email: customer.email
+                }),
+            });
+
+            const data = await response.json();
+            if (data.init_point) {
+                window.location.href = data.init_point;
+            } else {
+                alert("Error del servidor: " + (data.error || "No se generó el pago"));
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Error de conexión. ¿Tenés el servidor de Node prendido?");
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    if (!cart || cart.length === 0) {
+        return (
+            <section className="cart-page">
+                <div className="cart-empty">
+                    <span className="material-symbols-outlined cart-empty__icon">shopping_basket</span>
+                    <h2 className="cart-empty__title">Tu carrito está vacío</h2>
+                    <p className="cart-empty__text">Parece que todavía no elegiste tu próximo compañero de rutas.</p>
+                    <Link to="/productos" className="btn-gold-link">Explorar Productos</Link>
+                </div>
+            </section>
+        );
+    }
 
     return (
-        <div className="category-page">
-            {/* NAVEGACIÓN SUPERIOR */}
-            <div className="category-page__nav">
-                <Link to="/productos" className="btn-back">
-                    <span className="material-symbols-outlined">arrow_back</span>
-                    Volver a categorías
-                </Link>
-            </div>
+        <section className="cart-page">
+            <div className="cart-container">
 
-            <div className="category-page__main">
-                {/* SIDEBAR DE CONTROL (MAFIA PREMIUM) */}
-                <aside className="sidebar">
-                    <div className="sidebar__header">
-                        <h3>Filtros</h3>
-                        <div className="gold-dot"></div>
-                    </div>
+                <div className="cart-header">
+                    <h2>Tu Pedido Cuyo</h2>
+                    <div className="gold-line"></div>
+                </div>
 
-                    {/* Filtro de Precio */}
-                    <div className="filter-group">
-                        <label>Presupuesto: <b>${maxPrice.toLocaleString()}</b></label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="250000"
-                            step="5000"
-                            value={maxPrice}
-                            onChange={(e) => setMaxPrice(Number(e.target.value))}
-                        />
-                    </div>
+                <div className="cart-page__grid">
+                    <div className="cart-items">
+                        {cart.map((item) => (
+                            <div key={item.id} className="cart-item">
+                                <div className="cart-item__image">
+                                    {item.image_url ? (
+                                        <img src={item.image_url} alt={item.name} />
+                                    ) : (
+                                        <div className="item-img-placeholder">🧉</div>
+                                    )}
+                                </div>
 
-                    {/* Filtro de Material (Dinámico) */}
-                    <div className="filter-group">
-                        <label>Material / Origen</label>
-                        <select value={selectedMaterial} onChange={(e) => setSelectedMaterial(e.target.value)}>
-                            {materials.map(m => (
-                                <option key={m} value={m}>{m === 'todos' ? 'TODOS LOS MATERIALES' : m.toUpperCase()}</option>
-                            ))}
-                        </select>
-                    </div>
+                                <div className="cart-item__info">
+                                    <h3>{item.name}</h3>
+                                    <p className="cart-item__material">{item.material || "Artesanal"}</p>
+                                    <p className="cart-item__unit-price">{formatCurrency(item.price)} c/u</p>
 
-                    {/* Filtro de Tipo (Dinámico) */}
-                    <div className="filter-group">
-                        <label>Estilo / Marca</label>
-                        <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
-                            {types.map(t => (
-                                <option key={t} value={t}>{t === 'todos' ? 'TODOS LOS ESTILOS' : t.toUpperCase()}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="sidebar__footer">
-                        <p>Curaduría Cuyo Cebado © 2026</p>
-                    </div>
-                </aside>
-
-                {/* GRILLA DE PRODUCTOS */}
-                <section className="products-content">
-                    <header className="category-header">
-                        <div className="header-info">
-                            <h1>{currentCategory?.label} {currentCategory?.icon}</h1>
-                            <p>Mostrando {filteredProducts.length} tesoros encontrados</p>
-                        </div>
-                    </header>
-
-                    <div className="products-grid">
-                        {filteredProducts.length > 0 ? (
-                            filteredProducts.map(product => (
-                                <div key={product.id} className="product-card">
-                                    {product.bestSeller && <span className="product-badge">Más buscado</span>}
-
-                                    <div className="product-image">
-                                        <span className="placeholder-icon">🧉</span>
-                                        {/* <img src={product.image} alt={product.name} /> */}
-                                    </div>
-
-                                    <div className="product-info">
-                                        <div className="product-tags">
-                                            <span className="tag-type">{product.type}</span>
-                                            <span className="tag-material">{product.material}</span>
+                                    <div className="cart-item__actions">
+                                        <div className="quantity-selector">
+                                            <button
+                                                className="qty-btn"
+                                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                disabled={item.quantity <= 1}
+                                            >
+                                                −
+                                            </button>
+                                            <span className="qty-number">{item.quantity}</span>
+                                            <button
+                                                className="qty-btn"
+                                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                            >
+                                                +
+                                            </button>
                                         </div>
-                                        <h4>{product.name}</h4>
-                                        <p className="product-price">${product.price.toLocaleString()}</p>
-
-                                        <button
-                                            className="btn-add"
-                                            onClick={() => addToCart(product)}
-                                        >
-                                            <span className="material-symbols-outlined">add_shopping_cart</span>
-                                            Agregar al Carrito
+                                        <button className="btn-remove" onClick={() => removeFromCart(item.id)}>
+                                            <span className="material-symbols-outlined">delete</span>
+                                            Eliminar
                                         </button>
                                     </div>
                                 </div>
-                            ))
-                        ) : (
-                            <div className="no-products">
-                                <span className="material-symbols-outlined">search_off</span>
-                                <p>No encontramos productos con esos filtros. Probá ajustando el precio o el material.</p>
+                                <div className="cart-item__subtotal">
+                                    {formatCurrency(item.price * item.quantity)}
+                                </div>
                             </div>
-                        )}
+                        ))}
                     </div>
-                </section>
+
+                    <aside className="cart-summary">
+                        <div className="summary-card">
+                            <h3>Resumen de Compra</h3>
+
+                            <span className="fields-title">Datos del Matero</span>
+                            <div className="customer-form-group">
+                                <input
+                                    type="text"
+                                    placeholder="Nombre completo"
+                                    value={customer.name}
+                                    onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
+                                    className="cart-input-dark"
+                                />
+                                <input
+                                    type="email"
+                                    placeholder="Tu mejor Email"
+                                    value={customer.email}
+                                    onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
+                                    className="cart-input-dark"
+                                />
+                            </div>
+
+                            <div className="summary-details">
+                                <div className="summary-row">
+                                    <span>Subtotal</span>
+                                    <span>{formatCurrency(cartTotal)}</span>
+                                </div>
+                                <div className="summary-row">
+                                    <span>Envío</span>
+                                    <span className="text-free">¡Sin costo!</span>
+                                </div>
+                            </div>
+
+                            <hr className="summary-divider" />
+
+                            <div className="summary-row total">
+                                <span>TOTAL</span>
+                                <span className="total-amount">{formatCurrency(cartTotal)}</span>
+                            </div>
+
+                            <button
+                                className="btn-mercadopago"
+                                onClick={handleCheckoutMP}
+                                disabled={isProcessing}
+                            >
+                                <img src={mpLogo} alt="MP" className="mp-icon-local" />
+                                <span>{isProcessing ? "Procesando..." : "Finalizar Compra"}</span>
+                            </button>
+
+                            <p className="secure-payment">
+                                <span className="material-symbols-outlined">shield</span>
+                                Pago 100% seguro con Mercado Pago
+                            </p>
+                        </div>
+                    </aside>
+                </div>
             </div>
-        </div>
+        </section>
     );
 }
