@@ -25,7 +25,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Barra de anuncios: Fluye con la página (se oculta al bajar) */}
       <div className="announcement-bar">
         <p><b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.</p>
       </div>
@@ -55,7 +54,7 @@ export default function Navbar() {
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </Link>
 
-            {/* Botón con prioridad de z-index para que se vea la X */}
+            {/* BOTÓN CON LÓGICA DE ICONO */}
             <button
               className={`navbar__toggle ${isMobileOpen ? 'navbar__toggle--active' : ''}`}
               onClick={() => setIsMobileOpen(!isMobileOpen)}
