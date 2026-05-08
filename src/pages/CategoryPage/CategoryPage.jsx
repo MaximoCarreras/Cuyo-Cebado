@@ -16,7 +16,6 @@ export default function CategoryPage() {
 
     const currentCategory = categories.find(cat => cat.id === categoryId);
 
-    // FILTRADO DINÁMICO COMPLETO
     const filteredProducts = useMemo(() => {
         return products.filter(p => {
             const matchCategory = p.category === categoryId;
@@ -25,12 +24,10 @@ export default function CategoryPage() {
             const matchType = selectedType === 'todos' || p.type === selectedType;
             const matchBrand = selectedBrand === 'todos' || p.brand === selectedBrand;
             const matchCapacity = selectedCapacity === 'todos' || p.capacity === selectedCapacity;
-
             return matchCategory && matchPrice && matchMaterial && matchType && matchBrand && matchCapacity;
         });
     }, [categoryId, maxPrice, selectedMaterial, selectedType, selectedBrand, selectedCapacity]);
 
-    // Generador de opciones únicas para el Sidebar
     const getOptions = (key) => {
         const items = products.filter(p => p.category === categoryId);
         return ['todos', ...new Set(items.map(p => p[key]).filter(Boolean))];
@@ -47,48 +44,47 @@ export default function CategoryPage() {
 
             <div className="category-page__main">
                 <aside className="sidebar">
-                    <h3>Filtros</h3>
+                    <div className="sidebar__title">
+                        <h3>Filtros</h3>
+                        <div className="gold-dot"></div>
+                    </div>
 
-                    {/* Precio: Siempre visible */}
                     <div className="filter-group">
-                        <label>Precio máx: <b>${maxPrice.toLocaleString()}</b></label>
+                        <label>Precio máximo: <b>${maxPrice.toLocaleString()}</b></label>
                         <input type="range" min="0" max="150000" step="1000" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} />
                     </div>
 
-                    {/* Filtro de MARCA: Solo para Yerbas y Accesorios (Termos) */}
-                    {(categoryId === 'yerbas' || categoryId === 'accesorios') && (
+                    {/* Filtros dinámicos según categoría */}
+                    {(getOptions('brand').length > 1) && (
                         <div className="filter-group">
-                            <label>Marca</label>
+                            <label>Marca / Fabricante</label>
                             <select value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
                                 {getOptions('brand').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
                             </select>
                         </div>
                     )}
 
-                    {/* Filtro de MATERIAL: Solo para Mates, Bombillas y 3D */}
-                    {(categoryId === 'mates' || categoryId === 'bombillas' || categoryId === 'cuyo-3d') && (
+                    {(getOptions('material').length > 1) && (
                         <div className="filter-group">
-                            <label>Material</label>
+                            <label>Material de fabricación</label>
                             <select value={selectedMaterial} onChange={(e) => setSelectedMaterial(e.target.value)}>
                                 {getOptions('material').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
                             </select>
                         </div>
                     )}
 
-                    {/* Filtro de TIPO: Aparece en Yerbas (con/sin palo) y Mates (Imperial/Torpedo) */}
-                    {(categoryId === 'mates' || categoryId === 'yerbas') && (
+                    {(getOptions('type').length > 1) && (
                         <div className="filter-group">
-                            <label>{categoryId === 'yerbas' ? 'Molienda' : 'Modelo'}</label>
+                            <label>{categoryId === 'yerbas' ? 'Tipo de Molienda' : 'Modelo / Estilo'}</label>
                             <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
                                 {getOptions('type').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
                             </select>
                         </div>
                     )}
 
-                    {/* Filtro de CAPACIDAD: Solo para Termos */}
-                    {categoryId === 'accesorios' && (
+                    {(getOptions('capacity').length > 1) && (
                         <div className="filter-group">
-                            <label>Capacidad</label>
+                            <label>Capacidad / Tamaño</label>
                             <select value={selectedCapacity} onChange={(e) => setSelectedCapacity(e.target.value)}>
                                 {getOptions('capacity').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
                             </select>
@@ -99,14 +95,14 @@ export default function CategoryPage() {
                 <section className="products-content">
                     <header className="category-header">
                         <h1>{currentCategory?.label} {currentCategory?.icon}</h1>
-                        <p>{filteredProducts.length} productos para tu kit</p>
+                        <p>{filteredProducts.length} productos exclusivos encontrados</p>
                     </header>
 
                     <div className="products-grid">
                         {filteredProducts.map(product => (
                             <div key={product.id} className="product-card">
-                                {product.bestSeller && <span className="product-badge">Destacado</span>}
-                                <div className="product-image"><span>🧉</span></div>
+                                {product.bestSeller && <span className="product-badge">Top Ventas</span>}
+                                <div className="product-image"><span>{currentCategory?.icon}</span></div>
                                 <div className="product-info">
                                     <p className="product-material">{product.brand || product.material}</p>
                                     <h4>{product.name}</h4>
