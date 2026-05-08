@@ -10,6 +10,7 @@ export default function Navbar() {
 
   const navLinks = [
     { label: 'Inicio', to: '/' },
+    { label: 'Productos', to: '/productos' }, // Nueva pestaña agregada
     { label: 'Nosotros', to: '/nosotros' },
     { label: 'Guía de Curado', to: '/guia-curado' },
   ];
@@ -54,7 +55,6 @@ export default function Navbar() {
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </Link>
 
-            {/* BOTÓN CON LÓGICA DE ICONO */}
             <button
               className={`navbar__toggle ${isMobileOpen ? 'navbar__toggle--active' : ''}`}
               onClick={() => setIsMobileOpen(!isMobileOpen)}
