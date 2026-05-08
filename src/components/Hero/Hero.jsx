@@ -49,7 +49,7 @@ export default function Hero() {
       <div className="hero__container">
         <div className="hero__content">
           <h1 className="hero__title">
-            Mates con <br />
+            <span className="text-white">Mates con</span> <br />
             <b>Identidad</b>
           </h1>
 

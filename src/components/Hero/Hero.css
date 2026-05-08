@@ -6,7 +6,7 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
-  /* Marrón oscuro oficial */
+  /* Tu marrón oficial */
 }
 
 .hero__image-bg {
@@ -28,7 +28,7 @@
   width: 75%;
   height: 120%;
   background-color: #2b2520;
-  /* Marrón oscuro oficial */
+  /* Tu marrón oficial */
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
@@ -36,7 +36,7 @@
   overflow: hidden;
 }
 
-/* EFECTO GRANULADO */
+/* EFECTO GRANULADO GLOBAL */
 .hero::after {
   content: "";
   position: absolute;
@@ -58,9 +58,10 @@
   padding: 0 24px;
 }
 
-/* --- VISTA WEB --- */
+/* --- VISTA WEB (RESTAURACIÓN TOTAL) --- */
 .hero__content {
   max-width: 1000px;
+  /* Caja ancha restaurada */
   padding-left: 35%;
 }
 
@@ -72,6 +73,7 @@
   margin-bottom: 24px;
   color: #fdfaf7;
   font-family: 'Noto Serif', serif !important;
+  /* Fuente de títulos restaurada */
 }
 
 .hero__title b {
@@ -90,11 +92,11 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* BOTONES ESCRITORIO: Separación aumentada */
+/* BOTONES HERO (Con separación) */
 .hero__actions {
   display: flex;
   gap: 32px;
-  /* Aumentado de 20px a 32px */
+  /* Espacio aumentado entre botones */
   flex-wrap: wrap;
 }
 
@@ -128,7 +130,7 @@
 }
 
 /* =========================================
-   === ADAPTACIÓN MÓVIL (MARRÓN OSCURO) === 
+   === ADAPTACIÓN MÓVIL (MARRÓN CORRECTO) === 
    ========================================= */
 @media (max-width: 900px) {
   .hero {
@@ -136,54 +138,67 @@
     justify-content: flex-start;
     min-height: 100vh;
     background-color: #2b2520;
-    /* Marrón oscuro oficial aplicado */
+    /* Marrón oficial aplicado */
   }
 
+  /* La imagen (mate) se ve arriba en móvil */
   .hero__image-bg {
     position: relative;
-    height: 50vh;
-    width: 100%;
+    height: 45vh;
+    /* La imagen ocupa la parte superior */
     background-position: center top;
-    -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+    /* Efecto de degradado inferior para fundirse con el fondo marrón */
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
   }
 
+  /* REDISEÑO MÓVIL: La forma curva se elimina para que el fondo sea uniforme */
   .hero__shape {
-    position: absolute;
-    top: 45vh;
-    left: -10%;
-    width: 120%;
-    height: 70vh;
-    border-radius: 50% 50% 0 0 / 15% 15% 0 0;
-    background-color: #2b2520;
-    /* Marrón oscuro oficial aplicado */
-    box-shadow: none;
-    z-index: 2;
+    display: none;
+    /* Curvatura eliminada por completo en móvil */
   }
 
   .hero__container {
-    margin-top: -5vh;
     z-index: 3;
+    /* Texto por encima del fondo marrón */
   }
 
+  /* TEXTO CENTRADO SOBRE EL FONDO MARRÓN UNIFORME */
   .hero__content {
-    padding: 0 24px 80px;
+    padding: 20px 24px 60px;
+    /* Ajustado padding */
     text-align: center;
     max-width: 100%;
     padding-left: 0;
   }
 
-  /* BOTONES MÓVIL: Separación aumentada */
+  .hero__title {
+    font-size: clamp(2.3rem, 9vw, 3rem);
+    /* Ajustado para pantallas verticales */
+    margin-bottom: 20px;
+    font-family: 'Noto Serif', serif !important;
+    /* Fuente Serif */
+  }
+
+  .hero__subtitle {
+    font-size: 1rem;
+    margin-bottom: 35px;
+    color: rgba(253, 250, 247, 0.95);
+    /* Descripción en blanco hueso */
+  }
+
   .hero__actions {
+    justify-content: center;
     flex-direction: column;
-    gap: 24px;
-    /* Aumentado de 15px a 24px */
+    /* Apilados verticalmente */
+    gap: 15px;
+    /* Espacio aumentado entre botones apilados */
     align-items: center;
     width: 100%;
   }
 
   .hero .btn {
     width: 100%;
-    max-width: 320px;
+    max-width: 300px;
   }
 }

@@ -1,48 +1,64 @@
+/* src/components/Navbar/Navbar.css */
 :root {
   --color-cuyo-brown: #2b2520;
   --color-gold: #a5813a;
   --color-bone: #fdfaf7;
+  --nav-height: 100px;
+}
+
+.announcement-bar {
+  background-color: var(--color-gold);
+  color: var(--color-bone);
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
 }
 
 .navbar {
-  position: sticky;
-  top: 0;
-  background-color: var(--color-cuyo-brown);
-  height: 90px;
+  position: fixed;
+  top: 36px;
+  /* Empieza justo debajo de la announcement bar */
+  left: 0;
+  right: 0;
   z-index: 1000;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  padding: 0 5%;
+  height: 90px;
+  background-color: var(--color-cuyo-brown);
   border-bottom: 1px solid rgba(165, 129, 58, 0.15);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.navbar__container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .navbar__logo-img {
-  height: 65px;
+  height: 75px;
+  width: auto;
   display: block;
 }
 
 .navbar__links {
   display: flex;
-  gap: 35px;
+  gap: 40px;
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .navbar__links a {
+  font-size: 1rem;
   color: var(--color-bone);
   text-decoration: none;
   font-weight: 500;
-  font-size: 1rem;
   transition: color 0.3s;
+  font-family: 'Inter', sans-serif;
 }
 
 .navbar__links a:hover {
@@ -51,8 +67,10 @@
 
 .navbar__right {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
+  z-index: 1100;
 }
 
 .navbar__cart-link {
@@ -65,14 +83,14 @@
 
 .cart-badge {
   position: absolute;
-  top: -8px;
-  right: -10px;
+  top: -2px;
+  right: -2px;
   background: var(--color-gold);
   color: var(--color-cuyo-brown);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 800;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -105,8 +123,11 @@
     width: 280px;
     height: 100vh;
     background: var(--color-cuyo-brown);
-    padding: 100px 30px;
-    transition: right 0.4s ease;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 100px;
+    padding-left: 30px;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 2000;
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
   }
@@ -117,6 +138,7 @@
 
   .navbar__links {
     flex-direction: column;
+    align-items: flex-start;
     gap: 30px;
   }
 }
