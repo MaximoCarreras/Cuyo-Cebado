@@ -5,7 +5,7 @@
     overflow-x: hidden;
 }
 
-/* --- HERO SECTION MAFIA PREMIUM (ARREGLADO) --- */
+/* --- HERO SECTION MAFIA PREMIUM (AJUSTADO) --- */
 .hero-mafia {
     height: 90vh;
     background-color: #000;
@@ -19,21 +19,26 @@
     width: 100%;
 }
 
-/* Panel izquierdo curvo */
+/* Panel izquierdo curvo (AJUSTADO: Color amaderado, posición de texto y curva suave) */
 .hero-mafia__left-panel {
     width: 55%;
-    background: linear-gradient(135deg, #120f0d 0%, #000000 100%);
+    /* OLD: background: linear-gradient(135deg, #120f0d 0%, #000000 100%); */
+    /* NEW: Marrón Amaderado Profundo (#2b2520) - Color Principal */
+    background: linear-gradient(135deg, #2b2520 0%, #1a1613 100%);
+
     display: flex;
     align-items: center;
-    padding-left: 8%;
+
+    /* OLD: padding-left: 8%; */
+    /* NEW: Shifting text further to the right, mirroring the photo */
+    padding-left: 18%;
+
     position: relative;
     z-index: 10;
 
-    /* Efecto de curva React-Style (React Bits) */
-    clip-path: ellipse(95% 120% at 0% 50%);
+    /* Efecto de curva React-Style (React Bits) - Suavizada para no cortar tanto */
+    clip-path: ellipse(110% 150% at 0% 50%);
 
-    /* --- ARREGLO AQUÍ --- */
-    /* Eliminamos la sombra pesada que generaba el error visual en el fondo */
     box-shadow: none;
     border-right: 1px solid rgba(165, 129, 58, 0.1);
 }
@@ -58,23 +63,24 @@
     right: 0;
     height: 100%;
     z-index: 1;
-    /* --- ARREGLO AQUÍ: Ruta a tu carpeta assets --- */
     background-image: url('../../assets/fondo_hero_principal.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-/* Contenido del Hero */
+/* Contenido del Hero (AJUSTADO: Texto más grande) */
 .hero-mafia__content {
     max-width: 550px;
 }
 
 .hero-mafia__title {
     font-family: 'Noto Serif', serif;
-    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    /* OLD: font-size: clamp(2.5rem, 5.5vw, 4.2rem); */
+    /* NEW: Bigger, mirroring old photo, tight line height */
+    font-size: clamp(3rem, 6vw, 5rem);
     color: #fff;
-    line-height: 1.1;
+    line-height: 1.0;
     margin-bottom: 25px;
     font-weight: 900;
 }
@@ -89,8 +95,9 @@
 
 .hero-mafia__description {
     color: rgba(255, 255, 255, 0.7);
-    font-size: 1.1rem;
-    line-height: 1.8;
+    font-size: 1.25rem;
+    /* slightly larger description */
+    line-height: 1.6;
     margin-bottom: 45px;
 }
 
@@ -428,13 +435,16 @@
     box-shadow: 0 10px 20px rgba(165, 129, 58, 0.2);
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE HERO */
 @media (max-width: 1200px) {
     .hero-mafia__left-panel {
         width: 100%;
         clip-path: none;
         padding-right: 10%;
-        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../../assets/fondo_hero_principal.png') center/cover;
+        padding-left: 8%;
+        /* Back to smaller padding on tablet */
+        background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+            url('../../assets/fondo_hero_principal.png') center/cover;
     }
 
     .hero-mafia__right-image {
@@ -447,22 +457,46 @@
 }
 
 @media (max-width: 768px) {
-    .home-promo__container {
+    .hero-mafia__content h1 {
+        font-size: 3rem;
+    }
+
+    .hero-mafia__content p {
+        font-size: 1.1rem;
+    }
+
+    .hero-mafia__btns {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .btn-mafia-gold,
+    .btn-mafia-outline {
+        width: 100%;
+        text-align: center;
+    }
+
+    .promo-container {
         grid-template-columns: 1fr;
         padding: 40px;
         text-align: center;
     }
 
-    .home-promo__list li {
+    .promo-list li {
         justify-content: center;
     }
 
-    .home-promo__footer {
+    .promo-footer {
         flex-direction: column;
         gap: 20px;
     }
 
     .home-categories-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .section-header h2 {
+        font-size: 1.8rem;
     }
 }

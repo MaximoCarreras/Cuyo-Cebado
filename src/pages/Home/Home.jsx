@@ -11,7 +11,7 @@ export default function Home() {
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
     const mainCategories = categories.slice(0, 6);
 
-    // Buscamos el Kit de Regalo (asumiendo ID 501 o similar en products.js)
+    // Buscamos el Kit de Regalo (ID 501 o similar en products.js)
     const giftProduct = products.find(p => p.id === 501) || products.find(p => p.category === 'kits');
 
     const scrollToCategories = () => {
@@ -28,7 +28,7 @@ export default function Home() {
 
     return (
         <div className="home-mafia">
-            {/* HERO SECTION - MAFIA STYLE CON FONDO PNG */}
+            {/* HERO SECTION - MAFIA STYLE CON AJUSTES FINALES DE DISEÑO */}
             <section className="hero-mafia">
                 <div className="hero-mafia__container">
                     <div className="hero-mafia__left-panel">
@@ -56,7 +56,7 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
-                    {/* Aquí se carga la imagen de fondo desde CSS */}
+                    {/* Aquí se carga la imagen de fondo fondo_hero_principal.png desde CSS */}
                     <div className="hero-mafia__right-image"></div>
                 </div>
             </section>
