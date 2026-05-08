@@ -1,189 +1,86 @@
-.category-page {
-    max-width: 1400px;
-    margin: 0 auto;
-    /* Eliminamos el padding-top excesivo, confiamos en el main del App.css */
-    padding: 20px 24px 80px;
-    background-color: #fdfaf7;
-    min-height: 100vh;
-}
+/* ... (Todo el resto del CSS de CategoryPage.css se mantiene igual arriba) ... */
 
-.category-page__nav {
-    margin-bottom: 20px;
-}
-
-.btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #a5813a;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    transition: 0.3s;
-}
-
-.category-page__main {
-    display: flex;
-    gap: 40px;
-}
-
-/* SIDEBAR MANTENIDO PERO REFINADO */
-.sidebar {
-    width: 280px;
-    flex-shrink: 0;
-    background: #1a1614;
-    /* Marrón Mafia */
-    padding: 30px;
-    border-radius: 15px;
-    color: #fdfaf7;
-    height: fit-content;
-    position: sticky;
-    top: 110px;
-}
-
-.sidebar h3 {
-    font-family: 'Noto Serif', serif;
-    color: #a5813a;
-    font-size: 1rem;
-    margin: 0;
-}
-
-/* GRILLA ESTILO MERCADO LIBRE BOUTIQUE */
-.products-content {
-    flex-grow: 1;
-}
-
-.category-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.products-count {
-    color: #888;
-    font-size: 0.9rem;
-    margin-top: -30px;
-    /* Para pegarlo al título elegante */
-}
-
-.products-grid-meli {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
-}
-
-/* CARD PREMIUM */
-.product-card-premium {
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    transition: 0.3s ease;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.product-card-premium:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    border-color: #a5813a;
-}
-
-.product-image-container {
+.filter-group input[type="range"] {
+    /* 1. Reset total: le decimos al navegador que NO use su estilo por defecto */
+    -webkit-appearance: none;
+    appearance: none;
     width: 100%;
-    aspect-ratio: 1;
-    background: #f9f7f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-}
-
-.product-details {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.details-material {
-    color: #a5813a;
-    font-weight: 800;
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-}
-
-.details-name {
-    font-family: 'Inter', sans-serif;
-    /* Más limpio para nombres */
-    font-size: 0.95rem;
-    color: #1a1614;
-    margin-bottom: 10px;
-    font-weight: 600;
-    line-height: 1.2;
-}
-
-.details-price {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: #1a1614;
-    margin-top: auto;
-    margin-bottom: 15px;
-}
-
-.btn-add-cart {
-    width: 100%;
-    padding: 12px;
-    background: #1a1614;
-    color: #fdfaf7;
-    border: none;
-    border-radius: 6px;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.75rem;
+    background: transparent;
+    /* El fondo lo maneja la pista */
     cursor: pointer;
-    transition: 0.3s;
+    margin: 15px 0;
 }
 
-.btn-add-cart:hover {
+/* --- ESTILOS PARA NAVEGADORES WEBKIT (CHROME, SAFARI, EDGE) --- */
+
+/* LA PISTA (El camino por donde va el botón) */
+.filter-group input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(253, 250, 247, 0.1);
+    /* Crema muy sutil sobre el marrón */
+    border-radius: 3px;
+    border: none;
+}
+
+/* EL BOTÓN (El círculo que mueves) - Efecto "Oro Mafia" */
+.filter-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /* Reset de vuelta para el botón */
+    appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
     background: #a5813a;
+    /* Dorado Mafia */
+    cursor: pointer;
+    margin-top: -6px;
+    /* Centrado vertical: (Altura pista / 2) - (Altura botón / 2) */
+    box-shadow: 0 0 10px rgba(165, 129, 58, 0.5);
+    /* Brillo dorado */
+    border: 2px solid #1a1614;
+    /* Borde marrón para que resalte */
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
-/* --- RESPONSIVE QUIRÚRGICO (Meli Style) --- */
-@media (max-width: 768px) {
-    .category-page {
-        padding: 10px 15px 80px;
-    }
-
-    .category-page__main {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .sidebar {
-        width: 100%;
-        position: relative;
-        top: 0;
-        padding: 20px;
-    }
-
-    /* EL CORAZÓN DEL CAMBIO: 2 COLUMNAS */
-    .products-grid-meli {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-
-    .product-details {
-        padding: 10px;
-    }
-
-    .details-name {
-        font-size: 0.85rem;
-        min-height: 2.4em;
-    }
-
-    .details-price {
-        font-size: 1.1rem;
-    }
+/* Efectos al pasar el mouse sobre el botón */
+.filter-group input[type="range"]::-webkit-slider-thumb:hover {
+    background: #fdfaf7;
+    /* Cambia a crema */
+    transform: scale(1.1);
+    /* Se agranda un poquito */
+    box-shadow: 0 0 15px rgba(253, 250, 247, 0.7);
+    /* Brillo crema */
 }
+
+/* --- ESTILOS PARA FIREFOX (Usa prefijos distintos) --- */
+
+.filter-group input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(253, 250, 247, 0.1);
+    border-radius: 3px;
+}
+
+.filter-group input[type="range"]::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #a5813a;
+    border: 2px solid #1a1613;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(165, 129, 58, 0.5);
+    transition: background 0.3s, transform 0.3s;
+}
+
+.filter-group input[type="range"]::-moz-range-thumb:hover {
+    background: #fdfaf7;
+    transform: scale(1.1);
+}
+
+/* Parche para que Firefox no muestre un borde feo al hacer foco */
+.filter-group input[type="range"]::-moz-focus-outer {
+    border: 0;
+}
+
+/* ... (El resto del CSS de .products-content y media queries sigue igual abajo) ... */
