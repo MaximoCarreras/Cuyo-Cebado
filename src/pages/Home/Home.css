@@ -6,7 +6,7 @@
     overflow-x: hidden;
 }
 
-/* --- HERO SECTION MAFIA PREMIUM (RECONSTRUIDO AL 100%) --- */
+/* --- HERO SECTION MAFIA PREMIUM (ARREGLADO AL 100%) --- */
 .hero-mafia {
     height: 90vh;
     background-color: #000;
@@ -21,12 +21,12 @@
     width: 100%;
 }
 
-/* Panel izquierdo curvo - Color marrón Mafia oscuro y efecto React Bits */
+/* Panel izquierdo curvo - Color marrón amaderado más CLARITO y efecto React Bits */
 .hero-mafia__left-panel {
     width: 55%;
 
-    /* NEW: Marrón Mafia oscuro amaderado */
-    background: linear-gradient(135deg, #1a1310 0%, #0d0a09 100%);
+    /* NEW: Marrón Amaderado más claro (tipo Nuez Profunda) */
+    background: linear-gradient(135deg, #3d3025 0%, #2b2118 100%);
 
     display: flex;
     align-items: center;
@@ -34,7 +34,7 @@
     position: relative;
     z-index: 10;
 
-    /* La curva circular que pediste, no corta en seco */
+    /* La curva circular que no corta en seco */
     clip-path: ellipse(95% 120% at 0% 50%);
 
     /* Sombra para profundidadMafia */
@@ -94,7 +94,7 @@
     background-repeat: no-repeat;
 }
 
-/* Contenido del Hero */
+/* Contenido del Hero (AJUSTADO: Tipografía unificada) */
 .hero-mafia__content {
     max-width: 550px;
     animation: fadeInMafia 1s ease-out;
@@ -114,25 +114,23 @@
 
 .hero-mafia__title {
     font-family: 'Noto Serif', serif;
-    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    /* Tipografía Serif Mafia unificada */
+    font-size: clamp(2.5rem, 5.5vw, 4.2rem);
     color: #fff;
     line-height: 1.1;
     margin-bottom: 25px;
-    font-weight: 900;
+    font-weight: 800;
+    text-transform: uppercase;
+    /* Forzamos mayúsculas */
 }
 
-/* Tipografía "con intensidad" en dorado y script */
-.hero-mafia__intensity-text {
+/* Tipografía "IDENTIDAD" en dorado y serif */
+.hero-mafia__gold-text {
     color: #a5813a;
-    font-family: 'Inter', sans-serif;
-    /* Usamos sans-serif para contraste, como pediste */
     background: linear-gradient(to right, #a5813a, #e2c07d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 30px rgba(165, 129, 58, 0.3);
-    font-weight: 800;
-    text-transform: uppercase;
-    /* Para que sea Mafia total */
+    text-shadow: 0 0 30px rgba(165, 129, 58, 0.4);
 }
 
 .hero-mafia__description {
@@ -152,7 +150,7 @@
     background: #a5813a;
     color: #1a1613;
     border: none;
-    padding: 20px 45px;
+    padding: 20px 40px;
     border-radius: 50px;
     font-weight: 800;
     font-size: 0.85rem;
@@ -253,7 +251,7 @@
 .home-cat-card h3 {
     color: #2b2520;
     font-family: 'Noto Serif', serif;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     margin-bottom: 10px;
 }
 
@@ -502,5 +500,9 @@
 
     .home-categories-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .section-header h2 {
+        font-size: 1.8rem;
     }
 }

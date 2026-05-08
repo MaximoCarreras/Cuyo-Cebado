@@ -30,14 +30,14 @@ export default function Home() {
 
     return (
         <div className="home-mafia">
-            {/* HERO SECTION RESTAURADO AL 100% MAFIA STYLE */}
+            {/* HERO SECTION RESTAURADO AL 100% MAFIA STYLE - TEXTO CORREGIDO */}
             <section className="hero-mafia">
                 <div className="hero-mafia__container">
                     <div className="hero-mafia__left-panel">
                         <div className="hero-mafia__content">
                             <h1 className="hero-mafia__title">
-                                mates con <br />
-                                <span className="hero-mafia__intensity-text">intensidad</span>
+                                MATES CON <br />
+                                <span className="hero-mafia__gold-text">IDENTIDAD</span>
                             </h1>
                             <p className="hero-mafia__description">
                                 Curaduría premium de mates imperiales tallados a mano en Mendoza.
@@ -112,7 +112,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* PROMO BANNER REGALO */}
+            {/* PROMO BANNER REGALO (Sin Windows XP) */}
             <section className="home-promo">
                 <div className="home-promo__container">
                     <div className="home-promo__image">
