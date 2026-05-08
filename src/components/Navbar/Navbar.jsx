@@ -8,13 +8,12 @@ export default function Navbar() {
   const { cart } = useCart();
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Funciones de control
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <nav className="navbar">
-      {/* LADO IZQUIERDO: LOGO */}
+      {/* 1. IZQUIERDA: LOGO */}
       <div className="navbar__left">
         <Link to="/" className="navbar__brand" onClick={closeMenu}>
           <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
@@ -22,7 +21,15 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* LADO DERECHO: CARRITO + HAMBURGUESA */}
+      {/* 2. CENTRO: LINKS (En escritorio se ven acá, en móvil vuelan al drawer) */}
+      <ul className={`navbar__menu ${isMenuOpen ? 'navbar__menu--open' : ''}`}>
+        <li><Link to="/" className="navbar__link" onClick={closeMenu}>Inicio</Link></li>
+        <li><Link to="/productos" className="navbar__link" onClick={closeMenu}>Productos</Link></li>
+        <li><Link to="/nosotros" className="navbar__link" onClick={closeMenu}>Nosotros</Link></li>
+        <li><Link to="/guia-curado" className="navbar__link" onClick={closeMenu}>Guía de Curado</Link></li>
+      </ul>
+
+      {/* 3. DERECHA: ICONOS (Carrito + Hamburguesa) */}
       <div className="navbar__right">
         <Link to="/carrito" className="navbar__cart-container" onClick={closeMenu}>
           <span className="material-symbols-outlined cart-icon-main">
@@ -33,7 +40,6 @@ export default function Navbar() {
           )}
         </Link>
 
-        {/* BOTÓN HAMBURGUESA / X (Solo visible en móvil) */}
         <button className="navbar__hamburger" onClick={toggleMenu} aria-label="Menu">
           <span className="material-symbols-outlined">
             {isMenuOpen ? 'close' : 'menu'}
@@ -41,15 +47,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* MENÚ LATERAL (DRAWER) */}
-      <ul className={`navbar__menu ${isMenuOpen ? 'navbar__menu--open' : ''}`}>
-        <li><Link to="/" className="navbar__link" onClick={closeMenu}>Inicio</Link></li>
-        <li><Link to="/productos" className="navbar__link" onClick={closeMenu}>Productos</Link></li>
-        <li><Link to="/nosotros" className="navbar__link" onClick={closeMenu}>Nosotros</Link></li>
-        <li><Link to="/guia-curado" className="navbar__link" onClick={closeMenu}>Guía de Curado</Link></li>
-      </ul>
-
-      {/* FONDO OSCURO AL ABRIR EL MENÚ */}
       {isMenuOpen && <div className="navbar__overlay" onClick={closeMenu}></div>}
     </nav>
   );
