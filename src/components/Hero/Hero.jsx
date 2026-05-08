@@ -23,11 +23,13 @@ export default function Hero() {
       id="hero"
       style={{ height: viewHeight, minHeight: viewHeight }}
     >
+      {/* 1. Capa de imagen con la máscara de degradado aplicada en CSS */}
       <div
         className="hero__image-bg"
         style={{ backgroundImage: `url(${heroBgImage})` }}
       ></div>
 
+      {/* 2. Capa del fondo de madera animada (React Bits) */}
       <div className="hero__shape">
         <Grainient
           color1="#140d07"

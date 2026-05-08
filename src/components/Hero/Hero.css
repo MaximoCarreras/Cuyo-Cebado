@@ -6,7 +6,7 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
-  /* Color oficial */
+  /* Color Cuyo Brown oficial */
 }
 
 .hero__image-bg {
@@ -18,10 +18,11 @@
   background-size: cover;
   background-position: center right;
   z-index: 1;
-  /* --- MÁSCARA DE DEGRADADO REPARADA (Escritorio) --- */
-  /* Suavizamos el degradado para que se funda orgánicamente hacia la izquierda */
-  -webkit-mask-image: linear-gradient(to left, black 20%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.3) 80%, transparent 100%);
-  mask-image: linear-gradient(to left, black 20%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.3) 80%, transparent 100%);
+
+  /* --- MÁSCARA DE DEGRADADO (ESCRITORIO) --- */
+  /* La imagen se funde con la madera animada hacia la izquierda */
+  -webkit-mask-image: linear-gradient(to left, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
+  mask-image: linear-gradient(to left, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
 }
 
 /* LA CAPA DEL GRAINIENT (MADERA ANIMADA) */
@@ -33,12 +34,20 @@
   height: 120%;
   z-index: 2;
   overflow: hidden;
-  /* ELIMINADO: border-radius semicircular duro */
+
+  /* --- RESTAURADO: SEMICÍRCULO GRANDE ORIGINAL (Escritorio) --- */
+  /* Es una curva amplia para un flujo premium */
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
 }
 
 .hero__grainient {
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .hero__container {
@@ -68,7 +77,6 @@
 .hero__title b {
   color: #a5813a;
   display: block;
-  font-family: 'Noto Serif', serif !important;
 }
 
 .hero__subtitle {
@@ -81,6 +89,7 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* BOTONES (Con separación) */
 .hero__actions {
   display: flex;
   gap: 32px;
@@ -96,17 +105,13 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-family: 'Inter', sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .hero .btn--gold {
   background-color: #a5813a;
   color: #2b2520;
   border: none;
-}
-
-.hero .btn--gold:active {
-  background-color: #a5813a !important;
-  transform: scale(0.98);
 }
 
 .hero .btn--outline-gold {
@@ -116,7 +121,7 @@
 }
 
 /* =========================================
-   === ADAPTACIÓN MÓVIL (FUNDIDO SUAVE) === 
+   === ADAPTACIÓN MÓVIL (FUNDIDO COMPLETO) === 
    ========================================= */
 @media (max-width: 900px) {
   .hero {
@@ -124,38 +129,39 @@
     justify-content: flex-start;
     height: auto !important;
     min-height: 100vh;
-    background-color: #2b2520;
-    /* Fondo uniforme */
   }
 
-  /* --- MÁSCARA DE DEGRADADO REPARADA (Celular) --- */
-  /* Suavizamos el degradado hacia abajo para que el fundido sea invisible */
+  /* La imagen del mate arriba */
   .hero__image-bg {
     position: relative;
     height: 45vh;
     width: 100%;
     background-position: center top;
+
+    /* --- MÁSCARA DE DEGRADADO (CELULAR) --- */
+    /* La imagen se funde hacia abajo de forma gradual */
     -webkit-mask-image: linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
   }
 
-  /* REDISEÑO MÓVIL: Eliminamos la forma de la tarjeta rígida */
+  /* EL ARREGLO MÓVIL: Eliminamos la forma de la tarjeta rígida */
   .hero__shape {
     position: absolute;
     top: 35vh;
-    /* Empieza un poco antes para el fundido */
+    /* Sube la forma para el fundido invisible */
     left: 0;
     width: 100%;
     height: calc(100% - 35vh);
+
+    /* FIX DEFINITIVO: Sin curvas, fondo continuo e inmersivo */
     border-radius: 0;
-    /* Sin curvas, fondo continuo */
     margin-bottom: 0;
     box-shadow: none;
   }
 
   .hero__container {
     z-index: 3;
-    padding-top: 20px;
+    padding-top: 40px;
     padding-bottom: 80px;
   }
 
@@ -168,6 +174,11 @@
 
   .hero__title {
     font-size: clamp(2.3rem, 9vw, 3rem);
+  }
+
+  .hero__subtitle {
+    font-size: 1rem;
+    margin-bottom: 30px;
   }
 
   .hero__actions {
