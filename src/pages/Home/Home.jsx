@@ -1,29 +1,24 @@
 import { Link } from 'react-router-dom';
-import { categories, products } from '../data/products';
-import { useCart } from '../context/CartContext';
+import { categories, products } from '../../data/products';
+import { useCart } from '../../context/CartContext';
 import './Home.css';
 
 export default function Home() {
     const { addToCart } = useCart();
 
-    // Filtramos los 4 productos más vendidos para mostrar en la Home
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
-
-    // Elegimos las 5 categorías principales para el menú de arriba
-    const mainCategories = categories.slice(0, 5);
+    const mainCategories = categories.slice(0, 6);
 
     return (
         <div className="home">
-            {/* HERO SECTION (El impacto inicial) */}
             <section className="hero">
                 <div className="hero__content">
                     <h1>CURADURÍA MATERA PREMIUM</h1>
-                    <p>Desde el corazón de Mendoza, seleccionamos los tesoros más exclusivos para tu ritual.</p>
-                    <Link to="/productos" className="btn-hero">Explorar Catálogo</Link>
+                    <p>Desde Mendoza, seleccionamos las piezas más exclusivas para tu ritual diario.</p>
+                    <Link to="/productos" className="btn-hero">Ver Colección Completa</Link>
                 </div>
             </section>
 
-            {/* ENCONTRÁ TU CATEGORÍA (Sincronizado con la tienda) */}
             <section className="section__container">
                 <div className="section__title">
                     <h2>Encontrá tu compañero ideal</h2>
@@ -35,13 +30,12 @@ export default function Home() {
                         <Link key={cat.id} to={`/productos/${cat.id}`} className="home-category-card">
                             <span className="cat-icon">{cat.icon}</span>
                             <h3>{cat.label}</h3>
-                            <p>Ver colección</p>
+                            <p>Explorar</p>
                         </Link>
                     ))}
                 </div>
             </section>
 
-            {/* PRODUCTOS MÁS VENDIDOS (Escaparate real) */}
             <section className="section__container bg-light">
                 <div className="section__title">
                     <h2>Los Más Buscados</h2>
@@ -53,11 +47,11 @@ export default function Home() {
                         <div key={product.id} className="home-product-card">
                             <div className="product-card__image">
                                 <span className="placeholder-icon">🧉</span>
-                                <span className="badge-best">Más vendido</span>
+                                <span className="badge-best">Destacado</span>
                             </div>
                             <div className="product-card__info">
-                                <h4>{product.name}</h4>
                                 <p className="product-tag">{product.type}</p>
+                                <h4>{product.name}</h4>
                                 <p className="product-price">${product.price.toLocaleString()}</p>
                                 <button
                                     className="btn-add-home"
@@ -71,24 +65,22 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* BANNER PROMOCIONAL (El Regalo Perfecto) */}
             <section className="promo-banner section__container">
                 <div className="promo-grid">
                     <div className="promo-image">
-                        {/* Aquí iría la foto del kit de regalo */}
                         <div className="placeholder-promo">🎁</div>
                     </div>
                     <div className="promo-text">
-                        <span className="promo-tag">LA OPCIÓN MÁS ELEGIDA</span>
+                        <span className="promo-tag">EDICIÓN LIMITADA</span>
                         <h2>El regalo perfecto para el verdadero matero</h2>
                         <ul>
-                            <li><span className="material-symbols-outlined">check</span> Mate de madera noble seleccionado</li>
-                            <li><span className="material-symbols-outlined">check</span> Bombilla de alpaca o acero premium</li>
-                            <li><span className="material-symbols-outlined">check</span> Caja artesanal de madera</li>
-                            <li><span className="material-symbols-outlined">check</span> Guía de curado y cuidado paso a paso</li>
+                            <li><span className="material-symbols-outlined">done</span> Mate de madera noble seleccionada</li>
+                            <li><span className="material-symbols-outlined">done</span> Bombilla de alpaca premium</li>
+                            <li><span className="material-symbols-outlined">done</span> Caja artesanal de madera</li>
+                            <li><span className="material-symbols-outlined">done</span> Guía de curado paso a paso</li>
                         </ul>
                         <p className="promo-price">$89.000</p>
-                        <button className="btn-promo">Comprar ahora</button>
+                        <button className="btn-promo">Lo quiero ahora</button>
                     </div>
                 </div>
             </section>

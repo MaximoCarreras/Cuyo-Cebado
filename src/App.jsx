@@ -6,15 +6,15 @@ import ScrollToTop from './components/ScrollToTop';
 // Importamos la sección de Comunidad
 import Community from './components/Community/Community';
 
-// Importamos las páginas principales
-import Home from './pages/Home';
+// Importamos las páginas principales (Rutas actualizadas)
+import Home from './pages/Home/Home';
 import About from './pages/About';
 import Guide from './pages/Guide';
 import CartPage from './pages/CartPage/CartPage';
 import ProductsPage from './pages/ProductsPage/ProductsPage';
 import CategoryPage from './pages/CategoryPage/CategoryPage';
 
-// NUEVAS PÁGINAS DE CHECKOUT
+// PÁGINAS DE CHECKOUT
 import SuccessPage from './pages/Checkout/SuccessPage';
 import FailurePage from './pages/Checkout/FailurePage';
 
@@ -43,9 +43,7 @@ export default function App() {
         </Routes>
       </main>
 
-      {/* Comunidad antes del Footer */}
       <Community />
-
       <Footer />
 
       {/* BURBUJA FLOTANTE DE WHATSAPP */}
