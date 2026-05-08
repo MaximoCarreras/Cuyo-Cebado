@@ -10,42 +10,50 @@ export default function Home() {
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
     const mainCategories = categories.slice(0, 6);
 
+    // Buscamos el producto del Kit de Regalo para que el botón funcione
+    const giftProduct = products.find(p => p.id === 401) || products.find(p => p.category === 'kits');
+
     const scrollToCategories = () => {
         const element = document.getElementById('categorias-home');
         if (element) element.scrollIntoView({ behavior: 'smooth' });
     };
 
+    const handleGiftClick = () => {
+        if (giftProduct) {
+            addToCart(giftProduct);
+            alert("¡Kit Regalo Premium agregado al carrito! 🎁");
+        }
+    };
+
     return (
         <div className="home">
-            {/* HERO SECTION PREMIUM */}
+            {/* HERO SECTION RESTAURADO AL 100% */}
             <section className="hero">
-                <div className="hero__container">
-                    <div className="hero__left">
-                        <div className="hero__content">
-                            <h1>
-                                MATES CON <br />
-                                <span className="gold-text">IDENTIDAD</span>
-                            </h1>
-                            <p>
-                                Curaduría premium de mates imperiales tallados a mano en Mendoza.
-                                Una pieza de arte en cada cebada.
-                            </p>
-                            <div className="hero__actions">
-                                <button onClick={scrollToCategories} className="btn-primary">
-                                    VER CATÁLOGO
-                                </button>
-                                <a
-                                    href="https://wa.me/5492625597956?text=Hola!%20Quiero%20consultar%20por%20un%20mate%20premium"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="btn-outline"
-                                >
-                                    CONSULTAR POR WHATSAPP
-                                </a>
-                            </div>
+                <div className="hero__background-image"></div>
+                <div className="hero__overlay">
+                    <div className="hero__content-box">
+                        <h1>
+                            MATES CON <br />
+                            <span className="gold-text">IDENTIDAD</span>
+                        </h1>
+                        <p>
+                            Curaduría premium de mates imperiales tallados a mano en Mendoza.
+                            Una pieza de arte en cada cebada.
+                        </p>
+                        <div className="hero__actions">
+                            <button onClick={scrollToCategories} className="btn-primary">
+                                VER CATÁLOGO
+                            </button>
+                            <a
+                                href="https://wa.me/5492625597956?text=Hola!%20Quiero%20consultar%20por%20un%20mate%20premium"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="btn-outline"
+                            >
+                                CONSULTAR POR WHATSAPP
+                            </a>
                         </div>
                     </div>
-                    <div className="hero__right"></div>
                 </div>
             </section>
 
@@ -67,7 +75,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* LOS MÁS BUSCADOS */}
+            {/* PRODUCTOS MÁS BUSCADOS */}
             <section className="section-container bg-white">
                 <div className="section-header">
                     <h2>Los Más Buscados</h2>
@@ -98,7 +106,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* PROMO BANNER */}
+            {/* PROMO BANNER FUNCIONAL */}
             <section className="promo-section">
                 <div className="promo-container">
                     <div className="promo-image-box">
@@ -115,7 +123,9 @@ export default function Home() {
                         </ul>
                         <div className="promo-footer">
                             <p className="promo-price">$89.000</p>
-                            <button className="btn-promo-action">Lo quiero ahora</button>
+                            <button onClick={handleGiftClick} className="btn-promo-action">
+                                Lo quiero ahora
+                            </button>
                         </div>
                     </div>
                 </div>
