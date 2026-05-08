@@ -8,46 +8,96 @@
 
 .home {
     background-color: var(--mafia-cream);
+    min-height: 100vh;
 }
 
-/* --- HERO SECTION --- */
-.hero {
+/* --- 1. HERO SPOTLIGHT (Círculo y Derecha) --- */
+.hero-spotlight {
     height: 90vh;
+    background-color: var(--mafia-brown);
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    background-color: var(--mafia-brown);
+    position: relative;
+    overflow: hidden;
     color: var(--mafia-cream);
-    padding: 0 20px;
-    /* Podés agregar una imagen de fondo aquí si querés */
 }
 
-.hero__title {
+.hero-spotlight__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Izquierda y Derecha */
+    align-items: center;
+    padding: 0 50px;
+}
+
+.hero-title {
     font-family: 'Noto Serif', serif;
-    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-size: clamp(2.5rem, 6vw, 4rem);
     text-transform: uppercase;
     font-weight: 800;
+    line-height: 1.1;
     margin-bottom: 20px;
     letter-spacing: 2px;
 }
 
-.hero__title span {
+.hero-title span {
     color: var(--mafia-gold);
 }
 
-.hero__description {
-    max-width: 700px;
-    margin: 0 auto 40px;
+.hero-subtitle {
     font-size: 1.1rem;
+    margin-bottom: 40px;
+    max-width: 500px;
     line-height: 1.6;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
-.home__cta-container {
+.hero-cta {
     display: flex;
     gap: 15px;
+}
+
+/* EL CÍRCULO Y LA IMAGEN */
+.hero-spotlight__right {
+    position: relative;
+    display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.spotlight-circle {
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: var(--mafia-brown-light);
+    border: 1px solid rgba(165, 129, 58, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.spotlight-circle::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(165, 129, 58, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+.hero-image {
+    height: 600px;
+    /* La imagen se sale del círculo */
+    width: auto;
+    position: absolute;
+    bottom: -50px;
+    right: 50px;
+    z-index: 5;
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.5));
 }
 
 /* BOTONES */
@@ -73,7 +123,7 @@
     font-size: 0.8rem;
 }
 
-/* --- CATEGORÍAS (GRILLA CENTRADA) --- */
+/* --- 2. CATEGORÍAS (La Grilla Centrada) --- */
 .home-categories {
     padding: 80px 24px;
     max-width: 1400px;
@@ -127,17 +177,136 @@
     letter-spacing: 1.5px;
 }
 
-/* --- RESPONSIVE MÓVIL (2 COLUMNAS) --- */
+/* --- 3. LO MÁS VENDIDO (Kit Regalo) --- */
+.home-best-sellers {
+    padding: 80px 24px 120px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.best-sellers__header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.best-sellers__subtitle {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    color: var(--mafia-gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    margin-top: -30px;
+}
+
+.gold-separator {
+    width: 80px;
+    height: 4px;
+    background: var(--mafia-gold);
+    margin: 20px auto;
+    border-radius: 2px;
+}
+
+/* GRILLA ESTILO BOUTIQUE */
+.products-grid-meli {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.product-card-premium {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.product-image-container {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--mafia-cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+}
+
+.product-details {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.details-material {
+    color: var(--mafia-gold);
+    font-weight: 800;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+}
+
+.details-name {
+    font-size: 0.95rem;
+    color: var(--mafia-brown);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.details-price {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--mafia-brown);
+    margin-top: auto;
+    margin-bottom: 15px;
+}
+
+.btn-add-cart {
+    width: 100%;
+    padding: 12px;
+    background: var(--mafia-brown);
+    color: var(--mafia-cream);
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+/* --- RESPONSIVE MÓVIL --- */
 @media (max-width: 768px) {
-    .home-categories {
-        padding: 40px 15px;
+    .hero-spotlight__container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 0 20px;
+        height: 80vh;
     }
 
-    .home__cta-container {
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        margin: 0 auto 30px;
+    }
+
+    .hero-cta {
+        justify-content: center;
         flex-direction: column;
-        width: 100%;
     }
 
+    .spotlight-circle {
+        width: 300px;
+        height: 300px;
+    }
+
+    .hero-image {
+        height: 350px;
+        right: 0;
+        bottom: -20px;
+    }
+
+    /* 2 COLUMNAS EN MÓVIL (Clavado) */
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
@@ -154,5 +323,10 @@
 
     .category-card__info h3 {
         font-size: 0.95rem;
+    }
+
+    .products-grid-meli {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 }
