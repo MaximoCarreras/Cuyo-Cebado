@@ -13,14 +13,14 @@ body {
   min-height: 100vh;
 }
 
-/* ELIMINACIÓN DEL MARGEN BLANCO */
+/* FIX MARGEN BLANCO: Pegamos el contenido a la Navbar sticky */
 main {
   flex: 1;
   padding-top: 0 !important;
   background-color: #fdfaf7;
 }
 
-/* TÍTULOS DE SECCIÓN (Referencia para el Hero) */
+/* TÍTULOS DE TODA LA WEB (Referencia para el Hero) */
 .section__title {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   color: #2b2520;
@@ -32,6 +32,7 @@ main {
   font-family: 'Noto Serif', serif;
 }
 
+/* BOTONES PREMUM GLOBALES */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -54,8 +55,14 @@ main {
   color: #fdfaf7;
 }
 
+.btn--gold:hover {
+  background-color: #2b2520;
+  transform: translateY(-2px);
+}
+
+/* Fix específico para que el botón no se quede marrón después de tocarlo */
 .btn--gold:active {
-  background-color: #2b2520 !important;
+  background-color: #2b2520;
 }
 
 .whatsapp-float {

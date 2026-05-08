@@ -2,6 +2,7 @@
   --color-cuyo-brown: #2b2520;
   --color-gold: #a5813a;
   --color-bone: #fdfaf7;
+  --nav-height: 100px;
 }
 
 .announcement-bar {
@@ -98,7 +99,6 @@
   padding: 0;
   z-index: 2100;
   /* Asegura que la X esté siempre encima del menú */
-  transition: transform 0.3s ease;
 }
 
 .navbar__toggle span {
@@ -110,11 +110,6 @@
     display: flex;
   }
 
-  .navbar__toggle--active {
-    transform: rotate(90deg);
-    color: var(--color-gold);
-  }
-
   .navbar__center {
     position: fixed;
     top: 0;
@@ -123,7 +118,7 @@
     height: 100vh;
     background: var(--color-cuyo-brown);
     padding: 100px 30px;
-    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: right 0.4s ease;
     z-index: 2000;
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
   }
@@ -135,9 +130,5 @@
   .navbar__links {
     flex-direction: column;
     gap: 30px;
-  }
-
-  .navbar__links a {
-    font-size: 1.2rem;
   }
 }
