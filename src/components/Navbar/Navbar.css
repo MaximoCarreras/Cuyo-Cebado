@@ -40,7 +40,6 @@
   display: block;
 }
 
-/* --- LINKS ESCRITORIO --- */
 .navbar__links {
   display: flex;
   gap: 35px;
@@ -89,29 +88,31 @@
   justify-content: center;
 }
 
-/* --- BOTÓN HAMBURGUESA (FIX CUADRO BLANCO) --- */
+/* BOTÓN HAMBURGUESA MEJORADO */
 .navbar__toggle {
   display: none;
-  /* OCULTO EN ESCRITORIO */
   background: none;
-  /* Elimina fondo blanco */
   border: none;
-  /* Elimina borde */
   color: var(--color-bone);
   cursor: pointer;
   padding: 0;
-  line-height: 1;
+  z-index: 2100;
+  /* Asegura que la X esté siempre encima del menú */
+  transition: transform 0.3s ease;
 }
 
 .navbar__toggle span {
   font-size: 32px;
 }
 
-/* --- RESPONSIVE MÓVIL --- */
 @media (max-width: 950px) {
   .navbar__toggle {
     display: flex;
-    /* SE MUESTRA EN MÓVIL */
+  }
+
+  .navbar__toggle--active {
+    transform: rotate(90deg);
+    color: var(--color-gold);
   }
 
   .navbar__center {
@@ -122,7 +123,7 @@
     height: 100vh;
     background: var(--color-cuyo-brown);
     padding: 100px 30px;
-    transition: 0.4s ease;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 2000;
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
   }

@@ -32,14 +32,12 @@ export default function Navbar() {
       <nav className="navbar">
         <div className="navbar__container">
 
-          {/* IZQUIERDA: Logo */}
           <div className="navbar__left">
             <Link to="/" className="navbar__logo" onClick={handleNavClick}>
               <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo-img" />
             </Link>
           </div>
 
-          {/* CENTRO: Links (Se ocultan en móvil, se ven en escritorio) */}
           <div className={`navbar__center ${isMobileOpen ? 'navbar__center--open' : ''}`}>
             <ul className="navbar__links">
               {navLinks.map(link => (
@@ -50,16 +48,17 @@ export default function Navbar() {
             </ul>
           </div>
 
-          {/* DERECHA: Carrito y Hamburguesa */}
           <div className="navbar__right">
             <Link to="/carrito" className="navbar__cart-link" onClick={handleNavClick}>
               <span className="material-symbols-outlined">shopping_cart</span>
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </Link>
 
+            {/* Botón con prioridad de z-index para que se vea la X */}
             <button
               className={`navbar__toggle ${isMobileOpen ? 'navbar__toggle--active' : ''}`}
               onClick={() => setIsMobileOpen(!isMobileOpen)}
+              aria-label={isMobileOpen ? "Cerrar menú" : "Abrir menú"}
             >
               <span className="material-symbols-outlined">
                 {isMobileOpen ? 'close' : 'menu'}
