@@ -1,157 +1,108 @@
-:root {
-  --color-cuyo-brown: #2b2520;
-  --color-gold: #a5813a;
-  --color-bone: #fdfaf7;
-}
-
-.announcement-bar {
-  background-color: var(--color-gold);
-  color: var(--color-bone);
-  text-align: center;
-  padding: 10px 0;
-  font-size: 0.85rem;
-  font-weight: 600;
-  width: 100%;
-}
+/* src/components/Navbar/Navbar.css */
 
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
-  background-color: var(--color-cuyo-brown);
-  height: 90px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(165, 129, 58, 0.15);
-}
-
-.navbar__container {
+  left: 0;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  height: 90px;
+  /* Altura fija para mantener simetría en todas las vistas */
+  background-color: #1a1614;
+  /* Marrón Mafia de fondo */
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  padding: 0 50px;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(165, 129, 58, 0.1);
 }
 
-.navbar__left {
-  display: flex;
-  justify-content: flex-start;
+.navbar__logo {
+  height: 50px;
+  transition: transform 0.3s;
 }
 
-.navbar__logo-img {
-  height: 65px;
-  display: block;
+.navbar__logo:hover {
+  transform: scale(1.05);
 }
 
-.navbar__center {
-  display: flex;
-  justify-content: center;
-}
-
-.navbar__links {
+.navbar__menu {
   display: flex;
   gap: 35px;
   list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
-.navbar__links a {
-  color: var(--color-bone);
+.navbar__link {
+  color: #fdfaf7;
   text-decoration: none;
-  font-weight: 500;
-  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
   transition: color 0.3s;
 }
 
-.navbar__links a:hover {
-  color: var(--color-gold);
+.navbar__link:hover {
+  color: #a5813a;
 }
 
-/* DERECHA Y TOGGLE: Prioridad absoluta */
-.navbar__right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 20px;
-  z-index: 2100;
-  /* Por encima del menú lateral */
-}
-
-.navbar__cart-link {
-  color: var(--color-bone);
-  text-decoration: none;
+/* --- CARRITO PREMIUM AGRANDADO --- */
+.navbar__cart-container {
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #fdfaf7;
+  transition: transform 0.3s ease;
+  padding: 10px;
 }
 
-.cart-badge {
+.navbar__cart-container:hover {
+  transform: scale(1.1);
+  color: #a5813a;
+}
+
+/* Tamaño del icono aumentado */
+.cart-icon-main {
+  font-size: 32px !important;
+  /* El tamaño que pediste */
+  cursor: pointer;
+}
+
+/* El contador (burbuja) escalado simétricamente */
+.cart-badge-premium {
   position: absolute;
-  top: -8px;
-  right: -10px;
-  background: var(--color-gold);
-  color: var(--color-cuyo-brown);
-  font-size: 0.7rem;
+  top: 0;
+  right: 0;
+  background-color: #a5813a;
+  color: #1a1614;
+  font-size: 11px;
   font-weight: 800;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid #1a1614;
+  /* Para que resalte sobre el fondo oscuro */
 }
 
-.navbar__toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: var(--color-bone);
-  cursor: pointer;
-  padding: 0;
-  z-index: 2200;
-  /* Asegura que la X esté arriba de todo */
-}
-
-.navbar__toggle span {
-  font-size: 32px;
-}
-
-@media (max-width: 950px) {
-  .navbar__container {
-    display: flex;
-    justify-content: space-between;
+/* Responsive para que no se rompa en celu */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 20px;
+    height: 70px;
   }
 
-  .navbar__toggle {
-    display: block;
+  .navbar__menu {
+    display: none;
   }
 
-  .navbar__center {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 280px;
-    height: 100vh;
-    background: var(--color-cuyo-brown);
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 100px;
-    padding-left: 30px;
-    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 2000;
-    /* Más bajo que el toggle */
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-  }
-
-  .navbar__center--open {
-    right: 0;
-  }
-
-  .navbar__links {
-    flex-direction: column;
-    gap: 30px;
+  /* Suponiendo que tenés un menú hamburguesa */
+  .cart-icon-main {
+    font-size: 28px !important;
   }
 }

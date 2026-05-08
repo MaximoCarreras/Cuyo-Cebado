@@ -1,72 +1,39 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import './Navbar.css';
 
 export default function Navbar() {
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const { cartCount } = useCart();
-  const location = useLocation();
+  const { cart } = useCart();
 
-  const navLinks = [
-    { label: 'Inicio', to: '/' },
-    { label: 'Productos', to: '/productos' }, // Nueva pestaña agregada
-    { label: 'Nosotros', to: '/nosotros' },
-    { label: 'Guía de Curado', to: '/guia-curado' },
-  ];
-
-  const handleNavClick = () => {
-    setIsMobileOpen(false);
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  };
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [location.pathname]);
+  // Sumamos la cantidad total de productos
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <>
-      <div className="announcement-bar">
-        <p><b>Beneficio Cuyo:</b> Entrega personalizada en Mendoza y San Luis. Envíos protegidos a todo el país.</p>
-      </div>
+    <nav className="navbar">
+      {/* Logo de Cuyo Cebado */}
+      <Link to="/">
+        <img src="/src/assets/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
+      </Link>
 
-      <nav className="navbar">
-        <div className="navbar__container">
+      {/* Menú de Navegación */}
+      <ul className="navbar__menu">
+        <li><Link to="/" className="navbar__link">Inicio</Link></li>
+        <li><Link to="/productos" className="navbar__link">Productos</Link></li>
+        <li><Link to="/nosotros" className="navbar__link">Nosotros</Link></li>
+        <li><Link to="/guia-curado" className="navbar__link">Guía de Curado</Link></li>
+      </ul>
 
-          <div className="navbar__left">
-            <Link to="/" className="navbar__logo" onClick={handleNavClick}>
-              <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo-img" />
-            </Link>
+      {/* Carrito con tamaño Premium */}
+      <Link to="/carrito" className="navbar__cart-container">
+        <span className="material-symbols-outlined cart-icon-main">
+          shopping_bag
+        </span>
+        {totalItems > 0 && (
+          <div className="cart-badge-premium">
+            {totalItems}
           </div>
-
-          <div className={`navbar__center ${isMobileOpen ? 'navbar__center--open' : ''}`}>
-            <ul className="navbar__links">
-              {navLinks.map(link => (
-                <li key={link.to}>
-                  <Link to={link.to} onClick={handleNavClick}>{link.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="navbar__right">
-            <Link to="/carrito" className="navbar__cart-link" onClick={handleNavClick}>
-              <span className="material-symbols-outlined">shopping_cart</span>
-              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-            </Link>
-
-            <button
-              className={`navbar__toggle ${isMobileOpen ? 'navbar__toggle--active' : ''}`}
-              onClick={() => setIsMobileOpen(!isMobileOpen)}
-            >
-              <span className="material-symbols-outlined">
-                {isMobileOpen ? 'close' : 'menu'}
-              </span>
-            </button>
-          </div>
-
-        </div>
-      </nav>
-    </>
+        )}
+      </Link>
+    </nav>
   );
 }
