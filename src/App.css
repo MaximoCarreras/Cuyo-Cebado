@@ -1,8 +1,8 @@
 /* src/App.css */
 html,
 body {
-  background-color: #1e1a17;
-  /* Aplicamos el marroncito de fondo web */
+  background-color: #fdfaf7;
+  /* Fondo original del proyecto */
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -11,13 +11,9 @@ body {
 main {
   flex: 1;
   padding-top: 0 !important;
-  background-color: #1e1a17;
-  /* Consistencia total */
+  background-color: #fdfaf7;
 }
 
-/* ... Resto de tus estilos globales ... */
-
-/* TÍTULOS DE TODA LA WEB (Referencia para el Hero) */
 .section__title {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   color: #2b2520;
@@ -29,7 +25,6 @@ main {
   font-family: 'Noto Serif', serif;
 }
 
-/* BOTONES PREMUM GLOBALES */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -57,7 +52,6 @@ main {
   transform: translateY(-2px);
 }
 
-/* Fix específico para que el botón no se quede marrón después de tocarlo */
 .btn--gold:active {
   background-color: #2b2520;
 }

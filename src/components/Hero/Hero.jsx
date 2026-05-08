@@ -1,76 +1,60 @@
 import { useEffect, useState } from 'react';
 import './Hero.css';
 import heroBgImage from '../../assets/fondo_hero_principal.png';
-import Grainient from '../Backgrounds/Grainient'; 
+import Grainient from '../Backgrounds/Grainient';
 
 export default function Hero() {
   const [viewHeight, setViewHeight] = useState('100svh');
 
   useEffect(() => {
-    // Función para bloquear la altura en píxeles reales
     const lockHeight = () => {
-      // Solo aplicamos el bloqueo en celulares/tablets (ancho menor a 900)
       if (window.innerWidth <= 900) {
         setViewHeight(`${window.innerHeight}px`);
       } else {
-        setViewHeight('100vh'); // En PC se mantiene normal
+        setViewHeight('100vh');
       }
     };
-
     lockHeight();
-    // No escuchamos el evento 'resize' para que el scroll no active cambios de altura
   }, []);
 
   return (
-    <section 
-      className="hero" 
-      id="hero" 
+    <section
+      className="hero"
+      id="hero"
       style={{ height: viewHeight, minHeight: viewHeight }}
     >
-
-      {/* 1. Capa de la imagen */}
       <div
         className="hero__image-bg"
         style={{ backgroundImage: `url(${heroBgImage})` }}
       ></div>
 
-      {/* 2. Capa con animación de vetas de madera (Grainient) */}
       <div className="hero__shape">
         <Grainient
           color1="#140d07"
           color2="#3e2715"
           color3="#26170d"
           timeSpeed={0.18}
-          colorBalance={0}
           warpStrength={1.5}
           warpFrequency={3}
           warpSpeed={1.2}
-          warpAmplitude={40}
-          blendAngle={0}
-          blendSoftness={0.4}
           rotationAmount={100}
           noiseScale={1.5}
           grainAmount={0.06}
-          grainScale={1.5}
           grainAnimated={true}
-          contrast={1.2}
-          gamma={1}
-          saturation={0.8}
           zoom={1}
           className="hero__grainient"
         />
       </div>
 
-      {/* 3. Contenedor del texto (Limpio de emojis) */}
-      <div className="hero__container section__container">
+      <div className="hero__container">
         <div className="hero__content">
           <h1 className="hero__title">
-            <span className="text-white">Mates con</span> <br />
+            Mates con <br />
             <b>Identidad</b>
           </h1>
 
           <p className="hero__subtitle">
-            Curaduría premium de mates imperiales tallados a mano en Mendoza. 
+            Curaduría premium de mates imperiales tallados a mano en Mendoza.
             Una pieza de arte en cada cebada.
           </p>
 

@@ -1,25 +1,18 @@
 :root {
   --color-cuyo-brown: #2b2520;
-  /* Color original de tu Navbar */
   --color-gold: #a5813a;
   --color-bone: #fdfaf7;
 }
 
-.navbar {
-  position: sticky;
-  top: 0;
-  background-color: var(--color-cuyo-brown);
-  /* Mantiene su color característico */
-  height: 90px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(165, 129, 58, 0.1);
-  /* Un toque de sombra para separarla del Hero */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+.announcement-bar {
+  background-color: var(--color-gold);
+  color: var(--color-bone);
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: 100%;
 }
-
-/* ... Resto de tu CSS de Navbar igual ... */
 
 .navbar {
   position: sticky;
@@ -95,7 +88,6 @@
   justify-content: center;
 }
 
-/* BOTÓN HAMBURGUESA MEJORADO */
 .navbar__toggle {
   display: none;
   background: none;
@@ -104,7 +96,6 @@
   cursor: pointer;
   padding: 0;
   z-index: 2100;
-  /* Asegura que la X esté siempre encima del menú */
 }
 
 .navbar__toggle span {
