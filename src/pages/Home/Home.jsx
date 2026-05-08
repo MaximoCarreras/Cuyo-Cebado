@@ -6,12 +6,11 @@ import './Home.css';
 
 export default function Home() {
     const { addToCart } = useCart();
-    const heroRef = useRef(null); // Referencia para el Spotlight
+    const heroRef = useRef(null);
 
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
     const allCategories = categories;
 
-    // Producto del Kit de Regalo
     const giftProduct = products.find(p => p.id === 501) || products.find(p => p.category === 'kits');
 
     const scrollToCategories = () => {
@@ -26,7 +25,6 @@ export default function Home() {
         }
     };
 
-    // EFECTO SPOTLIGHT: Calcula la posición del mouse
     const handleMouseMove = (e) => {
         if (!heroRef.current) return;
         const rect = heroRef.current.getBoundingClientRect();
@@ -39,7 +37,6 @@ export default function Home() {
 
     return (
         <div className="home-mafia">
-            {/* HERO SECTION CON EFECTO SPOTLIGHT Y COLOR DE NUESTRA HISTORIA */}
             <section className="hero-mafia">
                 <div className="hero-mafia__container">
                     <div
@@ -47,7 +44,6 @@ export default function Home() {
                         onMouseMove={handleMouseMove}
                         className="hero-mafia__left-panel spotlight-card"
                     >
-                        {/* Resplandor React Bits en el borde */}
                         <div className="react-bits-glow"></div>
 
                         <div className="hero-mafia__content">
@@ -78,7 +74,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* CATEGORÍAS */}
             <section id="categorias-home" className="home-section">
                 <div className="home-section__header">
                     <h2 className="home-section__title">Encontrá tu compañero ideal</h2>
@@ -96,7 +91,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* LOS MÁS BUSCADOS */}
             <section className="home-section home-section--white">
                 <div className="home-section__header">
                     <h2 className="home-section__title">Los Más Buscados</h2>
@@ -124,7 +118,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* PROMO BANNER REGALO */}
             <section className="home-promo">
                 <div className="home-promo__container">
                     <div className="home-promo__image">
