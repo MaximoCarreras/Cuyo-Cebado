@@ -1,18 +1,14 @@
 /* src/components/Hero/Hero.css */
-
 .hero {
   width: 100%;
   position: relative;
   display: flex;
   align-items: center;
   overflow: hidden;
-  background-color: #2b2520;
-  /* Marrón Madera base */
-  min-height: 80vh;
-  /* Asegura un buen tamaño inicial */
+  background-color: #1e1a17;
+  /* El "marroncito" profundo de fondo, distinto al de la Navbar */
 }
 
-/* --- 1. IMAGEN DE FONDO (FOTO DEL MATE) --- */
 .hero__image-bg {
   position: absolute;
   top: 0;
@@ -23,17 +19,16 @@
   background-position: center right;
   z-index: 1;
   will-change: transform;
-  transform: translateZ(0);
 }
 
-/* --- 2. FORMA CURVA Y ROTADA PREMIUM --- */
 .hero__shape {
   position: absolute;
   top: -10%;
   left: -20%;
   width: 75%;
   height: 120%;
-  background-color: #2b2520;
+  background-color: #1e1a17;
+  /* Mismo color marroncito */
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
@@ -41,15 +36,21 @@
   overflow: hidden;
 }
 
-.hero__grainient {
-  width: 100%;
-  height: 100%;
+/* EFECTO GRANULADO (Noise Texture) */
+.hero::after {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  /* Textura de grano sutil */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 4;
 }
 
-/* --- 3. CONTENIDO (TEXTO Y BOTONES) --- */
 .hero__container {
   position: relative;
   z-index: 3;
@@ -58,13 +59,12 @@
   padding: 0 24px;
 }
 
-/* POSICIONAMIENTO Y ANCHO ESCRITORIO (Referencia, no se toca) */
+/* --- VISTA WEB (Sin cambios) --- */
 .hero__content {
   max-width: 1000px;
   padding-left: 35%;
 }
 
-/* TÍTULO ESCRITORIO (Noto Serif) */
 .hero__title {
   font-size: clamp(3.2rem, 5.5vw, 4.8rem);
   line-height: 1.1;
@@ -81,7 +81,6 @@
   font-family: 'Noto Serif', serif !important;
 }
 
-/* SUBTÍTULO ESCRITORIO (Inter Sans-Serif) */
 .hero__subtitle {
   max-width: 700px;
   font-size: 1.15rem;
@@ -92,7 +91,7 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* BOTONES HERO ESCRITORIO (Fix) */
+/* BOTONES */
 .hero__actions {
   display: flex;
   gap: 20px;
@@ -117,13 +116,9 @@
   border: none;
 }
 
-/* Evita que se quede marrón lisos tras el touch */
-.hero .btn--gold:focus,
 .hero .btn--gold:active {
   background-color: #a5813a !important;
-  color: #2b2520 !important;
-  box-shadow: none;
-  outline: none;
+  transform: scale(0.98);
 }
 
 .hero .btn--outline-gold {
@@ -133,85 +128,78 @@
 }
 
 /* =========================================
-   === ADAPTACIÓN MÓVIL ESTÉTICA ORIGINAL === 
-   ===   (SUAVIZADO Y APILADO DE LUJO)   ===
+   === ADAPTACIÓN MÓVIL "ESTÉTICA ANALÓGICA" === 
    ========================================= */
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
-    /* Apilado vertical */
     justify-content: flex-start;
-    padding-top: 0;
     min-height: 100vh;
+    background-color: #1e1a17;
+    /* Marroncito de fondo */
   }
 
-  /* La imagen de fondo (mate) se ve arriba en móvil */
+  /* LA TRANSICIÓN GRADUAL: La imagen se funde con el fondo */
   .hero__image-bg {
     position: relative;
-    height: 45vh;
-    /* La imagen ocupa la parte superior */
+    height: 50vh;
+    width: 100%;
     background-position: center top;
-    /* EFECTO PRO: Degradado inferior para la "conversión gradual" */
-    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    /* Máscara de degradado complejo para suavizar la transición */
+    -webkit-mask-image: linear-gradient(to bottom,
+        black 0%,
+        black 60%,
+        rgba(0, 0, 0, 0.8) 75%,
+        rgba(0, 0, 0, 0.3) 90%,
+        transparent 100%);
+    mask-image: linear-gradient(to bottom,
+        black 0%,
+        black 60%,
+        rgba(0, 0, 0, 0.8) 75%,
+        rgba(0, 0, 0, 0.3) 90%,
+        transparent 100%);
   }
 
-  /* REDISEÑO MÓVIL: La forma curva marrón se convierte en el fondo del texto inferior */
+  /* LA FORMA CURVA EN MÓVIL: Se vuelve un suave "marroncito" que sube */
   .hero__shape {
-    position: relative;
-    top: -5vh;
-    /* Sube un poco para unirse suavemente a la imagen */
-    left: 0;
-    width: 100%;
-    height: auto;
-    border-radius: 50% 50% 0 0 / 10% 10% 0 0;
-    /* Curva sutil superior */
-    background-color: #2b2520;
-    /* Color Marrón Madera */
-    margin-bottom: -5vh;
-    /* Corrige espacio */
+    position: absolute;
+    top: 40vh;
+    /* Empieza donde la imagen empieza a fundirse */
+    left: -10%;
+    width: 120%;
+    height: 70vh;
+    border-radius: 50% 50% 0 0 / 15% 15% 0 0;
+    background-color: #1e1a17;
+    /* El marroncito que querías */
     box-shadow: none;
+    z-index: 2;
   }
 
   .hero__container {
+    margin-top: -5vh;
+    /* Sube el texto para que "entre" en la degradación */
     z-index: 3;
-    /* Texto por encima de la curva marrón */
   }
 
-  /* TEXTO CENTRADO SOBRE LA CURVA OSCURA */
   .hero__content {
-    padding: 0 24px 60px;
+    padding: 0 24px 80px;
     text-align: center;
     max-width: 100%;
     padding-left: 0;
   }
 
   .hero__title {
-    font-size: clamp(2.2rem, 9vw, 3rem);
-    /* Ajustado para pantallas verticales */
+    font-size: 2.4rem;
     margin-bottom: 20px;
-    color: #fdfaf7;
-    /* "Mates con" en blanco hueso */
-  }
-
-  .hero__title b {
-    color: #a5813a;
-    /* "Identidad" en dorado */
   }
 
   .hero__subtitle {
     font-size: 1rem;
-    margin-bottom: 35px;
-    color: rgba(253, 250, 247, 0.95);
-    /* Descripción en blanco hueso */
-    padding: 0 10px;
+    margin-bottom: 40px;
   }
 
-  /* BOTONES APILADOS Y CÓMODOS (Fix móvil ya aplicado globalmente) */
   .hero__actions {
-    justify-content: center;
     flex-direction: column;
-    /* Uno arriba del otro */
     gap: 15px;
     align-items: center;
     width: 100%;
@@ -219,7 +207,6 @@
 
   .hero .btn {
     width: 100%;
-    /* Botes anchos fáciles de tocar */
-    max-width: 300px;
+    max-width: 320px;
   }
 }

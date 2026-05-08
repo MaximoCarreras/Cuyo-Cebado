@@ -1,24 +1,21 @@
 /* src/App.css */
 html,
 body {
-  background-color: #fdfaf7;
+  background-color: #1e1a17;
+  /* Aplicamos el marroncito de fondo web */
   margin: 0;
   padding: 0;
   overflow-x: hidden;
 }
 
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* FIX MARGEN BLANCO: Pegamos el contenido a la Navbar sticky */
 main {
   flex: 1;
   padding-top: 0 !important;
-  background-color: #fdfaf7;
+  background-color: #1e1a17;
+  /* Consistencia total */
 }
+
+/* ... Resto de tus estilos globales ... */
 
 /* TÍTULOS DE TODA LA WEB (Referencia para el Hero) */
 .section__title {

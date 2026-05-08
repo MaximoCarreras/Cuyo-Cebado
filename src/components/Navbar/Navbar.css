@@ -1,19 +1,25 @@
 :root {
   --color-cuyo-brown: #2b2520;
+  /* Color original de tu Navbar */
   --color-gold: #a5813a;
   --color-bone: #fdfaf7;
-  --nav-height: 100px;
 }
 
-.announcement-bar {
-  background-color: var(--color-gold);
-  color: var(--color-bone);
-  text-align: center;
-  padding: 10px 0;
-  font-size: 0.85rem;
-  font-weight: 600;
-  width: 100%;
+.navbar {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-cuyo-brown);
+  /* Mantiene su color característico */
+  height: 90px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(165, 129, 58, 0.1);
+  /* Un toque de sombra para separarla del Hero */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
+
+/* ... Resto de tu CSS de Navbar igual ... */
 
 .navbar {
   position: sticky;
