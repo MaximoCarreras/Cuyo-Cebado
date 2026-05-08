@@ -1,18 +1,20 @@
+// src/pages/Home/Home.jsx
 import { Link } from 'react-router-dom';
+import { useRef } from 'react'; // NEW: Hook para el efecto Spotlight
 import { categories, products } from '../../data/products';
 import { useCart } from '../../context/CartContext';
 import './Home.css';
 
 export default function Home() {
     const { addToCart } = useCart();
+    const panelRef = useRef(null); // NEW: Referencia al panel izquierdo
 
-    // Productos destacados para la Home
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
 
-    // AHORA: Tomamos TODAS las categorías definidas en products.js
+    // Tomamos TODAS las categorías definidas en products.js
     const allCategories = categories;
 
-    // Buscamos el Kit de Regalo (ID 501 o similar)
+    // Buscamos el Kit de Regalo
     const giftProduct = products.find(p => p.id === 501) || products.find(p => p.category === 'kits');
 
     const scrollToCategories = () => {
@@ -29,12 +31,30 @@ export default function Home() {
         }
     };
 
+    // NEW: Lógica para el efecto Spotlight (React Bits Style)
+    const handleMouseMove = (e) => {
+        if (!panelRef.current) return;
+        const rect = panelRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left; // posición X relativa al panel
+        const y = e.clientY - rect.top;  // posición Y relativa al panel
+
+        // Pasamos las coordenadas al CSS como variables personalizadas
+        panelRef.current.style.setProperty('--mouse-x', `${x}px`);
+        panelRef.current.style.setProperty('--mouse-y', `${y}px`);
+    };
+
     return (
         <div className="home-mafia">
-            {/* HERO SECTION - REACT BITS STYLE */}
+            {/* HERO SECTION - RECONSTRUIDO AL 100% CON EFECTO SPOTLIGHT CARD */}
             <section className="hero-mafia">
                 <div className="hero-mafia__container">
-                    <div className="hero-mafia__left-panel">
+                    {/* Panel izquierdo: Inversión de colores, Efecto Spotlight y React Bits Glow */}
+                    <div
+                        ref={panelRef} // NEW: Asignamos la referencia
+                        onMouseMove={handleMouseMove} // NEW: Escuchamos el movimiento del mouse
+                        className="hero-mafia__left-panel spotlight-card" // Agregamos clase spotlight-card
+                    >
+                        {/* El resplandor dinámico React Bits (mantenido del diseño anterior) */}
                         <div className="react-bits-glow"></div>
 
                         <div className="hero-mafia__content">
@@ -65,7 +85,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* TODAS LAS CATEGORÍAS (Actualizado) */}
+            {/* TODAS LAS CATEGORÍAS */}
             <section id="categorias-home" className="home-section">
                 <div className="home-section__header">
                     <h2 className="home-section__title">Encontrá tu compañero ideal</h2>
@@ -83,7 +103,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* LOS MÁS BUSCADOS (Botones Mejorados) */}
+            {/* LOS MÁS BUSCADOS */}
             <section className="home-section home-section--white">
                 <div className="home-section__header">
                     <h2 className="home-section__title">Los Más Buscados</h2>
@@ -114,7 +134,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* PROMO BANNER REGALO (Botón Imponente) */}
+            {/* PROMO BANNER REGALO */}
             <section className="home-promo">
                 <div className="home-promo__container">
                     <div className="home-promo__image">
