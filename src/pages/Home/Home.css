@@ -5,19 +5,19 @@
     --mafia-gray: #2b2520;
 }
 
-.home-container {
+.home-main {
     background-color: var(--mafia-cream);
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* --- HERO CON CORTE CURVO --- */
+/* --- HERO SECTION --- */
 .hero-mafia {
     height: 90vh;
     background-color: var(--mafia-black);
     display: flex;
     position: relative;
     overflow: hidden;
-    color: var(--mafia-cream);
 }
 
 .hero-mafia__content {
@@ -26,11 +26,12 @@
     align-items: center;
     padding-left: 8%;
     z-index: 10;
+    color: var(--mafia-cream);
 }
 
 .hero-title {
     font-family: 'Noto Serif', serif;
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-size: clamp(2.5rem, 6vw, 4.2rem);
     line-height: 1.1;
     font-weight: 900;
     margin-bottom: 20px;
@@ -42,50 +43,49 @@
 }
 
 .hero-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     opacity: 0.8;
     margin-bottom: 40px;
     max-width: 450px;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
-.hero-actions {
+.hero-buttons {
     display: flex;
     gap: 15px;
 }
 
-/* LADO DERECHO: IMAGEN Y CORTE CIRCULAR */
-.hero-visual {
+/* LADO DERECHO: IMAGEN Y CORTE CURVO */
+.hero-visual-block {
     position: absolute;
     top: 0;
     right: 0;
     width: 55%;
-    /* Le damos un poco más de la mitad */
     height: 100%;
-    /* El corte curvo que se ve en tu foto */
+    /* El efecto de corte circular hacia adentro */
     clip-path: ellipse(100% 100% at 100% 50%);
 }
 
-.hero-main-img {
+.hero-main-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
 }
 
-/* EFECTO SPOTLIGHT (EL BRILLO SOBRE LA IMAGEN) */
 .spotlight-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 20% 50%, rgba(26, 22, 20, 0.8) 0%, rgba(0, 0, 0, 0) 60%);
+    /* El efecto Spotlight de luz sobre la imagen */
+    background: radial-gradient(circle at 20% 50%, rgba(26, 22, 20, 0.85) 0%, rgba(0, 0, 0, 0) 65%);
     z-index: 2;
 }
 
 /* BOTONES */
-.btn-gold {
+.btn-gold-mafia {
     background: var(--mafia-gold);
     color: var(--mafia-black);
     padding: 16px 35px;
@@ -94,9 +94,10 @@
     font-weight: 800;
     text-transform: uppercase;
     font-size: 0.8rem;
+    transition: 0.3s;
 }
 
-.btn-outline {
+.btn-outline-mafia {
     border: 2px solid var(--mafia-gold);
     color: var(--mafia-gold);
     padding: 14px 35px;
@@ -105,32 +106,39 @@
     font-weight: 800;
     text-transform: uppercase;
     font-size: 0.8rem;
+    transition: 0.3s;
 }
 
-/* --- SECCIÓN CATEGORÍAS --- */
-.categories-section {
+.btn-gold-mafia:hover {
+    background: var(--mafia-cream);
+    transform: translateY(-3px);
+}
+
+/* --- CATEGORÍAS --- */
+.home-categories-section {
     padding: 80px 24px;
     max-width: 1400px;
     margin: 0 auto;
 }
 
-.home-section-title {
+.global-section-title {
     text-align: center;
     font-family: 'Noto Serif', serif;
     font-size: 2.2rem;
     color: var(--mafia-black);
     text-transform: uppercase;
     margin-bottom: 50px;
+    letter-spacing: 2px;
 }
 
-.categories-grid-mza {
+.categories-grid-premium {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
     justify-content: center;
 }
 
-.category-card-mafia {
+.card-cat-dark {
     background: var(--mafia-gray);
     border-radius: 25px;
     padding: 60px 20px;
@@ -138,34 +146,40 @@
     text-align: center;
     transition: 0.4s ease;
     border: 1px solid rgba(165, 129, 58, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.category-card-mafia:hover {
+.card-cat-dark:hover {
     transform: translateY(-10px);
     border-color: var(--mafia-gold);
+    background-color: var(--mafia-black);
 }
 
-.cat-icon {
+.cat-icon-display {
     font-size: 4rem;
     margin-bottom: 20px;
 }
 
-.cat-info h3 {
+.cat-text-display h3 {
     color: var(--mafia-cream);
     font-family: 'Noto Serif', serif;
     font-size: 1.5rem;
     margin-bottom: 10px;
+    text-transform: uppercase;
 }
 
-.cat-info span {
+.cat-text-display span {
     color: var(--mafia-gold);
     font-weight: 700;
     text-transform: uppercase;
     font-size: 0.8rem;
+    letter-spacing: 1.5px;
 }
 
-/* --- BEST SELLERS --- */
-.best-sellers-home {
+/* --- SECCIÓN LO MÁS VENDIDO --- */
+.home-best-sellers {
     padding: 60px 24px 120px;
     max-width: 1400px;
     margin: 0 auto;
@@ -176,15 +190,16 @@
     margin-bottom: 60px;
 }
 
-.gold-subtitle-tag {
+.gold-subtitle {
     color: var(--mafia-gold);
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     margin-top: -40px;
     text-transform: uppercase;
+    font-size: 0.9rem;
 }
 
-.separator-gold {
+.gold-line-separator {
     width: 80px;
     height: 4px;
     background: var(--mafia-gold);
@@ -192,22 +207,28 @@
     border-radius: 2px;
 }
 
-.products-grid-premium {
+.products-grid-meli-style {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 25px;
 }
 
-.product-card-white {
+.product-card-white-boutique {
     background: #fff;
     border-radius: 15px;
     border: 1px solid rgba(0, 0, 0, 0.05);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    transition: 0.3s;
 }
 
-.card-img-container {
+.product-card-white-boutique:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.product-img-wrapper {
     aspect-ratio: 1;
     background: #f9f7f5;
     display: flex;
@@ -216,36 +237,36 @@
     font-size: 4rem;
 }
 
-.card-body-premium {
+.product-info-wrapper {
     padding: 20px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
-.card-brand-tag {
+.product-brand-tag {
     color: var(--mafia-gold);
     font-weight: 800;
     font-size: 0.7rem;
     text-transform: uppercase;
 }
 
-.card-product-name {
+.product-name-text {
     font-size: 1rem;
     color: var(--mafia-black);
     margin: 10px 0;
     font-weight: 600;
 }
 
-.card-product-price {
-    font-size: 1.4rem;
+.product-price-val {
+    font-size: 1.5rem;
     font-weight: 800;
     color: var(--mafia-black);
     margin-bottom: 20px;
     margin-top: auto;
 }
 
-.btn-add-mafia {
+.btn-add-to-cart-mafia {
     background: var(--mafia-black);
     color: #fff;
     border: none;
@@ -255,9 +276,15 @@
     cursor: pointer;
     text-transform: uppercase;
     font-size: 0.75rem;
+    transition: 0.3s;
 }
 
-/* --- RESPONSIVE --- */
+.btn-add-to-cart-mafia:hover {
+    background: var(--mafia-gold);
+    color: var(--mafia-black);
+}
+
+/* --- RESPONSIVE MÓVIL (Sincronizado) --- */
 @media (max-width: 768px) {
     .hero-mafia {
         height: auto;
@@ -267,32 +294,65 @@
 
     .hero-mafia__content {
         width: 100%;
-        padding: 0 20px 40px;
+        padding: 0 20px 60px;
         text-align: center;
     }
 
-    .hero-actions {
+    .hero-buttons {
         flex-direction: column;
+        width: 100%;
     }
 
-    .hero-visual {
+    .hero-visual-block {
         position: relative;
         width: 100%;
         height: 400px;
         clip-path: none;
     }
 
-    .hero-main-img {
-        object-position: top;
-    }
-
-    .categories-grid-mza {
-        grid-template-columns: repeat(2, 1fr);
+    /* LAS 2 COLUMNAS CLAVADAS EN EL CELU */
+    .categories-grid-premium {
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px;
     }
 
-    .products-grid-premium {
-        grid-template-columns: repeat(2, 1fr);
+    .products-grid-meli-style {
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px;
     }
+
+    .card-cat-dark {
+        padding: 35px 10px;
+        border-radius: 20px;
+    }
+
+    .cat-icon-display {
+        font-size: 2.8rem;
+    }
+
+    .cat-text-display h3 {
+        font-size: 0.95rem;
+    }
+
+    .cat-text-display span {
+        font-size: 0.6rem;
+    }
+}
+
+/* WHATSAPP FLOAT */
+.whatsapp-float-fixed {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #25d366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
 }
