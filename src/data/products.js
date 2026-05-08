@@ -1,42 +1,28 @@
 // src/data/products.js
 
 export const products = [
-    // --- MATES (Los Reyes) ---
-    { id: 1, name: "Mate Imperial Premium", category: "mates", type: "Imperial", material: "Alpaca y Cuero", price: 48000, image: "mate-1.jpg", bestSeller: true },
-    { id: 2, name: "Mate Torpedo Vaqueta", category: "mates", type: "Torpedo", material: "Cuero Legítimo", price: 35000, image: "mate-2.jpg" },
-    { id: 3, name: "Mate Camionero Cincelado", category: "mates", type: "Camionero", material: "Acero y Cuero", price: 28000, image: "mate-3.jpg" },
-    { id: 4, name: "Mate de Palo Santo", category: "mates", type: "Madera", material: "Palo Santo", price: 18500, image: "mate-4.jpg" },
-    { id: 5, name: "Mate de Algarrobo", category: "mates", type: "Madera", material: "Algarrobo", price: 12000, image: "mate-5.jpg" },
-    { id: 6, name: "Mate de Vidrio Forrado", category: "mates", type: "Vidrio", material: "Cuero Croco", price: 14500, image: "mate-6.jpg" },
-    { id: 7, name: "Mate Cerámica Artesanal", category: "mates", type: "Cerámica", material: "Gres", price: 9800, image: "mate-7.jpg" },
-    { id: 8, name: "Mate de Acero Térmico", category: "mates", type: "Acero", material: "Inoxidable", price: 22000, image: "mate-8.jpg" },
+    // --- MATES ---
+    { id: 1, name: "Mate Imperial Premium", category: "mates", type: "Imperial", material: "Alpaca y Cuero", price: 48000, bestSeller: true },
+    { id: 2, name: "Mate Torpedo Vaqueta", category: "mates", type: "Torpedo", material: "Cuero", price: 35000 },
+    { id: 4, name: "Mate de Palo Santo", category: "mates", type: "Tradicional", material: "Madera", price: 18500 },
 
-    // --- BOMBILLAS (Variedad Total) ---
-    { id: 101, name: "Bombilla Pico de Loro", category: "bombillas", type: "Pico de Loro", material: "Alpaca", price: 12500, image: "b-1.jpg", bestSeller: true },
-    { id: 102, name: "Bombilla de Resorte", category: "bombillas", type: "Resorte", material: "Acero", price: 6500, image: "b-2.jpg" },
-    { id: 103, name: "Bombilla Cuchara", category: "bombillas", type: "Cuchara", material: "Bronce", price: 8900, image: "b-3.jpg" },
-    { id: 104, name: "Bombilla Plana de Lujo", category: "bombillas", type: "Cincelada", material: "Plata y Oro", price: 35000, image: "b-4.jpg" },
-    { id: 105, name: "Bombilla Desmontable", category: "bombillas", type: "Fácil Limpieza", material: "Acero Quirúrgico", price: 11000, image: "b-5.jpg" },
+    // --- YERBAS ---
+    { id: 201, name: "Yerba Canarias Amarilla", category: "yerbas", type: "Sin Palo", brand: "Canarias", price: 7500, bestSeller: true },
+    { id: 202, name: "Yerba Baldo", category: "yerbas", type: "Sin Palo", brand: "Baldo", price: 7200 },
+    { id: 203, name: "Yerba Playadito 1kg", category: "yerbas", type: "Con Palo", brand: "Playadito", price: 5800 },
+    { id: 204, name: "Yerba La Merced", category: "yerbas", type: "Barbacuá", brand: "La Merced", price: 8500 },
 
-    // --- YERBAS (El motor del negocio) ---
-    { id: 201, name: "Yerba Canarias Amarilla", category: "yerbas", type: "Despalada", material: "Uruguaya", price: 7500, image: "y-1.jpg", bestSeller: true },
-    { id: 202, name: "Yerba Baldo", category: "yerbas", type: "Tradicional", material: "Uruguaya", price: 7200, image: "y-2.jpg" },
-    { id: 203, name: "Yerba Barbacuá", category: "yerbas", type: "Ahumada", material: "Argentina", price: 8900, image: "y-3.jpg" },
-    { id: 204, name: "Yerba Orgánica Premium", category: "yerbas", type: "Sin Agroquímicos", material: "Argentina", price: 9500, image: "y-4.jpg" },
-    { id: 205, name: "Yerba Compuesta", category: "yerbas", type: "Con Hierbas", material: "Argentina", price: 6800, image: "y-5.jpg" },
+    // --- BOMBILLAS ---
+    { id: 101, name: "Bombilla Pico de Loro", category: "bombillas", type: "Curva", material: "Alpaca", price: 12500 },
+    { id: 102, name: "Bombilla de Resorte", category: "bombillas", type: "Resorte", material: "Acero", price: 6500 },
 
-    // --- CUYO 3D (El Diferencial) ---
-    { id: 301, name: "Estuche de Truco Selección", category: "cuyo-3d", type: "Estuche", material: "PLA 3D", price: 14000, image: "3d-1.jpg", bestSeller: true },
-    { id: 302, name: "Posamate Auto", category: "cuyo-3d", type: "Accesorio", material: "Flexible TPU", price: 5500, image: "3d-2.jpg" },
-    { id: 303, name: "Pico Cebador Adaptable", category: "cuyo-3d", type: "Repuesto", material: "PLA 3D", price: 3500, image: "3d-3.jpg" },
-    { id: 304, name: "Llavero Mate Personalizado", category: "cuyo-3d", type: "Regalo", material: "PLA 3D", price: 2500, image: "3d-4.jpg" },
+    // --- TERMOS ---
+    { id: 701, name: "Termo Stanley Classic", category: "accesorios", type: "Termo", brand: "Stanley", capacity: "1.0L", price: 95000 },
+    { id: 702, name: "Termo Media Manija", category: "accesorios", type: "Termo", brand: "Termolar", capacity: "1.0L", price: 55000 },
+    { id: 703, name: "Termo Personal", category: "accesorios", type: "Termo", brand: "Lumilagro", capacity: "0.5L", price: 15000 },
 
-    // --- KITS, DÚOS Y TRANSPORTE ---
-    { id: 401, name: "Kit Regalo Empresarial", category: "kits", type: "Set Completo", material: "Premium", price: 85000, image: "k-1.jpg" },
-    { id: 501, name: "Dúo Yerbera y Azucarera", category: "duos", type: "Set Guardado", material: "Latón Forrado", price: 22000, image: "d-1.jpg" },
-    { id: 601, name: "Matera de Cuero", category: "transporte", type: "Bolso", material: "Cuero Crudo", price: 42000, image: "t-1.jpg" },
-    { id: 701, name: "Termo Media Manija", category: "accesorios", type: "Termo", material: "Acero", price: 55000, image: "a-1.jpg" },
-    { id: 801, name: "Mate Listo Autocebante", category: "mate-listo", type: "Botella", material: "Plástico BPA Free", price: 11500, image: "ml-1.jpg" }
+    // --- CUYO 3D ---
+    { id: 301, name: "Estuche de Truco AFA", category: "cuyo-3d", type: "Estuche", material: "PLA 3D", price: 14000 }
 ];
 
 export const categories = [

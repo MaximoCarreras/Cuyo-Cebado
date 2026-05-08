@@ -7,14 +7,10 @@
     margin: 0 auto;
     padding: 140px 24px 80px;
     background-color: #fdfaf7;
-    min-height: 100vh;
 }
 
-/* LA NAVEGACIÓN SUPERIOR */
 .category-page__nav {
     width: 100%;
-    display: flex;
-    justify-content: flex-start;
     margin-bottom: 25px;
 }
 
@@ -23,13 +19,11 @@
     align-items: center;
     gap: 10px;
     color: #a5813a;
-    /* Dorado */
     text-decoration: none;
     font-weight: 700;
     font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    transition: 0.3s ease;
+    transition: 0.3s;
 }
 
 .btn-back:hover {
@@ -37,63 +31,61 @@
     transform: translateX(-5px);
 }
 
-/* ESTRUCTURA PRINCIPAL */
 .category-page__main {
     display: flex;
-    flex-direction: row;
     gap: 40px;
-    width: 100%;
 }
 
-/* SIDEBAR OSCURO PREMIUM */
+/* SIDEBAR MAFIA */
 .sidebar {
     width: 280px;
     flex-shrink: 0;
-    position: sticky;
-    top: 100px;
-    height: fit-content;
     background: #2b2520;
-    padding: 30px;
+    padding: 35px;
     border-radius: 20px;
     color: #fdfaf7;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar h3 {
     font-family: 'Noto Serif', serif;
     color: #a5813a;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-bottom: 1px solid rgba(165, 129, 58, 0.3);
+    border-bottom: 1px solid rgba(165, 129, 58, 0.2);
     padding-bottom: 10px;
 }
 
 .filter-group {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .filter-group label {
     display: block;
-    font-size: 0.85rem;
-    margin-bottom: 12px;
-    color: rgba(253, 250, 247, 0.8);
-}
-
-.filter-group input[type="range"] {
-    width: 100%;
-    accent-color: #a5813a;
-    cursor: pointer;
+    font-size: 0.75rem;
+    color: #a5813a;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
 }
 
 .filter-group select {
     width: 100%;
     padding: 12px;
     background: #1a1613;
-    border: 1px solid #a5813a;
+    border: 1px solid rgba(165, 129, 58, 0.4);
     color: #fdfaf7;
     border-radius: 8px;
-    outline: none;
+    font-size: 0.85rem;
+}
+
+.filter-group input[type="range"] {
+    width: 100%;
+    accent-color: #a5813a;
 }
 
 /* CONTENIDO */
@@ -101,15 +93,16 @@
     flex-grow: 1;
 }
 
-.category-header {
-    margin-bottom: 40px;
-}
-
 .category-header h1 {
     font-family: 'Noto Serif', serif;
-    font-size: 2.8rem;
+    font-size: 3rem;
     color: #2b2520;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.category-header p {
+    color: #888;
+    margin-bottom: 30px;
 }
 
 /* GRILLA */
@@ -121,75 +114,74 @@
 
 .product-card {
     background: #fff;
-    border-radius: 20px;
     padding: 20px;
+    border-radius: 20px;
     border: 1px solid #eee;
-    transition: 0.3s ease;
-    display: flex;
-    flex-direction: column;
+    transition: 0.3s;
+    position: relative;
 }
 
 .product-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
     border-color: #a5813a;
-    box-shadow: 0 15px 40px rgba(43, 37, 32, 0.1);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
 }
 
 .product-image {
     width: 100%;
-    aspect-ratio: 1/1;
+    aspect-ratio: 1;
     background: #f4f1ee;
     border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
     font-size: 3rem;
+    margin-bottom: 20px;
 }
 
 .product-badge {
     position: absolute;
+    top: 30px;
+    left: 30px;
     background: #2b2520;
     color: #a5813a;
     padding: 5px 12px;
     border-radius: 50px;
     font-size: 0.6rem;
     font-weight: 800;
-    text-transform: uppercase;
-    z-index: 2;
 }
 
 .product-info h4 {
     font-family: 'Noto Serif', serif;
     font-size: 1.2rem;
     color: #2b2520;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .product-material {
-    font-size: 0.75rem;
-    font-weight: 700;
     color: #a5813a;
+    font-weight: 700;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .product-price {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: #2b2520;
     margin-bottom: 20px;
 }
 
 .btn-add {
+    width: 100%;
+    padding: 15px;
     background: #2b2520;
     color: #fdfaf7;
     border: none;
-    padding: 15px;
     border-radius: 12px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
     cursor: pointer;
     transition: 0.3s;
 }
@@ -199,7 +191,6 @@
     color: #2b2520;
 }
 
-/* RESPONSIVE */
 @media (max-width: 1000px) {
     .category-page__main {
         flex-direction: column;
@@ -213,6 +204,5 @@
 
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
     }
 }
