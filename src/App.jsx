@@ -3,18 +3,20 @@ import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import ScrollToTop from './components/ScrollToTop';
 
-// Importamos la nueva sección de Comunidad
+// Importamos la sección de Comunidad
 import Community from './components/Community/Community';
 
-// Importamos las páginas existentes
+// Importamos las páginas principales
 import Home from './pages/Home';
 import About from './pages/About';
 import Guide from './pages/Guide';
 import CartPage from './pages/CartPage/CartPage';
-
-// NUEVAS IMPORTACIONES PARA EL CATÁLOGO
 import ProductsPage from './pages/ProductsPage/ProductsPage';
 import CategoryPage from './pages/CategoryPage/CategoryPage';
+
+// NUEVAS PÁGINAS DE CHECKOUT
+import SuccessPage from './pages/Checkout/SuccessPage';
+import FailurePage from './pages/Checkout/FailurePage';
 
 import './App.css';
 
@@ -31,13 +33,17 @@ export default function App() {
           <Route path="/nosotros" element={<About />} />
           <Route path="/guia-curado" element={<Guide />} />
 
-          {/* RUTAS DE PRODUCTOS Y CATEGORÍAS */}
+          {/* Rutas de Catálogo */}
           <Route path="/productos" element={<ProductsPage />} />
           <Route path="/productos/:categoryId" element={<CategoryPage />} />
+
+          {/* Rutas de Estado de Pago */}
+          <Route path="/pago-exitoso" element={<SuccessPage />} />
+          <Route path="/pago-fallido" element={<FailurePage />} />
         </Routes>
       </main>
 
-      {/* Comunidad aparece en todas las páginas antes del Footer */}
+      {/* Comunidad antes del Footer */}
       <Community />
 
       <Footer />

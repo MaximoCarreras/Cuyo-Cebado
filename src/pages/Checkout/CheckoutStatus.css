@@ -1,0 +1,86 @@
+.status-page {
+    padding: 160px 24px 80px;
+    min-height: 100vh;
+    background-color: #fdfaf7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.status-card {
+    background: white;
+    padding: 50px;
+    border-radius: 30px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(43, 37, 32, 0.08);
+    border: 1px solid rgba(165, 129, 58, 0.1);
+}
+
+.status-icon {
+    font-size: 80px !important;
+    margin-bottom: 20px;
+}
+
+.success .status-icon {
+    color: #4caf50;
+}
+
+.failure .status-icon {
+    color: #ff4444;
+}
+
+.status-card h1 {
+    font-family: 'Noto Serif', serif;
+    color: #2b2520;
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+}
+
+.status-card p {
+    color: #888;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.order-details {
+    background: #fdfaf7;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+    color: #555;
+    border: 1px dashed #a5813a;
+}
+
+.status-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn-status {
+    display: block;
+    background: #2b2520;
+    color: #fdfaf7;
+    padding: 18px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-status:hover {
+    background: #a5813a;
+    transform: translateY(-3px);
+}
+
+.btn-status.secondary {
+    background: transparent;
+    color: #888;
+    border: 1px solid #ddd;
+    font-size: 0.8rem;
+}
