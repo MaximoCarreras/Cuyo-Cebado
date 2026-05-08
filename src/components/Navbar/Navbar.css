@@ -4,7 +4,6 @@
   --color-bone: #fdfaf7;
 }
 
-/* BARRA DORADA: Se oculta al bajar */
 .announcement-bar {
   background-color: var(--color-gold);
   color: var(--color-bone);
@@ -15,7 +14,6 @@
   width: 100%;
 }
 
-/* NAVBAR: Sticky */
 .navbar {
   position: sticky;
   top: 0;
@@ -27,7 +25,6 @@
   border-bottom: 1px solid rgba(165, 129, 58, 0.15);
 }
 
-/* EL ARREGLO: Grilla de 3 columnas para centrado perfecto */
 .navbar__container {
   width: 100%;
   max-width: 1200px;
@@ -35,7 +32,7 @@
   padding: 0 24px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  /* Izquierda | Centro | Derecha */
+  /* Izq | Centro | Der */
   align-items: center;
 }
 
