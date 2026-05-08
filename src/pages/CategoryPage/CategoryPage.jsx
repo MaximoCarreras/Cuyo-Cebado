@@ -8,7 +8,7 @@ export default function CategoryPage() {
     const { categoryId } = useParams();
     const { addToCart } = useCart();
 
-    const [maxPrice, setMaxPrice] = useState(150000);
+    const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
     const [selectedType, setSelectedType] = useState('todos');
     const [selectedBrand, setSelectedBrand] = useState('todos');
@@ -51,11 +51,10 @@ export default function CategoryPage() {
 
                     <div className="filter-group">
                         <label>Precio máximo: <b>${maxPrice.toLocaleString()}</b></label>
-                        <input type="range" min="0" max="150000" step="1000" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} />
+                        <input type="range" min="0" max="250000" step="5000" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} />
                     </div>
 
-                    {/* Filtros dinámicos según categoría */}
-                    {(getOptions('brand').length > 1) && (
+                    {getOptions('brand').length > 1 && (
                         <div className="filter-group">
                             <label>Marca / Fabricante</label>
                             <select value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
@@ -64,29 +63,20 @@ export default function CategoryPage() {
                         </div>
                     )}
 
-                    {(getOptions('material').length > 1) && (
+                    {getOptions('material').length > 1 && (
                         <div className="filter-group">
-                            <label>Material de fabricación</label>
+                            <label>Material</label>
                             <select value={selectedMaterial} onChange={(e) => setSelectedMaterial(e.target.value)}>
                                 {getOptions('material').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
                             </select>
                         </div>
                     )}
 
-                    {(getOptions('type').length > 1) && (
+                    {getOptions('type').length > 1 && (
                         <div className="filter-group">
-                            <label>{categoryId === 'yerbas' ? 'Tipo de Molienda' : 'Modelo / Estilo'}</label>
+                            <label>{categoryId === 'yerbas' ? 'Tipo de Molienda' : 'Estilo'}</label>
                             <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
                                 {getOptions('type').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
-                            </select>
-                        </div>
-                    )}
-
-                    {(getOptions('capacity').length > 1) && (
-                        <div className="filter-group">
-                            <label>Capacidad / Tamaño</label>
-                            <select value={selectedCapacity} onChange={(e) => setSelectedCapacity(e.target.value)}>
-                                {getOptions('capacity').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
                             </select>
                         </div>
                     )}
@@ -94,20 +84,26 @@ export default function CategoryPage() {
 
                 <section className="products-content">
                     <header className="category-header">
-                        <h1>{currentCategory?.label} {currentCategory?.icon}</h1>
-                        <p>{filteredProducts.length} productos exclusivos encontrados</p>
+                        {/* Usamos la clase global section__title para coherencia total */}
+                        <h1 className="section__title">{currentCategory?.label}</h1>
+                        <p className="products-count">{filteredProducts.length} piezas encontradas</p>
                     </header>
 
-                    <div className="products-grid">
+                    <div className="products-grid-meli">
                         {filteredProducts.map(product => (
-                            <div key={product.id} className="product-card">
+                            <div key={product.id} className="product-card-premium">
                                 {product.bestSeller && <span className="product-badge">Top Ventas</span>}
-                                <div className="product-image"><span>{currentCategory?.icon}</span></div>
-                                <div className="product-info">
-                                    <p className="product-material">{product.brand || product.material}</p>
-                                    <h4>{product.name}</h4>
-                                    <p className="product-price">${product.price.toLocaleString()}</p>
-                                    <button className="btn-add" onClick={() => addToCart(product)}>Agregar al Carrito</button>
+                                <div className="product-image-container">
+                                    <span className="category-icon-bg">{currentCategory?.icon}</span>
+                                    {/* Aquí irá tu <img> cuando tengas las fotos listas */}
+                                </div>
+                                <div className="product-details">
+                                    <p className="details-material">{product.brand || product.material}</p>
+                                    <h4 className="details-name">{product.name}</h4>
+                                    <p className="details-price">${product.price.toLocaleString()}</p>
+                                    <button className="btn-add-cart" onClick={() => addToCart(product)}>
+                                        Añadir
+                                    </button>
                                 </div>
                             </div>
                         ))}
