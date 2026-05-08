@@ -15,36 +15,35 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar__container">
 
-        {/* BLOQUE IZQUIERDA: LOGO */}
-        <div className="navbar__column navbar__column--left">
+        {/* BLOQUE 1: LOGO (Izquierda) */}
+        <div className="navbar__left">
           <Link to="/" className="navbar__brand" onClick={closeMenu}>
             <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
             <span className="navbar__brand-text">CUYO CEBADO</span>
           </Link>
         </div>
 
-        {/* BLOQUE CENTRO: LINKS (Solo Desktop) */}
-        <div className="navbar__column navbar__column--center">
-          <ul className="navbar__desktop-menu">
-            <li><Link to="/" className="navbar__link">Inicio</Link></li>
-            <li><Link to="/productos" className="navbar__link">Productos</Link></li>
-            <li><Link to="/nosotros" className="navbar__link">Nosotros</Link></li>
-            <li><Link to="/guia-curado" className="navbar__link">Guía de Curado</Link></li>
-          </ul>
-        </div>
+        {/* BLOQUE 2: LINKS (Centro - Solo Desktop) */}
+        <ul className="navbar__desktop-menu">
+          <li><Link to="/" className="navbar__link">Inicio</Link></li>
+          <li><Link to="/productos" className="navbar__link">Productos</Link></li>
+          <li><Link to="/nosotros" className="navbar__link">Nosotros</Link></li>
+          <li><Link to="/guia-curado" className="navbar__link">Guía de Curado</Link></li>
+        </ul>
 
-        {/* BLOQUE DERECHA: ICONOS */}
-        <div className="navbar__column navbar__column--right">
+        {/* BLOQUE 3: ICONOS (Derecha) */}
+        <div className="navbar__right">
           <Link to="/carrito" className="navbar__cart-container" onClick={closeMenu}>
             <span className="material-symbols-outlined cart-icon-main">shopping_cart</span>
             {totalItems > 0 && <div className="cart-badge-premium">{totalItems}</div>}
           </Link>
 
-          <button className="navbar__hamburger" onClick={toggleMenu}>
-            <span className="material-symbols-outlined">{isMenuOpen ? 'close' : 'menu'}</span>
+          <button className="navbar__hamburger" onClick={toggleMenu} aria-label="Menu">
+            <span className="material-symbols-outlined">
+              {isMenuOpen ? 'close' : 'menu'}
+            </span>
           </button>
         </div>
-
       </div>
 
       {/* MENÚ MÓVIL (DRAWER) */}
