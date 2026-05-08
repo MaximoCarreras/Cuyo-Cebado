@@ -1,40 +1,189 @@
-/* ... (todo tu código anterior se mantiene igual) ... */
+/* src/pages/CategoryPage/CategoryPage.css */
 
-/* Estilos para el Botón Volver */
-.btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
+.category-page {
+    display: flex;
+    flex-direction: row;
+    /* Asegura que sea lado a lado */
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 140px 24px 80px;
+    background-color: #fdfaf7;
+    /* Fondo color hueso */
+    min-height: 100vh;
+}
+
+/* SIDEBAR: Panel de control izquierdo */
+.sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+    background: #2b2520;
+    /* Fondo oscuro premium */
+    padding: 30px;
+    border-radius: 20px;
+    color: #fdfaf7;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar h3 {
+    font-family: 'Noto Serif', serif;
     color: #a5813a;
-    /* Tu dorado premium */
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+    /* Dorado */
     margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(165, 129, 58, 0.3);
+    padding-bottom: 10px;
+}
+
+.filter-group {
+    margin-bottom: 30px;
+}
+
+.filter-group label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    color: rgba(253, 250, 247, 0.8);
+}
+
+/* Estilo para el input de rango (Dorado) */
+.filter-group input[type="range"] {
+    width: 100%;
+    accent-color: #a5813a;
+    cursor: pointer;
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 12px;
+    background: #1a1613;
+    border: 1px solid #a5813a;
+    color: #fdfaf7;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* CONTENIDO DE PRODUCTOS */
+.products-content {
+    flex-grow: 1;
+}
+
+.category-header {
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.category-header h1 {
+    font-family: 'Noto Serif', serif;
+    font-size: 2.5rem;
+    color: #2b2520;
+    margin-bottom: 5px;
+}
+
+.category-header p {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* GRILLA: Aquí es donde arreglamos las columnas */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* Mínimo 280px por tarjeta */
+    gap: 25px;
+}
+
+/* TARJETA DE PRODUCTO */
+.product-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid #eee;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    border-color: #a5813a;
+    box-shadow: 0 15px 40px rgba(43, 37, 32, 0.1);
+}
+
+.product-image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: #f4f1ee;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 3rem;
+}
+
+.product-info h4 {
+    font-family: 'Noto Serif', serif;
+    font-size: 1.2rem;
+    color: #2b2520;
+    margin-bottom: 10px;
+}
+
+.product-material {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #a5813a;
+    text-transform: uppercase;
+    background: rgba(165, 129, 58, 0.1);
+    padding: 4px 10px;
+    border-radius: 5px;
+    align-self: flex-start;
+    margin-bottom: 15px;
+}
+
+.product-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2b2520;
+    margin-bottom: 20px;
+}
+
+.btn-add {
+    background: #2b2520;
+    color: #fdfaf7;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.btn-back span {
-    font-size: 1.2rem;
-    transition: transform 0.3s ease;
-}
-
-.btn-back:hover {
+.btn-add:hover {
+    background: #a5813a;
     color: #2b2520;
-    /* Cambia a tu marrón oscuro */
 }
 
-.btn-back:hover span {
-    transform: translateX(-6px);
-    /* Efecto de "empuje" hacia atrás */
-}
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+    .category-page {
+        flex-direction: column;
+    }
 
-/* Ajuste extra para móviles */
-@media (max-width: 900px) {
-    .btn-back {
-        margin-bottom: 15px;
-        padding-top: 10px;
+    .sidebar {
+        width: 100%;
+        position: relative;
+        top: 0;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     }
 }
