@@ -23,11 +23,13 @@ export default function Hero() {
       id="hero"
       style={{ height: viewHeight, minHeight: viewHeight }}
     >
+      {/* 1. Imagen con máscara aplicada por CSS */}
       <div
         className="hero__image-bg"
         style={{ backgroundImage: `url(${heroBgImage})` }}
       ></div>
 
+      {/* 2. Fondo de madera animada (React Bits) */}
       <div className="hero__shape">
         <Grainient
           color1="#140d07"
@@ -45,6 +47,7 @@ export default function Hero() {
         />
       </div>
 
+      {/* 3. Contenido de texto */}
       <div className="hero__container">
         <div className="hero__content">
           <h1 className="hero__title">

@@ -6,6 +6,7 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
+  /* Marrón oficial de Cuyo Cebado */
 }
 
 .hero__image-bg {
@@ -17,9 +18,13 @@
   background-size: cover;
   background-position: center right;
   z-index: 1;
+  /* --- MÁSCARA DE DEGRADADO (Escritorio) --- */
+  /* La imagen se desvanece suavemente hacia la izquierda para fundirse con la madera */
+  -webkit-mask-image: linear-gradient(to left, black 50%, transparent 100%);
+  mask-image: linear-gradient(to left, black 50%, transparent 100%);
 }
 
-/* CAPA DEL GRAINIENT */
+/* CAPA DEL GRAINIENT (REACT BITS) */
 .hero__shape {
   position: absolute;
   top: -10%;
@@ -31,6 +36,11 @@
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
+}
+
+.hero__grainient {
+  width: 100%;
+  height: 100%;
 }
 
 .hero__container {
@@ -103,14 +113,13 @@
 }
 
 /* =========================================
-   === ADAPTACIÓN MÓVIL (FONDO COMPLETO) === 
+   === ADAPTACIÓN MÓVIL (MÁSCARA FLUIDA) === 
    ========================================= */
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
     justify-content: flex-start;
     height: auto !important;
-    /* Permitimos que crezca según el contenido */
     min-height: 100vh;
   }
 
@@ -119,21 +128,21 @@
     height: 45vh;
     width: 100%;
     background-position: center top;
-    -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+    /* --- MÁSCARA DE DEGRADADO (Celular) --- */
+    /* Aquí la imagen se desvanece hacia abajo */
+    -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
   }
 
-  /* EL ARREGLO: El Grainient ahora cubre TODO el fondo del texto hasta abajo */
+  /* EL ARREGLO: Madera animada sin bordes redondeados */
   .hero__shape {
     position: absolute;
     top: 35vh;
-    /* Empieza un poco antes de que termine la imagen */
     left: 0;
     width: 100%;
     height: calc(100% - 35vh);
-    /* Cubre el resto de la sección */
-    border-radius: 40px 40px 0 0;
-    /* Curva suave superior */
+    border-radius: 0;
+    /* Sin curvas para máxima inmersión */
     margin-bottom: 0;
     box-shadow: none;
   }
@@ -142,7 +151,6 @@
     z-index: 3;
     padding-top: 40px;
     padding-bottom: 80px;
-    /* Espacio antes de la siguiente sección blanca */
   }
 
   .hero__content {
@@ -150,15 +158,6 @@
     text-align: center;
     max-width: 100%;
     padding-left: 0;
-  }
-
-  .hero__title {
-    font-size: 2.3rem;
-  }
-
-  .hero__subtitle {
-    font-size: 1rem;
-    margin-bottom: 30px;
   }
 
   .hero__actions {
