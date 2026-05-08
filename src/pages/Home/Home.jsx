@@ -1,27 +1,22 @@
-// src/pages/Home/Home.jsx
 import { Link } from 'react-router-dom';
-import { useRef } from 'react'; // NEW: Hook para el efecto Spotlight
+import { useRef } from 'react';
 import { categories, products } from '../../data/products';
 import { useCart } from '../../context/CartContext';
 import './Home.css';
 
 export default function Home() {
     const { addToCart } = useCart();
-    const panelRef = useRef(null); // NEW: Referencia al panel izquierdo
+    const heroRef = useRef(null); // Referencia para el Spotlight
 
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
-
-    // Tomamos TODAS las categorías definidas en products.js
     const allCategories = categories;
 
-    // Buscamos el Kit de Regalo
+    // Producto del Kit de Regalo
     const giftProduct = products.find(p => p.id === 501) || products.find(p => p.category === 'kits');
 
     const scrollToCategories = () => {
         const element = document.getElementById('categorias-home');
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
     };
 
     const handleGiftClick = () => {
@@ -31,30 +26,28 @@ export default function Home() {
         }
     };
 
-    // NEW: Lógica para el efecto Spotlight (React Bits Style)
+    // EFECTO SPOTLIGHT: Calcula la posición del mouse
     const handleMouseMove = (e) => {
-        if (!panelRef.current) return;
-        const rect = panelRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left; // posición X relativa al panel
-        const y = e.clientY - rect.top;  // posición Y relativa al panel
+        if (!heroRef.current) return;
+        const rect = heroRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-        // Pasamos las coordenadas al CSS como variables personalizadas
-        panelRef.current.style.setProperty('--mouse-x', `${x}px`);
-        panelRef.current.style.setProperty('--mouse-y', `${y}px`);
+        heroRef.current.style.setProperty('--mouse-x', `${x}px`);
+        heroRef.current.style.setProperty('--mouse-y', `${y}px`);
     };
 
     return (
         <div className="home-mafia">
-            {/* HERO SECTION - RECONSTRUIDO AL 100% CON EFECTO SPOTLIGHT CARD */}
+            {/* HERO SECTION CON EFECTO SPOTLIGHT Y COLOR DE NUESTRA HISTORIA */}
             <section className="hero-mafia">
                 <div className="hero-mafia__container">
-                    {/* Panel izquierdo: Inversión de colores, Efecto Spotlight y React Bits Glow */}
                     <div
-                        ref={panelRef} // NEW: Asignamos la referencia
-                        onMouseMove={handleMouseMove} // NEW: Escuchamos el movimiento del mouse
-                        className="hero-mafia__left-panel spotlight-card" // Agregamos clase spotlight-card
+                        ref={heroRef}
+                        onMouseMove={handleMouseMove}
+                        className="hero-mafia__left-panel spotlight-card"
                     >
-                        {/* El resplandor dinámico React Bits (mantenido del diseño anterior) */}
+                        {/* Resplandor React Bits en el borde */}
                         <div className="react-bits-glow"></div>
 
                         <div className="hero-mafia__content">
@@ -85,7 +78,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* TODAS LAS CATEGORÍAS */}
+            {/* CATEGORÍAS */}
             <section id="categorias-home" className="home-section">
                 <div className="home-section__header">
                     <h2 className="home-section__title">Encontrá tu compañero ideal</h2>
@@ -121,10 +114,7 @@ export default function Home() {
                                 <span className="home-prod-card__type">{product.type}</span>
                                 <h4>{product.name}</h4>
                                 <p className="home-prod-card__price">${product.price.toLocaleString()}</p>
-                                <button
-                                    className="btn-premium-cart"
-                                    onClick={() => addToCart(product)}
-                                >
+                                <button className="btn-premium-cart" onClick={() => addToCart(product)}>
                                     <span className="material-symbols-outlined">shopping_bag</span>
                                     AGREGAR AL CARRITO
                                 </button>

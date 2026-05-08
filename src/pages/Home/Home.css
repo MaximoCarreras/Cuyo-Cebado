@@ -5,7 +5,7 @@
     overflow-x: hidden;
 }
 
-/* --- HERO SECTION MAFIA PREMIUM (AJUSTADO CON EFECTO SPOTLIGHT) --- */
+/* --- HERO SECTION MAFIA PREMIUM --- */
 .hero-mafia {
     height: 90vh;
     background-color: #000;
@@ -20,16 +20,11 @@
     width: 100%;
 }
 
-/* Panel izquierdo curvo - COLOR INVERTIDO Y EFECTO SPOTLIGHT (Basado en imagen_61ccde.png) */
+/* Panel izquierdo: Color Marrón de "Nuestra Historia" */
 .hero-mafia__left-panel {
     width: 55%;
-
-    /* NEW: Color clarito idéntico a la Spotlight Card */
-    background-color: #f4f1ee;
-
-    /* Text Color updates for contrast */
-    color: #1a1613;
-    /* o #2b2520 */
+    /* El mismo marrón oscuro amaderado de la tarjeta */
+    background-color: #1a1614;
 
     display: flex;
     align-items: center;
@@ -38,10 +33,10 @@
     z-index: 10;
     clip-path: ellipse(95% 120% at 0% 50%);
     box-shadow: 20px 0 60px rgba(0, 0, 0, 0.8);
-    border-right: 1px solid rgba(165, 129, 58, 0.1);
+    border-right: 1px solid rgba(165, 129, 58, 0.15);
 }
 
-/* EFECTO SPOTLIGHT CARD - Brillo difuso que sigue al mouse */
+/* EFECTO SPOTLIGHT CARD: El brillo que sigue al mouse */
 .spotlight-card::before {
     content: '';
     position: absolute;
@@ -49,21 +44,15 @@
     left: 0;
     width: 100%;
     height: 100%;
-
-    /* Brillo difuso blanco con opacidad baja, sigue las variables de JS */
-    background: radial-gradient(400px circle at var(--mouse-x) var(--mouse-y),
-            rgba(255, 255, 255, 0.08),
-            /* subtle golden light */
+    background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),
+            rgba(165, 129, 58, 0.1),
+            /* Luz dorada muy sutil */
             transparent 40%);
-
     pointer-events: none;
-    /* Allows clicking text below */
     z-index: 11;
-    /* higher than react bits glow, lower than content? wait bits glow was z-11. need to coordinate */
-    transition: opacity 0.3s;
 }
 
-/* Efecto React Bits sutil (mantenido, en z-index superior) */
+/* Efecto React Bits en el borde */
 .react-bits-glow {
     position: absolute;
     top: 0;
@@ -72,9 +61,8 @@
     height: 100%;
     background: linear-gradient(to bottom, transparent, #a5813a 20%, #fff 50%, #a5813a 80%, transparent);
     filter: blur(8px);
-    opacity: 0.5;
+    opacity: 0.6;
     z-index: 12;
-    /* Keep glow on top of spotlight */
     animation: glowTravel 4s infinite linear;
 }
 
@@ -88,7 +76,6 @@
     }
 }
 
-/* Imagen de fondo a la derecha */
 .hero-mafia__right-image {
     width: 65%;
     position: absolute;
@@ -98,39 +85,35 @@
     background-image: url('../../assets/fondo_hero_principal.png');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
 }
 
-/* Tipografía Hero - INVERSIÓN DE COLORES */
+/* TIPOGRAFÍA UNIFICADA Y MAYÚSCULAS */
 .hero-mafia__content {
-    z-index: 13;
+    z-index: 15;
     position: relative;
 }
 
-/* Content must be clickable and visible on top of glow/spotlight */
 .hero-mafia__title {
     font-family: 'Noto Serif', serif;
+    /* Misma que los títulos */
     font-size: clamp(2.8rem, 6vw, 4.8rem);
-    color: #1a1613;
-    /* Dark text for contrast */
+    color: #fff;
     line-height: 1.0;
     margin-bottom: 25px;
     font-weight: 800;
     text-transform: uppercase;
+    /* TODO EN MAYÚSCULAS */
 }
 
 .hero-mafia__gold-text {
     color: #a5813a;
-    /* Mismo dorado premium */
     background: linear-gradient(to right, #a5813a, #e2c07d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 40px rgba(165, 129, 58, 0.4);
 }
 
 .hero-mafia__description {
-    color: rgba(26, 22, 19, 0.8);
-    /* Dark description text for contrast */
+    color: rgba(255, 255, 255, 0.7);
     font-size: 1.15rem;
     line-height: 1.8;
     margin-bottom: 45px;
@@ -140,21 +123,19 @@
 /* BOTONES HERO */
 .btn-mafia-gold-solid {
     background: #a5813a;
-    color: #1a110f;
+    color: #1a1614;
     border: none;
     padding: 20px 45px;
     border-radius: 50px;
     font-weight: 800;
     font-size: 0.85rem;
     cursor: pointer;
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: 0.3s;
     letter-spacing: 1.5px;
-    margin-right: 15px;
 }
 
 .btn-mafia-gold-solid:hover {
-    background: #1a110f;
-    color: #a5813a;
+    background: #fff;
     transform: translateY(-5px);
 }
 
@@ -177,7 +158,7 @@
     transform: translateY(-5px);
 }
 
-/* --- RESTO DE SECCIONES (Sincronizadas) --- */
+/* SECCIONES POST-HERO */
 .home-section {
     max-width: 1400px;
     margin: 0 auto;
@@ -223,7 +204,7 @@
     text-decoration: none;
     border-radius: 25px;
     border: 1px solid rgba(165, 129, 58, 0.1);
-    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: 0.4s;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -240,29 +221,9 @@
     margin-bottom: 15px;
 }
 
-.home-cat-card h3 {
-    color: #2b2520;
-    font-family: 'Noto Serif', serif;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-
-.home-cat-card__action {
-    color: #a5813a;
-    font-weight: 800;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    opacity: 0.7;
-    transition: 0.3s;
-}
-
-.home-cat-card:hover .home-cat-card__action {
-    opacity: 1;
-    letter-spacing: 2px;
-}
-
-/* BOTÓN PREMIUM CARTS (MaquiaStyle) */
+/* BOTONES PREMIUM (Carrito y Regalo) */
 .btn-premium-cart {
+    width: 100%;
     background: #2b2520;
     color: #a5813a;
     border: 1px solid rgba(165, 129, 58, 0.3);
@@ -276,24 +237,17 @@
     justify-content: center;
     gap: 12px;
     cursor: pointer;
-    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-premium-cart span {
-    font-size: 1.2rem;
+    transition: 0.3s;
 }
 
 .btn-premium-cart:hover {
     background: #a5813a;
     color: #2b2520;
-    border-color: #a5813a;
     transform: scale(1.02);
-    box-shadow: 0 10px 20px rgba(165, 129, 58, 0.2);
 }
 
-/* BOTÓN "LO QUIERO AHORA" (MaquiaStyle CTA) */
 .btn-gift-cta {
-    background: linear-gradient(135deg, #2b2520 0%, #1a1613 100%);
+    background: #1a1614;
     color: #fdfaf7;
     border: 2px solid #a5813a;
     padding: 22px 50px;
@@ -307,25 +261,15 @@
     transition: 0.4s;
     font-size: 1rem;
     letter-spacing: 2px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
 .btn-gift-cta:hover {
     background: #a5813a;
-    color: #2b2520;
+    color: #1a1614;
     transform: translateX(10px) translateY(-5px);
-    box-shadow: 0 20px 40px rgba(165, 129, 58, 0.3);
 }
 
-.btn-gift-cta span:last-child {
-    transition: 0.3s;
-}
-
-.btn-gift-cta:hover span:last-child {
-    transform: translateX(5px);
-}
-
-/* PRODUCTOS DESTACADOS */
+/* PRODUCTOS */
 .home-products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -338,11 +282,6 @@
     padding: 25px;
     border: 1px solid #f0f0f0;
     transition: 0.3s;
-}
-
-.home-prod-card:hover {
-    border-color: #a5813a;
-    transform: translateY(-5px);
 }
 
 .home-prod-card__img-box {
@@ -370,21 +309,7 @@
     text-transform: uppercase;
 }
 
-.home-prod-card__info h4 {
-    font-family: 'Noto Serif', serif;
-    font-size: 1.4rem;
-    color: #2b2520;
-    margin: 15px 0 10px;
-}
-
-.home-prod-card__price {
-    font-size: 1.8rem;
-    font-weight: 900;
-    color: #2b2520;
-    margin-bottom: 25px;
-}
-
-/* PROMO BANNER REGALO */
+/* PROMO BANNER */
 .home-promo__container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -406,36 +331,6 @@
     font-size: 10rem;
 }
 
-.home-promo__title {
-    font-family: 'Noto Serif', serif;
-    font-size: 3.2rem;
-    color: #2b2520;
-    margin: 20px 0 40px;
-    line-height: 1.1;
-    font-weight: 800;
-}
-
-.home-promo__list li {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 20px;
-    color: #444;
-    font-size: 1.15rem;
-}
-
-.home-promo__list li span {
-    color: #a5813a;
-    font-size: 1.6rem;
-}
-
-.home-promo__footer {
-    display: flex;
-    align-items: center;
-    gap: 60px;
-    margin-top: 40px;
-}
-
 .home-promo__price {
     font-size: 3.5rem;
     font-weight: 900;
@@ -444,23 +339,22 @@
 
 /* RESPONSIVE */
 @media (max-width: 1200px) {
+    .hero-mafia__left-panel {
+        width: 100%;
+        clip-path: none;
+        padding-right: 10%;
+        background: linear-gradient(rgba(26, 22, 20, 0.9), rgba(26, 22, 20, 0.9)), url('../../assets/fondo_hero_principal.png') center/cover;
+    }
+
+    .react-bits-glow,
+    .hero-mafia__right-image {
+        display: none;
+    }
+
     .home-promo__container {
         grid-template-columns: 1fr;
-        padding: 50px;
+        padding: 40px;
         text-align: center;
-    }
-
-    .home-promo__list li {
-        justify-content: center;
-    }
-
-    .home-promo__footer {
-        flex-direction: column;
-        gap: 30px;
-    }
-
-    .home-categories-grid {
-        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -469,15 +363,8 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .hero-mafia__left-panel {
-        width: 100%;
-        clip-path: none;
-        padding-right: 10%;
-        background: linear-gradient(rgba(244, 241, 238, 0.8), rgba(244, 241, 238, 0.8)), url('../../assets/fondo_hero_principal.png') center/cover;
-    }
-
-    .react-bits-glow,
-    .hero-mafia__right-image {
-        display: none;
+    .home-promo__footer {
+        flex-direction: column;
+        gap: 20px;
     }
 }
