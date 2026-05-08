@@ -1,4 +1,5 @@
 /* src/components/Hero/Hero.css */
+
 .hero {
   width: 100%;
   position: relative;
@@ -6,10 +7,12 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
+  /* Marrón Madera base */
   min-height: 80vh;
   /* Asegura un buen tamaño inicial */
 }
 
+/* --- 1. IMAGEN DE FONDO (FOTO DEL MATE Y MANO) --- */
 .hero__image-bg {
   position: absolute;
   top: 0;
@@ -23,6 +26,7 @@
   transform: translateZ(0);
 }
 
+/* --- 2. FORMA CURVA OSCURA PREMIUM --- */
 .hero__shape {
   position: absolute;
   top: -10%;
@@ -30,6 +34,7 @@
   width: 75%;
   height: 120%;
   background-color: #2b2520;
+  /* Color Marrón Madera */
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
@@ -37,46 +42,66 @@
   overflow: hidden;
 }
 
+.hero__grainient {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* --- 3. CONTENIDO (TEXTO Y BOTONES) --- */
 .hero__container {
   position: relative;
   z-index: 3;
   max-width: 1200px;
   width: 100%;
   padding: 0 24px;
+  display: flex;
+  align-items: center;
 }
 
+/* POSICIONAMIENTO ESCRITORIO: Empujado a la derecha para abrazar la curva */
 .hero__content {
-  max-width: 1000px;
+  max-width: 600px;
   padding-left: 35%;
 }
 
+/* --- TÍTULO RESTAURADO (ESTÉTICA ORIGINAL) --- */
 .hero__title {
-  font-size: clamp(3.2rem, 5.5vw, 4.8rem);
-  line-height: 1.1;
+  font-size: clamp(3.2rem, 6vw, 5rem);
+  line-height: 1;
   font-weight: 800;
   text-transform: uppercase;
   margin-bottom: 24px;
+  /* FUENTE SANS-SERIF ORIGINAL (Como la foto vieja) */
+  font-family: sans-serif;
   color: #fdfaf7;
-  font-family: 'Noto Serif', serif !important;
+  /* Base en blanco hueso */
 }
 
+/* Palabra "IDENTIDAD" en dorado y bold */
 .hero__title b,
 .hero__title span.gold {
   color: #a5813a;
+  /* Tu Dorado de marca oficial */
+  font-family: sans-serif;
   display: block;
-  font-family: 'Noto Serif', serif !important;
+  font-weight: 900;
 }
 
 .hero__subtitle {
-  max-width: 700px;
   font-size: 1.15rem;
   line-height: 1.6;
   font-weight: 400;
   margin-bottom: 40px;
-  color: rgba(253, 250, 247, 0.9);
-  font-family: 'Inter', sans-serif;
+  /* FUENTE IMPRENTA LIMPIA */
+  font-family: sans-serif;
+  color: rgba(253, 250, 247, 0.95);
+  /* Blanco Hueso */
 }
 
+/* --- BOTONES PREMIUM MANTENIENDO EL FIX TÉCNICO --- */
 .hero__actions {
   display: flex;
   gap: 20px;
@@ -88,19 +113,26 @@
   padding: 16px 35px;
   font-weight: 700;
   font-size: 0.95rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-family: 'Inter', sans-serif;
   -webkit-tap-highlight-color: transparent;
+  /* Fix móvil */
 }
 
+/* Botón Dorado */
 .hero .btn--gold {
   background-color: #a5813a;
   color: #2b2520;
   border: none;
 }
 
+/* FIX TÉCNICO: Evita que se quede marrón lisos tras el touch */
 .hero .btn--gold:focus,
 .hero .btn--gold:active {
   background-color: #a5813a !important;
@@ -109,62 +141,99 @@
   outline: none;
 }
 
+/* Botón Outline */
 .hero .btn--outline-gold {
   background-color: transparent;
   color: #a5813a;
   border: 2px solid #a5813a;
 }
 
-/* --- ADAPTACIÓN MÓVIL PREMIUM --- */
+.hero .btn--outline-gold:focus,
+.hero .btn--outline-gold:active {
+  background-color: transparent !important;
+  color: #a5813a !important;
+}
+
+/* =========================================
+   === ADAPTACIÓN MÓVIL ESTÉTICA ORIGINAL === 
+   ===   RESTALURAMOS LA FOTO VIEJA EXACTA ===
+   ========================================= */
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 0;
+    justify-content: flex-end;
+    /* Empujamos el texto hacia abajo */
+    padding-bottom: 50px;
     min-height: 100vh;
   }
 
-  .hero__shape {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 45vh;
-    /* La imagen ocupa casi la mitad superior */
-    border-radius: 0 0 50% 50% / 0 0 15% 15%;
-    /* Curva suave hacia abajo */
-    margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  /* La imagen de fondo (mate/mano) se ve en la parte superior */
+  .hero__image-bg {
+    background-position: center top;
+    /* Aseguramos que se vea la parte de arriba */
   }
 
+  /* RESTAURACIÓN: La curva oscura (marrón) sube desde abajo */
+  .hero__shape {
+    position: absolute;
+    bottom: -15%;
+    /* Sube desde abajo */
+    left: -30%;
+    width: 160%;
+    height: 140%;
+    /* Cubre la mayor parte inferior */
+    border-radius: 50% 50% 0 0;
+    /* Curva hacia arriba */
+    background-color: #2b2520;
+    box-shadow: none;
+    /* Look más limpio original */
+    z-index: 2;
+    /* Sigue abajo del texto */
+  }
+
+  .hero__container {
+    z-index: 3;
+    /* Texto por encima de la curva */
+    display: flex;
+    justify-content: center;
+  }
+
+  /* TEXTO CENTRADO SOBRE LA CURVA OSCURA */
   .hero__content {
     padding: 0 24px 60px;
     text-align: center;
     max-width: 100%;
     padding-left: 0;
+    margin-top: 10vh;
+    /* Bajamos el texto para situarlo sobre la curva */
   }
 
   .hero__title {
-    font-size: 2.3rem;
-    /* Ajustado para que quepa bien en pantalla vertical */
+    font-size: clamp(2.3rem, 9vw, 3.2rem);
     margin-bottom: 20px;
+    color: #fdfaf7;
+    /* Mates con... en blanco hueso */
   }
 
   .hero__subtitle {
     font-size: 1rem;
-    margin-bottom: 30px;
-    padding: 0 10px;
+    margin-bottom: 35px;
+    color: rgba(253, 250, 247, 0.95);
+    /* Descripción en blanco hueso */
   }
 
   .hero__actions {
+    justify-content: center;
     flex-direction: column;
+    /* Apilados */
     gap: 15px;
     align-items: center;
+    width: 100%;
   }
 
   .hero .btn {
     width: 100%;
-    /* Botones anchos para fácil touch */
+    /* Botes anchos (Fix App.css ya soluciona el marrón) */
     max-width: 300px;
   }
 }
