@@ -1,308 +1,267 @@
-:root {
-    --mafia-brown: #1a1614;
-    --mafia-brown-light: #2b2520;
-    --mafia-gold: #a5813a;
-    --mafia-cream: #fdfaf7;
-}
-
-.home {
-    background-color: var(--mafia-cream);
+.home-container {
+    background-color: #fdfaf7;
     min-height: 100vh;
 }
 
-/* 1. HERO SPOTLIGHT - Estilos */
-.hero-spotlight {
-    height: 95vh;
-    /* Un poco más alto para impacto */
-    background-color: var(--mafia-brown);
+/* --- HERO SPOTLIGHT --- */
+.hero-section {
+    height: 90vh;
+    background-color: #1a1614;
     display: flex;
     align-items: center;
-    position: relative;
     overflow: hidden;
-    color: var(--mafia-cream);
+    color: #fdfaf7;
 }
 
-.hero-spotlight__container {
+.hero-content-wrapper {
     max-width: 1400px;
     margin: 0 auto;
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* Texto Der, Imagen Izq */
     align-items: center;
     padding: 0 50px;
+    width: 100%;
 }
 
-.hero-title {
+.main-title {
     font-family: 'Noto Serif', serif;
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    text-transform: uppercase;
-    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
     line-height: 1.1;
+    font-weight: 900;
     margin-bottom: 20px;
 }
 
-.hero-title span {
-    color: var(--mafia-gold);
+.main-title span {
+    color: #a5813a;
 }
 
-.hero-subtitle {
-    font-size: 1.1rem;
+.main-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.8;
     margin-bottom: 40px;
-    max-width: 500px;
-    line-height: 1.6;
-    opacity: 0.9;
+    max-width: 450px;
 }
 
-.hero-cta {
+.main-actions {
     display: flex;
     gap: 15px;
 }
 
-/* EL CÍRCULO CON EFECTO SPOTLIGHT */
-.hero-spotlight__right {
+.btn-gold {
+    background: #a5813a;
+    color: #1a1614;
+    padding: 16px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.btn-outline {
+    border: 2px solid #a5813a;
+    color: #a5813a;
+    padding: 14px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* EL CÍRCULO SPOTLIGHT */
+.hero-visual-side {
     position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
-.spotlight-card-circle {
-    width: 550px;
-    height: 550px;
+.spotlight-effect {
+    width: 500px;
+    height: 500px;
     border-radius: 50%;
-    /* EFECTO SPOTLIGHT: Degradado radial de luz */
-    background: radial-gradient(circle at 30% 30%, rgba(165, 129, 58, 0.2) 0%, rgba(43, 37, 32, 1) 70%);
+    background: radial-gradient(circle at center, rgba(165, 129, 58, 0.3) 0%, rgba(26, 22, 20, 1) 75%);
     border: 1px solid rgba(165, 129, 58, 0.2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.hero-image {
+.img-hero-principal {
     height: 650px;
-    /* La imagen se sale del círculo */
     width: auto;
     position: absolute;
-    bottom: -50px;
-    right: 60px;
-    /* Posicionado a la derecha del círculo */
-    z-index: 5;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
+    bottom: -40px;
+    right: 20px;
+    filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.8));
+    z-index: 10;
 }
 
-/* BOTONES */
-.btn-primary {
-    background-color: var(--mafia-gold);
-    color: var(--mafia-brown);
-    padding: 16px 30px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-}
-
-.btn-secondary {
-    border: 2px solid var(--mafia-gold);
-    color: var(--mafia-gold);
-    padding: 14px 30px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-}
-
-/* 2. CATEGORÍAS */
-.home-categories {
+/* --- CATEGORÍAS --- */
+.categories-section {
     padding: 80px 24px;
     max-width: 1400px;
     margin: 0 auto;
 }
 
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    justify-content: center;
+.title-section {
+    text-align: center;
+    font-family: 'Noto Serif', serif;
+    font-size: 2.2rem;
+    color: #1a1614;
+    margin-bottom: 50px;
+    text-transform: uppercase;
 }
 
-.product-category-card {
-    background-color: var(--mafia-brown-light);
-    border-radius: 25px;
-    padding: 60px 20px;
+.grid-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.card-category-dark {
+    background: #2b2520;
+    border-radius: 20px;
+    padding: 50px 20px;
     text-decoration: none;
     text-align: center;
     border: 1px solid rgba(165, 129, 58, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: 0.4s ease;
+    transition: 0.3s;
 }
 
-.product-category-card:hover {
+.card-category-dark:hover {
     transform: translateY(-10px);
-    border-color: var(--mafia-gold);
+    border-color: #a5813a;
 }
 
-.category-card__icon {
+.card-icon {
     font-size: 4rem;
     margin-bottom: 20px;
 }
 
-.category-card__info h3 {
-    color: var(--mafia-cream);
-    font-family: 'Noto Serif', serif;
+.card-body h3 {
+    color: #fdfaf7;
     font-size: 1.4rem;
-    text-transform: uppercase;
     margin-bottom: 10px;
 }
 
-.category-card__info span {
-    color: var(--mafia-gold);
+.card-body span {
+    color: #a5813a;
     font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 1.5px;
+    font-size: 0.8rem;
 }
 
-/* 3. LO MÁS VENDIDO */
-.home-best-sellers {
-    padding: 80px 24px 120px;
+/* --- BEST SELLERS --- */
+.best-sellers-section {
+    padding: 60px 24px 120px;
     max-width: 1400px;
     margin: 0 auto;
 }
 
-.best-sellers__header {
+.best-header {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
 }
 
-.best-sellers__subtitle {
-    font-family: 'Inter', sans-serif;
+.gold-tag {
+    color: #a5813a;
     font-weight: 800;
-    color: var(--mafia-gold);
-    text-transform: uppercase;
     letter-spacing: 2px;
-    font-size: 0.8rem;
-    margin-top: -30px;
+    margin-top: -40px;
 }
 
-.gold-separator {
-    width: 80px;
-    height: 4px;
-    background: var(--mafia-gold);
-    margin: 20px auto;
-    border-radius: 2px;
-}
-
-.products-grid-meli {
+.grid-products-premium {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
 }
 
-.product-card-premium {
+.card-product-white {
     background: #fff;
     border-radius: 12px;
     border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
-.product-image-container {
-    width: 100%;
+.img-holder {
     aspect-ratio: 1;
-    background: var(--mafia-cream);
+    background: #f9f7f5;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3.5rem;
+    font-size: 4rem;
 }
 
-.product-details {
-    padding: 15px;
+.info-holder {
+    padding: 20px;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
-.details-material {
-    color: var(--mafia-gold);
+.tag-brand {
+    color: #a5813a;
+    font-size: 0.7rem;
     font-weight: 800;
-    font-size: 0.65rem;
     text-transform: uppercase;
 }
 
-.details-name {
-    font-size: 0.95rem;
-    color: var(--mafia-brown);
+.product-title {
+    font-size: 1rem;
+    color: #1a1614;
+    margin: 10px 0;
     font-weight: 600;
-    margin-bottom: 10px;
 }
 
-.details-price {
-    font-size: 1.3rem;
+.product-price {
+    font-size: 1.5rem;
     font-weight: 800;
-    color: var(--mafia-brown);
+    color: #1a1614;
     margin-top: auto;
     margin-bottom: 15px;
 }
 
-.btn-add-cart {
-    width: 100%;
-    padding: 12px;
-    background: var(--mafia-brown);
-    color: var(--mafia-cream);
+.btn-buy {
+    background: #1a1614;
+    color: #fff;
     border: none;
+    padding: 12px;
     border-radius: 6px;
     font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.75rem;
     cursor: pointer;
 }
 
-/* RESPONSIVE */
+/* --- MÓVIL --- */
 @media (max-width: 768px) {
-    .hero-spotlight__container {
+    .hero-content-wrapper {
         grid-template-columns: 1fr;
         text-align: center;
-        padding: 0 20px;
-        height: 80vh;
+        padding: 20px;
     }
 
-    .hero-title {
-        font-size: 2rem;
-    }
-
-    .hero-subtitle {
-        margin: 0 auto 30px;
-    }
-
-    .hero-cta {
-        justify-content: center;
+    .main-actions {
         flex-direction: column;
     }
 
-    .spotlight-card-circle {
-        width: 350px;
-        height: 350px;
+    .spotlight-effect {
+        width: 320px;
+        height: 320px;
+        margin: 40px auto;
     }
 
-    .hero-image {
+    .img-hero-principal {
         height: 400px;
-        right: 0;
-        bottom: -20px;
+        right: 10px;
     }
 
-    .products-grid {
+    .grid-categories {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 10px;
     }
 
-    .products-grid-meli {
+    .grid-products-premium {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
     }

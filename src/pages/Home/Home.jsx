@@ -6,93 +6,84 @@ import './Home.css';
 export default function Home() {
     const { addToCart } = useCart();
 
-    // Filtramos para mostrar los Kits de Regalo Prensado (Lo más vendido)
+    // Filtramos los kits para la sección de abajo
     const bestSellers = products.filter(p => p.type === 'Prensado').slice(0, 4);
 
     return (
-        <div className="home">
-            {/* 1. HERO SPOTLIGHT - Texto Izq, Imagen/Círculo Der */}
-            <section className="hero-spotlight">
-                <div className="hero-spotlight__container">
-                    {/* LADO IZQUIERDO: TEXTO */}
-                    <div className="hero-spotlight__left">
-                        <h1 className="hero-title">
+        <div className="home-container">
+            {/* SECCIÓN HERO CON SPOTLIGHT */}
+            <section className="hero-section">
+                <div className="hero-content-wrapper">
+
+                    <div className="hero-text-side">
+                        <h1 className="main-title">
                             MATES CON <br />
                             <span>IDENTIDAD</span>
                         </h1>
-                        <p className="hero-subtitle">
+                        <p className="main-subtitle">
                             Curaduría premium de mates imperiales tallados a mano en Mendoza.
-                            Una pieza de arte en cada cebada.
                         </p>
-                        <div className="hero-cta">
-                            <Link to="/productos" className="btn-primary">Ver Catálogo</Link>
-                            <a href="https://wa.me/tu-numero" target="_blank" rel="noreferrer" className="btn-secondary">
-                                Consultanos
-                            </a>
+                        <div className="main-actions">
+                            <Link to="/productos" className="btn-gold">Ver Catálogo</Link>
+                            <a href="https://wa.me/tu-numero" className="btn-outline">WhatsApp</a>
                         </div>
                     </div>
 
-                    {/* LADO DERECHO: EL CÍRCULO SPOTLIGHT Y LA IMAGEN */}
-                    <div className="hero-spotlight__right">
-                        {/* EL CONTENEDOR DEL CÍRCULO (Spotlight Card) */}
-                        <div className="spotlight-card-circle">
-                            {/* LA IMAGEN ESPECÍFICA: fondo_hero_principal.jpg */}
-                            <img src="/fondo_hero_principal.jpg" alt="Mate Imperial Premium Cuyo Cebado" className="hero-image" />
+                    <div className="hero-visual-side">
+                        {/* ESTE ES EL CIRCULO SPOTLIGHT */}
+                        <div className="spotlight-effect">
+                            <img
+                                src="/fondo_hero_principal.jpg"
+                                alt="Mate Imperial"
+                                className="img-hero-principal"
+                            />
                         </div>
                     </div>
+
                 </div>
             </section>
 
-            {/* 2. CATEGORÍAS (Grilla Centrada 2 columnas) */}
-            <section className="home-categories">
-                <h2 className="section__title">Nuestras Colecciones</h2>
-                <div className="products-grid">
+            {/* CATEGORÍAS (Grilla 2 columnas en móvil) */}
+            <section className="categories-section">
+                <h2 className="title-section">Nuestras Colecciones</h2>
+                <div className="grid-categories">
                     {categories.map((cat) => (
-                        <Link key={cat.id} to={`/productos/${cat.id}`} className="product-category-card">
-                            <div className="category-card__icon">{cat.icon}</div>
-                            <div className="category-card__info">
+                        <Link key={cat.id} to={`/productos/${cat.id}`} className="card-category-dark">
+                            <div className="card-icon">{cat.icon}</div>
+                            <div className="card-body">
                                 <h3>{cat.label}</h3>
-                                <span>Explorar colección</span>
+                                <span>Explorar</span>
                             </div>
                         </Link>
                     ))}
                 </div>
             </section>
 
-            {/* 3. LO MÁS VENDIDO - KIT DE REGALO PRENSADO */}
-            <section className="home-best-sellers">
-                <div className="best-sellers__container">
-                    <header className="best-sellers__header">
-                        <h2 className="section__title">Lo más vendido</h2>
-                        <p className="best-sellers__subtitle">KIT DE REGALO PRENSADO</p>
-                        <div className="gold-separator"></div>
-                    </header>
+            {/* LO MÁS VENDIDO */}
+            <section className="best-sellers-section">
+                <header className="best-header">
+                    <h2 className="title-section">Lo más vendido</h2>
+                    <p className="gold-tag">KIT DE REGALO PRENSADO</p>
+                </header>
 
-                    <div className="products-grid-meli">
-                        {bestSellers.map((product) => (
-                            <div key={product.id} className="product-card-premium">
-                                <div className="product-image-container">
-                                    {/* Aquí irá tu <img> cuando tengas las fotos de los kits */}
-                                    <span className="category-icon-bg">🎁</span>
-                                </div>
-                                <div className="product-details">
-                                    <p className="details-material">{product.brand || 'Cuyo Cebado'}</p>
-                                    <h4 className="details-name">{product.name}</h4>
-                                    <p className="details-price">${product.price.toLocaleString()}</p>
-                                    <button className="btn-add-cart" onClick={() => addToCart(product)}>
-                                        Añadir
-                                    </button>
-                                </div>
+                <div className="grid-products-premium">
+                    {bestSellers.map((product) => (
+                        <div key={product.id} className="card-product-white">
+                            <div className="img-holder">
+                                <span className="icon-bg">🎁</span>
                             </div>
-                        ))}
-                    </div>
+                            <div className="info-holder">
+                                <p className="tag-brand">{product.brand || 'Cuyo Cebado'}</p>
+                                <h4 className="product-title">{product.name}</h4>
+                                <p className="product-price">${product.price.toLocaleString()}</p>
+                                <button className="btn-buy" onClick={() => addToCart(product)}>
+                                    Añadir
+                                </button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </section>
-
-            {/* WHATSAPP FLOAT */}
-            <a href="https://wa.me/tu-numero" className="whatsapp-float" target="_blank" rel="noreferrer">
-                <span className="material-symbols-outlined">chat</span>
-            </a>
         </div>
     );
 }
