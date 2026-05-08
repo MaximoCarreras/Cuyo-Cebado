@@ -88,14 +88,26 @@
     position: relative;
 }
 
+/* Ajuste en el Hero Title */
 .hero-mafia__title {
     font-family: 'Noto Serif', serif;
-    font-size: clamp(2.8rem, 6vw, 4.8rem);
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    /* Refinado */
     color: #fff;
-    line-height: 1.0;
+    line-height: 1.1;
     margin-bottom: 25px;
     font-weight: 800;
     text-transform: uppercase;
+}
+
+/* Títulos de secciones en la Home */
+.home-section__title {
+    font-family: 'Noto Serif', serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    /* Sincronizado con Nosotros */
+    color: #2b2520;
+    text-transform: uppercase;
+    font-weight: 800;
 }
 
 .hero-mafia__gold-text {

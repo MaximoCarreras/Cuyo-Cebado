@@ -10,7 +10,6 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar__left">
         <Link to="/" className="navbar__brand">
-          {/* Ruta directa a la carpeta public: no falla nunca */}
           <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
           <span className="navbar__brand-text">CUYO CEBADO</span>
         </Link>
@@ -24,7 +23,6 @@ export default function Navbar() {
       </ul>
 
       <Link to="/carrito" className="navbar__cart-container">
-        {/* Usamos el ícono de carrito como pediste */}
         <span className="material-symbols-outlined cart-icon-main">
           shopping_cart
         </span>

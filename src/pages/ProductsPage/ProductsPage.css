@@ -10,16 +10,15 @@
 
 .products-page__title {
     font-family: 'Noto Serif', serif;
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    /* Sincronización exacta */
     color: #2b2520;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: 800;
-    /* CLAVE: margin-top en 0 para que coincida con las otras vistas */
     margin-top: 0;
-    margin-bottom: 60px;
-    position: relative;
+    margin-bottom: 50px;
 }
 
 .products-page__title::after {

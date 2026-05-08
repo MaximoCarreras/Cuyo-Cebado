@@ -13,26 +13,29 @@ body {
   min-height: 100vh;
 }
 
-/* EL ARREGLO PARA QUE EL CONTENIDO NO SE PEGUE ARRIBA */
+/* EL "COLCHÓN" PARA SIMETRÍA TOTAL EN TODA LA WEB */
 main {
   flex: 1;
   padding-top: 90px;
-  /* Este es el 'suelo' donde se apoyan todos tus títulos */
+  /* Exactamente el alto de la Navbar */
   background-color: #fdfaf7;
 }
 
+/* TAMAÑO DE TÍTULOS ELEGANTE (Tipo "Nosotros/Guía") */
 .section__title {
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-family: 'Noto Serif', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
   color: #2b2520;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-weight: 800;
+  margin-top: 0;
+  /* Para que todos los títulos peguen igual arriba */
   margin-bottom: 40px;
-  font-family: 'Noto Serif', serif;
 }
 
-/* --- BURBUJA DE WHATSAPP --- */
+/* --- BURBUJA DE WHATSAPP DEFINITIVA --- */
 .whatsapp-float {
   position: fixed;
   width: 60px;
@@ -63,13 +66,8 @@ main {
   transition: fill 0.3s ease;
 }
 
-.whatsapp-float:hover .wa-icon {
-  fill: #2b2520;
-}
-
 @media (max-width: 768px) {
   main {
     padding-top: 75px;
-    /* Ajuste para móvil */
   }
 }
