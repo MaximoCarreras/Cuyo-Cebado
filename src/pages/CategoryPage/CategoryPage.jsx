@@ -1,17 +1,15 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom'; // Link agregado aquí
 import { useState, useMemo } from 'react';
 import { products, categories } from '../../data/products';
 import './CategoryPage.css';
 
 export default function CategoryPage() {
     const { categoryId } = useParams();
-    const [maxPrice, setMaxPrice] = useState(100000);
+    const [maxPrice, setMaxPrice] = useState(150000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
 
-    // Buscamos info de la categoría actual
     const currentCategory = categories.find(cat => cat.id === categoryId);
 
-    // Lógica de filtrado
     const filteredProducts = useMemo(() => {
         return products.filter(p => {
             const matchCategory = p.category === categoryId;
@@ -21,7 +19,6 @@ export default function CategoryPage() {
         });
     }, [categoryId, maxPrice, selectedMaterial]);
 
-    // Obtenemos materiales únicos de esta categoría para el filtro
     const materials = ['todos', ...new Set(products.filter(p => p.category === categoryId).map(p => p.material).filter(Boolean))];
 
     return (
@@ -52,6 +49,12 @@ export default function CategoryPage() {
             </aside>
 
             <section className="products-content">
+                {/* BOTÓN VOLVER ELEGANTE */}
+                <Link to="/productos" className="btn-back">
+                    <span className="material-symbols-outlined">arrow_back</span>
+                    Volver a categorías
+                </Link>
+
                 <header className="category-header">
                     <h1>{currentCategory?.label} {currentCategory?.icon}</h1>
                     <p>{filteredProducts.length} productos encontrados</p>
@@ -63,7 +66,6 @@ export default function CategoryPage() {
                             <div key={product.id} className="product-card">
                                 {product.bestSeller && <span className="badge">Destacado</span>}
                                 <div className="product-image">
-                                    {/* Aquí irá la imagen real. Por ahora un placeholder */}
                                     <div className="placeholder-img">📦</div>
                                 </div>
                                 <div className="product-info">
