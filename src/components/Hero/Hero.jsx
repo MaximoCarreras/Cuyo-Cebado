@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './Hero.css';
 import heroBgImage from '../../assets/fondo_hero_principal.png';
+import Grainient from '../Backgrounds/Grainient';
 
 export default function Hero() {
   const [viewHeight, setViewHeight] = useState('100svh');
@@ -22,13 +23,32 @@ export default function Hero() {
       id="hero"
       style={{ height: viewHeight, minHeight: viewHeight }}
     >
+      {/* 1. Capa de la imagen */}
       <div
         className="hero__image-bg"
         style={{ backgroundImage: `url(${heroBgImage})` }}
       ></div>
 
-      <div className="hero__shape"></div>
+      {/* 2. Capa con animación React Bits (Grainient) */}
+      <div className="hero__shape">
+        <Grainient
+          color1="#140d07"
+          color2="#3e2715"
+          color3="#26170d"
+          timeSpeed={0.18}
+          warpStrength={1.5}
+          warpFrequency={3}
+          warpSpeed={1.2}
+          rotationAmount={100}
+          noiseScale={1.5}
+          grainAmount={0.06}
+          grainAnimated={true}
+          zoom={1}
+          className="hero__grainient"
+        />
+      </div>
 
+      {/* 3. Texto */}
       <div className="hero__container">
         <div className="hero__content">
           <h1 className="hero__title">
