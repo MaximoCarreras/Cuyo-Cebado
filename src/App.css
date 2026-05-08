@@ -13,11 +13,11 @@ body {
   min-height: 100vh;
 }
 
-/* EL "COLCHÓN" PARA QUE EL CONTENIDO NO SE PEGUE A LA NAVBAR */
+/* EL ARREGLO PARA QUE EL CONTENIDO NO SE PEGUE ARRIBA */
 main {
   flex: 1;
   padding-top: 90px;
-  /* Igual al alto de la Navbar */
+  /* Exactamente el alto de la Navbar */
   background-color: #fdfaf7;
 }
 
@@ -69,7 +69,7 @@ main {
 
 @media (max-width: 768px) {
   main {
-    padding-top: 70px;
-    /* Ajuste para la barra más chica en móvil */
+    padding-top: 75px;
+    /* Ajuste para móvil */
   }
 }

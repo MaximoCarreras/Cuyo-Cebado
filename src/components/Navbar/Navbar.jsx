@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-// IMPORTAMOS EL LOGO (Asegúrate de que la ruta sea correcta según tu carpeta)
-import logo from '../../assets/logo.png';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -10,13 +8,14 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      {/* Brand: Logo + Texto */}
-      <Link to="/" className="navbar__brand">
-        <img src={logo} alt="Cuyo Cebado" className="navbar__logo" />
-        <span className="navbar__brand-text">CUYO CEBADO</span>
-      </Link>
+      <div className="navbar__left">
+        <Link to="/" className="navbar__brand">
+          {/* Ruta directa a la carpeta public: no falla nunca */}
+          <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
+          <span className="navbar__brand-text">CUYO CEBADO</span>
+        </Link>
+      </div>
 
-      {/* Menú de Navegación */}
       <ul className="navbar__menu">
         <li><Link to="/" className="navbar__link">Inicio</Link></li>
         <li><Link to="/productos" className="navbar__link">Productos</Link></li>
@@ -24,8 +23,8 @@ export default function Navbar() {
         <li><Link to="/guia-curado" className="navbar__link">Guía de Curado</Link></li>
       </ul>
 
-      {/* Carrito con icono de Carrito */}
       <Link to="/carrito" className="navbar__cart-container">
+        {/* Usamos el ícono de carrito como pediste */}
         <span className="material-symbols-outlined cart-icon-main">
           shopping_cart
         </span>

@@ -25,17 +25,19 @@
 
 .navbar__logo {
   height: 55px;
+  /* Tamaño optimizado */
   width: auto;
   transition: transform 0.3s;
 }
 
 .navbar__brand-text {
   color: #fdfaf7;
-  /* Blanco Hueso */
+  /* Blanco Hueso - Ahora sí se va a ver */
   font-family: 'Noto Serif', serif;
   font-weight: 700;
-  font-size: 1.2rem;
-  letter-spacing: 1px;
+  font-size: 1.3rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .navbar__menu {
@@ -97,18 +99,18 @@
   border: 2px solid #1a1614;
 }
 
-/* MÓVIL */
+/* RESPONSIVE MÓVIL */
 @media (max-width: 768px) {
   .navbar {
     padding: 0 20px;
-    height: 70px;
+    height: 75px;
   }
 
   .navbar__brand-text {
     display: none;
-    /* Ocultamos texto en móvil para que entre todo */
   }
 
+  /* Ocultamos nombre en móvil para dar espacio */
   .navbar__menu {
     display: none;
   }
