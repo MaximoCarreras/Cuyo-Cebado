@@ -1,86 +1,119 @@
-/* ... (Todo el resto del CSS de CategoryPage.css se mantiene igual arriba) ... */
+/* --- SIDEBAR MAFIA PREMIUM --- */
+.sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: #1a1614;
+    /* Marrón Mafia profundo */
+    padding: 30px;
+    border-radius: 15px;
+    color: #fdfaf7;
+    height: fit-content;
+    position: sticky;
+    top: 110px;
+    border: 1px solid rgba(165, 129, 58, 0.2);
+}
 
+.sidebar__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.sidebar h3 {
+    font-family: 'Noto Serif', serif;
+    color: #a5813a;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+/* --- CHAU WINDOWS XP: SELECTORES (DROPDOWNS) --- */
+.filter-group select {
+    width: 100%;
+    padding: 12px;
+    background-color: #2b2520;
+    /* Un tono más claro que el sidebar para que resalte */
+    border: 1px solid rgba(165, 129, 58, 0.4);
+    color: #fdfaf7;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    appearance: none;
+    /* Quitamos la flecha fea por defecto */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a5813a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    transition: border-color 0.3s;
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: #a5813a;
+}
+
+/* --- CHAU WINDOWS XP: SLIDER (RANGE) --- */
 .filter-group input[type="range"] {
-    /* 1. Reset total: le decimos al navegador que NO use su estilo por defecto */
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
     background: transparent;
-    /* El fondo lo maneja la pista */
     cursor: pointer;
     margin: 15px 0;
 }
 
-/* --- ESTILOS PARA NAVEGADORES WEBKIT (CHROME, SAFARI, EDGE) --- */
-
-/* LA PISTA (El camino por donde va el botón) */
+/* La pista (el camino) */
 .filter-group input[type="range"]::-webkit-slider-runnable-track {
     width: 100%;
-    height: 6px;
-    background: rgba(253, 250, 247, 0.1);
-    /* Crema muy sutil sobre el marrón */
-    border-radius: 3px;
-    border: none;
+    height: 4px;
+    background: rgba(165, 129, 58, 0.2);
+    border-radius: 2px;
 }
 
-/* EL BOTÓN (El círculo que mueves) - Efecto "Oro Mafia" */
+/* El botón (el círculo) */
 .filter-group input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    /* Reset de vuelta para el botón */
     appearance: none;
     height: 18px;
     width: 18px;
     border-radius: 50%;
     background: #a5813a;
-    /* Dorado Mafia */
-    cursor: pointer;
-    margin-top: -6px;
-    /* Centrado vertical: (Altura pista / 2) - (Altura botón / 2) */
-    box-shadow: 0 0 10px rgba(165, 129, 58, 0.5);
-    /* Brillo dorado */
+    /* Dorado */
     border: 2px solid #1a1614;
-    /* Borde marrón para que resalte */
-    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    margin-top: -7px;
+    /* Centrado */
+    box-shadow: 0 0 10px rgba(165, 129, 58, 0.4);
+    transition: transform 0.2s;
 }
 
-/* Efectos al pasar el mouse sobre el botón */
 .filter-group input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
     background: #fdfaf7;
-    /* Cambia a crema */
-    transform: scale(1.1);
-    /* Se agranda un poquito */
-    box-shadow: 0 0 15px rgba(253, 250, 247, 0.7);
-    /* Brillo crema */
 }
 
-/* --- ESTILOS PARA FIREFOX (Usa prefijos distintos) --- */
-
+/* Ajustes para Firefox */
 .filter-group input[type="range"]::-moz-range-track {
-    width: 100%;
-    height: 6px;
-    background: rgba(253, 250, 247, 0.1);
-    border-radius: 3px;
+    background: rgba(165, 129, 58, 0.2);
+    height: 4px;
 }
 
 .filter-group input[type="range"]::-moz-range-thumb {
+    background: #a5813a;
+    border: 2px solid #1a1614;
     height: 18px;
     width: 18px;
     border-radius: 50%;
-    background: #a5813a;
-    border: 2px solid #1a1613;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(165, 129, 58, 0.5);
-    transition: background 0.3s, transform 0.3s;
 }
 
-.filter-group input[type="range"]::-moz-range-thumb:hover {
-    background: #fdfaf7;
-    transform: scale(1.1);
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: relative;
+        top: 0;
+        margin-bottom: 30px;
+        padding: 20px;
+    }
 }
-
-/* Parche para que Firefox no muestre un borde feo al hacer foco */
-.filter-group input[type="range"]::-moz-focus-outer {
-    border: 0;
-}
-
-/* ... (El resto del CSS de .products-content y media queries sigue igual abajo) ... */
