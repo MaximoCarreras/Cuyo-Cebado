@@ -1,4 +1,4 @@
-/* --- ESTILO DESKTOP (3 COLUMNAS) --- */
+/* --- ESTILO GENERAL --- */
 .navbar {
   position: fixed;
   top: 0;
@@ -7,9 +7,8 @@
   height: 90px;
   background-color: #1a1614;
   display: grid;
-  /* Usamos Grid para control total */
   grid-template-columns: 1fr auto 1fr;
-  /* Izq (Logo), Centro (Links), Der (Iconos) */
+  /* Mantiene el centro perfecto */
   align-items: center;
   padding: 0 50px;
   z-index: 1000;
@@ -20,28 +19,6 @@
   justify-self: start;
 }
 
-.navbar__brand {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  text-decoration: none;
-}
-
-.navbar__logo {
-  height: 55px;
-  width: auto;
-}
-
-.navbar__brand-text {
-  color: #fdfaf7;
-  font-family: 'Noto Serif', serif;
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-/* LINKS EN EL CENTRO */
 .navbar__menu {
   justify-self: center;
   display: flex;
@@ -49,47 +26,36 @@
   list-style: none;
 }
 
-.navbar__link {
-  color: #fdfaf7;
-  text-decoration: none;
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  transition: color 0.3s;
-}
-
-.navbar__link:hover {
-  color: #a5813a;
-}
-
-/* CARRITO A LA DERECHA */
 .navbar__right {
   justify-self: end;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
 
-.navbar__hamburger {
-  display: none;
-  /* Escondido en PC */
-  background: none;
-  border: none;
-  color: #fdfaf7;
-  cursor: pointer;
-  z-index: 1100;
+/* --- CARRITO E ICONOS --- */
+.navbar__cart-container {
+  position: relative;
+  /* CLAVE: El número se posiciona respecto a esto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fdfaf7 !important;
+  /* Forzamos el color blanco hueso */
+  text-decoration: none;
 }
 
 .cart-icon-main {
   font-size: 32px !important;
+  color: #fdfaf7 !important;
+  /* Que se vea sobre el marrón */
 }
 
 .cart-badge-premium {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: -8px;
+  /* Ajustado para que pegue al icono */
+  right: -8px;
   background-color: #a5813a;
   color: #1a1614;
   font-size: 11px;
@@ -101,16 +67,25 @@
   align-items: center;
   justify-content: center;
   border: 2px solid #1a1614;
+  z-index: 10;
 }
 
-/* --- RESPONSIVE MÓVIL (DRAWER LATERAL) --- */
+.navbar__hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: #fdfaf7;
+  cursor: pointer;
+}
+
+/* --- RESPONSIVE MÓVIL --- */
 @media (max-width: 768px) {
   .navbar {
     display: flex;
-    /* En móvil volvemos a Flex para repartir logo e iconos */
+    /* En móvil usamos flex para repartir extremos */
     justify-content: space-between;
-    padding: 0 20px;
     height: 75px;
+    padding: 0 20px;
   }
 
   .navbar__brand-text {
@@ -129,12 +104,8 @@
     height: 100vh;
     background-color: #1a1614;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
     padding: 100px 40px;
-    gap: 30px;
-    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    transition: 0.4s ease;
     z-index: 1050;
   }
 
@@ -142,21 +113,8 @@
     right: 0;
   }
 
-  .navbar__link {
-    font-size: 1.2rem;
-    width: 100%;
-    border-bottom: 1px solid rgba(165, 129, 58, 0.1);
-    padding-bottom: 15px;
-  }
-
-  .navbar__overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(3px);
-    z-index: 1040;
+  /* Aseguramos que los iconos en móvil no se pisen */
+  .cart-icon-main {
+    font-size: 28px !important;
   }
 }

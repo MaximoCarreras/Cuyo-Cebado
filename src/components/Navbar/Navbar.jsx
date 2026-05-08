@@ -21,7 +21,7 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* 2. CENTRO: LINKS (En escritorio se ven acá, en móvil vuelan al drawer) */}
+      {/* 2. CENTRO: LINKS (Escritorio) */}
       <ul className={`navbar__menu ${isMenuOpen ? 'navbar__menu--open' : ''}`}>
         <li><Link to="/" className="navbar__link" onClick={closeMenu}>Inicio</Link></li>
         <li><Link to="/productos" className="navbar__link" onClick={closeMenu}>Productos</Link></li>
@@ -29,8 +29,9 @@ export default function Navbar() {
         <li><Link to="/guia-curado" className="navbar__link" onClick={closeMenu}>Guía de Curado</Link></li>
       </ul>
 
-      {/* 3. DERECHA: ICONOS (Carrito + Hamburguesa) */}
+      {/* 3. DERECHA: CARRITO Y LUEGO HAMBURGUESA */}
       <div className="navbar__right">
+        {/* El contenedor del carrito tiene que ser relativo para que el número no flote */}
         <Link to="/carrito" className="navbar__cart-container" onClick={closeMenu}>
           <span className="material-symbols-outlined cart-icon-main">
             shopping_cart
@@ -40,6 +41,7 @@ export default function Navbar() {
           )}
         </Link>
 
+        {/* La hamburguesa queda a la derecha del todo en móvil */}
         <button className="navbar__hamburger" onClick={toggleMenu} aria-label="Menu">
           <span className="material-symbols-outlined">
             {isMenuOpen ? 'close' : 'menu'}
