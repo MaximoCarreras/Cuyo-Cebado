@@ -1,4 +1,3 @@
-// src/pages/Home/Home.jsx
 import { Link } from 'react-router-dom';
 import { categories, products } from '../../data/products';
 import { useCart } from '../../context/CartContext';
@@ -11,12 +10,15 @@ export default function Home() {
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
     const mainCategories = categories.slice(0, 6);
 
-    // Buscamos el Kit de Regalo (ID 501 o similar en products.js)
+    // Buscamos el Kit de Regalo (asumiendo ID 501 o similar en products.js)
     const giftProduct = products.find(p => p.id === 501) || products.find(p => p.category === 'kits');
 
+    // Función para scroll suave a las categorías
     const scrollToCategories = () => {
         const element = document.getElementById('categorias-home');
-        if (element) element.scrollIntoView({ behavior: 'smooth' });
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
     const handleGiftClick = () => {
@@ -28,35 +30,35 @@ export default function Home() {
 
     return (
         <div className="home-mafia">
-            {/* HERO SECTION - MAFIA STYLE CON AJUSTES FINALES DE DISEÑO */}
+            {/* HERO SECTION RESTAURADO AL 100% MAFIA STYLE */}
             <section className="hero-mafia">
                 <div className="hero-mafia__container">
                     <div className="hero-mafia__left-panel">
                         <div className="hero-mafia__content">
                             <h1 className="hero-mafia__title">
-                                MATES CON <br />
-                                <span className="hero-mafia__gold-text">IDENTIDAD</span>
+                                mates con <br />
+                                <span className="hero-mafia__intensity-text">intensidad</span>
                             </h1>
                             <p className="hero-mafia__description">
                                 Curaduría premium de mates imperiales tallados a mano en Mendoza.
                                 Una pieza de arte en cada cebada.
                             </p>
                             <div className="hero-mafia__btns">
-                                <button onClick={scrollToCategories} className="btn-mafia-gold">
+                                <button onClick={scrollToCategories} className="btn-mafia-gold-solid">
                                     VER CATÁLOGO
                                 </button>
                                 <a
-                                    href="https://wa.me/5492625597956?text=Hola!%20Quiero%20consultar%20por%20un%20mate%20premium"
+                                    href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web%20y%20quiero%20consultar%20por%20un%20mate%20premium"
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="btn-mafia-outline"
+                                    className="btn-mafia-gold-outline"
                                 >
-                                    CONSULTAR POR WHATSAPP
+                                    CONSULTARNOS POR WHATSAPP
                                 </a>
                             </div>
                         </div>
                     </div>
-                    {/* Aquí se carga la imagen de fondo fondo_hero_principal.png desde CSS */}
+                    {/* Aquí se carga fondo_hero_principal.png desde CSS */}
                     <div className="hero-mafia__right-image"></div>
                 </div>
             </section>
@@ -120,10 +122,10 @@ export default function Home() {
                         <span className="home-promo__subtitle">EDICIÓN LIMITADA</span>
                         <h2 className="home-promo__title">El regalo perfecto para el verdadero matero</h2>
                         <ul className="home-promo__list">
-                            <li><span className="material-symbols-outlined">verified</span> Mate de madera noble seleccionada</li>
-                            <li><span className="material-symbols-outlined">verified</span> Bombilla de alpaca premium</li>
-                            <li><span className="material-symbols-outlined">verified</span> Caja artesanal de madera</li>
-                            <li><span className="material-symbols-outlined">verified</span> Guía de curado paso a paso</li>
+                            <li><span className="material-symbols-outlined">check_circle</span> Mate de madera noble seleccionada</li>
+                            <li><span className="material-symbols-outlined">check_circle</span> Bombilla de alpaca premium</li>
+                            <li><span className="material-symbols-outlined">check_circle</span> Caja artesanal de madera</li>
+                            <li><span className="material-symbols-outlined">check_circle</span> Guía de curado paso a paso</li>
                         </ul>
                         <div className="home-promo__footer">
                             <p className="home-promo__price">$89.000</p>
