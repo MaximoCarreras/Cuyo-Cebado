@@ -6,26 +6,52 @@ import './Home.css';
 export default function Home() {
     const { addToCart } = useCart();
 
-    // Filtramos los 4 productos marcados como bestSeller en products.js
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
-
-    // Tomamos las primeras categorías para la Home. Hay 6 en tu products.js.
-    // Esto incluye: Mates, Bombillas, Yerba Mate, Kits & Regalos, Dúos de Guardado, Transporte.
     const mainCategories = categories.slice(0, 6);
+
+    // Función para scroll suave a las categorías
+    const scrollToCategories = () => {
+        document.getElementById('categorias-home').scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
         <div className="home">
-            {/* HERO SECTION */}
+            {/* HERO SECTION RESTAURADO */}
             <section className="hero">
-                <div className="hero__content">
-                    <h1>CURADURÍA MATERA PREMIUM</h1>
-                    <p>Desde Mendoza, seleccionamos las piezas más exclusivas para elevar tu ritual diario.</p>
-                    <Link to="/productos" className="btn-hero">Ver Colección Completa</Link>
+                <div className="hero__container">
+                    <div className="hero__left-panel">
+                        <div className="hero__text-content">
+                            <h1>
+                                MATES CON <br />
+                                <span className="gold-text">IDENTIDAD</span>
+                            </h1>
+                            <p>
+                                Curaduría premium de mates imperiales tallados a mano en Mendoza.
+                                Una pieza de arte en cada cebada.
+                            </p>
+                            <div className="hero__actions">
+                                <button onClick={scrollToCategories} className="btn-hero-solid">
+                                    VER CATÁLOGO
+                                </button>
+                                <a
+                                    href="https://wa.me/5492625597956?text=Hola!%20Quiero%20consultar%20por%20un%20mate%20premium"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="btn-hero-outline"
+                                >
+                                    CONSULTAR POR WHATSAPP
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="hero__right-image">
+                        {/* Esta imagen se maneja por CSS para el efecto de fondo */}
+                    </div>
                 </div>
             </section>
 
-            {/* CATEGORÍAS PRINCIPALES (Todas en una línea) */}
-            <section className="section__container">
+            {/* ENCONTRÁ TU COMPAÑERO IDEAL (Categorías) */}
+            <section id="categorias-home" className="section__container">
                 <div className="section__title">
                     <h2>Encontrá tu compañero ideal</h2>
                     <div className="gold-line"></div>
@@ -42,13 +68,12 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* PRODUCTOS DESTACADOS */}
+            {/* RESTO DE LA PÁGINA (Best Sellers y Promo) */}
             <section className="section__container bg-light">
                 <div className="section__title">
                     <h2>Los Más Buscados</h2>
                     <div className="gold-line"></div>
                 </div>
-
                 <div className="home-products-grid">
                     {bestSellers.map(product => (
                         <div key={product.id} className="home-product-card">
@@ -60,10 +85,7 @@ export default function Home() {
                                 <p className="product-tag">{product.type}</p>
                                 <h4>{product.name}</h4>
                                 <p className="product-price">${product.price.toLocaleString()}</p>
-                                <button
-                                    className="btn-add-home"
-                                    onClick={() => addToCart(product)}
-                                >
+                                <button className="btn-add-home" onClick={() => addToCart(product)}>
                                     Agregar al Carrito
                                 </button>
                             </div>
@@ -72,12 +94,9 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* BANNER PROMOCIONAL (Botón arreglado) */}
             <section className="promo-banner section__container">
                 <div className="promo-grid">
-                    <div className="promo-image">
-                        <div className="placeholder-promo">🎁</div>
-                    </div>
+                    <div className="placeholder-promo">🎁</div>
                     <div className="promo-text">
                         <span className="promo-tag">EDICIÓN LIMITADA</span>
                         <h2>El regalo perfecto para el verdadero matero</h2>
@@ -88,7 +107,6 @@ export default function Home() {
                             <li><span className="material-symbols-outlined">done</span> Guía de curado paso a paso</li>
                         </ul>
                         <p className="promo-price">$89.000</p>
-                        {/* ESTE BOTÓN YA TIENE LA CLASE CORRECTA */}
                         <button className="btn-promo">Lo quiero ahora</button>
                     </div>
                 </div>
