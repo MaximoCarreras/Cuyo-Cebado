@@ -6,7 +6,7 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
-  /* Tu marrón oficial */
+  /* Marrón oscuro oficial */
 }
 
 .hero__image-bg {
@@ -18,6 +18,7 @@
   background-size: cover;
   background-position: center right;
   z-index: 1;
+  will-change: transform;
 }
 
 .hero__shape {
@@ -27,12 +28,26 @@
   width: 75%;
   height: 120%;
   background-color: #2b2520;
-  /* Tu marrón oficial */
+  /* Marrón oscuro oficial */
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
   z-index: 2;
   overflow: hidden;
+}
+
+/* EFECTO GRANULADO */
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 4;
 }
 
 .hero__container {
@@ -43,7 +58,7 @@
   padding: 0 24px;
 }
 
-/* --- VISTA WEB (RESTAURADA AL 100%) --- */
+/* --- VISTA WEB --- */
 .hero__content {
   max-width: 1000px;
   padding-left: 35%;
@@ -75,6 +90,14 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* BOTONES ESCRITORIO: Separación aumentada */
+.hero__actions {
+  display: flex;
+  gap: 32px;
+  /* Aumentado de 20px a 32px */
+  flex-wrap: wrap;
+}
+
 .hero .btn {
   border-radius: 50px;
   padding: 16px 35px;
@@ -104,55 +127,57 @@
   border: 2px solid #a5813a;
 }
 
-/* --- ADAPTACIÓN MÓVIL (CON EL MARRÓN CORRECTO) --- */
+/* =========================================
+   === ADAPTACIÓN MÓVIL (MARRÓN OSCURO) === 
+   ========================================= */
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
     justify-content: flex-start;
     min-height: 100vh;
     background-color: #2b2520;
+    /* Marrón oscuro oficial aplicado */
   }
 
-  /* La imagen se funde con el marrón #2b2520 */
   .hero__image-bg {
     position: relative;
-    height: 45vh;
+    height: 50vh;
     width: 100%;
     background-position: center top;
-    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
   }
 
   .hero__shape {
-    position: relative;
-    top: -5vh;
-    left: 0;
-    width: 100%;
-    height: auto;
-    border-radius: 50% 50% 0 0 / 10% 10% 0 0;
+    position: absolute;
+    top: 45vh;
+    left: -10%;
+    width: 120%;
+    height: 70vh;
+    border-radius: 50% 50% 0 0 / 15% 15% 0 0;
     background-color: #2b2520;
-    margin-bottom: -5vh;
+    /* Marrón oscuro oficial aplicado */
     box-shadow: none;
+    z-index: 2;
+  }
+
+  .hero__container {
+    margin-top: -5vh;
+    z-index: 3;
   }
 
   .hero__content {
-    padding: 0 24px 60px;
+    padding: 0 24px 80px;
     text-align: center;
     max-width: 100%;
     padding-left: 0;
   }
 
-  .hero__title {
-    font-size: 2.3rem;
-  }
-
-  .hero__subtitle {
-    font-size: 1rem;
-  }
-
+  /* BOTONES MÓVIL: Separación aumentada */
   .hero__actions {
     flex-direction: column;
-    gap: 15px;
+    gap: 24px;
+    /* Aumentado de 15px a 24px */
     align-items: center;
     width: 100%;
   }

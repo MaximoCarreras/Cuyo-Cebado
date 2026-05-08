@@ -4,16 +4,6 @@
   --color-bone: #fdfaf7;
 }
 
-.announcement-bar {
-  background-color: var(--color-gold);
-  color: var(--color-bone);
-  text-align: center;
-  padding: 10px 0;
-  font-size: 0.85rem;
-  font-weight: 600;
-  width: 100%;
-}
-
 .navbar {
   position: sticky;
   top: 0;
@@ -23,6 +13,7 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(165, 129, 58, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .navbar__container {
