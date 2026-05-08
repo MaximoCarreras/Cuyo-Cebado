@@ -1,11 +1,11 @@
 /* src/pages/Home/Home.css */
 
-.home-view {
+.home-mafia {
     background-color: #fdfaf7;
     overflow-x: hidden;
 }
 
-/* HERO SECTION - MAFIA REDESIGN */
+/* --- HERO SECTION MAFIA PREMIUM (ARREGLADO) --- */
 .hero-mafia {
     height: 90vh;
     background-color: #000;
@@ -19,20 +19,26 @@
     width: 100%;
 }
 
+/* Panel izquierdo curvo */
 .hero-mafia__left-panel {
     width: 55%;
     background: linear-gradient(135deg, #120f0d 0%, #000000 100%);
     display: flex;
     align-items: center;
-    padding-left: 10%;
+    padding-left: 8%;
     position: relative;
     z-index: 10;
-    /* La curva premium con efecto React Bits */
+
+    /* Efecto de curva React-Style (React Bits) */
     clip-path: ellipse(95% 120% at 0% 50%);
-    box-shadow: 20px 0 60px rgba(0, 0, 0, 1);
+
+    /* --- ARREGLO AQUÍ --- */
+    /* Eliminamos la sombra pesada que generaba el error visual en el fondo */
+    box-shadow: none;
+    border-right: 1px solid rgba(165, 129, 58, 0.1);
 }
 
-/* Efecto de resplandor dorado en la curva */
+/* Resplandor dorado sutil en la curva para profundidad */
 .hero-mafia__left-panel::after {
     content: '';
     position: absolute;
@@ -41,36 +47,27 @@
     width: 2px;
     height: 100%;
     background: linear-gradient(to bottom, transparent, #a5813a, transparent);
-    box-shadow: 0 0 15px #a5813a;
-    opacity: 0.5;
+    box-shadow: 0 0 20px rgba(165, 129, 58, 0.5);
+    opacity: 0.6;
 }
 
+/* Imagen de fondo a la derecha - USANDO TU PNG LOCAL */
 .hero-mafia__right-image {
     width: 65%;
     position: absolute;
     right: 0;
     height: 100%;
     z-index: 1;
-    background-image: url('https://images.unsplash.com/photo-1594411130635-46808795906d?q=80&w=2070&auto=format&fit=crop');
+    /* --- ARREGLO AQUÍ: Ruta a tu carpeta assets --- */
+    background-image: url('../../assets/fondo_hero_principal.png');
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
 }
 
+/* Contenido del Hero */
 .hero-mafia__content {
     max-width: 550px;
-    animation: fadeInHero 1s ease-out;
-}
-
-@keyframes fadeInHero {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
 }
 
 .hero-mafia__title {
@@ -84,7 +81,10 @@
 
 .hero-mafia__gold-text {
     color: #a5813a;
-    text-shadow: 0 0 30px rgba(165, 129, 58, 0.4);
+    background: linear-gradient(to right, #a5813a, #e2c07d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(165, 129, 58, 0.3);
 }
 
 .hero-mafia__description {
@@ -99,6 +99,7 @@
     gap: 20px;
 }
 
+/* BOTONES PREMIUM (Negro y Oro) */
 .btn-mafia-gold {
     background: #a5813a;
     color: #1a1613;
@@ -108,7 +109,7 @@
     font-weight: 800;
     font-size: 0.85rem;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     letter-spacing: 1.5px;
     text-transform: uppercase;
 }
@@ -139,7 +140,7 @@
     transform: translateY(-5px);
 }
 
-/* SECCIONES COMUNES */
+/* SECCIONES POST-HERO */
 .home-section {
     max-width: 1300px;
     margin: 0 auto;
@@ -148,7 +149,7 @@
 
 .home-section--white {
     background-color: #fff;
-    max-width: 100%;
+    max-width: 100% !important;
     padding: 120px 24px;
 }
 
@@ -172,7 +173,7 @@
     margin: 15px auto 0;
 }
 
-/* CATEGORÍAS */
+/* CATEGORÍAS EN UNA LÍNEA (FIXED) */
 .home-categories-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -186,11 +187,14 @@
     text-decoration: none;
     border-radius: 20px;
     border: 1px solid rgba(165, 129, 58, 0.1);
-    transition: 0.3s;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .home-cat-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-12px);
     border-color: #a5813a;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
 }
@@ -231,6 +235,8 @@
     padding: 20px;
     border: 1px solid #f0f0f0;
     transition: 0.3s;
+    display: flex;
+    flex-direction: column;
 }
 
 .home-prod-card:hover {
@@ -250,6 +256,10 @@
     position: relative;
 }
 
+.home-prod-card__placeholder {
+    opacity: 0.7;
+}
+
 .home-prod-card__badge {
     position: absolute;
     top: 20px;
@@ -261,11 +271,16 @@
     padding: 6px 14px;
     border-radius: 50px;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .home-prod-card__info {
-    padding: 30px 10px;
+    padding: 30px 10px 10px;
     text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .home-prod-card__type {
@@ -313,7 +328,11 @@
     color: #2b2520;
 }
 
-/* PROMO BANNER REGALO */
+/* PROMO BANNER (Adiós Windows XP) */
+.home-promo {
+    padding-bottom: 100px;
+}
+
 .home-promo__container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -323,6 +342,10 @@
     border-radius: 40px;
     border: 1px solid rgba(165, 129, 58, 0.15);
     align-items: center;
+}
+
+.home-promo__image {
+    flex-shrink: 0;
 }
 
 .home-promo__placeholder {
@@ -349,6 +372,7 @@
     color: #2b2520;
     margin: 20px 0 35px;
     line-height: 1.2;
+    font-weight: 800;
 }
 
 .home-promo__list {
@@ -382,6 +406,7 @@
     color: #2b2520;
 }
 
+/* Botón de Promo arreglado (Negro y Oro) */
 .home-promo__btn {
     background: #2b2520;
     color: #a5813a;
@@ -400,6 +425,7 @@
     background: #a5813a;
     color: #fff;
     transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(165, 129, 58, 0.2);
 }
 
 /* RESPONSIVE */
@@ -408,7 +434,7 @@
         width: 100%;
         clip-path: none;
         padding-right: 10%;
-        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1594411130635-46808795906d?q=80&w=2070&auto=format&fit=crop') center/cover;
+        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../../assets/fondo_hero_principal.png') center/cover;
     }
 
     .hero-mafia__right-image {

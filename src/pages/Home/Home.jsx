@@ -1,3 +1,4 @@
+// src/pages/Home/Home.jsx
 import { Link } from 'react-router-dom';
 import { categories, products } from '../../data/products';
 import { useCart } from '../../context/CartContext';
@@ -6,11 +7,11 @@ import './Home.css';
 export default function Home() {
     const { addToCart } = useCart();
 
-    // Productos destacados para la Home
+    // Productos destacados para la Home (Maquetado)
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
     const mainCategories = categories.slice(0, 6);
 
-    // Buscamos el Kit de Regalo (ID 401 o 501 según tu products.js)
+    // Buscamos el Kit de Regalo (asumiendo ID 501 o similar en products.js)
     const giftProduct = products.find(p => p.id === 501) || products.find(p => p.category === 'kits');
 
     const scrollToCategories = () => {
@@ -26,8 +27,8 @@ export default function Home() {
     };
 
     return (
-        <div className="home-view">
-            {/* HERO SECTION - ESTILO MAFIA PREMIUM */}
+        <div className="home-mafia">
+            {/* HERO SECTION - MAFIA STYLE CON FONDO PNG */}
             <section className="hero-mafia">
                 <div className="hero-mafia__container">
                     <div className="hero-mafia__left-panel">
@@ -55,6 +56,7 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
+                    {/* Aquí se carga la imagen de fondo desde CSS */}
                     <div className="hero-mafia__right-image"></div>
                 </div>
             </section>
@@ -77,7 +79,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* PRODUCTOS DESTACADOS (LOS MÁS BUSCADOS) */}
+            {/* PRODUCTOS DESTACADOS */}
             <section className="home-section home-section--white">
                 <div className="home-section__header">
                     <h2 className="home-section__title">Los Más Buscados</h2>
@@ -108,7 +110,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* PROMO BANNER (REGALO PERFECTO) */}
+            {/* PROMO BANNER REGALO */}
             <section className="home-promo">
                 <div className="home-promo__container">
                     <div className="home-promo__image">
