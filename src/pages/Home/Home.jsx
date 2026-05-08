@@ -6,19 +6,25 @@ import './Home.css';
 export default function Home() {
     const { addToCart } = useCart();
 
+    // Filtramos los 4 productos marcados como bestSeller en products.js
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
+
+    // Tomamos las primeras categorías para la Home. Hay 6 en tu products.js.
+    // Esto incluye: Mates, Bombillas, Yerba Mate, Kits & Regalos, Dúos de Guardado, Transporte.
     const mainCategories = categories.slice(0, 6);
 
     return (
         <div className="home">
+            {/* HERO SECTION */}
             <section className="hero">
                 <div className="hero__content">
                     <h1>CURADURÍA MATERA PREMIUM</h1>
-                    <p>Desde Mendoza, seleccionamos las piezas más exclusivas para tu ritual diario.</p>
+                    <p>Desde Mendoza, seleccionamos las piezas más exclusivas para elevar tu ritual diario.</p>
                     <Link to="/productos" className="btn-hero">Ver Colección Completa</Link>
                 </div>
             </section>
 
+            {/* CATEGORÍAS PRINCIPALES (Todas en una línea) */}
             <section className="section__container">
                 <div className="section__title">
                     <h2>Encontrá tu compañero ideal</h2>
@@ -36,6 +42,7 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* PRODUCTOS DESTACADOS */}
             <section className="section__container bg-light">
                 <div className="section__title">
                     <h2>Los Más Buscados</h2>
@@ -65,6 +72,7 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* BANNER PROMOCIONAL (Botón arreglado) */}
             <section className="promo-banner section__container">
                 <div className="promo-grid">
                     <div className="promo-image">
@@ -80,6 +88,7 @@ export default function Home() {
                             <li><span className="material-symbols-outlined">done</span> Guía de curado paso a paso</li>
                         </ul>
                         <p className="promo-price">$89.000</p>
+                        {/* ESTE BOTÓN YA TIENE LA CLASE CORRECTA */}
                         <button className="btn-promo">Lo quiero ahora</button>
                     </div>
                 </div>
