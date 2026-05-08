@@ -2,11 +2,10 @@
 
 .home-mafia {
     background-color: #fdfaf7;
-    /* Fondo color hueso */
     overflow-x: hidden;
 }
 
-/* --- HERO SECTION MAFIA PREMIUM (ARREGLADO AL 100%) --- */
+/* --- HERO SECTION MAFIA --- */
 .hero-mafia {
     height: 90vh;
     background-color: #000;
@@ -21,143 +20,103 @@
     width: 100%;
 }
 
-/* Panel izquierdo curvo - Color marrón amaderado más CLARITO y efecto React Bits */
+/* Panel izquierdo curvo - Marrón Amaderado Oscuro Mafia */
 .hero-mafia__left-panel {
     width: 55%;
-
-    /* NEW: Marrón Amaderado más claro (tipo Nuez Profunda) */
-    background: linear-gradient(135deg, #3d3025 0%, #2b2118 100%);
-
+    background: linear-gradient(135deg, #2b1d19 0%, #1a110f 100%);
     display: flex;
     align-items: center;
-    padding-left: 10%;
+    padding-left: 12%;
+    /* Ajustado para que el texto respire */
     position: relative;
     z-index: 10;
-
-    /* La curva circular que no corta en seco */
     clip-path: ellipse(95% 120% at 0% 50%);
-
-    /* Sombra para profundidadMafia */
     box-shadow: 20px 0 60px rgba(0, 0, 0, 0.8);
-    border-right: 1px solid rgba(165, 129, 58, 0.15);
 }
 
-/* Efecto React Bits (Degradado dinámico y resplandor dorado) */
-.hero-mafia__left-panel::after {
-    content: '';
+/* EFECTO REACT BITS: El resplandor que viaja por el borde */
+.react-bits-glow {
     position: absolute;
     top: 0;
     right: 0;
-    width: 2px;
+    width: 4px;
     height: 100%;
-
-    /* Gradiente dinámico React Bits */
     background: linear-gradient(to bottom,
             transparent,
-            #a5813a 30%,
-            #fdfaf7 50%,
-            #a5813a 70%,
+            #a5813a 20%,
+            #fff 50%,
+            #a5813a 80%,
             transparent);
-    box-shadow: 0 0 20px rgba(165, 129, 58, 0.5);
-    opacity: 0.7;
-    animation: reactBitsEffect 4s infinite linear;
+    filter: blur(8px);
+    opacity: 0.8;
+    z-index: 11;
+    animation: glowTravel 4s infinite linear;
 }
 
-@keyframes reactBitsEffect {
+@keyframes glowTravel {
     0% {
-        background-position: 0% 0%;
-        opacity: 0.4;
-    }
-
-    50% {
-        background-position: 0% 100%;
-        opacity: 0.8;
+        transform: translateY(-100%);
     }
 
     100% {
-        background-position: 0% 0%;
-        opacity: 0.4;
+        transform: translateY(100%);
     }
 }
 
-/* Imagen de fondo a la derecha - USANDO TU PNG LOCAL */
+/* Imagen de fondo a la derecha */
 .hero-mafia__right-image {
     width: 65%;
     position: absolute;
     right: 0;
     height: 100%;
     z-index: 1;
-    /* Asegurate que el archivo exista en src/assets/ */
     background-image: url('../../assets/fondo_hero_principal.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-/* Contenido del Hero (AJUSTADO: Tipografía unificada) */
-.hero-mafia__content {
-    max-width: 550px;
-    animation: fadeInMafia 1s ease-out;
-}
-
-@keyframes fadeInMafia {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
+/* Tipografía Hero */
 .hero-mafia__title {
     font-family: 'Noto Serif', serif;
-    /* Tipografía Serif Mafia unificada */
-    font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+    /* UNIFICADA */
+    font-size: clamp(2.8rem, 6vw, 4.8rem);
     color: #fff;
-    line-height: 1.1;
+    line-height: 1.0;
     margin-bottom: 25px;
     font-weight: 800;
     text-transform: uppercase;
-    /* Forzamos mayúsculas */
 }
 
-/* Tipografía "IDENTIDAD" en dorado y serif */
 .hero-mafia__gold-text {
     color: #a5813a;
     background: linear-gradient(to right, #a5813a, #e2c07d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 30px rgba(165, 129, 58, 0.4);
+    text-shadow: 0 0 40px rgba(165, 129, 58, 0.4);
 }
 
 .hero-mafia__description {
     color: rgba(255, 255, 255, 0.7);
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     line-height: 1.8;
     margin-bottom: 45px;
+    max-width: 480px;
 }
 
-.hero-mafia__btns {
-    display: flex;
-    gap: 20px;
-}
-
-/* BOTONES MAFIA PREMIUM */
+/* BOTONES MAFIA */
 .btn-mafia-gold-solid {
     background: #a5813a;
-    color: #1a1613;
+    color: #1a110f;
     border: none;
-    padding: 20px 40px;
+    padding: 20px 45px;
     border-radius: 50px;
     font-weight: 800;
     font-size: 0.85rem;
     cursor: pointer;
     transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     letter-spacing: 1.5px;
-    text-transform: uppercase;
+    margin-right: 15px;
 }
 
 .btn-mafia-gold-solid:hover {
@@ -177,7 +136,6 @@
     text-decoration: none;
     transition: 0.3s;
     letter-spacing: 1.5px;
-    text-transform: uppercase;
 }
 
 .btn-mafia-gold-outline:hover {
@@ -186,7 +144,7 @@
     transform: translateY(-5px);
 }
 
-/* SECCIONES POST-HERO */
+/* --- RESTO DE SECCIONES (Sincronizadas) --- */
 .home-section {
     max-width: 1300px;
     margin: 0 auto;
@@ -219,7 +177,6 @@
     margin: 15px auto 0;
 }
 
-/* CATEGORÍAS (Todas en una línea) */
 .home-categories-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -239,7 +196,7 @@
 .home-cat-card:hover {
     transform: translateY(-10px);
     border-color: #a5813a;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
 }
 
 .home-cat-card__icon {
@@ -248,28 +205,10 @@
     margin-bottom: 20px;
 }
 
-.home-cat-card h3 {
-    color: #2b2520;
-    font-family: 'Noto Serif', serif;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-
-.home-cat-card__action {
-    color: #a5813a;
-    font-weight: 800;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* PRODUCTOS DESTACADOS */
 .home-products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 35px;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 .home-prod-card {
@@ -309,33 +248,6 @@
     border-radius: 50px;
 }
 
-.home-prod-card__info {
-    padding: 30px 10px 10px;
-    text-align: center;
-}
-
-.home-prod-card__type {
-    color: #a5813a;
-    font-weight: 800;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.home-prod-card h4 {
-    font-family: 'Noto Serif', serif;
-    font-size: 1.4rem;
-    color: #2b2520;
-    margin: 12px 0;
-}
-
-.home-prod-card__price {
-    font-size: 1.8rem;
-    font-weight: 900;
-    color: #2b2520;
-    margin-bottom: 25px;
-}
-
 .home-prod-card__btn {
     width: 100%;
     background: #2b2520;
@@ -352,16 +264,7 @@
     transition: 0.3s;
 }
 
-.home-prod-card__btn:hover {
-    background: #a5813a;
-    color: #2b2520;
-}
-
-/* PROMO BANNER REGALO (Sin Windows XP) */
-.home-promo {
-    padding-bottom: 100px;
-}
-
+/* PROMO BANNER */
 .home-promo__container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -381,48 +284,12 @@
     align-items: center;
     justify-content: center;
     font-size: 8rem;
-    border: 1px solid #f0f0f0;
-}
-
-.home-promo__subtitle {
-    color: #a5813a;
-    font-weight: 800;
-    letter-spacing: 2px;
-    font-size: 0.85rem;
-}
-
-.home-promo__title {
-    font-family: 'Noto Serif', serif;
-    font-size: 2.8rem;
-    color: #2b2520;
-    margin: 20px 0 35px;
-    line-height: 1.2;
-    font-weight: 800;
-}
-
-.home-promo__list {
-    list-style: none;
-    margin-bottom: 45px;
-}
-
-.home-promo__list li {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 18px;
-    color: #555;
-    font-size: 1.1rem;
-}
-
-.home-promo__list li span {
-    color: #a5813a;
-    font-size: 1.5rem;
 }
 
 .home-promo__footer {
     display: flex;
     align-items: center;
-    gap: 50px;
+    gap: 40px;
 }
 
 .home-promo__price {
@@ -431,9 +298,8 @@
     color: #2b2520;
 }
 
-/* Botón de Promo Mafia (Dorado y Negro) */
 .home-promo__btn {
-    background: transparent;
+    background: #2b2520;
     color: #a5813a;
     border: 2px solid #a5813a;
     padding: 22px 50px;
@@ -442,14 +308,6 @@
     text-transform: uppercase;
     cursor: pointer;
     transition: 0.3s;
-    font-size: 0.95rem;
-    letter-spacing: 1px;
-}
-
-.home-promo__btn:hover {
-    background: #a5813a;
-    color: #fff;
-    transform: scale(1.05);
 }
 
 /* RESPONSIVE */
@@ -461,48 +319,12 @@
         background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../../assets/fondo_hero_principal.png') center/cover;
     }
 
+    .react-bits-glow,
     .hero-mafia__right-image {
         display: none;
     }
 
     .home-categories-grid {
         grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-mafia__btns {
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-    }
-
-    .btn-mafia-gold-solid,
-    .btn-mafia-gold-outline {
-        width: 100%;
-        text-align: center;
-    }
-
-    .home-promo__container {
-        grid-template-columns: 1fr;
-        padding: 40px;
-        text-align: center;
-    }
-
-    .home-promo__list li {
-        justify-content: center;
-    }
-
-    .home-promo__footer {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .home-categories-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .section-header h2 {
-        font-size: 1.8rem;
     }
 }

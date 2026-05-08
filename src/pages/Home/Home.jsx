@@ -6,14 +6,13 @@ import './Home.css';
 export default function Home() {
     const { addToCart } = useCart();
 
-    // Productos destacados para la Home (Maquetado)
+    // Productos destacados para la Home
     const bestSellers = products.filter(p => p.bestSeller).slice(0, 4);
     const mainCategories = categories.slice(0, 6);
 
-    // Buscamos el Kit de Regalo (asumiendo ID 501 o similar en products.js)
+    // Buscamos el Kit de Regalo (ID 501 o similar)
     const giftProduct = products.find(p => p.id === 501) || products.find(p => p.category === 'kits');
 
-    // Función para scroll suave a las categorías
     const scrollToCategories = () => {
         const element = document.getElementById('categorias-home');
         if (element) {
@@ -30,10 +29,13 @@ export default function Home() {
 
     return (
         <div className="home-mafia">
-            {/* HERO SECTION RESTAURADO AL 100% MAFIA STYLE - TEXTO CORREGIDO */}
+            {/* HERO SECTION - RECONSTRUIDO AL 100% CON EFECTO REACT BITS */}
             <section className="hero-mafia">
                 <div className="hero-mafia__container">
                     <div className="hero-mafia__left-panel">
+                        {/* El resplandor dinámico del borde */}
+                        <div className="react-bits-glow"></div>
+
                         <div className="hero-mafia__content">
                             <h1 className="hero-mafia__title">
                                 MATES CON <br />
@@ -58,7 +60,7 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
-                    {/* Aquí se carga fondo_hero_principal.png desde CSS */}
+                    {/* Imagen fondo_hero_principal.png cargada desde CSS */}
                     <div className="hero-mafia__right-image"></div>
                 </div>
             </section>
@@ -112,7 +114,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* PROMO BANNER REGALO (Sin Windows XP) */}
+            {/* PROMO BANNER REGALO */}
             <section className="home-promo">
                 <div className="home-promo__container">
                     <div className="home-promo__image">
