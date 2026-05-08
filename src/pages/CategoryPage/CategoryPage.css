@@ -1,146 +1,119 @@
+/* src/pages/CategoryPage/CategoryPage.css */
 .category-page {
     display: flex;
     gap: 40px;
-    max-width: 1300px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 140px 24px 80px;
 }
 
-/* SIDEBAR FILTROS */
+/* SIDEBAR: Más elegante y minimalista */
 .sidebar {
-    width: 250px;
+    width: 260px;
     flex-shrink: 0;
     position: sticky;
     top: 120px;
     height: fit-content;
-    background: #f9f7f4;
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid rgba(43, 37, 32, 0.1);
+    background: #fdfaf7;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid rgba(43, 37, 32, 0.08);
 }
 
 .sidebar h3 {
-    color: #2b2520;
-    margin-bottom: 25px;
-    text-transform: uppercase;
-    font-size: 1rem;
-}
-
-.filter-group {
-    margin-bottom: 30px;
-}
-
-.filter-group label {
-    display: block;
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-    color: #555;
-}
-
-.filter-group input[type="range"] {
-    width: 100%;
-    accent-color: #a5813a;
-}
-
-.filter-group select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-}
-
-/* GRILLA DE PRODUCTOS */
-.products-content {
-    flex-grow: 1;
-}
-
-.category-header {
-    margin-bottom: 40px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 20px;
-}
-
-.category-header h1 {
     font-family: 'Noto Serif', serif;
     color: #2b2520;
-    margin-bottom: 5px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #a5813a;
+    display: inline-block;
+    padding-bottom: 5px;
 }
 
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 30px;
-}
-
+/* TARJETA DE PRODUCTO: El corazón de la venta */
 .product-card {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    position: relative;
+    background: #fff;
+    border-radius: 18px;
+    padding: 15px;
+    border: 1px solid #f0f0f0;
     transition: all 0.3s ease;
-    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 15px 35px rgba(43, 37, 32, 0.08);
+    border-color: #a5813a;
+}
+
+.product-image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: #f8f6f3;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
 }
 
 .badge {
     position: absolute;
-    top: 15px;
-    left: 15px;
-    background: #a5813a;
-    color: white;
-    font-size: 0.7rem;
-    padding: 4px 10px;
+    top: 12px;
+    left: 12px;
+    background: #2b2520;
+    color: #a5813a;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 6px 12px;
     border-radius: 50px;
-    z-index: 2;
-}
-
-.placeholder-img {
-    height: 200px;
-    background: #f4f1ee;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .product-info h4 {
-    margin-bottom: 5px;
+    font-family: 'Noto Serif', serif;
     color: #2b2520;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
 }
 
 .product-material {
-    font-size: 0.8rem;
-    color: #888;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+    background: #fdfaf7;
+    color: #a5813a;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    border: 1px solid rgba(165, 129, 58, 0.2);
 }
 
 .product-price {
+    font-size: 1.4rem;
     font-weight: 800;
     color: #2b2520;
-    font-size: 1.2rem;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .btn-add {
-    width: 100%;
-    padding: 12px;
     background: #2b2520;
-    color: white;
+    color: #fdfaf7;
     border: none;
-    border-radius: 8px;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.8rem;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
 }
 
 .btn-add:hover {
     background: #a5813a;
+    transform: scale(1.02);
 }
 
 /* RESPONSIVE */
@@ -153,5 +126,14 @@
         width: 100%;
         position: relative;
         top: 0;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .product-info h4 {
+        font-size: 0.95rem;
     }
 }
