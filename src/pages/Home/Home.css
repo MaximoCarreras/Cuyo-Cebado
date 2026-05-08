@@ -1,212 +1,457 @@
-/* --- VARIABLES DE MARCA --- */
-:root {
-    --mafia-brown: #1a1614;
-    --mafia-brown-light: #2b2520;
-    --mafia-gold: #a5813a;
-    --mafia-cream: #fdfaf7;
+/* src/pages/Home/Home.css */
+
+.home-mafia {
+    background-color: #fdfaf7;
+    overflow-x: hidden;
 }
 
-.home {
-    background-color: var(--mafia-cream);
-    min-height: 100vh;
-}
-
-/* --- SECCIÓN HERO (PORTADA PRINCIPAL) --- */
-.hero {
-    position: relative;
+/* --- HERO SECTION MAFIA PREMIUM --- */
+.hero-mafia {
     height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0 10%;
-    background-color: var(--mafia-brown);
-    color: var(--mafia-cream);
+    background-color: #000;
+    position: relative;
+    width: 100%;
     overflow: hidden;
 }
 
-.hero::before {
+.hero-mafia__container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+/* Panel izquierdo: Color Marrón de "Nuestra Historia" */
+.hero-mafia__left-panel {
+    width: 55%;
+    background-color: #1a1614;
+    display: flex;
+    align-items: center;
+    padding-left: 12%;
+    position: relative;
+    z-index: 10;
+    clip-path: ellipse(95% 120% at 0% 50%);
+    box-shadow: 20px 0 60px rgba(0, 0, 0, 0.8);
+    border-right: 1px solid rgba(165, 129, 58, 0.15);
+}
+
+/* EFECTO SPOTLIGHT CARD */
+.spotlight-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/path-to-your-hero-image.jpg');
-    /* Asegurate de que la ruta sea correcta */
+    background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),
+            rgba(165, 129, 58, 0.12),
+            transparent 40%);
+    pointer-events: none;
+    z-index: 11;
+}
+
+.react-bits-glow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, #a5813a 20%, #fff 50%, #a5813a 80%, transparent);
+    filter: blur(8px);
+    opacity: 0.6;
+    z-index: 12;
+    animation: glowTravel 4s infinite linear;
+}
+
+@keyframes glowTravel {
+    0% {
+        transform: translateY(-100%);
+    }
+
+    100% {
+        transform: translateY(100%);
+    }
+}
+
+.hero-mafia__right-image {
+    width: 65%;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    z-index: 1;
+    background-image: url('../../assets/fondo_hero_principal.png');
     background-size: cover;
     background-position: center;
-    opacity: 0.4;
-    z-index: 1;
 }
 
-.hero__content {
+.hero-mafia__content {
+    z-index: 15;
     position: relative;
-    z-index: 2;
-    max-width: 600px;
 }
 
-.hero__title {
+/* Ajuste en el Hero Title */
+.hero-mafia__title {
     font-family: 'Noto Serif', serif;
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    /* Refinado */
+    color: #fff;
     line-height: 1.1;
+    margin-bottom: 25px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* Títulos de secciones en la Home */
+.home-section__title {
+    font-family: 'Noto Serif', serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    /* Sincronizado con Nosotros */
+    color: #2b2520;
     text-transform: uppercase;
     font-weight: 800;
-    margin-bottom: 20px;
 }
 
-.hero__title span {
-    color: var(--mafia-gold);
+.hero-mafia__gold-text {
+    color: #a5813a;
+    background: linear-gradient(to right, #a5813a, #e2c07d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.hero__description {
-    font-size: 1.1rem;
-    margin-bottom: 35px;
-    line-height: 1.6;
-    opacity: 0.9;
+.hero-mafia__description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.15rem;
+    line-height: 1.8;
+    margin-bottom: 45px;
+    max-width: 480px;
 }
 
-/* --- BOTONES PREMIUM --- */
-.home__cta-container {
+.hero-mafia__btns {
     display: flex;
     gap: 20px;
 }
 
-.btn-primary {
-    background-color: var(--mafia-gold);
-    color: var(--mafia-brown);
-    padding: 15px 35px;
+/* BOTONES HERO */
+.btn-mafia-gold-solid {
+    background: #a5813a;
+    color: #1a1614;
+    border: none;
+    padding: 20px 45px;
     border-radius: 50px;
-    text-decoration: none;
     font-weight: 800;
-    text-transform: uppercase;
     font-size: 0.85rem;
-    letter-spacing: 1px;
+    cursor: pointer;
     transition: 0.3s;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
 }
 
-.btn-secondary {
-    border: 2px solid var(--mafia-gold);
-    color: var(--mafia-gold);
-    padding: 15px 35px;
+.btn-mafia-gold-solid:hover {
+    background: #fff;
+    transform: translateY(-5px);
+}
+
+.btn-mafia-gold-outline {
+    background: transparent;
+    color: #a5813a;
+    border: 2px solid #a5813a;
+    padding: 18px 35px;
     border-radius: 50px;
-    text-decoration: none;
     font-weight: 800;
-    text-transform: uppercase;
     font-size: 0.85rem;
-    letter-spacing: 1px;
-    transition: 0.3s;
-}
-
-.btn-primary:hover {
-    background-color: var(--mafia-cream);
-    transform: translateY(-3px);
-}
-
-.btn-secondary:hover {
-    background-color: var(--mafia-gold);
-    color: var(--mafia-brown);
-}
-
-/* --- SECCIÓN CATEGORÍAS (EL CORAZÓN DEL CAMBIO) --- */
-.home-categories {
-    padding: 80px 24px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* GRILLA SINCRONIZADA CON PRODUCTOS */
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-    justify-content: center;
-    width: 100%;
-}
-
-.product-category-card {
-    background-color: var(--mafia-brown-light);
-    border-radius: 25px;
-    padding: 60px 30px;
     text-decoration: none;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid rgba(165, 129, 58, 0.2);
-    display: flex;
-    flex-direction: column;
+    transition: 0.3s;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
-.product-category-card:hover {
-    transform: translateY(-15px);
-    background-color: var(--mafia-brown);
-    border-color: var(--mafia-gold);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+.btn-mafia-gold-outline:hover {
+    background: #a5813a;
+    color: #fff;
+    transform: translateY(-5px);
 }
 
-.category-card__icon {
-    font-size: 4.5rem;
-    margin-bottom: 25px;
+/* --- SECCIONES --- */
+.home-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 100px 24px;
+}
+
+.home-section--white {
+    background-color: #fff;
+    max-width: 100% !important;
+    padding: 120px 24px;
+}
+
+.home-section__header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.home-section__title {
+    font-family: 'Noto Serif', serif;
+    font-size: 2.8rem;
+    color: #2b2520;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.home-section__gold-line {
+    width: 80px;
+    height: 4px;
+    background: #a5813a;
+    margin: 15px auto 0;
+}
+
+.home-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.home-cat-card {
+    background: white;
+    padding: 40px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 25px;
+    border: 1px solid rgba(165, 129, 58, 0.1);
+    transition: 0.4s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.home-cat-card:hover {
+    transform: translateY(-15px);
+    border-color: #a5813a;
+    box-shadow: 0 25px 50px rgba(43, 37, 32, 0.1);
+}
+
+.home-cat-card__icon {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+}
+
+/* BOTONES PREMIUM (Carrito y Regalo) */
+.btn-premium-cart {
+    width: 100%;
+    background: #2b2520;
+    color: #a5813a;
+    border: 1px solid rgba(165, 129, 58, 0.3);
+    padding: 18px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
     transition: 0.3s;
 }
 
-.category-card__info h3 {
-    color: var(--mafia-cream);
-    font-family: 'Noto Serif', serif;
-    font-size: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
+.btn-premium-cart:hover {
+    background: #a5813a;
+    color: #2b2520;
+    transform: scale(1.02);
 }
 
-.category-card__info span {
-    color: var(--mafia-gold);
-    font-weight: 700;
+.btn-gift-cta {
+    background: #1a1614;
+    color: #fdfaf7;
+    border: 2px solid #a5813a;
+    padding: 22px 50px;
+    border-radius: 15px;
+    font-weight: 900;
     text-transform: uppercase;
-    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: 0.4s;
+    font-size: 1rem;
     letter-spacing: 2px;
 }
 
-/* --- RESPONSIVE MÓVIL (CENTRADO TOTAL) --- */
-@media (max-width: 768px) {
-    .hero {
-        height: 80vh;
-        padding: 0 5%;
-        justify-content: center;
+.btn-gift-cta:hover {
+    background: #a5813a;
+    color: #1a1614;
+    transform: translateX(10px) translateY(-5px);
+}
+
+/* PRODUCTOS */
+.home-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 35px;
+}
+
+.home-prod-card {
+    background: #fff;
+    border-radius: 30px;
+    padding: 25px;
+    border: 1px solid #f0f0f0;
+    transition: 0.3s;
+}
+
+.home-prod-card__img-box {
+    height: 280px;
+    background: #fdfaf7;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.home-prod-card__badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #2b2520;
+    color: #a5813a;
+    font-size: 0.65rem;
+    font-weight: 900;
+    padding: 8px 15px;
+    border-radius: 50px;
+    text-transform: uppercase;
+}
+
+/* PROMO BANNER */
+.home-promo__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    padding: 80px;
+    background: white;
+    border-radius: 50px;
+    border: 1px solid rgba(165, 129, 58, 0.15);
+    align-items: center;
+}
+
+.home-promo__placeholder {
+    height: 500px;
+    background: #fdfaf7;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10rem;
+}
+
+.home-promo__price {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #2b2520;
+}
+
+/* --- RESPONSIVE - FIX PARA MÓVILES --- */
+@media (max-width: 1200px) {
+    .hero-mafia__left-panel {
+        width: 100%;
+        clip-path: none;
+        padding-right: 10%;
+        background: linear-gradient(rgba(26, 22, 20, 0.95), rgba(26, 22, 20, 0.95)), url('../../assets/fondo_hero_principal.png') center/cover;
+    }
+
+    .react-bits-glow,
+    .hero-mafia__right-image {
+        display: none;
+    }
+
+    .home-promo__container {
+        grid-template-columns: 1fr;
+        padding: 40px;
         text-align: center;
     }
 
-    .home__cta-container {
+    .home-categories-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* AJUSTE CLAVE BOTONES HERO EN MÓVIL */
+    .hero-mafia__btns {
         flex-direction: column;
+        gap: 15px;
         width: 100%;
+        max-width: 350px;
+        margin: 0 auto;
     }
 
-    .home-categories {
-        padding: 40px 15px;
-    }
-
-    /* LA GRILLA DE 2 COLUMNAS CENTRADA */
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        padding: 0;
-    }
-
-    .product-category-card {
-        padding: 35px 10px;
-        border-radius: 20px;
-    }
-
-    .category-card__icon {
-        font-size: 2.8rem;
-    }
-
-    .category-card__info h3 {
-        font-size: 1rem;
+    .btn-mafia-gold-solid,
+    .btn-mafia-gold-outline {
+        width: 100%;
+        padding: 18px 20px;
+        font-size: 0.8rem;
+        text-align: center;
         letter-spacing: 1px;
     }
 
-    .category-card__info span {
-        font-size: 0.6rem;
+    .hero-mafia__title {
+        font-size: 2.5rem;
+    }
+
+    .hero-mafia__description {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+
+    .hero-mafia__left-panel {
+        padding-left: 5%;
+        padding-right: 5%;
+        text-align: center;
+    }
+
+    .hero-mafia__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .home-section__title {
+        font-size: 1.8rem;
+    }
+
+    .home-categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .home-cat-card {
+        padding: 30px 10px;
+        border-radius: 15px;
+    }
+
+    .home-cat-card__icon {
+        font-size: 2.8rem;
+    }
+
+    .home-promo__footer {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .home-promo__title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-mafia__title {
+        font-size: 2.2rem;
     }
 }
