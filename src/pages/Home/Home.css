@@ -1,21 +1,130 @@
-/* --- SECCIÓN CATEGORÍAS EN INICIO --- */
+/* --- VARIABLES DE MARCA --- */
+:root {
+    --mafia-brown: #1a1614;
+    --mafia-brown-light: #2b2520;
+    --mafia-gold: #a5813a;
+    --mafia-cream: #fdfaf7;
+}
+
+.home {
+    background-color: var(--mafia-cream);
+    min-height: 100vh;
+}
+
+/* --- SECCIÓN HERO (PORTADA PRINCIPAL) --- */
+.hero {
+    position: relative;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 10%;
+    background-color: var(--mafia-brown);
+    color: var(--mafia-cream);
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/path-to-your-hero-image.jpg');
+    /* Asegurate de que la ruta sea correcta */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.4;
+    z-index: 1;
+}
+
+.hero__content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+}
+
+.hero__title {
+    font-family: 'Noto Serif', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.hero__title span {
+    color: var(--mafia-gold);
+}
+
+.hero__description {
+    font-size: 1.1rem;
+    margin-bottom: 35px;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+/* --- BOTONES PREMIUM --- */
+.home__cta-container {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-primary {
+    background-color: var(--mafia-gold);
+    color: var(--mafia-brown);
+    padding: 15px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-secondary {
+    border: 2px solid var(--mafia-gold);
+    color: var(--mafia-gold);
+    padding: 15px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: var(--mafia-cream);
+    transform: translateY(-3px);
+}
+
+.btn-secondary:hover {
+    background-color: var(--mafia-gold);
+    color: var(--mafia-brown);
+}
+
+/* --- SECCIÓN CATEGORÍAS (EL CORAZÓN DEL CAMBIO) --- */
 .home-categories {
-    padding: 60px 24px;
+    padding: 80px 24px;
     max-width: 1400px;
     margin: 0 auto;
 }
 
-/* Reutilizamos la grilla que funcionó en productos */
+/* GRILLA SINCRONIZADA CON PRODUCTOS */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
     justify-content: center;
+    width: 100%;
 }
 
 .product-category-card {
-    background-color: #2b2520;
-    /* Marrón Mafia */
+    background-color: var(--mafia-brown-light);
     border-radius: 25px;
     padding: 60px 30px;
     text-decoration: none;
@@ -30,32 +139,74 @@
 
 .product-category-card:hover {
     transform: translateY(-15px);
-    background-color: #1a1614;
-    border-color: #a5813a;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    background-color: var(--mafia-brown);
+    border-color: var(--mafia-gold);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .category-card__icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
+    font-size: 4.5rem;
+    margin-bottom: 25px;
+    transition: 0.3s;
 }
 
 .category-card__info h3 {
-    color: #fdfaf7;
+    color: var(--mafia-cream);
     font-family: 'Noto Serif', serif;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     text-transform: uppercase;
+    letter-spacing: 2px;
     margin-bottom: 10px;
 }
 
 .category-card__info span {
-    color: #a5813a;
+    color: var(--mafia-gold);
     font-weight: 700;
     text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 2px;
-    opacity: 0.8;
 }
 
-/* --- RESPONSIVE MÓVIL (Sincronizado) --- */
-@media
+/* --- RESPONSIVE MÓVIL (CENTRADO TOTAL) --- */
+@media (max-width: 768px) {
+    .hero {
+        height: 80vh;
+        padding: 0 5%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .home__cta-container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .home-categories {
+        padding: 40px 15px;
+    }
+
+    /* LA GRILLA DE 2 COLUMNAS CENTRADA */
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 0;
+    }
+
+    .product-category-card {
+        padding: 35px 10px;
+        border-radius: 20px;
+    }
+
+    .category-card__icon {
+        font-size: 2.8rem;
+    }
+
+    .category-card__info h3 {
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+
+    .category-card__info span {
+        font-size: 0.6rem;
+    }
+}
