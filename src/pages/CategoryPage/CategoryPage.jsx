@@ -1,15 +1,20 @@
-import { useParams, Link } from 'react-router-dom'; // Link agregado aquí
+import { useParams, Link } from 'react-router-dom';
 import { useState, useMemo } from 'react';
 import { products, categories } from '../../data/products';
+import { useCart } from '../../context/CartContext'; // Importamos el carrito
 import './CategoryPage.css';
 
 export default function CategoryPage() {
     const { categoryId } = useParams();
+    const { addToCart } = useCart(); // Traemos la función para agregar productos
+
     const [maxPrice, setMaxPrice] = useState(150000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
 
+    // Buscamos info de la categoría actual
     const currentCategory = categories.find(cat => cat.id === categoryId);
 
+    // Lógica de filtrado
     const filteredProducts = useMemo(() => {
         return products.filter(p => {
             const matchCategory = p.category === categoryId;
@@ -19,10 +24,12 @@ export default function CategoryPage() {
         });
     }, [categoryId, maxPrice, selectedMaterial]);
 
+    // Obtenemos materiales únicos para los filtros
     const materials = ['todos', ...new Set(products.filter(p => p.category === categoryId).map(p => p.material).filter(Boolean))];
 
     return (
         <div className="category-page">
+            {/* SIDEBAR DE FILTROS */}
             <aside className="sidebar">
                 <h3>Filtros</h3>
 
@@ -48,8 +55,8 @@ export default function CategoryPage() {
                 </div>
             </aside>
 
+            {/* CONTENIDO PRINCIPAL */}
             <section className="products-content">
-                {/* BOTÓN VOLVER ELEGANTE */}
                 <Link to="/productos" className="btn-back">
                     <span className="material-symbols-outlined">arrow_back</span>
                     Volver a categorías
@@ -57,28 +64,37 @@ export default function CategoryPage() {
 
                 <header className="category-header">
                     <h1>{currentCategory?.label} {currentCategory?.icon}</h1>
-                    <p>{filteredProducts.length} productos encontrados</p>
+                    <p>{filteredProducts.length} productos encontrados en Mendoza</p>
                 </header>
 
                 <div className="products-grid">
                     {filteredProducts.length > 0 ? (
                         filteredProducts.map(product => (
                             <div key={product.id} className="product-card">
-                                {product.bestSeller && <span className="badge">Destacado</span>}
+                                {product.bestSeller && <span className="product-badge">Destacado</span>}
+
                                 <div className="product-image">
-                                    <div className="placeholder-img">📦</div>
+                                    {/* Placeholder con icono, luego pondrás las fotos */}
+                                    <span>🧉</span>
                                 </div>
+
                                 <div className="product-info">
-                                    <h4>{product.name}</h4>
                                     <p className="product-material">{product.material}</p>
+                                    <h4>{product.name}</h4>
                                     <p className="product-price">${product.price.toLocaleString()}</p>
-                                    <button className="btn-add">Agregar al Carrito</button>
+
+                                    <button
+                                        className="btn-add"
+                                        onClick={() => addToCart(product)}
+                                    >
+                                        Agregar al Carrito
+                                    </button>
                                 </div>
                             </div>
                         ))
                     ) : (
                         <div className="no-products">
-                            <p>No hay productos que coincidan con los filtros. 🧉</p>
+                            <p>No hay productos que coincidan. Intentá ajustar los filtros. 🧉</p>
                         </div>
                     )}
                 </div>
