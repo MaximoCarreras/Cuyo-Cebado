@@ -1,67 +1,100 @@
 /* src/pages/ProductsPage/ProductsPage.css */
-.products-view {
-    padding: 140px 24px 80px;
-    max-width: 1200px;
+
+.products-page {
+    /* Usamos un padding balanceado. El top es 40px porque se suma a los 90px del main */
+    padding: 40px 24px 100px;
+    max-width: 1400px;
     margin: 0 auto;
+    min-height: 100vh;
+}
+
+.products-page__title {
+    font-family: 'Noto Serif', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: #2b2520;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800;
+    /* CLAVE: margin-top en 0 para que coincida con las otras vistas */
+    margin-top: 0;
+    margin-bottom: 60px;
+    position: relative;
 }
 
-.category-grid {
+.products-page__title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: #a5813a;
+    margin: 15px auto 0;
+}
+
+/* GRILLA DE CATEGORÍAS */
+.products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
-    margin-top: 50px;
 }
 
-.category-card {
-    background: #2b2520;
-    /* Tu marrón oficial */
-    padding: 50px 30px;
-    border-radius: 20px;
+.product-category-card {
+    background-color: #2b2520;
+    /* Marrón Cuyo */
+    border-radius: 25px;
+    padding: 60px 30px;
     text-decoration: none;
+    text-align: center;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: 1px solid rgba(165, 129, 58, 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    overflow: hidden;
+    justify-content: center;
 }
 
-/* Efecto de brillo dorado al pasar el mouse */
-.category-card::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(165, 129, 58, 0.1) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.4s;
-}
-
-.category-card:hover {
-    transform: translateY(-10px);
+.product-category-card:hover {
+    transform: translateY(-15px);
+    background-color: #1a1614;
     border-color: #a5813a;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-.category-card:hover::after {
-    opacity: 1;
-}
-
-.category-icon {
-    font-size: 3.5rem;
+.category-card__icon {
+    font-size: 4rem;
     margin-bottom: 20px;
-    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s;
 }
 
-.category-card h3 {
+.product-category-card:hover .category-card__icon {
+    transform: scale(1.15);
+}
+
+.category-card__info h3 {
     color: #fdfaf7;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 1.2rem;
-    font-weight: 700;
     font-family: 'Noto Serif', serif;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.category-card__info span {
+    color: #a5813a;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    opacity: 0.8;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .products-page__title {
+        font-size: 1.8rem;
+    }
 }

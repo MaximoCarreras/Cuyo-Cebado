@@ -17,7 +17,7 @@ body {
 main {
   flex: 1;
   padding-top: 90px;
-  /* Exactamente el alto de la Navbar */
+  /* Este es el 'suelo' donde se apoyan todos tus títulos */
   background-color: #fdfaf7;
 }
 
