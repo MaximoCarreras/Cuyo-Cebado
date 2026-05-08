@@ -6,11 +6,15 @@ import ScrollToTop from './components/ScrollToTop';
 // Importamos la nueva sección de Comunidad
 import Community from './components/Community/Community';
 
-// Importamos las páginas
+// Importamos las páginas existentes
 import Home from './pages/Home';
 import About from './pages/About';
 import Guide from './pages/Guide';
 import CartPage from './pages/CartPage/CartPage';
+
+// NUEVAS IMPORTACIONES PARA EL CATÁLOGO
+import ProductsPage from './pages/ProductsPage/ProductsPage';
+import CategoryPage from './pages/CategoryPage/CategoryPage';
 
 import './App.css';
 
@@ -26,17 +30,19 @@ export default function App() {
           <Route path="/carrito" element={<CartPage />} />
           <Route path="/nosotros" element={<About />} />
           <Route path="/guia-curado" element={<Guide />} />
+
+          {/* RUTAS DE PRODUCTOS Y CATEGORÍAS */}
+          <Route path="/productos" element={<ProductsPage />} />
+          <Route path="/productos/:categoryId" element={<CategoryPage />} />
         </Routes>
       </main>
 
-      {/* Ponemos la Comunidad acá para que aparezca en todas las páginas 
-          antes del final, llenando ese espacio que querías.
-      */}
+      {/* Comunidad aparece en todas las páginas antes del Footer */}
       <Community />
 
       <Footer />
 
-      {/* BURBUJA FLOTANTE DE WHATSAPP (Minimalista y Premium) */}
+      {/* BURBUJA FLOTANTE DE WHATSAPP */}
       <a
         href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web"
         className="whatsapp-float"
