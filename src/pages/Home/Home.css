@@ -11,7 +11,7 @@
     overflow-x: hidden;
 }
 
-/* HERO SPOTLIGHT */
+/* --- HERO CON SPOTLIGHT (ESCRITORIO - NO TOCAR) --- */
 .hero-mafia {
     height: 90vh;
     background-color: var(--mafia-black);
@@ -28,7 +28,9 @@
     height: 100%;
     z-index: 1;
     pointer-events: none;
-    background: radial-gradient(800px circle at var(--hero-x) var(--hero-y), rgba(165, 129, 58, 0.12), transparent 80%);
+    background: radial-gradient(800px circle at var(--hero-x) var(--hero-y),
+            rgba(165, 129, 58, 0.12),
+            transparent 80%);
 }
 
 .hero-mafia__content {
@@ -93,6 +95,11 @@
     z-index: 2;
 }
 
+.hero-mobile-gradient-mask {
+    display: none;
+    /* Oculto en escritorio */
+}
+
 .btn-gold-mafia {
     background: var(--mafia-gold);
     color: var(--mafia-black);
@@ -119,7 +126,12 @@
     transition: 0.3s;
 }
 
-/* CATEGORÍAS */
+.btn-gold-mafia:hover {
+    background: var(--mafia-cream);
+    transform: translateY(-3px);
+}
+
+/* --- CATEGORÍAS CON SPOTLIGHT (MANTENIDO) --- */
 .home-categories-section {
     padding: 80px 24px;
     max-width: 1400px;
@@ -173,6 +185,15 @@
     opacity: 1;
 }
 
+.card-cat-content {
+    z-index: 2;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
 .cat-icon-display {
     font-size: 4rem;
     margin-bottom: 20px;
@@ -195,7 +216,7 @@
     letter-spacing: 1.5px;
 }
 
-/* BEST SELLERS & FILOSOFÍA */
+/* --- BEST SELLERS (MANTENIDO) --- */
 .home-best-sellers {
     padding: 60px 24px 100px;
     max-width: 1400px;
@@ -298,6 +319,7 @@
     transition: 0.3s;
 }
 
+/* --- FILOSOFÍA (MANTENIDO EL ESTILO, BRANDING CORREGIDO EN JSX) --- */
 .home-philosophy {
     background-color: var(--mafia-black);
     color: var(--mafia-cream);
@@ -325,33 +347,134 @@
     margin-bottom: 40px;
 }
 
+/* --- RESPONSIVE QUIRÚRGICO (MODIFICADO SOLO HERO) --- */
 @media (max-width: 768px) {
+
+    /* 1. HERO - AJUSTES PARA CELULAR */
     .hero-mafia {
         height: auto;
-        padding-top: 100px;
+        /* Altura automática en celu */
+        padding-top: 0;
+        /* Quitamos padding superior anterior */
         flex-direction: column;
+        /* Diseño en columna estándar */
     }
 
+    /* 1a. IMAGEN ARRIBA */
+    .hero-visual-block {
+        position: relative;
+        /* No absoluto para fluir en el diseño */
+        width: 100%;
+        height: 60vh;
+        /* Altura generosa de imagen en celu */
+        min-height: 400px;
+        clip-path: none;
+        /* Sin corte curvo */
+        z-index: 5;
+        margin-top: 0;
+    }
+
+    /* Efecto de máscara de degradado: la imagen se funde hacia abajo */
+    .hero-mobile-gradient-mask {
+        display: block;
+        /* Visible solo en celu */
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 30%;
+        /* Área de transición al fondo oscuro */
+        background: linear-gradient(to top, var(--mafia-black) 0%, transparent 100%);
+        z-index: 6;
+        /* Por encima de la imagen */
+    }
+
+    /* 1b. TEXTO ABAJO */
     .hero-mafia__content {
         width: 100%;
-        padding: 0 20px 60px;
+        padding: 20px 20px 60px;
+        /* Padding ajustado abajo */
+        text-align: center;
+        z-index: 10;
+        position: relative;
+        /* Para el spotlight layer */
+        /* Fondo negro Mafia que se funde con el degradado de arriba */
+        background-color: var(--mafia-black);
+    }
+
+    /* Spotlight layer para el fondo del texto en celu */
+    .hero-mafia .hero-spotlight-layer {
+        opacity: 0.5;
+        /* Reducido para celular */
+        z-index: 2;
+        /* Sobre el fondo, bajo el texto */
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        margin-top: 20px;
+        /* Separación de la imagen */
+    }
+
+    .hero-subtitle {
+        margin: 0 auto 30px;
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        /* Botones apilados */
+        width: 100%;
+        gap: 12px;
+    }
+
+    .btn-gold-mafia,
+    .btn-outline-mafia {
+        width: 100%;
+        /* Ancho completo */
         text-align: center;
     }
 
-    .hero-visual-block {
-        position: relative;
-        width: 100%;
-        height: 400px;
-        clip-path: none;
-    }
-
+    /* 2. CATEGORÍAS - GRILLA 2 COLUMNAS CLAVADAS EN EL CELU */
     .categories-grid-premium {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px;
+        padding: 0;
     }
 
+    .card-cat-dark-spotlight {
+        padding: 35px 10px;
+        border-radius: 20px;
+    }
+
+    .cat-icon-display {
+        font-size: 2.8rem;
+        margin-bottom: 15px;
+    }
+
+    .cat-text-display h3 {
+        font-size: 0.95rem;
+    }
+
+    .cat-text-display span {
+        font-size: 0.6rem;
+        letter-spacing: 1px;
+    }
+
+    /* 3. PRODUCTOS - GRILLA 2 COLUMNAS */
     .products-grid-meli-style {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px;
+    }
+
+    /* 4. FILOSOFÍA */
+    .philosophy-title {
+        font-size: 1.8rem;
+    }
+
+    .philosophy-container p {
+        font-size: 1rem;
+        line-height: 1.6;
     }
 }
