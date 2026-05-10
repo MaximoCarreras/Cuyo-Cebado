@@ -3,7 +3,6 @@
     --mafia-gold: #a5813a;
     --mafia-cream: #fdfaf7;
     --mafia-gray: #2b2520;
-    /* Fondo marrón de las tarjetas */
 }
 
 .home-main {
@@ -12,7 +11,7 @@
     overflow-x: hidden;
 }
 
-/* --- HERO SECTION (Mantenida) --- */
+/* --- HERO SECTION --- */
 .hero-mafia {
     height: 90vh;
     background-color: var(--mafia-black);
@@ -111,7 +110,7 @@
     transform: translateY(-3px);
 }
 
-/* --- CATEGORÍAS (Con Spotlight Card Effect) --- */
+/* --- CATEGORÍAS (Spotlight Card) --- */
 .home-categories-section {
     padding: 80px 24px;
     max-width: 1400px;
@@ -135,17 +134,14 @@
     justify-content: center;
 }
 
-/* LA TARJETA BOUTIQUE CON SPOTLIGHT */
 .card-cat-dark-spotlight {
     background: var(--mafia-gray);
-    /* Fondo marrón Mafia */
     border-radius: 25px;
     padding: 60px 20px;
     text-decoration: none;
     border: 1px solid rgba(165, 129, 58, 0.2);
     transition: 0.4s ease;
     overflow: hidden;
-    /* IMPORTANTE para el spotlight */
     position: relative;
     display: flex;
     flex-direction: column;
@@ -156,10 +152,8 @@
     transform: translateY(-10px);
     border-color: var(--mafia-gold);
     background-color: #1a1614;
-    /* Se vuelve un poco más oscura en hover */
 }
 
-/* CAPA DE LUZ INTERACTIVA (EL SPOTLIGHT) */
 .spotlight-light-layer {
     position: absolute;
     top: 0;
@@ -167,29 +161,17 @@
     width: 100%;
     height: 100%;
     z-index: 1;
-    /* Detrás del contenido, sobre el fondo */
     opacity: 0;
-    /* Oculta por defecto */
     transition: opacity 0.5s ease;
-    /* DIBUJAMOS LA LUZ RADIAL USANDO LAS VARIABLES DE JS */
-    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y),
-            /* Posición dinámica */
-            rgba(165, 129, 58, 0.4) 0%,
-            /* Centro dorado Mafia */
-            rgba(0, 0, 0, 0) 65%
-            /* Se funde a transparente */
-        );
+    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(165, 129, 58, 0.4) 0%, rgba(0, 0, 0, 0) 65%);
 }
 
 .card-cat-dark-spotlight:hover .spotlight-light-layer {
     opacity: 1;
-    /* Mostramos la luz en hover */
 }
 
-/* CONTENIDO DE LA TARJETA (Encima del spotlight) */
 .card-cat-content {
     z-index: 2;
-    /* Sobre la luz */
     position: relative;
     display: flex;
     flex-direction: column;
@@ -221,7 +203,7 @@
     opacity: 0.8;
 }
 
-/* --- BEST SELLERS (Mantenida) --- */
+/* --- BEST SELLERS --- */
 .home-best-sellers {
     padding: 60px 24px 120px;
     max-width: 1400px;
@@ -329,7 +311,7 @@
     color: var(--mafia-black);
 }
 
-/* --- RESPONSIVE MÓVIL (Sincronizado) --- */
+/* --- RESPONSIVE MÓVIL --- */
 @media (max-width: 768px) {
     .hero-mafia {
         height: auto;
@@ -355,7 +337,6 @@
         clip-path: none;
     }
 
-    /* LAS 2 COLUMNAS CLAVADAS EN EL CELU */
     .categories-grid-premium {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px;
@@ -386,30 +367,8 @@
         letter-spacing: 1px;
     }
 
-    /* En móvil, el spotlight suele desactivarse o ser fijo para evitar lag */
     .spotlight-light-layer {
-        background: radial-gradient(circle at center,
-                rgba(165, 129, 58, 0.2) 0%,
-                rgba(0, 0, 0, 0) 70%);
+        background: radial-gradient(circle at center, rgba(165, 129, 58, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
         opacity: 0.5;
-        /* Ligeramente visible pero fijo */
     }
-}
-
-/* WHATSAPP FLOAT */
-.whatsapp-float-fixed {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #25d366;
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    text-decoration: none;
 }

@@ -58,7 +58,7 @@ export default function Home() {
                         </p>
                         <div className="hero-buttons">
                             <Link to="/productos" className="btn-gold-mafia">Ver Catálogo</Link>
-                            <a href="https://wa.me/tu-numero" target="_blank" rel="noreferrer" className="btn-outline-mafia">
+                            <a href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web" target="_blank" rel="noreferrer" className="btn-outline-mafia">
                                 WhatsApp
                             </a>
                         </div>
@@ -125,11 +125,6 @@ export default function Home() {
                     ))}
                 </div>
             </section>
-
-            {/* BOTÓN WHATSAPP */}
-            <a href="https://wa.me/tu-numero" className="whatsapp-float-fixed" target="_blank" rel="noreferrer">
-                <span className="material-symbols-outlined">chat</span>
-            </a>
         </div>
     );
 }

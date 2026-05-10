@@ -7,7 +7,6 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  /* FUENTE DE CUERPO GLOBAL */
   font-family: 'Inter', sans-serif;
 }
 
@@ -20,11 +19,9 @@ body {
 main {
   flex: 1;
   padding-top: 90px;
-  /* Colchón Desktop */
   background-color: #fdfaf7;
 }
 
-/* TAMAÑO DE TÍTULOS UNIFICADO (Refinado) */
 .section__title {
   font-family: 'Noto Serif', serif;
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
@@ -37,27 +34,29 @@ main {
   margin-bottom: 40px;
 }
 
-/* BURBUJA WHATSAPP */
+/* --- BURBUJA WHATSAPP MAFIA PREMIUM --- */
 .whatsapp-float {
   position: fixed;
   width: 60px;
   height: 60px;
   bottom: 25px;
   right: 25px;
-  background-color: #2b2520;
+  background-color: #1a1614;
+  /* Negro Sólido para que no se vea nada atrás */
   border-radius: 50%;
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(165, 129, 58, 0.3);
-  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  border: 2px solid #a5813a;
+  /* Borde Dorado */
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-decoration: none;
 }
 
 .whatsapp-float:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(5deg);
   background-color: #a5813a;
 }
 
@@ -65,18 +64,29 @@ main {
   width: 32px;
   height: 32px;
   fill: #a5813a;
+  /* Icono Dorado */
   transition: fill 0.3s ease;
+}
+
+.whatsapp-float:hover .wa-icon {
+  fill: #1a1614;
+  /* Al hover se pone negro el icono */
 }
 
 /* ESCALA MÓVIL */
 @media (max-width: 768px) {
   html {
     font-size: 14px;
-    /* Ajuste para que nada se vea gigante */
   }
 
   main {
     padding-top: 75px;
-    /* Colchón Móvil alineado a la Navbar */
+  }
+
+  .whatsapp-float {
+    width: 55px;
+    height: 55px;
+    bottom: 20px;
+    right: 20px;
   }
 }
