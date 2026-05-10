@@ -21,7 +21,6 @@ import FailurePage from './pages/Checkout/FailurePage';
 import './App.css';
 
 export default function App() {
-  // Definimos el contenido de la barra una sola vez para duplicarlo
   const benefits = (
     <>
       <div className="top-bar-item">

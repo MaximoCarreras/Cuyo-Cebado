@@ -72,7 +72,10 @@ export default function Home() {
                             <div className="spotlight-light-layer"></div>
                             <div className="card-cat-content">
                                 <div className="cat-icon-display">{cat.icon}</div>
-                                <div className="cat-text-display"><h3>{cat.label}</h3><span>Explorar colección</span></div>
+                                <div className="cat-text-display">
+                                    <h3>{cat.label}</h3>
+                                    <span>Explorar colección</span>
+                                </div>
                             </div>
                         </Link>
                     ))}

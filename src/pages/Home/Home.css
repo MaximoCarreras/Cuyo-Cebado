@@ -123,11 +123,6 @@
     transition: 0.3s;
 }
 
-.btn-gold-mafia:hover {
-    background: var(--mafia-cream);
-    transform: translateY(-3px);
-}
-
 /* --- SECCIÓN CATEGORÍAS (CENTRADO TOTAL) --- */
 .home-categories-section {
     padding: 80px 24px;
@@ -136,7 +131,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Centra el título y la grilla */
 }
 
 .global-section-title {
@@ -151,10 +145,11 @@
 
 .categories-grid-premium {
     display: grid;
-    /* Cambiamos auto-fit por auto-fill y justify-content para asegurar el centrado */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
     justify-content: center;
+    justify-items: center;
+    /* Centra las tarjetas dentro de su celda */
     width: 100%;
 }
 
@@ -170,6 +165,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    /* Centra verticalmente */
+    width: 100%;
+    max-width: 350px;
 }
 
 .spotlight-light-layer {
@@ -188,10 +187,29 @@
     opacity: 1;
 }
 
+.card-cat-content {
+    z-index: 2;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
 .cat-icon-display {
     font-size: 4rem;
     margin-bottom: 20px;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.cat-text-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
 .cat-text-display h3 {
@@ -200,6 +218,7 @@
     font-size: 1.5rem;
     margin-bottom: 10px;
     text-transform: uppercase;
+    text-align: center;
 }
 
 .cat-text-display span {
@@ -208,6 +227,7 @@
     text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 1.5px;
+    text-align: center;
 }
 
 /* BEST SELLERS & FILOSOFÍA */
@@ -243,6 +263,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 25px;
+    justify-content: center;
 }
 
 .product-card-white-boutique {
@@ -275,6 +296,8 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .product-brand-tag {
@@ -311,6 +334,7 @@
     text-transform: uppercase;
     font-size: 0.75rem;
     transition: 0.3s;
+    width: 100%;
 }
 
 .home-philosophy {

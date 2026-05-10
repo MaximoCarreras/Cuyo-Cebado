@@ -82,7 +82,8 @@ nav,
   background-color: #1a1614;
 }
 
-.nav-menu,
+/* El menú abierto siempre arriba de la barra dorada */
+.nav-menu.active,
 .mobile-menu-container {
   z-index: 2000 !important;
 }
