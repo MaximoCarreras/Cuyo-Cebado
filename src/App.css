@@ -16,19 +16,25 @@ body {
   min-height: 100vh;
 }
 
-/* --- NUEVA BARRA DORADA SUPERIOR --- */
+/* --- BARRA DORADA SUPERIOR --- */
 .top-mafia-bar {
   background-color: #a5813a;
-  /* Dorado Cuyo */
   color: #1a1614;
-  /* Texto Oscuro para contraste */
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 10px 5%;
   position: relative;
-  /* Para que se esconda con el scroll */
+  /* Fluye con el scroll */
   z-index: 10001;
+}
+
+/* FIX PARA QUE LA NAVBAR NO LA TAPE */
+nav,
+.navbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10000 !important;
 }
 
 .top-bar-item {
@@ -61,7 +67,7 @@ body {
 main {
   flex: 1;
   padding-top: 0;
-  /* Quitamos padding fijo para que la barra maneje el flujo */
+  /* Sticky navbar no requiere padding inicial */
   background-color: #fdfaf7;
 }
 
@@ -127,7 +133,6 @@ main {
 
   .top-bar-item p span {
     display: none;
-    /* Escondemos subtítulo en celu para que no ocupe tanto */
   }
 
   .whatsapp-float {

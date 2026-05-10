@@ -59,7 +59,7 @@ export default function App() {
       <Community />
       <Footer />
 
-      {/* BURBUJA FLOTANTE DE WHATSAPP (ÚNICA) */}
+      {/* BURBUJA WHATSAPP MAFIA PREMIUM */}
       <a
         href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web"
         className="whatsapp-float"
