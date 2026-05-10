@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
 import { categories, products } from '../../data/products';
 import { useCart } from '../../context/CartContext';
-// Importamos supabase (Asegurate de tenerlo configurado en tu proyecto)
-// import { supabase } from '../../supabaseClient'; 
 import heroImg from '../../assets/fondo_hero_principal.png';
 import './Home.css';
 
@@ -15,7 +13,7 @@ export default function Home() {
     const heroRef = useRef(null);
     const categoryCardRefs = useRef([]);
 
-    // Seleccionamos el producto estrella (El primer kit de regalo que encuentre)
+    // Seleccionamos el producto estrella
     const featuredKit = products.find(p => p.type === 'Prensado') || products[0];
 
     useEffect(() => {
@@ -49,18 +47,9 @@ export default function Home() {
         };
     }, []);
 
-    // Lógica de Newsletter para Supabase
-    const handleNewsletter = async (e) => {
+    const handleNewsletter = (e) => {
         e.preventDefault();
         setStatus('enviando');
-
-        /* Descomentá esto cuando tengas Supabase conectado:
-        const { error } = await supabase.from('newsletter').insert([{ email }]);
-        if (error) setStatus('error');
-        else { setStatus('exito'); setEmail(''); }
-        */
-
-        // Simulación por ahora:
         setTimeout(() => { setStatus('exito'); setEmail(''); }, 1000);
     };
 
@@ -79,15 +68,15 @@ export default function Home() {
                         <h1 className="hero-title">MATES CON <br /><span>IDENTIDAD</span></h1>
                         <p className="hero-subtitle">Curaduría premium de mates imperiales tallados a mano en Mendoza. Una pieza de arte en cada cebada.</p>
                         <div className="hero-buttons">
-                            {/* Botones con estilo premium */}
                             <Link to="/productos" className="btn-gold-mafia">Ver Catálogo</Link>
-                            <a href="https://wa.me/5492625597956" target="_blank" rel="noreferrer" className="btn-outline-mafia">WhatsApp</a>
+                            {/* BOTÓN WHATSAPP - NÚMERO ACTUALIZADO */}
+                            <a href="https://wa.me/5492612307516" target="_blank" rel="noreferrer" className="btn-outline-mafia">WhatsApp</a>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 2. CATEGORÍAS (CENTRADAS Y COMPACTAS EN CELU) */}
+            {/* 2. CATEGORÍAS (COMPACTAS) */}
             <section className="home-categories-section">
                 <h2 className="global-section-title">Nuestras Colecciones</h2>
                 <div className="categories-grid-premium">
@@ -127,7 +116,6 @@ export default function Home() {
                         </ul>
                         <div className="showcase-actions">
                             <span className="showcase-price">${featuredKit?.price.toLocaleString()}</span>
-                            {/* Botón ahora premium, no Windows XP */}
                             <button className="btn-gold-mafia" onClick={() => addToCart(featuredKit)}>
                                 Comprar Ahora
                             </button>
@@ -136,7 +124,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* 4. CLUB DE MATEROS (NEWSLETTER) */}
+            {/* 4. CLUB DE MATEROS */}
             <section className="club-newsletter">
                 <div className="club-card">
                     <h2 className="club-title">Unite al Club de Materos</h2>
@@ -156,8 +144,6 @@ export default function Home() {
                     {status === 'exito' && <p className="club-msg-ok">¡Bienvenido al Club!</p>}
                 </div>
             </section>
-
-            {/* SECCIÓN FILOSOFÍA ELIMINADA POR PEDIDO */}
         </div>
     );
 }

@@ -69,9 +69,9 @@ export default function App() {
       <Community />
       <Footer />
 
-      {/* BURBUJA WHATSAPP MAFIA PREMIUM */}
+      {/* BURBUJA WHATSAPP - NÚMERO ACTUALIZADO */}
       <a
-        href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web"
+        href="https://wa.me/5492612307516?text=Hola!%20Vengo%20desde%20la%20web"
         className="whatsapp-float"
         target="_blank"
         rel="noreferrer"
