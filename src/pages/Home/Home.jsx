@@ -1,14 +1,22 @@
 import { Link } from 'react-router-dom';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { categories, products } from '../../data/products';
 import { useCart } from '../../context/CartContext';
+// Importamos supabase (Asegurate de tenerlo configurado en tu proyecto)
+// import { supabase } from '../../supabaseClient'; 
 import heroImg from '../../assets/fondo_hero_principal.png';
 import './Home.css';
 
 export default function Home() {
     const { addToCart } = useCart();
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState('');
+
     const heroRef = useRef(null);
     const categoryCardRefs = useRef([]);
+
+    // Seleccionamos el producto estrella (El primer kit de regalo que encuentre)
+    const featuredKit = products.find(p => p.type === 'Prensado') || products[0];
 
     useEffect(() => {
         const handleHeroMouse = (e) => {
@@ -41,10 +49,24 @@ export default function Home() {
         };
     }, []);
 
-    const bestSellers = products.filter(p => p.type === 'Prensado').slice(0, 4);
+    // Lógica de Newsletter para Supabase
+    const handleNewsletter = async (e) => {
+        e.preventDefault();
+        setStatus('enviando');
+
+        /* Descomentá esto cuando tengas Supabase conectado:
+        const { error } = await supabase.from('newsletter').insert([{ email }]);
+        if (error) setStatus('error');
+        else { setStatus('exito'); setEmail(''); }
+        */
+
+        // Simulación por ahora:
+        setTimeout(() => { setStatus('exito'); setEmail(''); }, 1000);
+    };
 
     return (
         <div className="home-main">
+            {/* 1. HERO SECTION (INTACTO) */}
             <section className="hero-mafia" ref={heroRef}>
                 <div className="hero-spotlight-layer"></div>
                 <div className="hero-visual-block">
@@ -64,6 +86,7 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* 2. CATEGORÍAS (CENTRADAS) */}
             <section className="home-categories-section">
                 <h2 className="global-section-title">Nuestras Colecciones</h2>
                 <div className="categories-grid-premium">
@@ -82,27 +105,57 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="home-best-sellers">
-                <header className="best-sellers-header">
-                    <h2 className="global-section-title">Lo más vendido</h2>
-                    <p className="gold-subtitle">KIT DE REGALO PRENSADO</p>
-                    <div className="gold-line-separator"></div>
-                </header>
-                <div className="products-grid-meli-style">
-                    {bestSellers.map((product) => (
-                        <div key={product.id} className="product-card-white-boutique">
-                            <div className="product-img-wrapper"><span className="emoji-bg-display">🎁</span></div>
-                            <div className="product-info-wrapper">
-                                <p className="product-brand-tag">{product.brand || 'Cuyo Cebado'}</p>
-                                <h4 className="product-name-text">{product.name}</h4>
-                                <p className="product-price-val">${product.price.toLocaleString()}</p>
-                                <button className="btn-add-to-cart-mafia" onClick={() => addToCart(product)}>Añadir</button>
-                            </div>
+            {/* 3. SHOWCASE KIT ESTRELLA (NUEVA SECCIÓN PREMIUM) */}
+            <section className="featured-showcase">
+                <div className="showcase-container">
+                    <div className="showcase-image-side">
+                        <div className="badge-premium">EL MÁS ELEGIDO</div>
+                        <span className="showcase-emoji">🎁</span>
+                    </div>
+                    <div className="showcase-info-side">
+                        <p className="gold-tag">NUESTRO KIT ESTRELLA</p>
+                        <h2 className="showcase-title">{featuredKit?.name}</h2>
+                        <p className="showcase-description">
+                            La experiencia definitiva para el buen cebador. Un conjunto pensado para durar toda la vida.
+                        </p>
+                        <ul className="showcase-list">
+                            <li><span className="material-symbols-outlined">check_circle</span> Mate Imperial Premium de Cuero Legítimo</li>
+                            <li><span className="material-symbols-outlined">check_circle</span> Bombilla de Alpaca Cincelada</li>
+                            <li><span className="material-symbols-outlined">check_circle</span> Yerba Mate Cuyo Cebado (500g)</li>
+                            <li><span className="material-symbols-outlined">check_circle</span> Packaging de Regalo Boutique</li>
+                        </ul>
+                        <div className="showcase-actions">
+                            <span className="showcase-price">${featuredKit?.price.toLocaleString()}</span>
+                            <button className="btn-gold-mafia" onClick={() => addToCart(featuredKit)}>
+                                Comprar Ahora
+                            </button>
                         </div>
-                    ))}
+                    </div>
                 </div>
             </section>
 
+            {/* 4. CLUB DE MATEROS (NEWSLETTER) */}
+            <section className="club-newsletter">
+                <div className="club-card">
+                    <h2 className="club-title">Unite al Club de Materos</h2>
+                    <p className="club-subtitle">Recibí alertas de stock, lanzamientos exclusivos y beneficios antes que nadie.</p>
+                    <form className="club-form" onSubmit={handleNewsletter}>
+                        <input
+                            type="email"
+                            placeholder="Tu correo electrónico"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <button type="submit" className="btn-club">
+                            {status === 'enviando' ? 'Enviando...' : 'Unirme'}
+                        </button>
+                    </form>
+                    {status === 'exito' && <p className="club-msg-ok">¡Bienvenido al Club!</p>}
+                </div>
+            </section>
+
+            {/* 5. FILOSOFÍA (INTACTO) */}
             <section className="home-philosophy">
                 <div className="philosophy-container">
                     <h2 className="philosophy-title">Identidad y Tradición</h2>

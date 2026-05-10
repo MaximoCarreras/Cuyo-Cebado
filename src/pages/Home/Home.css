@@ -11,7 +11,7 @@
     overflow-x: hidden;
 }
 
-/* HERO ESCRITORIO */
+/* HERO ESCRITORIO (MANTENIDO) */
 .hero-mafia {
     height: 90vh;
     background-color: var(--mafia-black);
@@ -93,37 +93,7 @@
     z-index: 2;
 }
 
-.hero-mobile-gradient-mask {
-    display: none;
-}
-
-.btn-gold-mafia {
-    background: var(--mafia-gold);
-    color: var(--mafia-black);
-    padding: 16px 35px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    transition: 0.3s;
-    display: inline-block;
-    border: none;
-}
-
-.btn-outline-mafia {
-    border: 2px solid var(--mafia-gold);
-    color: var(--mafia-gold);
-    padding: 14px 35px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    transition: 0.3s;
-}
-
-/* --- SECCIÓN CATEGORÍAS (CENTRADO TOTAL) --- */
+/* CATEGORÍAS (MANTENIDO EL CENTRADO) */
 .home-categories-section {
     padding: 80px 24px;
     max-width: 1400px;
@@ -149,7 +119,6 @@
     gap: 30px;
     justify-content: center;
     justify-items: center;
-    /* Centra las tarjetas dentro de su celda */
     width: 100%;
 }
 
@@ -165,8 +134,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    /* Centra verticalmente */
     width: 100%;
     max-width: 350px;
 }
@@ -205,13 +172,6 @@
     width: 100%;
 }
 
-.cat-text-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
 .cat-text-display h3 {
     color: var(--mafia-cream);
     font-family: 'Noto Serif', serif;
@@ -230,113 +190,175 @@
     text-align: center;
 }
 
-/* BEST SELLERS & FILOSOFÍA */
-.home-best-sellers {
-    padding: 60px 24px 100px;
-    max-width: 1400px;
+/* --- SECCIÓN FEATURED SHOWCASE --- */
+.featured-showcase {
+    padding: 100px 20px;
+    background-color: #fff;
+}
+
+.showcase-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.showcase-image-side {
+    aspect-ratio: 1/1.1;
+    background: #f9f7f5;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.showcase-emoji {
+    font-size: 10rem;
+}
+
+.badge-premium {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    background: var(--mafia-gold);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.gold-tag {
+    color: var(--mafia-gold);
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+}
+
+.showcase-title {
+    font-family: 'Noto Serif', serif;
+    font-size: 3rem;
+    color: var(--mafia-black);
+    margin-bottom: 20px;
+}
+
+.showcase-description {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.showcase-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 40px;
+}
+
+.showcase-list li {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: var(--mafia-black);
+}
+
+.showcase-list span {
+    color: var(--mafia-gold);
+}
+
+.showcase-actions {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 30px;
+}
+
+.showcase-price {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--mafia-black);
+}
+
+/* --- CLUB DE MATEROS --- */
+.club-newsletter {
+    padding: 100px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.club-card {
+    background: var(--mafia-gray);
+    width: 100%;
+    max-width: 900px;
+    padding: 80px 40px;
+    border-radius: 40px;
+    text-align: center;
+    border: 1px solid rgba(165, 129, 58, 0.2);
+}
+
+.club-title {
+    font-family: 'Noto Serif', serif;
+    color: var(--mafia-cream);
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+}
+
+.club-subtitle {
+    color: var(--mafia-gold);
+    opacity: 0.9;
+    margin-bottom: 40px;
+}
+
+.club-form {
+    display: flex;
+    gap: 10px;
+    max-width: 500px;
     margin: 0 auto;
 }
 
-.best-sellers-header {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.gold-subtitle {
-    color: var(--mafia-gold);
-    font-weight: 800;
-    letter-spacing: 3px;
-    margin-top: -40px;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-}
-
-.gold-line-separator {
-    width: 80px;
-    height: 4px;
-    background: var(--mafia-gold);
-    margin: 20px auto;
-    border-radius: 2px;
-}
-
-.products-grid-meli-style {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 25px;
-    justify-content: center;
-}
-
-.product-card-white-boutique {
-    background: #fff;
-    border-radius: 15px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: 0.3s;
-}
-
-.product-card-white-boutique:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    border-color: var(--mafia-gold);
-}
-
-.product-img-wrapper {
-    aspect-ratio: 1;
-    background: #f9f7f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4rem;
-}
-
-.product-info-wrapper {
-    padding: 20px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.product-brand-tag {
-    color: var(--mafia-gold);
-    font-weight: 800;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-}
-
-.product-name-text {
-    font-size: 1rem;
-    color: var(--mafia-black);
-    margin: 10px 0;
-    font-weight: 600;
-    line-height: 1.3;
-}
-
-.product-price-val {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--mafia-black);
-    margin-bottom: 20px;
-    margin-top: auto;
-}
-
-.btn-add-to-cart-mafia {
-    background: var(--mafia-black);
+.club-form input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(165, 129, 58, 0.3);
+    padding: 18px 25px;
+    border-radius: 50px;
     color: #fff;
-    border: none;
-    padding: 14px;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    transition: 0.3s;
-    width: 100%;
+    font-size: 1rem;
 }
 
+.btn-club {
+    background: var(--mafia-gold);
+    color: var(--mafia-black);
+    border: none;
+    padding: 0 40px;
+    border-radius: 50px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-club:hover {
+    background: var(--mafia-cream);
+    transform: translateY(-2px);
+}
+
+.club-msg-ok {
+    margin-top: 20px;
+    color: var(--mafia-gold);
+    font-weight: 700;
+}
+
+/* FILOSOFÍA (MANTENIDO) */
 .home-philosophy {
     background-color: var(--mafia-black);
     color: var(--mafia-cream);
@@ -398,25 +420,26 @@
         background-color: var(--mafia-black);
     }
 
-    .hero-title {
-        font-size: 2rem;
-        margin-top: 20px;
+    .showcase-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
     }
 
-    .hero-buttons {
+    .showcase-title {
+        font-size: 2.2rem;
+    }
+
+    .showcase-actions {
         flex-direction: column;
-        width: 100%;
-        gap: 12px;
+        gap: 15px;
+        text-align: center;
     }
 
-    .categories-grid-premium {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px;
-        padding: 0;
+    .club-form {
+        flex-direction: column;
     }
 
-    .products-grid-meli-style {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px;
+    .btn-club {
+        padding: 18px;
     }
 }
