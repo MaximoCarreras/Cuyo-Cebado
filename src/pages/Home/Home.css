@@ -128,11 +128,15 @@
     transform: translateY(-3px);
 }
 
-/* CATEGORÍAS */
+/* --- SECCIÓN CATEGORÍAS (CENTRADO TOTAL) --- */
 .home-categories-section {
     padding: 80px 24px;
     max-width: 1400px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Centra el título y la grilla */
 }
 
 .global-section-title {
@@ -147,9 +151,11 @@
 
 .categories-grid-premium {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* Cambiamos auto-fit por auto-fill y justify-content para asegurar el centrado */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
     justify-content: center;
+    width: 100%;
 }
 
 .card-cat-dark-spotlight {

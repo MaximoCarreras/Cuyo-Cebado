@@ -21,11 +21,9 @@ body {
   background-color: #a5813a;
   color: #1a1614;
   overflow: hidden;
-  /* IMPORTANTE para el ticker */
   padding: 12px 0;
   position: relative;
   z-index: 10;
-  /* Menor que la Navbar */
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -33,9 +31,7 @@ body {
   display: flex;
   width: max-content;
   gap: 100px;
-  /* Espacio entre cada grupo de texto */
   animation: scroll-right 40s linear infinite;
-  /* Movimiento a la derecha */
 }
 
 @keyframes scroll-right {
@@ -53,7 +49,6 @@ body {
   align-items: center;
   gap: 10px;
   white-space: nowrap;
-  /* Evita que las oraciones se amontonen */
 }
 
 .top-bar-item span {
@@ -84,11 +79,9 @@ nav,
   position: sticky !important;
   top: 0 !important;
   z-index: 1000 !important;
-  /* Superior a la barra dorada */
   background-color: #1a1614;
 }
 
-/* Para que el menú lateral al abrirse no sea tapado */
 .nav-menu,
 .mobile-menu-container {
   z-index: 2000 !important;
@@ -146,11 +139,9 @@ main {
   fill: #1a1614;
 }
 
-/* ESCALA MÓVIL */
 @media (max-width: 768px) {
   .ticker-track {
     animation: scroll-right 25s linear infinite;
-    /* Un poco más rápido en celu por distancia corta */
     gap: 60px;
   }
 
@@ -158,7 +149,6 @@ main {
     display: inline;
   }
 
-  /* Asegura que la oracion sea una sola linea */
   .whatsapp-float {
     width: 55px;
     height: 55px;
