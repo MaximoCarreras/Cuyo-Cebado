@@ -24,6 +24,23 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+
+      {/* BARRA DE BENEFICIOS SUPERIOR (DORADA MAFIA) */}
+      <div className="top-mafia-bar">
+        <div className="top-bar-item">
+          <span className="material-symbols-outlined">local_shipping</span>
+          <p><strong>Envíos a todo el país</strong> <span>Llegamos a cada rincón de Argentina.</span></p>
+        </div>
+        <div className="top-bar-item">
+          <span className="material-symbols-outlined">verified_user</span>
+          <p><strong>Calidad Premium</strong> <span>Piezas seleccionadas y talladas a mano.</span></p>
+        </div>
+        <div className="top-bar-item">
+          <span className="material-symbols-outlined">payments</span>
+          <p><strong>Pago Seguro</strong> <span>Hasta 3 cuotas sin interés.</span></p>
+        </div>
+      </div>
+
       <Navbar />
 
       <main>

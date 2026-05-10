@@ -86,32 +86,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* 2. BENEFICIOS */}
-            <section className="home-benefits">
-                <div className="benefit-item">
-                    <span className="material-symbols-outlined">local_shipping</span>
-                    <div className="benefit-text">
-                        <h4>Envíos a todo el país</h4>
-                        <p>Llegamos a cada rincón de Argentina.</p>
-                    </div>
-                </div>
-                <div className="benefit-item">
-                    <span className="material-symbols-outlined">verified_user</span>
-                    <div className="benefit-text">
-                        <h4>Calidad Premium</h4>
-                        <p>Piezas seleccionadas y talladas a mano.</p>
-                    </div>
-                </div>
-                <div className="benefit-item">
-                    <span className="material-symbols-outlined">payments</span>
-                    <div className="benefit-text">
-                        <h4>Pago Seguro</h4>
-                        <p>Hasta 3 cuotas sin interés.</p>
-                    </div>
-                </div>
-            </section>
-
-            {/* 3. CATEGORÍAS CON SPOTLIGHT CARDS */}
+            {/* 2. CATEGORÍAS CON SPOTLIGHT CARDS */}
             <section className="home-categories-section">
                 <h2 className="global-section-title">Nuestras Colecciones</h2>
                 <div className="categories-grid-premium">
@@ -135,7 +110,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* 4. LO MÁS VENDIDO */}
+            {/* 3. LO MÁS VENDIDO */}
             <section className="home-best-sellers">
                 <header className="best-sellers-header">
                     <h2 className="global-section-title">Lo más vendido</h2>
@@ -161,7 +136,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* 5. FILOSOFÍA */}
+            {/* 4. FILOSOFÍA */}
             <section className="home-philosophy">
                 <div className="philosophy-container">
                     <h2 className="philosophy-title">La Mafia del Mate</h2>
