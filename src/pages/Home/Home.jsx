@@ -66,7 +66,7 @@ export default function Home() {
 
     return (
         <div className="home-main">
-            {/* 1. HERO SECTION (INTACTO) */}
+            {/* 1. HERO SECTION */}
             <section className="hero-mafia" ref={heroRef}>
                 <div className="hero-spotlight-layer"></div>
                 <div className="hero-visual-block">
@@ -79,6 +79,7 @@ export default function Home() {
                         <h1 className="hero-title">MATES CON <br /><span>IDENTIDAD</span></h1>
                         <p className="hero-subtitle">Curaduría premium de mates imperiales tallados a mano en Mendoza. Una pieza de arte en cada cebada.</p>
                         <div className="hero-buttons">
+                            {/* Botones con estilo premium */}
                             <Link to="/productos" className="btn-gold-mafia">Ver Catálogo</Link>
                             <a href="https://wa.me/5492625597956" target="_blank" rel="noreferrer" className="btn-outline-mafia">WhatsApp</a>
                         </div>
@@ -86,7 +87,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* 2. CATEGORÍAS (CENTRADAS) */}
+            {/* 2. CATEGORÍAS (CENTRADAS Y COMPACTAS EN CELU) */}
             <section className="home-categories-section">
                 <h2 className="global-section-title">Nuestras Colecciones</h2>
                 <div className="categories-grid-premium">
@@ -97,7 +98,7 @@ export default function Home() {
                                 <div className="cat-icon-display">{cat.icon}</div>
                                 <div className="cat-text-display">
                                     <h3>{cat.label}</h3>
-                                    <span>Explorar colección</span>
+                                    <span>Explorar</span>
                                 </div>
                             </div>
                         </Link>
@@ -105,7 +106,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* 3. SHOWCASE KIT ESTRELLA (NUEVA SECCIÓN PREMIUM) */}
+            {/* 3. SHOWCASE KIT ESTRELLA */}
             <section className="featured-showcase">
                 <div className="showcase-container">
                     <div className="showcase-image-side">
@@ -126,6 +127,7 @@ export default function Home() {
                         </ul>
                         <div className="showcase-actions">
                             <span className="showcase-price">${featuredKit?.price.toLocaleString()}</span>
+                            {/* Botón ahora premium, no Windows XP */}
                             <button className="btn-gold-mafia" onClick={() => addToCart(featuredKit)}>
                                 Comprar Ahora
                             </button>
@@ -148,21 +150,14 @@ export default function Home() {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <button type="submit" className="btn-club">
-                            {status === 'enviando' ? 'Enviando...' : 'Unirme'}
+                            {status === 'enviando' ? 'Enviando' : 'Unirme'}
                         </button>
                     </form>
                     {status === 'exito' && <p className="club-msg-ok">¡Bienvenido al Club!</p>}
                 </div>
             </section>
 
-            {/* 5. FILOSOFÍA (INTACTO) */}
-            <section className="home-philosophy">
-                <div className="philosophy-container">
-                    <h2 className="philosophy-title">Identidad y Tradición</h2>
-                    <p>No vendemos simples objetos, seleccionamos compañeros de vida. En <strong>Cuyo Cebado</strong> creemos en la mística del ritual mendocino.</p>
-                    <Link to="/nosotros" className="btn-gold-mafia">Nuestra Historia</Link>
-                </div>
-            </section>
+            {/* SECCIÓN FILOSOFÍA ELIMINADA POR PEDIDO */}
         </div>
     );
 }
