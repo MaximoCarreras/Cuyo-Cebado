@@ -16,31 +16,44 @@ body {
   min-height: 100vh;
 }
 
-/* --- BARRA DORADA SUPERIOR --- */
+/* --- BARRA DORADA CON MOVIMIENTO --- */
 .top-mafia-bar {
   background-color: #a5813a;
   color: #1a1614;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px 5%;
+  overflow: hidden;
+  /* IMPORTANTE para el ticker */
+  padding: 12px 0;
   position: relative;
-  /* Fluye con el scroll */
-  z-index: 10001;
+  z-index: 10;
+  /* Menor que la Navbar */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* FIX PARA QUE LA NAVBAR NO LA TAPE */
-nav,
-.navbar {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 10000 !important;
+.ticker-track {
+  display: flex;
+  width: max-content;
+  gap: 100px;
+  /* Espacio entre cada grupo de texto */
+  animation: scroll-right 40s linear infinite;
+  /* Movimiento a la derecha */
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
 }
 
 .top-bar-item {
   display: flex;
   align-items: center;
   gap: 10px;
+  white-space: nowrap;
+  /* Evita que las oraciones se amontonen */
 }
 
 .top-bar-item span {
@@ -49,25 +62,41 @@ nav,
 
 .top-bar-item p {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   line-height: 1.2;
 }
 
 .top-bar-item p strong {
-  display: block;
+  display: inline-block;
   text-transform: uppercase;
   font-weight: 800;
+  margin-right: 5px;
 }
 
 .top-bar-item p span {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   opacity: 0.8;
+}
+
+/* FIX NAVBAR Y MENÚ HAMBURGUESA */
+nav,
+.navbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  /* Superior a la barra dorada */
+  background-color: #1a1614;
+}
+
+/* Para que el menú lateral al abrirse no sea tapado */
+.nav-menu,
+.mobile-menu-container {
+  z-index: 2000 !important;
 }
 
 main {
   flex: 1;
   padding-top: 0;
-  /* Sticky navbar no requiere padding inicial */
   background-color: #fdfaf7;
 }
 
@@ -83,7 +112,7 @@ main {
   margin-bottom: 40px;
 }
 
-/* --- BURBUJA WHATSAPP MAFIA PREMIUM --- */
+/* BURBUJA WHATSAPP */
 .whatsapp-float {
   position: fixed;
   width: 60px;
@@ -111,7 +140,6 @@ main {
   width: 32px;
   height: 32px;
   fill: #a5813a;
-  transition: fill 0.3s ease;
 }
 
 .whatsapp-float:hover .wa-icon {
@@ -120,21 +148,17 @@ main {
 
 /* ESCALA MÓVIL */
 @media (max-width: 768px) {
-  html {
-    font-size: 14px;
-  }
-
-  .top-mafia-bar {
-    flex-direction: column;
-    gap: 8px;
-    padding: 15px 10px;
-    text-align: center;
+  .ticker-track {
+    animation: scroll-right 25s linear infinite;
+    /* Un poco más rápido en celu por distancia corta */
+    gap: 60px;
   }
 
   .top-bar-item p span {
-    display: none;
+    display: inline;
   }
 
+  /* Asegura que la oracion sea una sola linea */
   .whatsapp-float {
     width: 55px;
     height: 55px;
