@@ -1,51 +1,66 @@
 import { Link } from 'react-router-dom';
-import { useRef, useEffect } from 'react'; // IMPORTANTE
+import { useRef, useEffect } from 'react';
 import { categories, products } from '../../data/products';
 import { useCart } from '../../context/CartContext';
-// Imagen importada correctamente desde assets
 import heroImg from '../../assets/fondo_hero_principal.png';
 import './Home.css';
 
 export default function Home() {
     const { addToCart } = useCart();
-    // Referencias para las tarjetas de categorías (Spotlight effect)
+
+    // Referencias para los efectos de luz (Spotlight)
+    const heroRef = useRef(null);
     const categoryCardRefs = useRef([]);
 
-    // LÓGICA DEL EFECTO SPOTLIGHT (JS)
     useEffect(() => {
-        const cards = categoryCardRefs.current;
+        // Luz interactiva para el HERO
+        const handleHeroMouse = (e) => {
+            if (!heroRef.current) return;
+            const rect = heroRef.current.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            heroRef.current.style.setProperty("--hero-x", `${x}px`);
+            heroRef.current.style.setProperty("--hero-y", `${y}px`);
+        };
 
-        const handleMouseMove = (e, card) => {
+        // Luz interactiva para las CATEGORÍAS
+        const handleCardMouse = (e, card) => {
             const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left; // Posición X relativa a la tarjeta
-            const y = e.clientY - rect.top;  // Posición Y relativa a la tarjeta
-
-            // Seteamos variables CSS que usaremos en el .css
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
             card.style.setProperty("--mouse-x", `${x}px`);
             card.style.setProperty("--mouse-y", `${y}px`);
         };
 
-        cards.forEach((card) => {
+        const currentHero = heroRef.current;
+        if (currentHero) {
+            currentHero.addEventListener('mousemove', handleHeroMouse);
+        }
+
+        categoryCardRefs.current.forEach((card) => {
             if (!card) return;
-            card.addEventListener('mousemove', (e) => handleMouseMove(e, card));
+            card.addEventListener('mousemove', (e) => handleCardMouse(e, card));
         });
 
-        // Cleanup (Limpieza al desmontar)
         return () => {
-            cards.forEach((card) => {
+            if (currentHero) {
+                currentHero.removeEventListener('mousemove', handleHeroMouse);
+            }
+            categoryCardRefs.current.forEach((card) => {
                 if (!card) return;
-                card.removeEventListener('mousemove', (e) => handleMouseMove(e, card));
+                card.removeEventListener('mousemove', (e) => handleCardMouse(e, card));
             });
         };
-    }, []); // Se ejecuta una sola vez al montar
+    }, []);
 
-    // Filtramos para la sección de Kit de Regalo Prensado
     const bestSellers = products.filter(p => p.type === 'Prensado').slice(0, 4);
 
     return (
         <div className="home-main">
-            {/* 1. SECCIÓN HERO (Recuperada y Blindada) */}
-            <section className="hero-mafia">
+            {/* 1. HERO SECTION CON SPOTLIGHT EN EL FONDO */}
+            <section className="hero-mafia" ref={heroRef}>
+                <div className="hero-spotlight-layer"></div>
+
                 <div className="hero-mafia__content">
                     <div className="hero-text-block">
                         <h1 className="hero-title">
@@ -58,7 +73,7 @@ export default function Home() {
                         </p>
                         <div className="hero-buttons">
                             <Link to="/productos" className="btn-gold-mafia">Ver Catálogo</Link>
-                            <a href="https://wa.me/5492625597956?text=Hola!%20Vengo%20desde%20la%20web" target="_blank" rel="noreferrer" className="btn-outline-mafia">
+                            <a href="https://wa.me/5492625597956" target="_blank" rel="noreferrer" className="btn-outline-mafia">
                                 WhatsApp
                             </a>
                         </div>
@@ -71,7 +86,32 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* 2. CATEGORÍAS (Con efecto Spotlight Card) */}
+            {/* 2. BENEFICIOS */}
+            <section className="home-benefits">
+                <div className="benefit-item">
+                    <span className="material-symbols-outlined">local_shipping</span>
+                    <div className="benefit-text">
+                        <h4>Envíos a todo el país</h4>
+                        <p>Llegamos a cada rincón de Argentina.</p>
+                    </div>
+                </div>
+                <div className="benefit-item">
+                    <span className="material-symbols-outlined">verified_user</span>
+                    <div className="benefit-text">
+                        <h4>Calidad Premium</h4>
+                        <p>Piezas seleccionadas y talladas a mano.</p>
+                    </div>
+                </div>
+                <div className="benefit-item">
+                    <span className="material-symbols-outlined">payments</span>
+                    <div className="benefit-text">
+                        <h4>Pago Seguro</h4>
+                        <p>Hasta 3 cuotas sin interés.</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* 3. CATEGORÍAS CON SPOTLIGHT CARDS */}
             <section className="home-categories-section">
                 <h2 className="global-section-title">Nuestras Colecciones</h2>
                 <div className="categories-grid-premium">
@@ -80,13 +120,9 @@ export default function Home() {
                             key={cat.id}
                             to={`/productos/${cat.id}`}
                             className="card-cat-dark-spotlight"
-                            // Asignamos la referencia a la tarjeta
                             ref={(el) => (categoryCardRefs.current[index] = el)}
                         >
-                            {/* LA LUZ INTERACTIVA (Spotlight layer) */}
                             <div className="spotlight-light-layer"></div>
-
-                            {/* CONTENIDO DE LA TARJETA */}
                             <div className="card-cat-content">
                                 <div className="cat-icon-display">{cat.icon}</div>
                                 <div className="cat-text-display">
@@ -99,14 +135,13 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* 3. LO MÁS VENDIDO */}
+            {/* 4. LO MÁS VENDIDO */}
             <section className="home-best-sellers">
                 <header className="best-sellers-header">
                     <h2 className="global-section-title">Lo más vendido</h2>
                     <p className="gold-subtitle">KIT DE REGALO PRENSADO</p>
                     <div className="gold-line-separator"></div>
                 </header>
-
                 <div className="products-grid-meli-style">
                     {bestSellers.map((product) => (
                         <div key={product.id} className="product-card-white-boutique">
@@ -118,11 +153,23 @@ export default function Home() {
                                 <h4 className="product-name-text">{product.name}</h4>
                                 <p className="product-price-val">${product.price.toLocaleString()}</p>
                                 <button className="btn-add-to-cart-mafia" onClick={() => addToCart(product)}>
-                                    Añadir al carrito
+                                    Añadir
                                 </button>
                             </div>
                         </div>
                     ))}
+                </div>
+            </section>
+
+            {/* 5. FILOSOFÍA */}
+            <section className="home-philosophy">
+                <div className="philosophy-container">
+                    <h2 className="philosophy-title">La Mafia del Mate</h2>
+                    <p>
+                        No vendemos simples objetos, seleccionamos compañeros de vida.
+                        En <strong>Cuyo Cebado</strong> creemos en la mística del ritual mendocino.
+                    </p>
+                    <Link to="/nosotros" className="btn-gold-mafia">Nuestra Historia</Link>
                 </div>
             </section>
         </div>
