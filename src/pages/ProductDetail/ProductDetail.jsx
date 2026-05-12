@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { categories } from '../../data/products'; // Para traer los emojis
 import './ProductDetail.css';
 
 export default function ProductDetail() {
@@ -8,7 +9,6 @@ export default function ProductDetail() {
     const { addToCart } = useCart();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [mainImage, setMainImage] = useState('');
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
@@ -18,16 +18,10 @@ export default function ProductDetail() {
                 const API_URL = import.meta.env.VITE_API_URL || 'https://cuyo-cebado.onrender.com';
                 const response = await fetch(`${API_URL}/api/products`);
                 const data = await response.json();
-
-                // Buscamos el producto específico por ID
                 const found = data.find(p => p.id === productId);
-                if (found) {
-                    setProduct(found);
-                    // Si tienes un array de imágenes, usamos la primera. Si no, la image_url básica.
-                    setMainImage(found.image_url || found.images?.[0]);
-                }
+                setProduct(found);
             } catch (error) {
-                console.error("Error cargando detalle:", error);
+                console.error("Error:", error);
             } finally {
                 setLoading(false);
             }
@@ -35,8 +29,14 @@ export default function ProductDetail() {
         fetchProduct();
     }, [productId]);
 
-    if (loading) return <div className="loading-mafia">Cargando pieza exclusiva...</div>;
-    if (!product) return <div className="error-mafia">Producto no encontrado.</div>;
+    // Función para obtener el emoji de la categoría
+    const getCategoryIcon = (categorySlug) => {
+        const cat = categories.find(c => c.id === categorySlug);
+        return cat ? cat.icon : '🧉';
+    };
+
+    if (loading) return <div className="loading-view-mafia">🧉 Preparando selección premium...</div>;
+    if (!product) return <div className="loading-view-mafia">Producto no encontrado.</div>;
 
     return (
         <div className="product-detail-page">
@@ -46,70 +46,72 @@ export default function ProductDetail() {
                 </Link>
 
                 <div className="detail-grid">
-                    {/* GALERÍA ESTILO MERCADO LIBRE */}
-                    <div className="gallery-side">
-                        <div className="thumbnails">
-                            {/* Aquí mapearías tu array de imágenes de Supabase */}
-                            {[product.image_url, ...(product.images || [])].map((img, idx) => (
-                                <img
-                                    key={idx}
-                                    src={img}
-                                    alt=""
-                                    className={mainImage === img ? 'active-thumb' : ''}
-                                    onClick={() => setMainImage(img)}
-                                    onError={(e) => e.target.style.display = 'none'}
-                                />
-                            ))}
-                        </div>
-                        <div className="main-image-box">
-                            {mainImage ? (
-                                <img src={mainImage} alt={product.name} />
+                    {/* IMAGEN / EMOJI */}
+                    <div className="detail-visual-side">
+                        <div className="main-image-box-mafia">
+                            {product.image_url ? (
+                                <img src={product.image_url} alt={product.name} className="img-real-detail" />
                             ) : (
-                                <span className="emoji-detail">🧉</span>
+                                <span className="emoji-detail-display">{getCategoryIcon(product.category)}</span>
                             )}
                         </div>
                     </div>
 
-                    {/* INFORMACIÓN Y COMPRA */}
-                    <div className="info-side">
-                        <span className="detail-category">{product.category} | {product.material}</span>
-                        <h1 className="detail-title">{product.name}</h1>
+                    {/* INFO Y COMPRA */}
+                    <div className="detail-info-side">
+                        <p className="detail-tag-mafia">{product.category} | {product.material}</p>
+                        <h1 className="detail-title-mafia">{product.name}</h1>
 
-                        <div className="detail-price-box">
-                            <span className="current-price">${Number(product.price).toLocaleString()}</span>
-                            <p className="payment-note">Hasta 3 cuotas sin interés</p>
+                        <div className="detail-price-box-mafia">
+                            <span className="price-main">${Number(product.price).toLocaleString()}</span>
+                            <span className="installments-tag">3 CUOTAS SIN INTERÉS</span>
                         </div>
 
-                        <div className="detail-description">
+                        <div className="detail-description-mafia">
                             <h3>Descripción</h3>
-                            <p>{product.description || "Pieza artesanal de curaduría premium. Cada detalle ha sido trabajado a mano por maestros artesanos de Mendoza."}</p>
+                            <p>{product.description || "Pieza artesanal de curaduría premium."}</p>
                         </div>
 
-                        <div className="detail-specs">
-                            <div className="spec-item"><strong>Material:</strong> {product.material}</div>
-                            <div className="spec-item"><strong>Stock:</strong> {product.stock > 0 ? `${product.stock} unidades` : "Agotado temporalmente"}</div>
+                        {/* NUEVA SECCIÓN: FICHA TÉCNICA */}
+                        <div className="technical-sheet-mafia">
+                            <h3>Ficha Técnica</h3>
+                            <div className="specs-grid">
+                                <div className="spec-row">
+                                    <span>Material</span>
+                                    <span>{product.material || "Artesanal"}</span>
+                                </div>
+                                <div className="spec-row">
+                                    <span>Disponibilidad</span>
+                                    <span>{product.stock > 0 ? `${product.stock} unidades` : "Agotado"}</span>
+                                </div>
+                                {/* Si agregas la columna 'specs' en Supabase, aparecerá aquí */}
+                                {product.specs && (
+                                    <div className="spec-row">
+                                        <span>Detalles</span>
+                                        <span>{product.specs}</span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
-                        {product.stock > 0 && (
-                            <div className="purchase-zone">
-                                <div className="qty-selector-detail">
+                        {product.stock > 0 ? (
+                            <div className="purchase-action-area">
+                                <div className="qty-selector-mafia-detail">
                                     <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button>
                                     <span>{quantity}</span>
                                     <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}>+</button>
                                 </div>
                                 <button
-                                    className="btn-add-detail"
+                                    className="btn-add-to-cart-mafia"
                                     onClick={() => addToCart({ ...product, quantity })}
                                 >
-                                    Añadir al carrito
+                                    Añadir al Carrito
                                 </button>
                             </div>
-                        )}
-
-                        {product.stock === 0 && (
-                            <div className="no-stock-notice">
-                                <span className="material-symbols-outlined">info</span>
-                                Próximamente disponible. ¡Unite al club para recibir el aviso!
+                        ) : (
+                            <div className="out-of-stock-notice-mafia">
+                                <span className="material-symbols-outlined">event_busy</span>
+                                Sin stock por el momento
                             </div>
                         )}
                     </div>
