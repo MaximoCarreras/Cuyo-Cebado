@@ -84,17 +84,31 @@ export default function CategoryPage() {
 
                     <div className="products-grid">
                         {filteredProducts.map(product => (
-                            <div key={product.id} className="product-card">
-                                {product.bestSeller && <span className="product-badge">Top Ventas</span>}
+                            <div key={product.id} className={`product-card ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
+
+                                {/* Etiqueta de Top Ventas o Sin Stock */}
+                                {product.stock === 0 ? (
+                                    <span className="product-badge out-of-stock">Sin Stock</span>
+                                ) : (
+                                    product.bestSeller && <span className="product-badge">Top Ventas</span>
+                                )}
+
                                 <div className="product-image-container">
                                     <span className="category-icon-bg">{currentCategory?.icon}</span>
+                                    {product.stock === 0 && <div className="out-of-stock-overlay">Agotado</div>}
                                 </div>
+
                                 <div className="product-info">
                                     <p className="product-tag">{product.material}</p>
                                     <h4 className="product-name">{product.name}</h4>
                                     <p className="product-price">${product.price.toLocaleString()}</p>
-                                    <button className="btn-add-to-cart" onClick={() => addToCart(product)}>
-                                        Añadir al Carrito
+
+                                    <button
+                                        className={`btn-add-to-cart ${product.stock === 0 ? 'btn-disabled' : ''}`}
+                                        onClick={() => product.stock > 0 && addToCart(product)}
+                                        disabled={product.stock === 0}
+                                    >
+                                        {product.stock === 0 ? 'Sin Disponibilidad' : 'Añadir al Carrito'}
                                     </button>
                                 </div>
                             </div>

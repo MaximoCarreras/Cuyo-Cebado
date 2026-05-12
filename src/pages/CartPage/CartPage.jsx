@@ -2,14 +2,11 @@ import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import { Link } from 'react-router-dom';
 import './CartPage.css';
-
-// Importamos el logo de Mercado Pago
 import mpLogo from '../../assets/mp-logo.png';
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
     const [customer, setCustomer] = useState({ name: '', email: '' });
-    const [isProcessing, setIsProcessing] = useState(false);
 
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('es-AR', {
@@ -17,41 +14,6 @@ export default function CartPage() {
             currency: 'ARS',
             minimumFractionDigits: 0,
         }).format(value);
-    };
-
-    const handleCheckoutMP = async () => {
-        if (!customer.name || !customer.email) {
-            alert("Por favor, completá tus datos para continuar.");
-            return;
-        }
-
-        setIsProcessing(true);
-        try {
-            // CAMBIO CLAVE: Detecta si usa Render o Localhost automáticamente
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-
-            const response = await fetch(`${API_URL}/api/checkout`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    items: cart,
-                    name: customer.name,
-                    email: customer.email
-                }),
-            });
-
-            const data = await response.json();
-            if (data.init_point) {
-                window.location.href = data.init_point;
-            } else {
-                alert("Error del servidor: " + (data.error || "No se generó el pago"));
-            }
-        } catch (error) {
-            console.error(error);
-            alert("Hubo un problema al conectar con el servidor. Intentá de nuevo en unos segundos.");
-        } finally {
-            setIsProcessing(false);
-        }
     };
 
     if (!cart || cart.length === 0) {
@@ -70,7 +32,6 @@ export default function CartPage() {
     return (
         <section className="cart-page">
             <div className="cart-container">
-
                 <div className="cart-header">
                     <h2>Tu Pedido Cuyo</h2>
                     <div className="gold-line"></div>
@@ -87,38 +48,22 @@ export default function CartPage() {
                                         <div className="item-img-placeholder">🧉</div>
                                     )}
                                 </div>
-
                                 <div className="cart-item__info">
                                     <h3>{item.name}</h3>
                                     <p className="cart-item__material">{item.material || "Artesanal"}</p>
                                     <p className="cart-item__unit-price">{formatCurrency(item.price)} c/u</p>
-
                                     <div className="cart-item__actions">
                                         <div className="quantity-selector">
-                                            <button
-                                                className="qty-btn"
-                                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                disabled={item.quantity <= 1}
-                                            >
-                                                −
-                                            </button>
+                                            <button className="qty-btn" onClick={() => updateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>−</button>
                                             <span className="qty-number">{item.quantity}</span>
-                                            <button
-                                                className="qty-btn"
-                                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                            >
-                                                +
-                                            </button>
+                                            <button className="qty-btn" onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                                         </div>
                                         <button className="btn-remove" onClick={() => removeFromCart(item.id)}>
-                                            <span className="material-symbols-outlined">delete</span>
-                                            Eliminar
+                                            <span className="material-symbols-outlined">delete</span> Eliminar
                                         </button>
                                     </div>
                                 </div>
-                                <div className="cart-item__subtotal">
-                                    {formatCurrency(item.price * item.quantity)}
-                                </div>
+                                <div className="cart-item__subtotal">{formatCurrency(item.price * item.quantity)}</div>
                             </div>
                         ))}
                     </div>
@@ -126,55 +71,32 @@ export default function CartPage() {
                     <aside className="cart-summary">
                         <div className="summary-card">
                             <h3>Resumen de Compra</h3>
-
                             <span className="fields-title">Datos del Matero</span>
                             <div className="customer-form-group">
-                                <input
-                                    type="text"
-                                    placeholder="Nombre completo"
-                                    value={customer.name}
-                                    onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-                                    className="cart-input-dark"
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="Tu mejor Email"
-                                    value={customer.email}
-                                    onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
-                                    className="cart-input-dark"
-                                />
+                                <input type="text" placeholder="Nombre completo" value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })} className="cart-input-dark" />
+                                <input type="email" placeholder="Tu mejor Email" value={customer.email} onChange={(e) => setCustomer({ ...customer, email: e.target.value })} className="cart-input-dark" />
                             </div>
 
                             <div className="summary-details">
-                                <div className="summary-row">
-                                    <span>Subtotal</span>
-                                    <span>{formatCurrency(cartTotal)}</span>
-                                </div>
-                                <div className="summary-row">
-                                    <span>Envío</span>
-                                    <span className="text-free">¡Sin costo!</span>
-                                </div>
+                                <div className="summary-row"><span>Subtotal</span><span>{formatCurrency(cartTotal)}</span></div>
+                                <div className="summary-row"><span>Envío</span><span className="text-free">¡Sin costo!</span></div>
                             </div>
-
                             <hr className="summary-divider" />
+                            <div className="summary-row total"><span>TOTAL</span><span className="total-amount">{formatCurrency(cartTotal)}</span></div>
 
-                            <div className="summary-row total">
-                                <span>TOTAL</span>
-                                <span className="total-amount">{formatCurrency(cartTotal)}</span>
-                            </div>
-
+                            {/* BOTÓN DESHABILITADO TEMPORALMENTE */}
                             <button
                                 className="btn-mercadopago"
-                                onClick={handleCheckoutMP}
-                                disabled={isProcessing}
+                                style={{ backgroundColor: '#ccc', cursor: 'not-allowed', color: '#666' }}
+                                onClick={() => alert("¡Pronto podrás comprar tus mates online! Estamos terminando de preparar el stock.")}
+                                disabled={true}
                             >
-                                <img src={mpLogo} alt="MP" className="mp-icon-local" />
-                                <span>{isProcessing ? "Procesando..." : "Finalizar Compra"}</span>
+                                <img src={mpLogo} alt="MP" className="mp-icon-local" style={{ opacity: 0.5 }} />
+                                <span>Lanzamiento próximamente</span>
                             </button>
 
                             <p className="secure-payment">
-                                <span className="material-symbols-outlined">shield</span>
-                                Pago 100% seguro con Mercado Pago
+                                <span className="material-symbols-outlined">shield</span> Pago 100% seguro con Mercado Pago
                             </p>
                         </div>
                     </aside>

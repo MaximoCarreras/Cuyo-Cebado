@@ -1,6 +1,4 @@
 export const products = [
-    // --- PRODUCTOS REALES (CONECTADOS A TU SUPABASE) ---
-    // Estos productos ya existen en tu base de datos y tienen el ID correcto (UUID).
     {
         id: "939a1f06-6e48-47e1-a5a1-4cc4e74eafe8",
         name: "Mate Lapacho Imperial",
@@ -8,6 +6,7 @@ export const products = [
         type: "Imperial",
         material: "Madera de Lapacho",
         price: 45000,
+        stock: 0, // <--- Todo en 0 para empezar
         bestSeller: true
     },
     {
@@ -16,7 +15,8 @@ export const products = [
         category: "mates",
         type: "Rústico",
         material: "Madera de Quebracho",
-        price: 52000
+        price: 52000,
+        stock: 0
     },
     {
         id: "977e492d-990e-4934-8227-6ae0a8203ef5",
@@ -24,7 +24,8 @@ export const products = [
         category: "mates",
         type: "Cerámica",
         material: "Cerámica Esmaltada",
-        price: 28000
+        price: 28000,
+        stock: 0
     },
     {
         id: "9852b131-00e1-4b09-8ab1-ed94984568b2",
@@ -32,7 +33,8 @@ export const products = [
         category: "bombillas",
         type: "Clásica",
         material: "Alpaca",
-        price: 12000
+        price: 12000,
+        stock: 0
     },
     {
         id: "6acf35f1-8a23-4717-971e-5fe657c5ed35",
@@ -41,10 +43,9 @@ export const products = [
         type: "Kit",
         material: "Varios",
         price: 89000,
+        stock: 0,
         bestSeller: true
     }
-    // Nota: Si querés agregar más productos, primero crealos en Supabase 
-    // y después pegá acá el ID largo (UUID) que te genere la base de datos.
 ];
 
 export const categories = [
