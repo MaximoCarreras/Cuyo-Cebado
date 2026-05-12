@@ -27,7 +27,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar__container">
 
-        {/* IZQUIERDA: LOGO */}
+        {/* 1. LOGO (Izquierda) */}
         <div className="navbar__left">
           <Link to="/" className="navbar__brand" onClick={closeMenu}>
             <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
@@ -35,7 +35,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* CENTRO: BUSCADOR */}
+        {/* 2. BUSCADOR (Centro) */}
         <div className="navbar__center">
           <form className="navbar__search" onSubmit={handleSearch}>
             <input
@@ -48,9 +48,10 @@ export default function Navbar() {
           </form>
         </div>
 
-        {/* DERECHA: LINKS COMPLETOS + CARRITO */}
+        {/* 3. NAVEGACIÓN Y CARRITO (Derecha) */}
         <div className="navbar__right">
           <div className="navbar__desktop-links">
+            <Link to="/" className="nav-item">Inicio</Link>
             <Link to="/productos" className="nav-item">Productos</Link>
             <Link to="/nosotros" className="nav-item">Nosotros</Link>
             <Link to="/guia-curado" className="nav-item">Guía</Link>
@@ -67,21 +68,16 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MENÚ MÓVIL (Escondido por defecto en CSS) */}
+      {/* MENÚ MÓVIL */}
       <div className={`navbar__mobile-menu ${isMenuOpen ? 'active' : ''}`}>
         <form className="mobile-search-box" onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="Buscar..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <input type="text" placeholder="Buscar..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         </form>
         <Link to="/" onClick={closeMenu}>Inicio</Link>
         <Link to="/productos" onClick={closeMenu}>Productos</Link>
         <Link to="/nosotros" onClick={closeMenu}>Nosotros</Link>
         <Link to="/guia-curado" onClick={closeMenu}>Guía de Curado</Link>
-        <Link to="/carrito" onClick={closeMenu}>Mi Carrito</Link>
+        <Link to="/carrito" onClick={closeMenu}>Mi Carrito ({totalItems})</Link>
       </div>
 
       {isMenuOpen && <div className="navbar__blur-overlay" onClick={closeMenu}></div>}
