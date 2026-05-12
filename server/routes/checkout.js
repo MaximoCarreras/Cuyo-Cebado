@@ -5,13 +5,20 @@ import { mpClient } from '../lib/mercadopago.js';
 
 const router = Router();
 
-// URL fija para la prueba en tu PC
-const FRONTEND_URL = 'http://localhost:5173';
+// Detectamos si estamos en producción (Render) o en tu PC
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 router.post('/', async (req, res) => {
   try {
+    // Verificamos qué es lo que falta exactamente para ayudarte mejor
     if (!supabaseAdmin || !mpClient) {
-      return res.status(503).json({ error: 'Configuración de Supabase o MP ausente.' });
+      console.error("--- ERROR DE CONFIGURACIÓN ---");
+      if (!supabaseAdmin) console.error("Falta inicializar Supabase. Revisá SUPABASE_URL y SUPABASE_KEY");
+      if (!mpClient) console.error("Falta inicializar Mercado Pago. Revisá MP_ACCESS_TOKEN");
+
+      return res.status(503).json({
+        error: 'Configuración de Supabase o MP ausente en el servidor.'
+      });
     }
 
     const { items, email, name } = req.body;
@@ -68,16 +75,10 @@ router.post('/', async (req, res) => {
           failure: `${FRONTEND_URL}/carrito`,
           pending: `${FRONTEND_URL}/`
         },
-        // Sacamos el auto_return para que MP no se ponga exquisito con la validación
+        auto_return: "approved",
         external_reference: order.id
       }
     });
-
-    // 4. Actualizar orden
-    await supabaseAdmin
-      .from('orders')
-      .update({ mp_preference_id: response.id })
-      .eq('id', order.id);
 
     res.json({ init_point: response.init_point });
 
