@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
-import { categories, products } from '../../data/products';
+import { categories } from '../../data/products'; // Traemos solo las categorías
 import { useCart } from '../../context/CartContext';
 import heroImg from '../../assets/fondo_hero_principal.png';
 import './Home.css';
@@ -10,12 +10,14 @@ export default function Home() {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('');
 
+    // ESTADOS PARA PRODUCTOS DE SUPABASE
+    const [featuredProducts, setFeaturedProducts] = useState([]);
+    const [featuredKit, setFeaturedKit] = useState(null);
+
     const heroRef = useRef(null);
     const categoryCardRefs = useRef([]);
 
-    // Seleccionamos el producto estrella
-    const featuredKit = products.find(p => p.type === 'Prensado') || products[0];
-
+    // 1. EFECTOS DE SPOTLIGHT (TU LÓGICA ORIGINAL)
     useEffect(() => {
         const handleHeroMouse = (e) => {
             if (!heroRef.current) return;
@@ -26,6 +28,7 @@ export default function Home() {
             heroRef.current.style.setProperty("--hero-y", `${y}px`);
         };
         const handleCardMouse = (e, card) => {
+            if (!card) return;
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -45,6 +48,28 @@ export default function Home() {
                 card.removeEventListener('mousemove', (e) => handleCardMouse(e, card));
             });
         };
+    }, [featuredProducts]); // Re-ejecutar cuando carguen los productos
+
+    // 2. CARGA AUTOMÁTICA DESDE SUPABASE
+    useEffect(() => {
+        const fetchHomeData = async () => {
+            try {
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+                const response = await fetch(`${API_URL}/api/products`);
+                const data = await response.json();
+
+                // Filtramos los destacados (is_featured en Supabase)
+                const featured = data.filter(p => p.is_featured);
+                setFeaturedProducts(featured);
+
+                // Buscamos un Kit para el Showcase o usamos el primero de la lista
+                const kit = data.find(p => p.category === 'kits') || data[0];
+                setFeaturedKit(kit);
+            } catch (error) {
+                console.error("Error cargando datos de inicio:", error);
+            }
+        };
+        fetchHomeData();
     }, []);
 
     const handleNewsletter = (e) => {
@@ -69,19 +94,18 @@ export default function Home() {
                         <p className="hero-subtitle">Curaduría premium de mates imperiales tallados a mano en Mendoza. Una pieza de arte en cada cebada.</p>
                         <div className="hero-buttons">
                             <Link to="/productos" className="btn-gold-mafia">Ver Catálogo</Link>
-                            {/* BOTÓN WHATSAPP - NÚMERO ACTUALIZADO */}
                             <a href="https://wa.me/5492612307516" target="_blank" rel="noreferrer" className="btn-outline-mafia">WhatsApp</a>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 2. CATEGORÍAS (COMPACTAS) */}
+            {/* 2. CATEGORÍAS */}
             <section className="home-categories-section">
                 <h2 className="global-section-title">Nuestras Colecciones</h2>
                 <div className="categories-grid-premium">
                     {categories.map((cat, index) => (
-                        <Link key={cat.id} to={`/productos/${cat.id}`} className="card-cat-dark-spotlight" ref={(el) => (categoryCardRefs.current[index] = el)}>
+                        <Link key={cat.id} to={`/categoria/${cat.id}`} className="card-cat-dark-spotlight" ref={(el) => (categoryCardRefs.current[index] = el)}>
                             <div className="spotlight-light-layer"></div>
                             <div className="card-cat-content">
                                 <div className="cat-icon-display">{cat.icon}</div>
@@ -95,34 +119,45 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* 3. SHOWCASE KIT ESTRELLA */}
-            <section className="featured-showcase">
-                <div className="showcase-container">
-                    <div className="showcase-image-side">
-                        <div className="badge-premium">EL MÁS ELEGIDO</div>
-                        <span className="showcase-emoji">🎁</span>
-                    </div>
-                    <div className="showcase-info-side">
-                        <p className="gold-tag">NUESTRO KIT ESTRELLA</p>
-                        <h2 className="showcase-title">{featuredKit?.name}</h2>
-                        <p className="showcase-description">
-                            La experiencia definitiva para el buen cebador. Un conjunto pensado para durar toda la vida.
-                        </p>
-                        <ul className="showcase-list">
-                            <li><span className="material-symbols-outlined">check_circle</span> Mate Imperial Premium de Cuero Legítimo</li>
-                            <li><span className="material-symbols-outlined">check_circle</span> Bombilla de Alpaca Cincelada</li>
-                            <li><span className="material-symbols-outlined">check_circle</span> Yerba Mate Cuyo Cebado (500g)</li>
-                            <li><span className="material-symbols-outlined">check_circle</span> Packaging de Regalo Boutique</li>
-                        </ul>
-                        <div className="showcase-actions">
-                            <span className="showcase-price">${featuredKit?.price.toLocaleString()}</span>
-                            <button className="btn-gold-mafia" onClick={() => addToCart(featuredKit)}>
-                                Comprar Ahora
-                            </button>
+            {/* 3. SHOWCASE DINÁMICO (Kit Estrella) */}
+            {featuredKit && (
+                <section className="featured-showcase">
+                    <div className="showcase-container">
+                        <div className="showcase-image-side">
+                            {featuredKit.image_url ? (
+                                <img src={featuredKit.image_url} alt={featuredKit.name} className="img-showcase-real" />
+                            ) : (
+                                <>
+                                    <div className="badge-premium">EL MÁS ELEGIDO</div>
+                                    <span className="showcase-emoji">🎁</span>
+                                </>
+                            )}
+                        </div>
+                        <div className="showcase-info-side">
+                            <p className="gold-tag">PRODUCTO DESTACADO</p>
+                            <h2 className="showcase-title">{featuredKit.name}</h2>
+                            <p className="showcase-description">
+                                {featuredKit.description || "La experiencia definitiva para el buen cebador. Una pieza seleccionada por su calidad y terminación artesanal."}
+                            </p>
+                            <ul className="showcase-list">
+                                <li><span className="material-symbols-outlined">check_circle</span> Calidad de Exportación</li>
+                                <li><span className="material-symbols-outlined">check_circle</span> Materiales Seleccionados</li>
+                                <li><span className="material-symbols-outlined">check_circle</span> {featuredKit.stock > 0 ? 'Stock Disponible' : 'Próximamente disponible'}</li>
+                            </ul>
+                            <div className="showcase-actions">
+                                <span className="showcase-price">${Number(featuredKit.price).toLocaleString()}</span>
+                                <button
+                                    className="btn-gold-mafia"
+                                    onClick={() => featuredKit.stock > 0 && addToCart(featuredKit)}
+                                    disabled={featuredKit.stock === 0}
+                                >
+                                    {featuredKit.stock > 0 ? 'Comprar Ahora' : 'Sin Stock'}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             {/* 4. CLUB DE MATEROS */}
             <section className="club-newsletter">
