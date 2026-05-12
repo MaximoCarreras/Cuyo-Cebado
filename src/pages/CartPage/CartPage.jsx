@@ -49,7 +49,6 @@ export default function CartPage() {
                         {cart.map((item) => (
                             <div key={item.id} className="cart-item-mafia">
                                 <div className="cart-item__img-box">
-                                    {/* Placeholder estético con Emoji */}
                                     <span className="cart-item-emoji">{getCategoryIcon(item.category)}</span>
                                 </div>
 
@@ -57,13 +56,29 @@ export default function CartPage() {
                                     <div className="cart-item__header">
                                         <p className="cart-item__material-tag">{item.material || "Artesanal"}</p>
                                         <h3>{item.name}</h3>
+                                        {/* Avisamos cuánto stock queda si se acerca al límite */}
+                                        <p style={{ fontSize: '0.7rem', color: '#a5813a' }}>
+                                            Stock disponible: {item.stock}
+                                        </p>
                                     </div>
 
                                     <div className="cart-item__actions-mafia">
                                         <div className="qty-control-mafia">
-                                            <button onClick={() => updateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>−</button>
+                                            <button
+                                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                disabled={item.quantity <= 1}
+                                            >
+                                                −
+                                            </button>
                                             <span className="qty-val">{item.quantity}</span>
-                                            <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                                            <button
+                                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                /* AQUÍ EL CAMBIO: Se deshabilita si alcanza el stock */
+                                                disabled={item.quantity >= item.stock}
+                                                style={item.quantity >= item.stock ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
+                                            >
+                                                +
+                                            </button>
                                         </div>
                                         <button className="btn-remove-mafia" onClick={() => removeFromCart(item.id)}>
                                             <span className="material-symbols-outlined">delete</span> Eliminar
