@@ -1,14 +1,5 @@
 /**
- * Express Server — Mates Mendoza API
- * 
- * Serves as the backend for:
- * - Product listing from Supabase
- * - Mercado Pago checkout integration
- * - Payment webhook processing
- * - Newsletter subscriptions
- * 
- * Start: node index.js (or npm run dev for --watch mode)
- * Port: 3001 (configurable via PORT env var) [SF][CA]
+ * Express Server — Cuyo Cebado API
  */
 import 'dotenv/config';
 import express from 'express';
@@ -22,10 +13,28 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 /* --- Middleware --- */
-/* CORS: allow frontend origin during development [SFT] */
+
+// Configuración de CORS Multiorigen
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://cuyocebado.com.ar',
+  'https://www.cuyocebado.com.ar'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // Permitir pedidos sin origen (como aplicaciones móviles o Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log("Origen bloqueado por CORS:", origin);
+      callback(new Error('No permitido por CORS'));
+    }
+  },
   methods: ['GET', 'POST'],
+  credentials: true
 }));
 
 /* Parse JSON request bodies */
@@ -44,6 +53,7 @@ app.get('/api/health', (req, res) => {
 
 /* --- Start Server --- */
 app.listen(PORT, () => {
-  console.log(`\n🧉 Mates Mendoza API running on http://localhost:${PORT}`);
+  console.log(`\n🧉 Cuyo Cebado API funcionando correctamente`);
+  console.log(`   Puerto: ${PORT}`);
   console.log(`   Health check: http://localhost:${PORT}/api/health\n`);
 });
