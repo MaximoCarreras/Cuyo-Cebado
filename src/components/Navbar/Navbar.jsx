@@ -35,7 +35,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* 2. BUSCADOR (Visible en Desktop y Mobile) */}
+        {/* 2. BUSCADOR UNIVERSAL */}
         <div className="navbar__center">
           <form className="navbar__search" onSubmit={handleSearch}>
             <input
@@ -57,7 +57,8 @@ export default function Navbar() {
             <Link to="/guia-curado" className="nav-item">Guía</Link>
           </div>
 
-          <Link to="/carrito" className="navbar__cart" onClick={closeMenu}>
+          {/* LINK DEL CARRITO - AHORA CON CLASE ESPECÍFICA PARA MÓVIL */}
+          <Link to="/carrito" className="navbar__cart-link" onClick={closeMenu}>
             <span className="material-symbols-outlined cart-icon-nav">shopping_cart</span>
             {totalItems > 0 && <span className="cart-count-premium">{totalItems}</span>}
           </Link>
@@ -68,13 +69,12 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MENÚ MÓVIL (Ya no tiene el buscador adentro porque está arriba) */}
+      {/* MENÚ MÓVIL (Carrito eliminado de aquí por pedido) */}
       <div className={`navbar__mobile-menu ${isMenuOpen ? 'active' : ''}`}>
         <Link to="/" onClick={closeMenu}>Inicio</Link>
         <Link to="/productos" onClick={closeMenu}>Productos</Link>
         <Link to="/nosotros" onClick={closeMenu}>Nosotros</Link>
         <Link to="/guia-curado" onClick={closeMenu}>Guía de Curado</Link>
-        <Link to="/carrito" onClick={closeMenu}>Mi Carrito ({totalItems})</Link>
       </div>
 
       {isMenuOpen && <div className="navbar__blur-overlay" onClick={closeMenu}></div>}

@@ -36,7 +36,6 @@
 .navbar__logo {
   height: 42px;
   width: auto;
-  transition: 0.3s;
 }
 
 .navbar__logo-text {
@@ -52,7 +51,7 @@
   color: #a5813a;
 }
 
-/* CENTRO: BUSCADOR UNIVERSAL */
+/* BUSCADOR */
 .navbar__center {
   flex: 0 1 400px;
   margin: 0 15px;
@@ -118,22 +117,26 @@
   color: #a5813a;
 }
 
-.navbar__cart {
+/* CARRITO - AREA DE TOQUE MEJORADA */
+.navbar__cart-link {
   position: relative;
   color: #fdfaf7;
   text-decoration: none;
   display: flex;
   align-items: center;
+  padding: 10px;
+  /* Área de toque más grande */
+  transition: 0.2s;
 }
 
 .cart-icon-nav {
-  font-size: 26px !important;
+  font-size: 28px !important;
 }
 
 .cart-count-premium {
   position: absolute;
-  top: -5px;
-  right: -8px;
+  top: 2px;
+  right: 0px;
   background: #a5813a;
   color: #1a1614;
   font-size: 9px;
@@ -153,6 +156,7 @@
   border: none;
   color: #fff;
   cursor: pointer;
+  padding: 10px;
 }
 
 /* RESPONSIVE MÓVIL */
@@ -171,29 +175,20 @@
   }
 
   .navbar__container {
-    padding: 0 15px;
+    padding: 0 10px;
   }
 
   .navbar__logo {
     height: 32px;
   }
 
-  /* Logo más chico para dar espacio al buscador */
-
   .navbar__center {
     flex: 1;
-    /* El buscador toma el espacio central */
-    max-width: none;
-    margin: 0 10px;
-  }
-
-  .navbar__search {
-    padding: 0 10px;
+    margin: 0 8px;
   }
 
   .navbar__search input {
     font-size: 0.75rem;
-    padding: 6px;
   }
 
   /* CAJÓN MÓVIL */
@@ -210,7 +205,6 @@
     gap: 25px;
     transition: 0.4s ease;
     z-index: 2500;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
   }
 
   .navbar__mobile-menu.active {
@@ -237,18 +231,4 @@
     backdrop-filter: blur(4px);
     z-index: 2400;
   }
-}
-
-@media (max-width: 400px) {
-
-  /* Ajuste extremo para celus muy chicos */
-  .navbar__logo {
-    height: 28px;
-  }
-
-  .navbar__search input::placeholder {
-    color: transparent;
-  }
-
-  /* Escondemos el texto del buscador si el celu es mini para que no se encime */
 }
