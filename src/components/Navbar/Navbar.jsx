@@ -26,20 +26,21 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar__container">
-        {/* IZQUIERDA: LOGO */}
+
+        {/* 1. IZQUIERDA: LOGO */}
         <div className="navbar__left">
           <Link to="/" className="navbar__brand" onClick={closeMenu}>
             <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
-            <span className="navbar__brand-text">CUYO CEBADO</span>
+            <span className="navbar__logo-text">CUYO <span>CEBADO</span></span>
           </Link>
         </div>
 
-        {/* CENTRO: BUSCADOR BOUTIQUE */}
-        <div className="navbar__search-container">
-          <form className="navbar__search-form" onSubmit={handleSearch}>
+        {/* 2. CENTRO: BUSCADOR (Se oculta en móvil) */}
+        <div className="navbar__center">
+          <form className="navbar__search" onSubmit={handleSearch}>
             <input
               type="text"
-              placeholder="Buscar mate, bombilla..."
+              placeholder="¿Qué mate buscás hoy?"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -47,26 +48,27 @@ export default function Navbar() {
           </form>
         </div>
 
-        {/* DERECHA: LINKS + CARRITO */}
+        {/* 3. DERECHA: LINKS + CARRITO */}
         <div className="navbar__right">
-          <ul className="navbar__desktop-menu">
-            <li><Link to="/productos" className="navbar__link">Tienda</Link></li>
-          </ul>
+          <div className="navbar__desktop-links">
+            <Link to="/productos" className="nav-item">Tienda</Link>
+            <Link to="/nosotros" className="nav-item">Nosotros</Link>
+          </div>
 
-          <Link to="/carrito" className="navbar__cart-container" onClick={closeMenu}>
-            <span className="material-symbols-outlined cart-icon-main">shopping_cart</span>
-            {totalItems > 0 && <div className="cart-badge-premium">{totalItems}</div>}
+          <Link to="/carrito" className="navbar__cart" onClick={closeMenu}>
+            <span className="material-symbols-outlined">shopping_cart</span>
+            {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
           </Link>
 
-          <button className="navbar__hamburger" onClick={toggleMenu} aria-label="Menu">
+          <button className="navbar__toggle" onClick={toggleMenu}>
             <span className="material-symbols-outlined">{isMenuOpen ? 'close' : 'menu'}</span>
           </button>
         </div>
       </div>
 
       {/* MENÚ MÓVIL */}
-      <div className={`navbar__mobile-drawer ${isMenuOpen ? 'open' : ''}`}>
-        <form className="mobile-search" onSubmit={handleSearch}>
+      <div className={`navbar__mobile ${isMenuOpen ? 'active' : ''}`}>
+        <form className="mobile-search-form" onSubmit={handleSearch}>
           <input
             type="text"
             placeholder="Buscar..."
@@ -80,7 +82,7 @@ export default function Navbar() {
         <Link to="/guia-curado" onClick={closeMenu}>Guía de Curado</Link>
       </div>
 
-      {isMenuOpen && <div className="navbar__overlay" onClick={closeMenu}></div>}
+      {isMenuOpen && <div className="navbar__backdrop" onClick={closeMenu}></div>}
     </nav>
   );
 }

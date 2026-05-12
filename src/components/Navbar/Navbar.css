@@ -5,89 +5,137 @@
   width: 100%;
   height: 90px;
   background-color: #1a1614;
+  border-bottom: 1px solid rgba(165, 129, 58, 0.2);
   z-index: 2000;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(165, 129, 58, 0.2);
 }
 
 .navbar__container {
   width: 100%;
-  padding: 0 50px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
   display: flex;
   justify-content: space-between;
+  /* Logo | Buscador | Acciones */
   align-items: center;
+  gap: 20px;
 }
 
-/* BUSCADOR MAFIA */
-.navbar__search-container {
-  flex: 0 1 400px;
-  margin: 0 20px;
+/* IZQUIERDA */
+.navbar__left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-.navbar__search-form {
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 12px;
+}
+
+.navbar__logo {
+  height: 45px;
+  width: auto;
+}
+
+.navbar__logo-text {
+  color: #fdfaf7;
+  font-family: 'Noto Serif', serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.navbar__logo-text span {
+  color: #a5813a;
+}
+
+/* CENTRO: BUSCADOR */
+.navbar__center {
+  flex: 1;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar__search {
+  width: 100%;
   display: flex;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(165, 129, 58, 0.3);
   border-radius: 50px;
-  padding: 5px 15px;
+  padding: 4px 18px;
   transition: 0.3s;
 }
 
-.navbar__search-form:focus-within {
+.navbar__search:focus-within {
   border-color: #a5813a;
   background: rgba(255, 255, 255, 0.1);
 }
 
-.navbar__search-form input {
+.navbar__search input {
   background: none;
   border: none;
-  color: #fdfaf7;
+  color: #fff;
   padding: 8px;
   width: 100%;
   outline: none;
   font-size: 0.85rem;
 }
 
-.navbar__search-form button {
+.navbar__search button {
   background: none;
   border: none;
   color: #a5813a;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
-.navbar__brand-text {
-  color: #fdfaf7;
-  font-family: 'Noto Serif', serif;
-  font-weight: 700;
-  font-size: 1.2rem;
-  letter-spacing: 1px;
+/* DERECHA */
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-shrink: 0;
 }
 
-.navbar__desktop-menu {
+.navbar__desktop-links {
   display: flex;
   gap: 25px;
-  list-style: none;
 }
 
-.navbar__link {
+.nav-item {
   color: #fdfaf7;
   text-decoration: none;
   font-size: 0.8rem;
   text-transform: uppercase;
+  font-weight: 600;
   letter-spacing: 1px;
   transition: 0.3s;
 }
 
-.navbar__link:hover {
+.nav-item:hover {
   color: #a5813a;
 }
 
-.cart-badge-premium {
+.navbar__cart {
+  position: relative;
+  color: #fdfaf7;
+  text-decoration: none;
+  display: flex;
+}
+
+.cart-count {
   position: absolute;
   top: -8px;
-  right: -8px;
-  background-color: #a5813a;
+  right: -10px;
+  background: #a5813a;
   color: #1a1614;
   font-size: 10px;
   font-weight: 800;
@@ -99,26 +147,68 @@
   justify-content: center;
 }
 
-@media (max-width: 900px) {
+.navbar__toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
 
-  .navbar__search-container,
-  .navbar__desktop-menu {
+/* MÓVIL */
+@media (max-width: 1024px) {
+
+  .navbar__center,
+  .navbar__desktop-links {
     display: none;
   }
 
-  .navbar__hamburger {
+  .navbar__toggle {
     display: block;
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
   }
 
-  .navbar__container {
-    padding: 0 20px;
-  }
-
-  .navbar__brand-text {
+  .navbar__logo-text {
     display: none;
+  }
+
+  .navbar__mobile {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100vh;
+    background: #1a1614;
+    display: flex;
+    flex-direction: column;
+    padding: 100px 40px;
+    gap: 25px;
+    transition: 0.4s ease;
+    z-index: 2500;
+  }
+
+  .navbar__mobile.active {
+    right: 0;
+  }
+
+  .navbar__mobile a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .mobile-search-form {
+    margin-bottom: 20px;
+  }
+
+  .mobile-search-form input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #a5813a;
+    padding: 12px;
+    border-radius: 8px;
+    color: #fff;
+    outline: none;
   }
 }
