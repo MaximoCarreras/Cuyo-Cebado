@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import { Link } from 'react-router-dom';
-import './CartPage.css'; // <--- ACÁ ESTABA EL ERROR, YA ESTÁ ARREGLADO
+import './CartPage.css';
 
 // Importamos el logo de Mercado Pago
 import mpLogo from '../../assets/mp-logo.png';
@@ -27,7 +27,10 @@ export default function CartPage() {
 
         setIsProcessing(true);
         try {
-            const response = await fetch("http://localhost:3001/api/checkout", {
+            // CAMBIO CLAVE: Detecta si usa Render o Localhost automáticamente
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+            const response = await fetch(`${API_URL}/api/checkout`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -45,7 +48,7 @@ export default function CartPage() {
             }
         } catch (error) {
             console.error(error);
-            alert("Error de conexión. ¿Tenés el servidor de Node prendido?");
+            alert("Hubo un problema al conectar con el servidor. Intentá de nuevo en unos segundos.");
         } finally {
             setIsProcessing(false);
         }
