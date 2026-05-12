@@ -18,10 +18,8 @@
   padding: 0 50px;
   display: flex;
   justify-content: space-between;
-  /* Logo a un lado, Iconos al otro */
   align-items: center;
   position: relative;
-  /* Necesario para el centro absoluto */
 }
 
 /* IZQUIERDA: LOGO */
@@ -37,14 +35,18 @@
   gap: 15px;
 }
 
-.navbar__logo {
+/* LA NUEVA REGLA PARA EL LOGO SVG */
+.navbar__logo-svg {
   height: 55px;
+  /* Misma altura que tenías antes */
   width: auto;
+  display: block;
 }
 
 .navbar__brand-text {
   color: #fdfaf7;
-  font-family: 'Noto Serif', serif;
+  font-family: 'Vollkorn', serif;
+  /* Actualizado a la tipografía de marca */
   font-weight: 700;
   font-size: 1.3rem;
   letter-spacing: 1.5px;
@@ -52,12 +54,11 @@
   white-space: nowrap;
 }
 
-/* CENTRO: EL SECRETO DEL CENTRADO PERFECTO */
+/* CENTRO: CENTRADO PERFECTO */
 .navbar__desktop-menu {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  /* Clava los links en el centro de la pantalla */
   display: flex;
   gap: 35px;
   list-style: none;
@@ -78,7 +79,8 @@
 }
 
 .navbar__link:hover {
-  color: #a5813a;
+  color: #D4A76A;
+  /* Usamos tu dorado premium */
 }
 
 /* DERECHA: ICONOS */
@@ -103,7 +105,7 @@
   position: absolute;
   top: -8px;
   right: -8px;
-  background-color: #a5813a;
+  background-color: #D4A76A;
   color: #1a1614;
   font-size: 11px;
   font-weight: 800;
@@ -118,7 +120,6 @@
 
 .navbar__hamburger {
   display: none;
-  /* Escondido en PC */
   background: none;
   border: none;
   color: #fdfaf7;
@@ -126,7 +127,6 @@
   z-index: 3000;
 }
 
-/* --- ELIMINAR FANTAMAS: El menú móvil no existe en PC --- */
 .navbar__mobile-drawer {
   display: none;
 }
@@ -146,15 +146,12 @@
     display: none !important;
   }
 
-  /* Matamos el menú de escritorio */
-
   .navbar__hamburger {
     display: block;
   }
 
   .navbar__mobile-drawer {
     display: flex;
-    /* Solo vive en móvil */
     position: fixed;
     top: 0;
     right: -280px;
@@ -176,6 +173,7 @@
   .navbar__mobile-drawer a {
     color: #fdfaf7;
     text-decoration: none;
+    font-family: 'Vollkorn', serif;
     font-size: 1.2rem;
     font-weight: 600;
     text-transform: uppercase;

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import LogoCuyo from './LogoCuyo'; // Importamos el logo en código
 import './Navbar.css';
 
 export default function Navbar() {
@@ -15,15 +16,15 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar__container">
 
-        {/* IZQUIERDA: LOGO */}
+        {/* IZQUIERDA: LOGO EN CÓDIGO (SVG) */}
         <div className="navbar__left">
           <Link to="/" className="navbar__brand" onClick={closeMenu}>
-            <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
+            <LogoCuyo className="navbar__logo-svg" />
             <span className="navbar__brand-text">CUYO CEBADO</span>
           </Link>
         </div>
 
-        {/* CENTRO: LINKS (Solo se ven en escritorio) */}
+        {/* CENTRO: LINKS */}
         <ul className="navbar__desktop-menu">
           <li><Link to="/" className="navbar__link">Inicio</Link></li>
           <li><Link to="/productos" className="navbar__link">Productos</Link></li>
@@ -46,7 +47,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MENÚ MÓVIL (DRAWER) - Completamente separado */}
+      {/* MENÚ MÓVIL */}
       <div className={`navbar__mobile-drawer ${isMenuOpen ? 'open' : ''}`}>
         <Link to="/" onClick={closeMenu}>Inicio</Link>
         <Link to="/productos" onClick={closeMenu}>Productos</Link>
