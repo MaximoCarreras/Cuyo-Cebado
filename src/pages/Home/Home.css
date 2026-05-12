@@ -80,7 +80,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
 }
 
 .spotlight-overlay {
@@ -117,8 +116,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
-    justify-content: center;
-    justify-items: center;
     width: 100%;
 }
 
@@ -129,56 +126,28 @@
     text-decoration: none;
     border: 1px solid rgba(165, 129, 58, 0.2);
     transition: 0.4s ease;
-    overflow: hidden;
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    max-width: 350px;
-}
-
-.spotlight-light-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(165, 129, 58, 0.4) 0%, rgba(0, 0, 0, 0) 65%);
-}
-
-.card-cat-dark-spotlight:hover .spotlight-light-layer {
-    opacity: 1;
 }
 
 .card-cat-content {
-    z-index: 2;
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    width: 100%;
 }
 
 .cat-icon-display {
     font-size: 4rem;
     margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-    width: 100%;
 }
 
 .cat-text-display h3 {
     color: var(--mafia-cream);
     font-family: 'Noto Serif', serif;
     font-size: 1.5rem;
-    margin-bottom: 10px;
     text-transform: uppercase;
-    text-align: center;
 }
 
 .cat-text-display span {
@@ -186,11 +155,9 @@
     font-weight: 700;
     text-transform: uppercase;
     font-size: 0.8rem;
-    letter-spacing: 1.5px;
-    text-align: center;
 }
 
-/* --- SECCIÓN FEATURED SHOWCASE --- */
+/* FEATURED SHOWCASE */
 .featured-showcase {
     padding: 100px 20px;
     background-color: #fff;
@@ -230,7 +197,6 @@
     border-radius: 50px;
     font-weight: 800;
     font-size: 0.75rem;
-    letter-spacing: 1px;
 }
 
 .gold-tag {
@@ -255,25 +221,6 @@
     line-height: 1.6;
 }
 
-.showcase-list {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 40px;
-}
-
-.showcase-list li {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 12px;
-    font-weight: 600;
-    color: var(--mafia-black);
-}
-
-.showcase-list span {
-    color: var(--mafia-gold);
-}
-
 .showcase-actions {
     display: flex;
     align-items: center;
@@ -288,7 +235,7 @@
     color: var(--mafia-black);
 }
 
-/* --- CLUB DE MATEROS --- */
+/* CLUB DE MATEROS */
 .club-newsletter {
     padding: 100px 20px;
     display: flex;
@@ -332,7 +279,6 @@
     padding: 18px 25px;
     border-radius: 50px;
     color: #fff;
-    font-size: 1rem;
 }
 
 .btn-club {
@@ -347,18 +293,7 @@
     transition: 0.3s;
 }
 
-.btn-club:hover {
-    background: var(--mafia-cream);
-    transform: translateY(-2px);
-}
-
-.club-msg-ok {
-    margin-top: 20px;
-    color: var(--mafia-gold);
-    font-weight: 700;
-}
-
-/* --- BOTONES PREMIUM --- */
+/* BOTONES PREMIUM */
 .btn-gold-mafia {
     background: linear-gradient(135deg, #a5813a 0%, #b89b5e 100%);
     color: var(--mafia-black);
@@ -369,42 +304,11 @@
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 1.5px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-block;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(165, 129, 58, 0.2);
+    transition: 0.3s;
 }
 
-.btn-gold-mafia:hover {
-    background: linear-gradient(135deg, #b89b5e 0%, #a5813a 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(165, 129, 58, 0.4);
-}
-
-.btn-outline-mafia {
-    border: 1px solid var(--mafia-gold);
-    color: var(--mafia-gold);
-    padding: 13px 30px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 1.5px;
-    transition: all 0.3s ease;
-    background: transparent;
-}
-
-.btn-outline-mafia:hover {
-    background: rgba(165, 129, 58, 0.05);
-    border-color: var(--mafia-cream);
-    color: var(--mafia-cream);
-    transform: translateY(-2px);
-}
-
-
-/* --- RESPONSIVE MODIFICADO --- */
+/* --- RESPONSIVE FINAL --- */
 @media (max-width: 768px) {
     .hero-mafia {
         height: auto;
@@ -412,12 +316,8 @@
     }
 
     .hero-visual-block {
-        position: relative;
-        width: 100%;
         height: 60vh;
-        min-height: 400px;
         clip-path: none;
-        z-index: 5;
     }
 
     .hero-mafia__content {
@@ -434,21 +334,15 @@
     .hero-buttons {
         flex-direction: column;
         width: 100%;
-        gap: 12px;
         align-items: center;
     }
 
-    .btn-gold-mafia,
-    .btn-outline-mafia {
+    .btn-gold-mafia {
         width: 100%;
         max-width: 280px;
     }
 
     /* CATEGORÍAS 2 COLUMNAS */
-    .home-categories-section {
-        padding: 40px 15px;
-    }
-
     .categories-grid-premium {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px;
@@ -461,75 +355,67 @@
 
     .cat-icon-display {
         font-size: 2.2rem;
-        margin-bottom: 10px;
     }
 
     .cat-text-display h3 {
         font-size: 0.85rem;
     }
 
-    /* --- REDUCCIÓN DE SHOWCASE (PRODUCTO ELEGIDO) --- */
+    /* SHOWCASE COMPACTO */
     .featured-showcase {
         padding: 50px 15px;
     }
 
     .showcase-container {
         grid-template-columns: 1fr;
-        /* Columna única */
         gap: 20px;
     }
 
     .showcase-image-side {
         max-width: 240px;
-        /* Reducción de tamaño de imagen */
         margin: 0 auto;
-        border-radius: 20px;
     }
 
     .showcase-emoji {
         font-size: 6rem;
-        /* Emoji más chico */
-    }
-
-    .badge-premium {
-        top: 15px;
-        left: 15px;
-        padding: 6px 12px;
-        font-size: 0.6rem;
     }
 
     .showcase-title {
         font-size: 1.8rem;
-        /* Título más equilibrado */
         text-align: center;
-    }
-
-    .showcase-description {
-        font-size: 0.9rem;
-        text-align: center;
-    }
-
-    .showcase-list li {
-        font-size: 0.85rem;
-        justify-content: center;
-        /* Centrado de lista */
     }
 
     .showcase-actions {
         flex-direction: column;
-        gap: 15px;
-        padding-top: 20px;
     }
 
-    .showcase-price {
-        font-size: 1.6rem;
-    }
-
+    /* --- ARREGLO CLUB DE MATEROS (MOBILE) --- */
     .club-card {
-        padding: 50px 20px;
+        padding: 40px 20px;
+        /* Menos padding para ganar espacio */
     }
 
     .club-title {
         font-size: 1.6rem;
+    }
+
+    .club-form {
+        flex-direction: column;
+        /* APILAMOS INPUT Y BOTÓN */
+        width: 100%;
+        gap: 15px;
+        /* Separación saludable */
+    }
+
+    .club-form input {
+        width: 100%;
+        padding: 15px 20px;
+    }
+
+    .btn-club {
+        width: 100%;
+        padding: 15px;
+        height: 55px;
+        /* Altura consistente con el input */
     }
 }
