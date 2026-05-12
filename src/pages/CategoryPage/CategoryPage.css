@@ -103,7 +103,6 @@
 
 .emoji-display {
     font-size: 4.5rem;
-    /* Emoji grande y centrado */
     filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.05));
 }
 
@@ -196,14 +195,66 @@
     color: #1a1614;
 }
 
-@media (max-width: 900px) {
+/* --- AJUSTE RESPONSIVE QUIRÚRGICO --- */
+@media (max-width: 768px) {
+    .category-page {
+        padding: 100px 15px 60px;
+    }
+
     .category-page__main {
         grid-template-columns: 1fr;
+        gap: 20px;
     }
 
     .sidebar-mafia {
         position: relative;
         top: 0;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
+        padding: 20px;
+    }
+
+    /* Grilla de 2 columnas compacta */
+    .products-grid-mafia {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px;
+    }
+
+    .product-card-mafia {
+        border-radius: 12px;
+    }
+
+    .product-image-container-mafia {
+        height: 140px;
+        /* Reducción de altura */
+    }
+
+    .emoji-display {
+        font-size: 3rem;
+        /* Emoji más proporcional */
+    }
+
+    .product-info-mafia {
+        padding: 12px;
+    }
+
+    .product-tag-mafia {
+        font-size: 0.55rem;
+    }
+
+    .product-name-mafia {
+        font-size: 0.85rem;
+        margin-bottom: 5px;
+        min-height: 32px;
+        /* Alineación de nombres cortos */
+    }
+
+    .product-price-mafia {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .btn-add-mafia {
+        padding: 10px;
+        font-size: 0.6rem;
     }
 }

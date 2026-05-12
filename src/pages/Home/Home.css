@@ -11,7 +11,7 @@
     overflow-x: hidden;
 }
 
-/* HERO ESCRITORIO (MANTENIDO) */
+/* HERO ESCRITORIO */
 .hero-mafia {
     height: 90vh;
     background-color: var(--mafia-black);
@@ -93,7 +93,7 @@
     z-index: 2;
 }
 
-/* CATEGORÍAS (MANTENIDO EL CENTRADO DE ESCRITORIO) */
+/* CATEGORÍAS */
 .home-categories-section {
     padding: 80px 24px;
     max-width: 1400px;
@@ -358,23 +358,16 @@
     font-weight: 700;
 }
 
-/* FILOSOFÍA ESTILOS ELIMINADOS */
-
-
-/* --- NUEVOS BOTONES PREMIUM (ELEGANTES) --- */
+/* --- BOTONES PREMIUM --- */
 .btn-gold-mafia {
     background: linear-gradient(135deg, #a5813a 0%, #b89b5e 100%);
-    /* Degradado sutil */
     color: var(--mafia-black);
     padding: 14px 30px;
-    /* Un poco más estilizado */
     border-radius: 50px;
     text-decoration: none;
     font-weight: 700;
-    /* No tan gruesa */
     text-transform: uppercase;
     font-size: 0.75rem;
-    /* Más chica para elegancia */
     letter-spacing: 1.5px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-block;
@@ -391,10 +384,8 @@
 
 .btn-outline-mafia {
     border: 1px solid var(--mafia-gold);
-    /* Borde más fino */
     color: var(--mafia-gold);
     padding: 13px 30px;
-    /* Ajuste por el borde */
     border-radius: 50px;
     text-decoration: none;
     font-weight: 700;
@@ -413,7 +404,7 @@
 }
 
 
-/* --- RESPONSIVE QUIRÚRGICO (MODIFICADO SOLO HERO Y CATEGORÍAS) --- */
+/* --- RESPONSIVE MODIFICADO --- */
 @media (max-width: 768px) {
     .hero-mafia {
         height: auto;
@@ -429,17 +420,6 @@
         z-index: 5;
     }
 
-    .hero-mobile-gradient-mask {
-        display: block;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 30%;
-        background: linear-gradient(to top, var(--mafia-black) 0%, transparent 100%);
-        z-index: 6;
-    }
-
     .hero-mafia__content {
         width: 100%;
         padding: 20px 20px 60px;
@@ -449,7 +429,6 @@
 
     .hero-title {
         font-size: 2rem;
-        margin-top: 20px;
     }
 
     .hero-buttons {
@@ -459,75 +438,98 @@
         align-items: center;
     }
 
-    /* Centrados en celu */
-
-    /* BOTONES MÓVIL ANCHO COMPLETO SUTIL */
     .btn-gold-mafia,
     .btn-outline-mafia {
         width: 100%;
         max-width: 280px;
-        text-align: center;
     }
 
-    /* --- CATEGORÍAS COMPACTAS (ESTILO MERCADOLIBRE) --- */
+    /* CATEGORÍAS 2 COLUMNAS */
     .home-categories-section {
         padding: 40px 15px;
     }
 
     .categories-grid-premium {
         grid-template-columns: repeat(2, 1fr) !important;
-        /* Forzamos 2 columnas */
         gap: 12px;
-        /* Espacio justo */
-        padding: 0;
     }
 
     .card-cat-dark-spotlight {
         padding: 20px 10px;
-        /* Padding súper reducido */
         border-radius: 15px;
-        /* Bordes más rectos para aprovechar espacio */
-        height: auto;
     }
 
     .cat-icon-display {
         font-size: 2.2rem;
-        /* Iconos mucho más chicos */
         margin-bottom: 10px;
     }
 
     .cat-text-display h3 {
         font-size: 0.85rem;
-        /* Título chico */
-        margin-bottom: 4px;
     }
 
-    .cat-text-display span {
-        font-size: 0.6rem;
-        /* Subtítulo diminuto */
-        letter-spacing: 0.5px;
+    /* --- REDUCCIÓN DE SHOWCASE (PRODUCTO ELEGIDO) --- */
+    .featured-showcase {
+        padding: 50px 15px;
     }
 
     .showcase-container {
         grid-template-columns: 1fr;
-        gap: 30px;
+        /* Columna única */
+        gap: 20px;
+    }
+
+    .showcase-image-side {
+        max-width: 240px;
+        /* Reducción de tamaño de imagen */
+        margin: 0 auto;
+        border-radius: 20px;
+    }
+
+    .showcase-emoji {
+        font-size: 6rem;
+        /* Emoji más chico */
+    }
+
+    .badge-premium {
+        top: 15px;
+        left: 15px;
+        padding: 6px 12px;
+        font-size: 0.6rem;
     }
 
     .showcase-title {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
+        /* Título más equilibrado */
+        text-align: center;
+    }
+
+    .showcase-description {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .showcase-list li {
+        font-size: 0.85rem;
+        justify-content: center;
+        /* Centrado de lista */
     }
 
     .showcase-actions {
         flex-direction: column;
         gap: 15px;
-        text-align: center;
+        padding-top: 20px;
     }
 
-    .club-form {
-        flex-direction: column;
+    .showcase-price {
+        font-size: 1.6rem;
     }
 
-    .btn-club {
-        padding: 18px;
+    .club-card {
+        padding: 50px 20px;
+    }
+
+    .club-title {
+        font-size: 1.6rem;
     }
 }
