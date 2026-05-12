@@ -1,7 +1,8 @@
 export const products = [
-    // --- PRODUCTOS QUE YA TENÉS EN SUPABASE ---
+    // --- PRODUCTOS REALES (CONECTADOS A TU SUPABASE) ---
+    // Estos productos ya existen en tu base de datos y tienen el ID correcto (UUID).
     {
-        id: "939a1f06-6e48-47e1-a5a1-4cc4e74eafe8", // ID REAL DE SUPABASE
+        id: "939a1f06-6e48-47e1-a5a1-4cc4e74eafe8",
         name: "Mate Lapacho Imperial",
         category: "mates",
         type: "Imperial",
@@ -42,4 +43,18 @@ export const products = [
         price: 89000,
         bestSeller: true
     }
+    // Nota: Si querés agregar más productos, primero crealos en Supabase 
+    // y después pegá acá el ID largo (UUID) que te genere la base de datos.
+];
+
+export const categories = [
+    { id: "mates", label: "Mates", icon: "🧉" },
+    { id: "bombillas", label: "Bombillas", icon: "🪄" },
+    { id: "yerbas", label: "Yerba Mate", icon: "🌿" },
+    { id: "kits", label: "Kits & Regalos", icon: "🎁" },
+    { id: "duos", label: "Dúos de Guardado", icon: "🧂" },
+    { id: "transporte", label: "Transporte", icon: "👜" },
+    { id: "accesorios", label: "Termos & Accesorios", icon: "🌡️" },
+    { id: "mate-listo", label: "Mate Listo", icon: "🥤" },
+    { id: "cuyo-3d", label: "Cuyo 3D", icon: "⚙️" }
 ];
