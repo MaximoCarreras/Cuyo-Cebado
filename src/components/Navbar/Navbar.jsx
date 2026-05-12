@@ -27,7 +27,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar__container">
 
-        {/* 1. LOGO (Izquierda) */}
+        {/* 1. LOGO */}
         <div className="navbar__left">
           <Link to="/" className="navbar__brand" onClick={closeMenu}>
             <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
@@ -35,12 +35,12 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* 2. BUSCADOR (Centro) */}
+        {/* 2. BUSCADOR (Visible en Desktop y Mobile) */}
         <div className="navbar__center">
           <form className="navbar__search" onSubmit={handleSearch}>
             <input
               type="text"
-              placeholder="¿Qué mate buscás hoy?"
+              placeholder="¿Qué buscás?"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -48,7 +48,7 @@ export default function Navbar() {
           </form>
         </div>
 
-        {/* 3. NAVEGACIÓN Y CARRITO (Derecha) */}
+        {/* 3. NAVEGACIÓN Y CARRITO */}
         <div className="navbar__right">
           <div className="navbar__desktop-links">
             <Link to="/" className="nav-item">Inicio</Link>
@@ -68,11 +68,8 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MENÚ MÓVIL */}
+      {/* MENÚ MÓVIL (Ya no tiene el buscador adentro porque está arriba) */}
       <div className={`navbar__mobile-menu ${isMenuOpen ? 'active' : ''}`}>
-        <form className="mobile-search-box" onSubmit={handleSearch}>
-          <input type="text" placeholder="Buscar..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-        </form>
         <Link to="/" onClick={closeMenu}>Inicio</Link>
         <Link to="/productos" onClick={closeMenu}>Productos</Link>
         <Link to="/nosotros" onClick={closeMenu}>Nosotros</Link>

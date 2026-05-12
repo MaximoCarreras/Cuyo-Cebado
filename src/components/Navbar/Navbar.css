@@ -22,6 +22,10 @@
 }
 
 /* LOGO */
+.navbar__left {
+  flex-shrink: 0;
+}
+
 .navbar__brand {
   display: flex;
   align-items: center;
@@ -32,6 +36,7 @@
 .navbar__logo {
   height: 42px;
   width: auto;
+  transition: 0.3s;
 }
 
 .navbar__logo-text {
@@ -47,10 +52,10 @@
   color: #a5813a;
 }
 
-/* CENTRO: BUSCADOR */
+/* CENTRO: BUSCADOR UNIVERSAL */
 .navbar__center {
   flex: 0 1 400px;
-  margin: 0 20px;
+  margin: 0 15px;
 }
 
 .navbar__search {
@@ -58,7 +63,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(165, 129, 58, 0.2);
   border-radius: 50px;
-  padding: 2px 15px;
+  padding: 2px 12px;
   transition: 0.3s;
 }
 
@@ -71,7 +76,7 @@
   background: none;
   border: none;
   color: #fff;
-  padding: 10px;
+  padding: 8px;
   width: 100%;
   outline: none;
   font-size: 0.8rem;
@@ -82,13 +87,16 @@
   border: none;
   color: #a5813a;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
-/* DERECHA: LINKS */
+/* DERECHA */
 .navbar__right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
+  flex-shrink: 0;
 }
 
 .navbar__desktop-links {
@@ -116,7 +124,6 @@
   text-decoration: none;
   display: flex;
   align-items: center;
-  padding-left: 10px;
 }
 
 .cart-icon-nav {
@@ -140,42 +147,56 @@
   border: 1px solid #1a1614;
 }
 
-/* RESPONSIVE */
-.navbar__mobile-menu,
 .navbar__hamburger-btn {
   display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
 }
 
-@media (max-width: 1200px) {
-  .navbar__center {
-    flex: 0 1 300px;
-  }
-
-  .nav-item {
-    font-size: 0.65rem;
-    gap: 12px;
-  }
-}
-
+/* RESPONSIVE MÓVIL */
 @media (max-width: 1000px) {
+  .navbar {
+    height: 75px;
+  }
 
-  .navbar__center,
-  .navbar__desktop-links {
+  .navbar__desktop-links,
+  .navbar__logo-text {
     display: none;
   }
 
   .navbar__hamburger-btn {
     display: block;
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
   }
 
-  .navbar__logo-text {
-    display: none;
+  .navbar__container {
+    padding: 0 15px;
   }
 
+  .navbar__logo {
+    height: 32px;
+  }
+
+  /* Logo más chico para dar espacio al buscador */
+
+  .navbar__center {
+    flex: 1;
+    /* El buscador toma el espacio central */
+    max-width: none;
+    margin: 0 10px;
+  }
+
+  .navbar__search {
+    padding: 0 10px;
+  }
+
+  .navbar__search input {
+    font-size: 0.75rem;
+    padding: 6px;
+  }
+
+  /* CAJÓN MÓVIL */
   .navbar__mobile-menu {
     display: flex;
     position: fixed;
@@ -216,4 +237,18 @@
     backdrop-filter: blur(4px);
     z-index: 2400;
   }
+}
+
+@media (max-width: 400px) {
+
+  /* Ajuste extremo para celus muy chicos */
+  .navbar__logo {
+    height: 28px;
+  }
+
+  .navbar__search input::placeholder {
+    color: transparent;
+  }
+
+  /* Escondemos el texto del buscador si el celu es mini para que no se encime */
 }
