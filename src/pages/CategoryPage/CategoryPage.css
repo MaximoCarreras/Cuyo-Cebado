@@ -1,21 +1,21 @@
+/* Estructura Principal */
 .category-page {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 20px 24px 80px;
+    padding: 120px 24px 80px;
     background-color: #fdfaf7;
+    min-height: 100vh;
 }
 
 .category-page__main {
-    display: flex;
+    display: grid;
+    grid-template-columns: 280px 1fr;
     gap: 40px;
 }
 
-/* SIDEBAR BOUTIQUE */
-.sidebar {
-    width: 280px;
-    flex-shrink: 0;
+/* Sidebar Estilo Boutique */
+.sidebar-mafia {
     background: #1a1614;
-    /* Marrón Mafia */
     padding: 35px;
     border-radius: 15px;
     color: #fdfaf7;
@@ -25,131 +25,89 @@
     border: 1px solid rgba(165, 129, 58, 0.2);
 }
 
-.sidebar__title {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 25px;
-    border-bottom: 1px solid rgba(165, 129, 58, 0.2);
-    padding-bottom: 12px;
-}
-
-.sidebar h3 {
+.sidebar-mafia h3 {
     font-family: 'Noto Serif', serif;
     color: #a5813a;
     text-transform: uppercase;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     letter-spacing: 2px;
+    margin-bottom: 20px;
 }
 
-/* --- FILTROS: ADIÓS WINDOWS XP --- */
+.gold-dot {
+    width: 6px;
+    height: 6px;
+    background: #a5813a;
+    border-radius: 50%;
+    margin-top: 5px;
+}
+
+/* Filtros */
 .filter-group {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 
 .filter-group label {
     display: block;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: #a5813a;
     margin-bottom: 12px;
     text-transform: uppercase;
     font-weight: 800;
-    letter-spacing: 1px;
 }
 
-/* CUSTOM SELECT */
 .filter-group select {
     width: 100%;
-    padding: 12px 15px;
-    background-color: #2b2520;
+    padding: 12px;
+    background: #2b2520;
     border: 1px solid rgba(165, 129, 58, 0.3);
     color: #fdfaf7;
     border-radius: 8px;
-    font-size: 0.8rem;
-    appearance: none;
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a5813a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    transition: 0.3s;
-}
-
-.filter-group select:focus {
-    outline: none;
-    border-color: #a5813a;
-}
-
-/* CUSTOM RANGE SLIDER */
-.filter-group input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    background: transparent;
     cursor: pointer;
 }
 
-.filter-group input[type="range"]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 4px;
-    background: rgba(165, 129, 58, 0.2);
-    border-radius: 2px;
-}
-
-.filter-group input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    height: 18px;
-    width: 18px;
-    border-radius: 50%;
-    background: #a5813a;
-    border: 2px solid #1a1614;
-    margin-top: -7px;
-    box-shadow: 0 0 8px rgba(165, 129, 58, 0.4);
-    transition: 0.2s;
-}
-
-.filter-group input[type="range"]:hover::-webkit-slider-thumb {
-    transform: scale(1.2);
-    background: #fdfaf7;
-}
-
-/* GRILLA Y CARDS */
-.products-content {
-    flex-grow: 1;
-}
-
-.category-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.products-count {
-    color: #888;
-    font-size: 0.9rem;
-    margin-top: -30px;
-}
-
-.products-grid {
+/* Grilla de Productos */
+.products-grid-mafia {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 30px;
 }
 
-.product-card {
+/* Tarjeta de Producto */
+.product-card-mafia {
     background: #fff;
     border-radius: 12px;
     border: 1px solid rgba(0, 0, 0, 0.05);
-    transition: 0.3s ease;
-    position: relative;
+    transition: all 0.3s ease;
     overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+.product-card-mafia:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
-/* BADGE TOP VENTAS (Etiqueta Boutique) */
+/* Contenedor de Emoji/Imagen */
+.product-image-container-mafia {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #f9f7f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.emoji-display {
+    font-size: 4.5rem;
+    /* Emoji grande y centrado */
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.05));
+}
+
+/* Badges */
 .product-badge {
     position: absolute;
     top: 15px;
@@ -161,114 +119,91 @@
     font-size: 0.65rem;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
     z-index: 10;
-    border: 1px solid rgba(165, 129, 58, 0.4);
 }
 
-.product-image-container {
-    width: 100%;
-    aspect-ratio: 1;
-    background-color: #f9f7f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.5rem;
-    position: relative;
+.product-badge.out-of-stock {
+    background: #888;
+    color: #fff;
 }
 
-.product-info {
+/* Información */
+.product-info-mafia {
     padding: 20px;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.product-price {
-    font-size: 1.4rem;
+.product-tag-mafia {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #a5813a;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.product-name-mafia {
+    font-family: 'Noto Serif', serif;
+    font-size: 1.1rem;
+    color: #1a1614;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.product-price-mafia {
+    font-size: 1.3rem;
     font-weight: 800;
     color: #1a1614;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-.btn-add-to-cart {
+/* Botón de Acción */
+.btn-add-mafia {
     width: 100%;
-    padding: 14px;
-    background-color: #1a1614;
+    padding: 12px;
+    background: #1a1614;
     color: #fdfaf7;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 700;
-    font-size: 0.75rem;
     text-transform: uppercase;
+    font-size: 0.7rem;
     cursor: pointer;
     transition: background 0.3s;
 }
 
-.btn-add-to-cart:hover {
-    background-color: #a5813a;
+.btn-add-mafia:hover {
+    background: #a5813a;
 }
 
-/* --- ESTILOS DE STOCK (ADICIONALES) --- */
-
-.product-badge.out-of-stock {
-    background-color: #888;
-    color: white;
-    border-color: #666;
-}
-
-.out-of-stock-card {
-    opacity: 0.75;
-}
-
-.btn-add-to-cart.btn-disabled {
-    background-color: #e0e0e0;
-    color: #999;
+.btn-disabled {
+    background: #e0e0e0 !important;
+    color: #999 !important;
     cursor: not-allowed;
-    border: 1px solid #ccc;
 }
 
-.btn-add-to-cart.btn-disabled:hover {
-    background-color: #e0e0e0;
-    /* Evita el cambio de color al pasar el mouse */
+/* Loading View */
+.loading-view-mafia {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1614;
 }
 
-.out-of-stock-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(43, 37, 32, 0.8);
-    color: #fdfaf7;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    pointer-events: none;
-    z-index: 5;
-}
-
-@media (max-width: 768px) {
-    .category-page {
-        padding: 10px 15px 80px;
-    }
-
+@media (max-width: 900px) {
     .category-page__main {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 
-    .sidebar {
-        width: 100%;
+    .sidebar-mafia {
         position: relative;
         top: 0;
-        padding: 25px;
-    }
-
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-
-    .product-info {
-        padding: 12px;
+        margin-bottom: 30px;
     }
 }

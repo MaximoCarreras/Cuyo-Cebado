@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useMemo, useEffect } from 'react';
-import { categories } from '../../data/products'; // Solo importamos categorías
+import { categories } from '../../data/products';
 import { useCart } from '../../context/CartContext';
 import './CategoryPage.css';
 
@@ -13,21 +13,19 @@ export default function CategoryPage() {
 
     const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
-    const [selectedType, setSelectedType] = useState('todos');
 
     const currentCategory = categories.find(cat => cat.id === categoryId);
 
-    // Buscamos los productos en el servidor al cargar la página
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+                const API_URL = import.meta.env.VITE_API_URL || 'https://cuyo-cebado.onrender.com';
                 const response = await fetch(`${API_URL}/api/products`);
                 const data = await response.json();
                 setDbProducts(data);
             } catch (error) {
-                console.error("Error en la conexión con el catálogo:", error);
+                console.error("Error cargando productos:", error);
             } finally {
                 setLoading(false);
             }
@@ -40,17 +38,16 @@ export default function CategoryPage() {
             const matchCategory = p.category === categoryId;
             const matchPrice = p.price <= maxPrice;
             const matchMaterial = selectedMaterial === 'todos' || p.material === selectedMaterial;
-            const matchType = selectedType === 'todos' || p.type === selectedType;
-            return matchCategory && matchPrice && matchMaterial && matchType;
+            return matchCategory && matchPrice && matchMaterial;
         });
-    }, [dbProducts, categoryId, maxPrice, selectedMaterial, selectedType]);
+    }, [dbProducts, categoryId, maxPrice, selectedMaterial]);
 
     const getOptions = (key) => {
         const items = dbProducts.filter(p => p.category === categoryId);
         return ['todos', ...new Set(items.map(p => p[key]).filter(Boolean))];
     };
 
-    if (loading) return <div className="loading-view">🧉 Preparando el catálogo de Cuyo...</div>;
+    if (loading) return <div className="loading-view-mafia">🧉 Preparando el catálogo de Cuyo...</div>;
 
     return (
         <div className="category-page">
@@ -62,7 +59,7 @@ export default function CategoryPage() {
             </div>
 
             <div className="category-page__main">
-                <aside className="sidebar">
+                <aside className="sidebar-mafia">
                     <div className="sidebar__title">
                         <h3>Filtros</h3>
                         <div className="gold-dot"></div>
@@ -88,15 +85,6 @@ export default function CategoryPage() {
                             </select>
                         </div>
                     )}
-
-                    {getOptions('type').length > 1 && (
-                        <div className="filter-group">
-                            <label>Estilo</label>
-                            <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
-                                {getOptions('type').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
-                            </select>
-                        </div>
-                    )}
                 </aside>
 
                 <section className="products-content">
@@ -105,35 +93,32 @@ export default function CategoryPage() {
                         <p className="products-count">{filteredProducts.length} piezas encontradas</p>
                     </header>
 
-                    <div className="products-grid">
+                    <div className="products-grid-mafia">
                         {filteredProducts.map(product => (
-                            <div key={product.id} className={`product-card ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
+                            <div key={product.id} className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
+
                                 {product.stock === 0 ? (
-                                    <span className="product-badge out-of-stock">Sin Stock</span>
+                                    <span className="product-badge out-of-stock">Agotado</span>
                                 ) : (
                                     product.is_featured && <span className="product-badge">Top Ventas</span>
                                 )}
 
-                                <div className="product-image-container">
-                                    {product.image_url ? (
-                                        <img src={product.image_url} alt={product.name} className="product-img-real" />
-                                    ) : (
-                                        <span className="category-icon-bg">{currentCategory?.icon}</span>
-                                    )}
-                                    {product.stock === 0 && <div className="out-of-stock-overlay">Agotado</div>}
+                                <div className="product-image-container-mafia">
+                                    <span className="emoji-display">{currentCategory?.icon}</span>
+                                    {product.stock === 0 && <div className="out-of-stock-overlay-mafia">Sin Disponibilidad</div>}
                                 </div>
 
-                                <div className="product-info">
-                                    <p className="product-tag">{product.material}</p>
-                                    <h4 className="product-name">{product.name}</h4>
-                                    <p className="product-price">${Number(product.price).toLocaleString()}</p>
+                                <div className="product-info-mafia">
+                                    <p className="product-tag-mafia">{product.material || 'Artesanal'}</p>
+                                    <h4 className="product-name-mafia">{product.name}</h4>
+                                    <p className="product-price-mafia">${Number(product.price).toLocaleString()}</p>
 
                                     <button
-                                        className={`btn-add-to-cart ${product.stock === 0 ? 'btn-disabled' : ''}`}
+                                        className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`}
                                         onClick={() => product.stock > 0 && addToCart(product)}
                                         disabled={product.stock === 0}
                                     >
-                                        {product.stock === 0 ? 'Sin Disponibilidad' : 'Añadir al Carrito'}
+                                        {product.stock === 0 ? 'Sin Stock' : 'Añadir al Carrito'}
                                     </button>
                                 </div>
                             </div>
