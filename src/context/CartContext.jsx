@@ -1,7 +1,7 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
 
 const CartContext = createContext(null);
-const STORAGE_KEY = 'cuyo_cebado_cart_v2'; // Actualizamos a v2 para limpiar errores viejos
+const STORAGE_KEY = 'cuyo_cebado_cart_v2';
 
 const ACTIONS = {
   ADD_ITEM: 'ADD_ITEM',
@@ -15,29 +15,50 @@ function cartReducer(state, action) {
   switch (action.type) {
     case ACTIONS.LOAD_CART:
       return { ...state, items: action.payload };
+
     case ACTIONS.ADD_ITEM: {
       const existing = state.items.find(item => item.id === action.payload.id);
+
       if (existing) {
+        // VALIDACIÓN: Si ya alcanzó el stock máximo, no sumamos nada
+        if (existing.quantity >= existing.stock) {
+          return state;
+        }
         return {
           ...state,
           items: state.items.map(item =>
-            item.id === action.payload.id ? { ...item, quantity: item.quantity + 1 } : item
+            item.id === action.payload.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
           ),
         };
       }
+
+      // Si es nuevo pero por alguna razón no hay stock, no lo agregamos
+      if (action.payload.stock <= 0) return state;
+
       return { ...state, items: [...state.items, { ...action.payload, quantity: 1 }] };
     }
+
     case ACTIONS.REMOVE_ITEM:
       return { ...state, items: state.items.filter(item => item.id !== action.payload) };
+
     case ACTIONS.UPDATE_QUANTITY:
       return {
         ...state,
-        items: state.items.map(item =>
-          item.id === action.payload.id ? { ...item, quantity: Math.max(0, action.payload.quantity) } : item
-        ).filter(item => item.quantity > 0),
+        items: state.items.map(item => {
+          if (item.id === action.payload.id) {
+            // VALIDACIÓN: Aseguramos que la nueva cantidad no supere el stock
+            const safeQuantity = Math.min(action.payload.quantity, item.stock);
+            return { ...item, quantity: Math.max(0, safeQuantity) };
+          }
+          return item;
+        }).filter(item => item.quantity > 0),
       };
+
     case ACTIONS.CLEAR_CART:
       return { ...state, items: [] };
+
     default:
       return state;
   }
