@@ -27,7 +27,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar__container">
 
-        {/* 1. LOGO */}
+        {/* 1. IZQUIERDA: LOGO */}
         <div className="navbar__left">
           <Link to="/" className="navbar__brand" onClick={closeMenu}>
             <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
@@ -35,7 +35,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* 2. BUSCADOR UNIVERSAL */}
+        {/* 2. CENTRO: BUSCADOR */}
         <div className="navbar__center">
           <form className="navbar__search" onSubmit={handleSearch}>
             <input
@@ -48,7 +48,7 @@ export default function Navbar() {
           </form>
         </div>
 
-        {/* 3. NAVEGACIÓN Y CARRITO */}
+        {/* 3. DERECHA: LINKS + CARRITO */}
         <div className="navbar__right">
           <div className="navbar__desktop-links">
             <Link to="/" className="nav-item">Inicio</Link>
@@ -57,7 +57,6 @@ export default function Navbar() {
             <Link to="/guia-curado" className="nav-item">Guía</Link>
           </div>
 
-          {/* LINK DEL CARRITO - AHORA CON CLASE ESPECÍFICA PARA MÓVIL */}
           <Link to="/carrito" className="navbar__cart-link" onClick={closeMenu}>
             <span className="material-symbols-outlined cart-icon-nav">shopping_cart</span>
             {totalItems > 0 && <span className="cart-count-premium">{totalItems}</span>}
@@ -69,7 +68,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MENÚ MÓVIL (Carrito eliminado de aquí por pedido) */}
+      {/* MENÚ MÓVIL (Escondido por defecto) */}
       <div className={`navbar__mobile-menu ${isMenuOpen ? 'active' : ''}`}>
         <Link to="/" onClick={closeMenu}>Inicio</Link>
         <Link to="/productos" onClick={closeMenu}>Productos</Link>
