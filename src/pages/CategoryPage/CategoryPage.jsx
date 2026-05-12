@@ -95,8 +95,13 @@ export default function CategoryPage() {
 
                     <div className="products-grid-mafia">
                         {filteredProducts.map(product => (
-                            <div key={product.id} className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
-
+                            /* TARJETA CLICKABLE QUE LLEVA AL DETALLE */
+                            <Link
+                                key={product.id}
+                                to={`/producto/${product.id}`}
+                                className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}
+                                style={{ textDecoration: 'none', color: 'inherit' }}
+                            >
                                 {product.stock === 0 ? (
                                     <span className="product-badge out-of-stock">Agotado</span>
                                 ) : (
@@ -115,13 +120,16 @@ export default function CategoryPage() {
 
                                     <button
                                         className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`}
-                                        onClick={() => product.stock > 0 && addToCart(product)}
+                                        onClick={(e) => {
+                                            e.preventDefault(); // Evita que el clic en el botón active el Link de la tarjeta
+                                            if (product.stock > 0) addToCart(product);
+                                        }}
                                         disabled={product.stock === 0}
                                     >
-                                        {product.stock === 0 ? 'Sin Stock' : 'Añadir al Carrito'}
+                                        {product.stock === 0 ? 'Sin Stock' : 'Ver Detalles'}
                                     </button>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </section>
