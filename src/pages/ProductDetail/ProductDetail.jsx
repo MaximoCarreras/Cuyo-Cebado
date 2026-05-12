@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-import { categories } from '../../data/products'; // Para traer los emojis
+import { categories } from '../../data/products';
 import './ProductDetail.css';
 
 export default function ProductDetail() {
@@ -21,7 +21,7 @@ export default function ProductDetail() {
                 const found = data.find(p => p.id === productId);
                 setProduct(found);
             } catch (error) {
-                console.error("Error:", error);
+                console.error("Error cargando detalle:", error);
             } finally {
                 setLoading(false);
             }
@@ -29,7 +29,6 @@ export default function ProductDetail() {
         fetchProduct();
     }, [productId]);
 
-    // Función para obtener el emoji de la categoría
     const getCategoryIcon = (categorySlug) => {
         const cat = categories.find(c => c.id === categorySlug);
         return cat ? cat.icon : '🧉';
@@ -46,18 +45,13 @@ export default function ProductDetail() {
                 </Link>
 
                 <div className="detail-grid">
-                    {/* IMAGEN / EMOJI */}
                     <div className="detail-visual-side">
                         <div className="main-image-box-mafia">
-                            {product.image_url ? (
-                                <img src={product.image_url} alt={product.name} className="img-real-detail" />
-                            ) : (
-                                <span className="emoji-detail-display">{getCategoryIcon(product.category)}</span>
-                            )}
+                            {/* CAMBIO CLAVE: Forzamos el emoji aunque en Supabase diga que hay imagen */}
+                            <span className="emoji-detail-display">{getCategoryIcon(product.category)}</span>
                         </div>
                     </div>
 
-                    {/* INFO Y COMPRA */}
                     <div className="detail-info-side">
                         <p className="detail-tag-mafia">{product.category} | {product.material}</p>
                         <h1 className="detail-title-mafia">{product.name}</h1>
@@ -72,25 +66,12 @@ export default function ProductDetail() {
                             <p>{product.description || "Pieza artesanal de curaduría premium."}</p>
                         </div>
 
-                        {/* NUEVA SECCIÓN: FICHA TÉCNICA */}
                         <div className="technical-sheet-mafia">
                             <h3>Ficha Técnica</h3>
                             <div className="specs-grid">
-                                <div className="spec-row">
-                                    <span>Material</span>
-                                    <span>{product.material || "Artesanal"}</span>
-                                </div>
-                                <div className="spec-row">
-                                    <span>Disponibilidad</span>
-                                    <span>{product.stock > 0 ? `${product.stock} unidades` : "Agotado"}</span>
-                                </div>
-                                {/* Si agregas la columna 'specs' en Supabase, aparecerá aquí */}
-                                {product.specs && (
-                                    <div className="spec-row">
-                                        <span>Detalles</span>
-                                        <span>{product.specs}</span>
-                                    </div>
-                                )}
+                                <div className="spec-row"><span>Material</span><span>{product.material || "Artesanal"}</span></div>
+                                <div className="spec-row"><span>Disponibilidad</span><span>{product.stock > 0 ? `${product.stock} unidades` : "Agotado"}</span></div>
+                                {product.specs && <div className="spec-row"><span>Detalles</span><span>{product.specs}</span></div>}
                             </div>
                         </div>
 
@@ -101,10 +82,7 @@ export default function ProductDetail() {
                                     <span>{quantity}</span>
                                     <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}>+</button>
                                 </div>
-                                <button
-                                    className="btn-add-to-cart-mafia"
-                                    onClick={() => addToCart({ ...product, quantity })}
-                                >
+                                <button className="btn-add-to-cart-mafia" onClick={() => addToCart({ ...product, quantity })}>
                                     Añadir al Carrito
                                 </button>
                             </div>

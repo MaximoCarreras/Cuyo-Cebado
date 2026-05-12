@@ -3,17 +3,19 @@ import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import ScrollToTop from './components/ScrollToTop';
 
-// Componentes y Páginas
+// Importamos la sección de Comunidad
 import Community from './components/Community/Community';
+
+// Importamos las páginas principales
 import Home from './pages/Home/Home';
 import About from './pages/About';
 import Guide from './pages/Guide';
 import CartPage from './pages/CartPage/CartPage';
 import ProductsPage from './pages/ProductsPage/ProductsPage';
 import CategoryPage from './pages/CategoryPage/CategoryPage';
-import ProductDetail from './pages/ProductDetail/ProductDetail'; // <-- Nueva importación
+import ProductDetail from './pages/ProductDetail/ProductDetail'; // <-- AGREGADO
 
-// Checkout
+// PÁGINAS DE CHECKOUT
 import SuccessPage from './pages/Checkout/SuccessPage';
 import FailurePage from './pages/Checkout/FailurePage';
 
@@ -59,8 +61,7 @@ export default function App() {
           <Route path="/guia-curado" element={<Guide />} />
           <Route path="/productos" element={<ProductsPage />} />
           <Route path="/productos/:categoryId" element={<CategoryPage />} />
-          {/* RUTA PARA EL DETALLE DEL PRODUCTO */}
-          <Route path="/producto/:productId" element={<ProductDetail />} />
+          <Route path="/producto/:productId" element={<ProductDetail />} /> {/* <-- AGREGADO */}
           <Route path="/pago-exitoso" element={<SuccessPage />} />
           <Route path="/pago-fallido" element={<FailurePage />} />
         </Routes>

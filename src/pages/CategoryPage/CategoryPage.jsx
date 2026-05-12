@@ -53,8 +53,7 @@ export default function CategoryPage() {
         <div className="category-page">
             <div className="category-page__nav">
                 <Link to="/productos" className="btn-back">
-                    <span className="material-symbols-outlined">arrow_back</span>
-                    Volver a categorías
+                    <span className="material-symbols-outlined">arrow_back</span> Volver a categorías
                 </Link>
             </div>
 
@@ -64,19 +63,10 @@ export default function CategoryPage() {
                         <h3>Filtros</h3>
                         <div className="gold-dot"></div>
                     </div>
-
                     <div className="filter-group">
                         <label>Precio máximo: <b>${maxPrice.toLocaleString()}</b></label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="250000"
-                            step="5000"
-                            value={maxPrice}
-                            onChange={(e) => setMaxPrice(Number(e.target.value))}
-                        />
+                        <input type="range" min="0" max="250000" step="5000" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} />
                     </div>
-
                     {getOptions('material').length > 1 && (
                         <div className="filter-group">
                             <label>Material</label>
@@ -95,13 +85,7 @@ export default function CategoryPage() {
 
                     <div className="products-grid-mafia">
                         {filteredProducts.map(product => (
-                            /* TARJETA CLICKABLE QUE LLEVA AL DETALLE */
-                            <Link
-                                key={product.id}
-                                to={`/producto/${product.id}`}
-                                className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}
-                                style={{ textDecoration: 'none', color: 'inherit' }}
-                            >
+                            <Link key={product.id} to={`/producto/${product.id}`} className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 {product.stock === 0 ? (
                                     <span className="product-badge out-of-stock">Agotado</span>
                                 ) : (
@@ -117,15 +101,7 @@ export default function CategoryPage() {
                                     <p className="product-tag-mafia">{product.material || 'Artesanal'}</p>
                                     <h4 className="product-name-mafia">{product.name}</h4>
                                     <p className="product-price-mafia">${Number(product.price).toLocaleString()}</p>
-
-                                    <button
-                                        className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`}
-                                        onClick={(e) => {
-                                            e.preventDefault(); // Evita que el clic en el botón active el Link de la tarjeta
-                                            if (product.stock > 0) addToCart(product);
-                                        }}
-                                        disabled={product.stock === 0}
-                                    >
+                                    <button className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`} disabled={product.stock === 0}>
                                         {product.stock === 0 ? 'Sin Stock' : 'Ver Detalles'}
                                     </button>
                                 </div>
