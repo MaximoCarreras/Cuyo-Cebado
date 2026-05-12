@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
-import { useState, useMemo } from 'react';
-import { products, categories } from '../../data/products';
+import { useState, useMemo, useEffect } from 'react';
+import { categories } from '../../data/products'; // Solo importamos categorías
 import { useCart } from '../../context/CartContext';
 import './CategoryPage.css';
 
@@ -8,26 +8,49 @@ export default function CategoryPage() {
     const { categoryId } = useParams();
     const { addToCart } = useCart();
 
+    const [dbProducts, setDbProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
     const [selectedType, setSelectedType] = useState('todos');
 
     const currentCategory = categories.find(cat => cat.id === categoryId);
 
+    // Buscamos los productos en el servidor al cargar la página
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                setLoading(true);
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+                const response = await fetch(`${API_URL}/api/products`);
+                const data = await response.json();
+                setDbProducts(data);
+            } catch (error) {
+                console.error("Error en la conexión con el catálogo:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, [categoryId]);
+
     const filteredProducts = useMemo(() => {
-        return products.filter(p => {
+        return dbProducts.filter(p => {
             const matchCategory = p.category === categoryId;
             const matchPrice = p.price <= maxPrice;
             const matchMaterial = selectedMaterial === 'todos' || p.material === selectedMaterial;
             const matchType = selectedType === 'todos' || p.type === selectedType;
             return matchCategory && matchPrice && matchMaterial && matchType;
         });
-    }, [categoryId, maxPrice, selectedMaterial, selectedType]);
+    }, [dbProducts, categoryId, maxPrice, selectedMaterial, selectedType]);
 
     const getOptions = (key) => {
-        const items = products.filter(p => p.category === categoryId);
+        const items = dbProducts.filter(p => p.category === categoryId);
         return ['todos', ...new Set(items.map(p => p[key]).filter(Boolean))];
     };
+
+    if (loading) return <div className="loading-view">🧉 Preparando el catálogo de Cuyo...</div>;
 
     return (
         <div className="category-page">
@@ -85,23 +108,25 @@ export default function CategoryPage() {
                     <div className="products-grid">
                         {filteredProducts.map(product => (
                             <div key={product.id} className={`product-card ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
-
-                                {/* Etiqueta de Top Ventas o Sin Stock */}
                                 {product.stock === 0 ? (
                                     <span className="product-badge out-of-stock">Sin Stock</span>
                                 ) : (
-                                    product.bestSeller && <span className="product-badge">Top Ventas</span>
+                                    product.is_featured && <span className="product-badge">Top Ventas</span>
                                 )}
 
                                 <div className="product-image-container">
-                                    <span className="category-icon-bg">{currentCategory?.icon}</span>
+                                    {product.image_url ? (
+                                        <img src={product.image_url} alt={product.name} className="product-img-real" />
+                                    ) : (
+                                        <span className="category-icon-bg">{currentCategory?.icon}</span>
+                                    )}
                                     {product.stock === 0 && <div className="out-of-stock-overlay">Agotado</div>}
                                 </div>
 
                                 <div className="product-info">
                                     <p className="product-tag">{product.material}</p>
                                     <h4 className="product-name">{product.name}</h4>
-                                    <p className="product-price">${product.price.toLocaleString()}</p>
+                                    <p className="product-price">${Number(product.price).toLocaleString()}</p>
 
                                     <button
                                         className={`btn-add-to-cart ${product.stock === 0 ? 'btn-disabled' : ''}`}
