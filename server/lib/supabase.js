@@ -1,19 +1,18 @@
 /**
- * Supabase Admin Client — Server-side (service role key).
- * Has full access to all tables, bypasses RLS.
+ * Supabase Admin Client — Server-side
  */
 import { createClient } from '@supabase/supabase-js';
 
+// Corregimos el nombre para que coincida con Render
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseKey = process.env.SUPABASE_KEY;
 
-if (!supabaseUrl || !supabaseServiceKey) {
+if (!supabaseUrl || !supabaseKey) {
   console.warn(
-    '⚠️  SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not set. ' +
-    'Server will run but Supabase operations will fail.'
+    '⚠️  SUPABASE_URL o SUPABASE_KEY no configurados en el servidor.'
   );
 }
 
-export const supabaseAdmin = (supabaseUrl && supabaseServiceKey)
-  ? createClient(supabaseUrl, supabaseServiceKey)
+export const supabaseAdmin = (supabaseUrl && supabaseKey)
+  ? createClient(supabaseUrl, supabaseKey)
   : null;
