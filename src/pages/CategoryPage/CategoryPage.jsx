@@ -11,8 +11,10 @@ export default function CategoryPage() {
     const [dbProducts, setDbProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // ESTADOS DE FILTROS
     const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
+    const [selectedType, setSelectedType] = useState('todos');
 
     const currentCategory = categories.find(cat => cat.id === categoryId);
 
@@ -31,20 +33,34 @@ export default function CategoryPage() {
             }
         };
         fetchProducts();
+        // Reset de filtros al cambiar de categoría
+        setSelectedMaterial('todos');
+        setSelectedType('todos');
     }, [categoryId]);
 
+    // LÓGICA DE FILTRADO DINÁMICO
     const filteredProducts = useMemo(() => {
         return dbProducts.filter(p => {
             const matchCategory = p.category === categoryId;
             const matchPrice = p.price <= maxPrice;
             const matchMaterial = selectedMaterial === 'todos' || p.material === selectedMaterial;
-            return matchCategory && matchPrice && matchMaterial;
+            const matchType = selectedType === 'todos' || p.type === selectedType;
+            return matchCategory && matchPrice && matchMaterial && matchType;
         });
-    }, [dbProducts, categoryId, maxPrice, selectedMaterial]);
+    }, [dbProducts, categoryId, maxPrice, selectedMaterial, selectedType]);
 
+    // OBTENER OPCIONES ÚNICAS DINÁMICAMENTE (Solo de la categoría actual)
     const getOptions = (key) => {
-        const items = dbProducts.filter(p => p.category === categoryId);
-        return ['todos', ...new Set(items.map(p => p[key]).filter(Boolean))];
+        const itemsInCategory = dbProducts.filter(p => p.category === categoryId);
+        const uniqueValues = [...new Set(itemsInCategory.map(p => p[key]).filter(Boolean))];
+        return ['todos', ...uniqueValues];
+    };
+
+    // ETIQUETAS DINÁMICAS SEGÚN CATEGORÍA
+    const getTypeLabel = () => {
+        if (categoryId === 'yerbas') return 'Variedad';
+        if (categoryId === 'bombillas') return 'Estilo';
+        return 'Modelo'; // Para mates
     };
 
     if (loading) return <div className="loading-view-mafia">🧉 Preparando el catálogo de Cuyo...</div>;
@@ -58,25 +74,53 @@ export default function CategoryPage() {
             </div>
 
             <div className="category-page__main">
+                {/* SIDEBAR DE FILTROS */}
                 <aside className="sidebar-mafia">
                     <div className="sidebar__title">
                         <h3>Filtros</h3>
                         <div className="gold-dot"></div>
                     </div>
+
+                    {/* Filtro de Precio */}
                     <div className="filter-group">
                         <label>Precio máximo: <b>${maxPrice.toLocaleString()}</b></label>
-                        <input type="range" min="0" max="250000" step="5000" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} />
+                        <input
+                            type="range"
+                            min="0"
+                            max="250000"
+                            step="5000"
+                            value={maxPrice}
+                            onChange={(e) => setMaxPrice(Number(e.target.value))}
+                            className="price-slider-mafia"
+                        />
                     </div>
+
+                    {/* Filtro de Material (Solo aparece si hay más de un material en la categoría) */}
                     {getOptions('material').length > 1 && (
                         <div className="filter-group">
                             <label>Material</label>
                             <select value={selectedMaterial} onChange={(e) => setSelectedMaterial(e.target.value)}>
-                                {getOptions('material').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
+                                {getOptions('material').map(o => (
+                                    <option key={o} value={o}>{o === 'todos' ? 'TODOS' : o.toUpperCase()}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
+                    {/* Filtro de Tipo (Modelo/Variedad) */}
+                    {getOptions('type').length > 1 && (
+                        <div className="filter-group">
+                            <label>{getTypeLabel()}</label>
+                            <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+                                {getOptions('type').map(o => (
+                                    <option key={o} value={o}>{o === 'todos' ? 'TODOS' : o.toUpperCase()}</option>
+                                ))}
                             </select>
                         </div>
                     )}
                 </aside>
 
+                {/* CONTENIDO DE PRODUCTOS */}
                 <section className="products-content">
                     <header className="category-header">
                         <h1 className="section__title">{currentCategory?.label}</h1>
@@ -85,29 +129,39 @@ export default function CategoryPage() {
 
                     <div className="products-grid-mafia">
                         {filteredProducts.map(product => (
-                            <Link key={product.id} to={`/producto/${product.id}`} className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                {product.stock === 0 ? (
-                                    <span className="product-badge out-of-stock">Agotado</span>
-                                ) : (
-                                    product.is_featured && <span className="product-badge">Top Ventas</span>
-                                )}
+                            <Link key={product.id} to={`/producto/${product.id}`} className="product-card-link-mafia">
+                                <div className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
+                                    {product.stock === 0 ? (
+                                        <span className="product-badge out-of-stock">Agotado</span>
+                                    ) : (
+                                        product.is_featured && <span className="product-badge">Top Ventas</span>
+                                    )}
 
-                                <div className="product-image-container-mafia">
-                                    <span className="emoji-display">{currentCategory?.icon}</span>
-                                    {product.stock === 0 && <div className="out-of-stock-overlay-mafia">Sin Disponibilidad</div>}
-                                </div>
+                                    <div className="product-image-container-mafia">
+                                        <span className="emoji-display">{currentCategory?.icon}</span>
+                                        {product.stock === 0 && <div className="out-of-stock-overlay-mafia">Sin Disponibilidad</div>}
+                                    </div>
 
-                                <div className="product-info-mafia">
-                                    <p className="product-tag-mafia">{product.material || 'Artesanal'}</p>
-                                    <h4 className="product-name-mafia">{product.name}</h4>
-                                    <p className="product-price-mafia">${Number(product.price).toLocaleString()}</p>
-                                    <button className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`} disabled={product.stock === 0}>
-                                        {product.stock === 0 ? 'Sin Stock' : 'Ver Detalles'}
-                                    </button>
+                                    <div className="product-info-mafia">
+                                        <p className="product-tag-mafia">
+                                            {product.type} {product.material ? `| ${product.material}` : ''}
+                                        </p>
+                                        <h4 className="product-name-mafia">{product.name}</h4>
+                                        <p className="product-price-mafia">${Number(product.price).toLocaleString()}</p>
+                                        <button className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`} disabled={product.stock === 0}>
+                                            {product.stock === 0 ? 'Sin Stock' : 'Ver Detalles'}
+                                        </button>
+                                    </div>
                                 </div>
                             </Link>
                         ))}
                     </div>
+                    {filteredProducts.length === 0 && (
+                        <div className="no-results-mafia">
+                            <span className="material-symbols-outlined">search_off</span>
+                            <p>No hay productos que coincidan con los filtros seleccionados.</p>
+                        </div>
+                    )}
                 </section>
             </div>
         </div>
