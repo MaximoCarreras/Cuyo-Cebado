@@ -54,29 +54,45 @@ export default function ProductDetail() {
                 </Link>
 
                 <div className="detail-grid">
+                    {/* PARTE IZQUIERDA: IMAGEN/EMOJI */}
                     <div className="detail-visual-side">
                         <div className="main-image-box-mafia">
                             <span className="emoji-detail-display">{getCategoryIcon(product.category)}</span>
                         </div>
                     </div>
 
+                    {/* PARTE DERECHA: INFO */}
                     <div className="detail-info-side">
                         <p className="detail-tag-mafia">{product.category} | {product.material || 'Artesanal'}</p>
                         <h1 className="detail-title-mafia">{product.name}</h1>
+
                         <div className="detail-price-box-mafia">
                             <span className="price-main">${Number(product.price).toLocaleString()}</span>
-                            <span className="installments-tag">3 CUOTAS SIN INTERÉS</span>
+                            <span className="installments-tag">HASTA 3 CUOTAS SIN INTERÉS</span>
                         </div>
+
                         <div className="detail-description-mafia">
                             <h3>Descripción</h3>
-                            <p>{product.description || "Pieza artesanal de curaduría premium."}</p>
+                            <p>{product.description}</p>
                         </div>
+
                         <div className="technical-sheet-mafia">
                             <h3>Ficha Técnica</h3>
                             <div className="specs-grid">
-                                <div className="spec-row"><span>Material</span><span>{product.material || "Artesanal"}</span></div>
-                                <div className="spec-row"><span>Disponibilidad</span><span>{product.stock > 0 ? `${product.stock} unidades` : "Agotado"}</span></div>
-                                {product.specs && <div className="spec-row"><span>Detalles</span><span>{product.specs}</span></div>}
+                                <div className="spec-row">
+                                    <span>Material</span>
+                                    <span>{product.material || "Artesanal"}</span>
+                                </div>
+                                <div className="spec-row">
+                                    <span>Disponibilidad</span>
+                                    <span>{product.stock > 0 ? `${product.stock} unidades` : "Sin Stock"}</span>
+                                </div>
+                                {product.type && (
+                                    <div className="spec-row">
+                                        <span>Estilo</span>
+                                        <span>{product.type}</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -92,7 +108,7 @@ export default function ProductDetail() {
                                 </button>
                             </div>
                         ) : (
-                            <div className="out-of-stock-notice-mafia">Sin stock por el momento</div>
+                            <div className="out-of-stock-notice-mafia">Próximamente disponible</div>
                         )}
                     </div>
                 </div>
