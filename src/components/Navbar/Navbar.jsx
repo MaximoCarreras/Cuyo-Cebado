@@ -27,7 +27,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar__container">
 
-        {/* 1. IZQUIERDA: LOGO */}
+        {/* IZQUIERDA: LOGO */}
         <div className="navbar__left">
           <Link to="/" className="navbar__brand" onClick={closeMenu}>
             <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
@@ -35,7 +35,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* 2. CENTRO: BUSCADOR (Se oculta en móvil) */}
+        {/* CENTRO: BUSCADOR */}
         <div className="navbar__center">
           <form className="navbar__search" onSubmit={handleSearch}>
             <input
@@ -48,27 +48,28 @@ export default function Navbar() {
           </form>
         </div>
 
-        {/* 3. DERECHA: LINKS + CARRITO */}
+        {/* DERECHA: LINKS COMPLETOS + CARRITO */}
         <div className="navbar__right">
           <div className="navbar__desktop-links">
-            <Link to="/productos" className="nav-item">Tienda</Link>
+            <Link to="/productos" className="nav-item">Productos</Link>
             <Link to="/nosotros" className="nav-item">Nosotros</Link>
+            <Link to="/guia-curado" className="nav-item">Guía</Link>
           </div>
 
           <Link to="/carrito" className="navbar__cart" onClick={closeMenu}>
-            <span className="material-symbols-outlined">shopping_cart</span>
-            {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
+            <span className="material-symbols-outlined cart-icon-nav">shopping_cart</span>
+            {totalItems > 0 && <span className="cart-count-premium">{totalItems}</span>}
           </Link>
 
-          <button className="navbar__toggle" onClick={toggleMenu}>
+          <button className="navbar__hamburger-btn" onClick={toggleMenu}>
             <span className="material-symbols-outlined">{isMenuOpen ? 'close' : 'menu'}</span>
           </button>
         </div>
       </div>
 
-      {/* MENÚ MÓVIL */}
-      <div className={`navbar__mobile ${isMenuOpen ? 'active' : ''}`}>
-        <form className="mobile-search-form" onSubmit={handleSearch}>
+      {/* MENÚ MÓVIL (Escondido por defecto en CSS) */}
+      <div className={`navbar__mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+        <form className="mobile-search-box" onSubmit={handleSearch}>
           <input
             type="text"
             placeholder="Buscar..."
@@ -80,9 +81,10 @@ export default function Navbar() {
         <Link to="/productos" onClick={closeMenu}>Productos</Link>
         <Link to="/nosotros" onClick={closeMenu}>Nosotros</Link>
         <Link to="/guia-curado" onClick={closeMenu}>Guía de Curado</Link>
+        <Link to="/carrito" onClick={closeMenu}>Mi Carrito</Link>
       </div>
 
-      {isMenuOpen && <div className="navbar__backdrop" onClick={closeMenu}></div>}
+      {isMenuOpen && <div className="navbar__blur-overlay" onClick={closeMenu}></div>}
     </nav>
   );
 }
