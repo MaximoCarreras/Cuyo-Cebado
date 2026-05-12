@@ -33,12 +33,12 @@ export default function CategoryPage() {
             }
         };
         fetchProducts();
-        // Reset de filtros al cambiar de categoría
+        // Reset de filtros al cambiar de categoría para evitar conflictos
         setSelectedMaterial('todos');
         setSelectedType('todos');
     }, [categoryId]);
 
-    // LÓGICA DE FILTRADO DINÁMICO
+    // FILTRADO DINÁMICO
     const filteredProducts = useMemo(() => {
         return dbProducts.filter(p => {
             const matchCategory = p.category === categoryId;
@@ -49,18 +49,25 @@ export default function CategoryPage() {
         });
     }, [dbProducts, categoryId, maxPrice, selectedMaterial, selectedType]);
 
-    // OBTENER OPCIONES ÚNICAS DINÁMICAMENTE (Solo de la categoría actual)
+    // OBTENER OPCIONES DE FILTROS DESDE LA DB
     const getOptions = (key) => {
         const itemsInCategory = dbProducts.filter(p => p.category === categoryId);
         const uniqueValues = [...new Set(itemsInCategory.map(p => p[key]).filter(Boolean))];
         return ['todos', ...uniqueValues];
     };
 
-    // ETIQUETAS DINÁMICAS SEGÚN CATEGORÍA
+    // ETIQUETA DINÁMICA DEL FILTRO
     const getTypeLabel = () => {
         if (categoryId === 'yerbas') return 'Variedad';
         if (categoryId === 'bombillas') return 'Estilo';
-        return 'Modelo'; // Para mates
+        return 'Modelo';
+    };
+
+    // AGREGAR AL CARRITO SIN NAVEGAR
+    const handleQuickAdd = (e, product) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addToCart(product);
     };
 
     if (loading) return <div className="loading-view-mafia">🧉 Preparando el catálogo de Cuyo...</div>;
@@ -74,14 +81,13 @@ export default function CategoryPage() {
             </div>
 
             <div className="category-page__main">
-                {/* SIDEBAR DE FILTROS */}
+                {/* BARRA LATERAL DE FILTROS */}
                 <aside className="sidebar-mafia">
                     <div className="sidebar__title">
                         <h3>Filtros</h3>
                         <div className="gold-dot"></div>
                     </div>
 
-                    {/* Filtro de Precio */}
                     <div className="filter-group">
                         <label>Precio máximo: <b>${maxPrice.toLocaleString()}</b></label>
                         <input
@@ -95,7 +101,6 @@ export default function CategoryPage() {
                         />
                     </div>
 
-                    {/* Filtro de Material (Solo aparece si hay más de un material en la categoría) */}
                     {getOptions('material').length > 1 && (
                         <div className="filter-group">
                             <label>Material</label>
@@ -107,7 +112,6 @@ export default function CategoryPage() {
                         </div>
                     )}
 
-                    {/* Filtro de Tipo (Modelo/Variedad) */}
                     {getOptions('type').length > 1 && (
                         <div className="filter-group">
                             <label>{getTypeLabel()}</label>
@@ -120,7 +124,7 @@ export default function CategoryPage() {
                     )}
                 </aside>
 
-                {/* CONTENIDO DE PRODUCTOS */}
+                {/* CONTENIDO PRINCIPAL */}
                 <section className="products-content">
                     <header className="category-header">
                         <h1 className="section__title">{currentCategory?.label}</h1>
@@ -131,15 +135,16 @@ export default function CategoryPage() {
                         {filteredProducts.map(product => (
                             <Link key={product.id} to={`/producto/${product.id}`} className="product-card-link-mafia">
                                 <div className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
+                                    {/* BADGES */}
                                     {product.stock === 0 ? (
-                                        <span className="product-badge out-of-stock">Agotado</span>
+                                        <span className="product-badge out-of-stock">Próximo Ingreso</span>
                                     ) : (
                                         product.is_featured && <span className="product-badge">Top Ventas</span>
                                     )}
 
                                     <div className="product-image-container-mafia">
                                         <span className="emoji-display">{currentCategory?.icon}</span>
-                                        {product.stock === 0 && <div className="out-of-stock-overlay-mafia">Sin Disponibilidad</div>}
+                                        {product.stock === 0 && <div className="out-of-stock-overlay-mafia">Próximamente</div>}
                                     </div>
 
                                     <div className="product-info-mafia">
@@ -148,18 +153,25 @@ export default function CategoryPage() {
                                         </p>
                                         <h4 className="product-name-mafia">{product.name}</h4>
                                         <p className="product-price-mafia">${Number(product.price).toLocaleString()}</p>
-                                        <button className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`} disabled={product.stock === 0}>
-                                            {product.stock === 0 ? 'Sin Stock' : 'Ver Detalles'}
+
+                                        {/* BOTÓN DE ACCIÓN RÁPIDA */}
+                                        <button
+                                            className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`}
+                                            disabled={product.stock === 0}
+                                            onClick={(e) => handleQuickAdd(e, product)}
+                                        >
+                                            {product.stock === 0 ? 'Sin Stock' : 'Agregar al Carrito'}
                                         </button>
                                     </div>
                                 </div>
                             </Link>
                         ))}
                     </div>
+
                     {filteredProducts.length === 0 && (
                         <div className="no-results-mafia">
                             <span className="material-symbols-outlined">search_off</span>
-                            <p>No hay productos que coincidan con los filtros seleccionados.</p>
+                            <p>No encontramos productos con esos filtros.</p>
                         </div>
                     )}
                 </section>
