@@ -1,4 +1,3 @@
-/* --- BASE NAVBAR --- */
 .navbar {
   position: fixed;
   top: 0;
@@ -14,89 +13,74 @@
 
 .navbar__container {
   width: 100%;
-  max-width: 100%;
   padding: 0 50px;
   display: flex;
   justify-content: space-between;
-  /* Logo a un lado, Iconos al otro */
   align-items: center;
-  position: relative;
-  /* Necesario para el centro absoluto */
 }
 
-/* IZQUIERDA: LOGO */
-.navbar__left {
+/* BUSCADOR MAFIA */
+.navbar__search-container {
+  flex: 0 1 400px;
+  margin: 0 20px;
+}
+
+.navbar__search-form {
   display: flex;
-  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(165, 129, 58, 0.3);
+  border-radius: 50px;
+  padding: 5px 15px;
+  transition: 0.3s;
 }
 
-.navbar__brand {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  gap: 15px;
+.navbar__search-form:focus-within {
+  border-color: #a5813a;
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.navbar__logo {
-  height: 55px;
-  width: auto;
+.navbar__search-form input {
+  background: none;
+  border: none;
+  color: #fdfaf7;
+  padding: 8px;
+  width: 100%;
+  outline: none;
+  font-size: 0.85rem;
+}
+
+.navbar__search-form button {
+  background: none;
+  border: none;
+  color: #a5813a;
+  cursor: pointer;
 }
 
 .navbar__brand-text {
   color: #fdfaf7;
   font-family: 'Noto Serif', serif;
   font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  white-space: nowrap;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
 }
 
-/* CENTRO: EL SECRETO DEL CENTRADO PERFECTO */
 .navbar__desktop-menu {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  /* Clava los links en el centro de la pantalla */
   display: flex;
-  gap: 35px;
+  gap: 25px;
   list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 .navbar__link {
   color: #fdfaf7;
   text-decoration: none;
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  white-space: nowrap;
-  transition: color 0.3s;
+  letter-spacing: 1px;
+  transition: 0.3s;
 }
 
 .navbar__link:hover {
   color: #a5813a;
-}
-
-/* DERECHA: ICONOS */
-.navbar__right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.navbar__cart-container {
-  position: relative;
-  color: #fdfaf7;
-  display: flex;
-  text-decoration: none;
-}
-
-.cart-icon-main {
-  font-size: 32px !important;
 }
 
 .cart-badge-premium {
@@ -105,92 +89,36 @@
   right: -8px;
   background-color: #a5813a;
   color: #1a1614;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #1a1614;
 }
 
-.navbar__hamburger {
-  display: none;
-  /* Escondido en PC */
-  background: none;
-  border: none;
-  color: #fdfaf7;
-  cursor: pointer;
-  z-index: 3000;
-}
+@media (max-width: 900px) {
 
-/* --- ELIMINAR FANTAMAS: El menú móvil no existe en PC --- */
-.navbar__mobile-drawer {
-  display: none;
-}
+  .navbar__search-container,
+  .navbar__desktop-menu {
+    display: none;
+  }
 
-/* --- RESPONSIVE MÓVIL --- */
-@media (max-width: 768px) {
-  .navbar {
-    height: 75px;
+  .navbar__hamburger {
+    display: block;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
   }
 
   .navbar__container {
     padding: 0 20px;
   }
 
-  .navbar__brand-text,
-  .navbar__desktop-menu {
-    display: none !important;
-  }
-
-  /* Matamos el menú de escritorio */
-
-  .navbar__hamburger {
-    display: block;
-  }
-
-  .navbar__mobile-drawer {
-    display: flex;
-    /* Solo vive en móvil */
-    position: fixed;
-    top: 0;
-    right: -280px;
-    width: 280px;
-    height: 100vh;
-    background-color: #1a1614;
-    flex-direction: column;
-    padding: 100px 40px;
-    gap: 30px;
-    transition: 0.4s ease;
-    z-index: 2500;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-  }
-
-  .navbar__mobile-drawer.open {
-    right: 0;
-  }
-
-  .navbar__mobile-drawer a {
-    color: #fdfaf7;
-    text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    border-bottom: 1px solid rgba(165, 129, 58, 0.1);
-    padding-bottom: 15px;
-  }
-
-  .navbar__overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(3px);
-    z-index: 2400;
+  .navbar__brand-text {
+    display: none;
   }
 }
