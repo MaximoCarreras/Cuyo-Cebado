@@ -12,13 +12,7 @@ export default function CartPage() {
     const [loading, setLoading] = useState(false);
 
     const [orderData, setOrderData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        method: 'shipment', // 'shipment' o 'pickup'
-        address: '',
-        city: '',
-        zip: ''
+        name: '', email: '', phone: '', method: 'shipment', address: '', city: '', zip: ''
     });
 
     useEffect(() => {
@@ -51,15 +45,35 @@ export default function CartPage() {
             status: 'pending'
         };
 
-        const { error } = await supabase.from('orders').insert([newOrder]);
+        const { data, error } = await supabase.from('orders').insert([newOrder]).select();
 
         if (error) {
-            toast.error("Error al procesar pedido. Reintentá en unos minutos.");
-            console.error(error);
+            toast.error("Error al procesar pedido.");
         } else {
-            toast.success("¡Pedido confirmado! Te contactaremos por WhatsApp.");
-            clearCart();
-            setTimeout(() => navigate('/pago-exitoso'), 2000);
+            // --- PODER WHATSAPP ---
+            const businessPhone = "5492612307516"; // El número de tu socio
+            const orderId = data[0].id.slice(0, 5).toUpperCase();
+
+            let message = `*¡Hola Cuyo Cebado!* 👋%0A`;
+            message += `Soy *${orderData.name}* y acabo de realizar el pedido *#${orderId}* en la web.%0A%0A`;
+            message += `*Detalle de mi compra:*%0A`;
+            cart.forEach(item => {
+                message += `- ${item.quantity}x ${item.name} (${formatCurrency(item.price * item.quantity)})%0A`;
+            });
+            message += `%0A*Total:* ${formatCurrency(cartTotal)}%0A`;
+            message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro por local' : 'Envío a domicilio'}%0A%0A`;
+            message += `¿Cómo coordinamos el pago?`;
+
+            const whatsappUrl = `https://wa.me/${businessPhone}?text=${message}`;
+
+            toast.success("¡Pedido guardado! Abriendo WhatsApp...");
+
+            // Limpiamos y redirigimos
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+                clearCart();
+                navigate('/pago-exitoso');
+            }, 1500);
         }
         setLoading(false);
     };
@@ -69,7 +83,6 @@ export default function CartPage() {
             <section className="cart-page-empty">
                 <span className="material-symbols-outlined">shopping_basket</span>
                 <h2>Tu carrito está vacío</h2>
-                <p>Tu próximo compañero de rutas te está esperando.</p>
                 <Link to="/productos" className="btn-gold-mafia">Explorar Productos</Link>
             </section>
         );
@@ -79,7 +92,6 @@ export default function CartPage() {
         <section className="cart-page-modern">
             <Toaster position="top-center" />
             <div className="cart-container-pro">
-
                 <div className="cart-main-content">
                     <div className="cart-header-actions">
                         <h2>Mi Carrito</h2>
@@ -87,7 +99,6 @@ export default function CartPage() {
                             <span className="material-symbols-outlined">arrow_back</span> Seguir comprando
                         </Link>
                     </div>
-
                     <div className="cart-items-list">
                         {cart.map((item) => (
                             <div key={item.id} className="cart-item-card">
@@ -101,37 +112,25 @@ export default function CartPage() {
                                             <span>{item.quantity}</span>
                                             <button onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button className="remove-link" onClick={() => removeFromCart(item.id)}>
-                                            <span className="material-symbols-outlined">delete</span> Eliminar
-                                        </button>
+                                        <button className="remove-link" onClick={() => removeFromCart(item.id)}>Eliminar</button>
                                     </div>
                                 </div>
-                                <div className="item-price">
-                                    {formatCurrency(item.price * item.quantity)}
-                                </div>
+                                <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
                             </div>
                         ))}
                     </div>
                 </div>
-
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Finalizar Compra</h3>
-
                         <div className="shipping-selector">
-                            <button type="button" className={orderData.method === 'shipment' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'shipment' })}>
-                                🚚 Envío
-                            </button>
-                            <button type="button" className={orderData.method === 'pickup' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'pickup' })}>
-                                🏠 Retiro
-                            </button>
+                            <button type="button" className={orderData.method === 'shipment' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'shipment' })}>🚚 Envío</button>
+                            <button type="button" className={orderData.method === 'pickup' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'pickup' })}>🏠 Retiro</button>
                         </div>
-
                         <div className="form-inputs-group">
                             <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
                             <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp (Ej: 261...)" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
-
                             {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
                                     <input type="text" placeholder="Dirección (Calle y N°)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
@@ -147,17 +146,14 @@ export default function CartPage() {
                                 </div>
                             )}
                         </div>
-
                         <div className="total-summary-card">
                             <div className="t-row"><span>Subtotal</span><span>{formatCurrency(cartTotal)}</span></div>
                             <div className="t-row"><span>Envío</span><span className="free-tag">¡GRATIS!</span></div>
                             <div className="t-row main-total"><span>TOTAL</span><span>{formatCurrency(cartTotal)}</span></div>
                         </div>
-
                         <button type="submit" className="btn-confirm-order" disabled={loading}>
                             {loading ? 'Confirmando...' : 'CONFIRMAR PEDIDO'}
                         </button>
-                        <span className="pago-note">🛡️ Pago seguro a coordinar</span>
                     </form>
                 </aside>
             </div>

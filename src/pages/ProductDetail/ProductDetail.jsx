@@ -10,6 +10,7 @@ export default function ProductDetail() {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
+    const [activeImg, setActiveImg] = useState(null); // Para la galería
 
     const { addToCart } = useCart();
 
@@ -24,78 +25,67 @@ export default function ProductDetail() {
 
             if (!error && data) {
                 setProduct(data);
+                setActiveImg(data.image_url); // Ponemos la principal al inicio
             }
             setLoading(false);
         };
-
         fetchProduct();
     }, [slug]);
 
     const handleAddToCart = () => {
-        // Le pasamos la cantidad exacta al carrito en UN SOLO viaje
         addToCart(product, quantity);
-
-        toast.success(`${quantity}x ${product.name} agregado al carrito`, {
+        toast.success(`${quantity}x ${product.name} agregado`, {
             icon: '🧉',
             style: { background: '#1a1614', color: '#a5813a', border: '1px solid #a5813a' }
         });
     };
 
     if (loading) return <div className="product-loading">Preparando el mate...</div>;
+    if (!product) return <div className="product-not-found">Pucha, no encontramos el producto.</div>;
 
-    if (!product) return (
-        <div className="product-not-found">
-            <h2>Pucha, no encontramos este producto.</h2>
-            <Link to="/" className="btn-back-home">Volver al inicio</Link>
-        </div>
-    );
+    // Juntamos todas las imágenes para la galería
+    const allImages = [product.image_url, ...(product.extra_images || [])].filter(Boolean);
 
     return (
         <div className="product-detail-page">
             <Toaster position="bottom-center" />
-
             <div className="product-detail-container">
-                {/* COLUMNA IZQUIERDA: Imagen */}
+
+                {/* COLUMNA IZQUIERDA: GALERÍA INTELIGENTE */}
                 <div className="product-image-section">
                     <div className="main-image-wrapper">
                         {product.badge && <span className="product-badge-premium">{product.badge}</span>}
-                        <img src={product.image_url || '/assets/placeholder.png'} alt={product.name} className="product-main-image" />
+                        <img src={activeImg || '/assets/placeholder.png'} alt={product.name} className="product-main-image" />
                     </div>
+
+                    {allImages.length > 1 && (
+                        <div className="product-thumbnails-row">
+                            {allImages.map((img, i) => (
+                                <div
+                                    key={i}
+                                    className={`thumb-box ${activeImg === img ? 'active' : ''}`}
+                                    onClick={() => setActiveImg(img)}
+                                >
+                                    <img src={img} alt="detalle" />
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
-                {/* COLUMNA DERECHA: Info y Compra */}
+                {/* COLUMNA DERECHA: Info */}
                 <div className="product-info-section">
-                    <div className="breadcrumbs">
-                        <Link to="/">Inicio</Link> / <span>{product.category}</span> / <span>{product.name}</span>
-                    </div>
-
+                    <div className="breadcrumbs"><Link to="/">Inicio</Link> / <span>{product.name}</span></div>
                     <h1 className="product-title">{product.name}</h1>
                     <p className="product-price">${product.price.toLocaleString('es-AR')}</p>
 
                     <div className="product-quick-specs">
-                        {product.material && (
-                            <div className="spec-item">
-                                <span className="material-symbols-outlined">diamond</span>
-                                <span><strong>Material:</strong> {product.material}</span>
-                            </div>
-                        )}
-                        {product.type && (
-                            <div className="spec-item">
-                                <span className="material-symbols-outlined">category</span>
-                                <span><strong>Tipo:</strong> {product.type}</span>
-                            </div>
-                        )}
-                        {product.specs && (
-                            <div className="spec-item">
-                                <span className="material-symbols-outlined">verified</span>
-                                <span><strong>Detalle:</strong> {product.specs}</span>
-                            </div>
-                        )}
+                        {product.material && <div className="spec-item"><span className="material-symbols-outlined">diamond</span><span>{product.material}</span></div>}
+                        {product.type && <div className="spec-item"><span className="material-symbols-outlined">category</span><span>{product.type}</span></div>}
                     </div>
 
                     <p className="product-description">{product.description}</p>
 
-                    {/* Controles de Compra */}
                     <div className="purchase-controls">
                         {product.stock > 0 ? (
                             <>
@@ -104,31 +94,15 @@ export default function ProductDetail() {
                                     <span>{quantity}</span>
                                     <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}>+</button>
                                 </div>
-                                <button className="btn-add-to-cart" onClick={handleAddToCart}>
-                                    AGREGAR AL CARRITO
-                                </button>
+                                <button className="btn-add-to-cart" onClick={handleAddToCart}>AGREGAR AL CARRITO</button>
                             </>
-                        ) : (
-                            <div className="out-of-stock-alert">Sin stock por el momento</div>
-                        )}
-                    </div>
-
-                    <div className="store-benefits">
-                        <div className="benefit">
-                            <span className="material-symbols-outlined">local_shipping</span>
-                            <span>Envíos a todo Mendoza y el país</span>
-                        </div>
-                        <div className="benefit">
-                            <span className="material-symbols-outlined">security</span>
-                            <span>Compra 100% segura</span>
-                        </div>
+                        ) : <div className="out-of-stock-alert">Sin stock por el momento</div>}
                     </div>
 
                     {product.video_url && (
                         <div className="product-video-section">
                             <a href={product.video_url} target="_blank" rel="noopener noreferrer" className="btn-watch-video">
-                                <span className="material-symbols-outlined">play_circle</span>
-                                Ver Reel del Producto
+                                <span className="material-symbols-outlined">play_circle</span> Ver Reel
                             </a>
                         </div>
                     )}
