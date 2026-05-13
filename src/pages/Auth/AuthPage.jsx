@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient'; // <-- IMPORTANTE
+import { supabase } from '../../lib/supabaseClient';
 import './AuthPage.css';
 
 export default function AuthPage() {
@@ -23,10 +23,12 @@ export default function AuthPage() {
                     password,
                 });
                 if (error) throw error;
-                navigate('/'); // Al inicio tras loguearse
+
+                // Te mandamos a Mi Cuenta para que veas tus opciones
+                navigate('/mi-cuenta');
             } else {
                 // REGISTRO NUEVO
-                const { data, error } = await supabase.auth.signUp({
+                const { error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
@@ -36,10 +38,12 @@ export default function AuthPage() {
                     }
                 });
                 if (error) throw error;
-                alert("¡Socio registrado! Por favor, revisá tu mail para confirmar tu cuenta.");
+
+                alert("¡Socio registrado con éxito! Ya podés iniciar sesión.");
+                setIsLogin(true); // Lo pasamos al login automáticamente
             }
         } catch (error) {
-            alert(error.message);
+            alert("Error: " + error.message);
         } finally {
             setLoading(false);
         }

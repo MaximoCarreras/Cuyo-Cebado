@@ -1,15 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Agregamos useEffect
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { supabase } from '../../lib/supabaseClient'; // Importamos supabase
 import './Navbar.css';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [userRole, setUserRole] = useState(null); // Estado para el rol del usuario
+
   const navigate = useNavigate();
   const { cart } = useCart();
 
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  // Detectar el rol del usuario al cargar el Navbar
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+        setUserRole(profile?.role);
+      } else {
+        setUserRole(null);
+      }
+    };
+    checkUser();
+
+    // Escuchar cambios en la sesión (por si se desloguea)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      checkUser();
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
@@ -56,7 +84,14 @@ export default function Navbar() {
             <Link to="/nosotros" className="nav-item">Nosotros</Link>
             <Link to="/guia-curado" className="nav-item">Guía</Link>
 
-            {/* LINK MI CUENTA ESCRITORIO */}
+            {/* BOTÓN ADMIN ESCRITORIO (Solo si es admin) */}
+            {userRole === 'admin' && (
+              <Link to="/admin" className="nav-item" style={{ color: '#a5813a', fontWeight: 'bold' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', verticalAlign: 'middle', marginRight: '4px' }}>admin_panel_settings</span>
+                ADMIN
+              </Link>
+            )}
+
             <Link to="/mi-cuenta" className="nav-item nav-item--account">
               <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', verticalAlign: 'middle', marginRight: '4px' }}>person</span>
               Mi Cuenta
@@ -81,7 +116,14 @@ export default function Navbar() {
         <Link to="/nosotros" onClick={closeMenu}>Nosotros</Link>
         <Link to="/guia-curado" onClick={closeMenu}>Guía de Curado</Link>
 
-        {/* LINK MI CUENTA MÓVIL */}
+        {/* BOTÓN ADMIN MÓVIL (Solo si es admin) */}
+        {userRole === 'admin' && (
+          <Link to="/admin" onClick={closeMenu} style={{ color: '#a5813a', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span className="material-symbols-outlined">admin_panel_settings</span>
+            Panel Admin
+          </Link>
+        )}
+
         <Link to="/mi-cuenta" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span className="material-symbols-outlined">person</span>
           Mi Cuenta
