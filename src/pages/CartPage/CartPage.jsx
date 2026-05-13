@@ -50,29 +50,26 @@ export default function CartPage() {
         if (error) {
             toast.error("Error al procesar pedido.");
         } else {
-            // --- PODER WHATSAPP ---
-            const businessPhone = "5492612307516"; // El número de tu socio
+            const businessPhone = "5492612307516";
             const orderId = data[0].id.slice(0, 5).toUpperCase();
 
             let message = `*¡Hola Cuyo Cebado!* 👋%0A`;
-            message += `Soy *${orderData.name}* y acabo de realizar el pedido *#${orderId}* en la web.%0A%0A`;
-            message += `*Detalle de mi compra:*%0A`;
+            message += `Soy *${orderData.name}* y realicé el pedido *#${orderId}* en la web.%0A%0A`;
+            message += `*Detalle:*%0A`;
             cart.forEach(item => {
                 message += `- ${item.quantity}x ${item.name} (${formatCurrency(item.price * item.quantity)})%0A`;
             });
             message += `%0A*Total:* ${formatCurrency(cartTotal)}%0A`;
-            message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro por local' : 'Envío a domicilio'}%0A%0A`;
-            message += `¿Cómo coordinamos el pago?`;
+            message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro local' : 'Envío domicilio'}%0A%0A`;
+            message += `¿Coordinamos el pago?`;
 
             const whatsappUrl = `https://wa.me/${businessPhone}?text=${message}`;
-
             toast.success("¡Pedido guardado! Abriendo WhatsApp...");
 
-            // Limpiamos y redirigimos
             setTimeout(() => {
                 window.open(whatsappUrl, '_blank');
                 clearCart();
-                navigate('/pago-exitoso');
+                navigate('/'); // Volvemos al inicio o a una página de éxito
             }, 1500);
         }
         setLoading(false);
@@ -131,29 +128,20 @@ export default function CartPage() {
                             <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
                             <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp (Ej: 261...)" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
-                            {orderData.method === 'shipment' ? (
-                                <div className="address-fields animate-fade">
-                                    <input type="text" placeholder="Dirección (Calle y N°)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
-                                    <div className="grid-2">
+                            {orderData.method === 'shipment' && (
+                                <div className="address-fields">
+                                    <input type="text" placeholder="Dirección" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
+                                    <div className="grid-cp">
                                         <input type="text" placeholder="Ciudad" required value={orderData.city} onChange={e => setOrderData({ ...orderData, city: e.target.value })} />
                                         <input type="text" placeholder="CP" required value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
                                     </div>
                                 </div>
-                            ) : (
-                                <div className="pickup-box animate-fade">
-                                    <p>📍 <b>Punto de Retiro:</b> Código Vinario (Mendoza)</p>
-                                    <p className="pickup-sub">Coordinamos la entrega por WhatsApp.</p>
-                                </div>
                             )}
                         </div>
                         <div className="total-summary-card">
-                            <div className="t-row"><span>Subtotal</span><span>{formatCurrency(cartTotal)}</span></div>
-                            <div className="t-row"><span>Envío</span><span className="free-tag">¡GRATIS!</span></div>
                             <div className="t-row main-total"><span>TOTAL</span><span>{formatCurrency(cartTotal)}</span></div>
                         </div>
-                        <button type="submit" className="btn-confirm-order" disabled={loading}>
-                            {loading ? 'Confirmando...' : 'CONFIRMAR PEDIDO'}
-                        </button>
+                        <button type="submit" className="btn-confirm-order" disabled={loading}>CONFIRMAR PEDIDO</button>
                     </form>
                 </aside>
             </div>
