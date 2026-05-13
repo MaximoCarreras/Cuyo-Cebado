@@ -198,7 +198,6 @@
     color: #1a1614;
 }
 
-/* ESTRELLAS Y ESTADOS DE PEDIDO */
 .btn-star {
     background: none;
     border: none;
@@ -304,7 +303,7 @@
     color: #1a1614;
 }
 
-/* MODALES Y SUBIDA DE IMAGENES */
+/* MODALES */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -328,6 +327,23 @@
     overflow-y: auto;
 }
 
+/* ESTILOS DEL SÚPER FORMULARIO (MODAL GRANDE) */
+.modal-large {
+    width: 850px !important;
+}
+
+.modal-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 .modal-card h2,
 .modal-card h3 {
     margin-bottom: 25px;
@@ -338,10 +354,9 @@
 .image-upload-box {
     position: relative;
     width: 100%;
-    height: 150px;
+    height: 200px;
     border: 2px dashed #ccc;
     border-radius: 12px;
-    margin-bottom: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -376,26 +391,20 @@
 }
 
 .upload-placeholder span.material-symbols-outlined {
-    font-size: 2rem;
-    margin-bottom: 5px;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
     color: #a5813a;
 }
 
 .image-preview {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-}
-
-.modal-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    object-fit: cover;
 }
 
 .modern-modal-input {
     width: 100%;
-    padding: 15px;
+    padding: 12px;
     border: 1px solid #ddd;
     border-radius: 10px;
     box-sizing: border-box;
@@ -408,6 +417,11 @@
     border-color: #a5813a;
 }
 
+.desc-box {
+    height: 120px;
+    resize: none;
+}
+
 .form-split {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -417,7 +431,7 @@
 .modal-btns {
     display: flex;
     gap: 10px;
-    margin-top: 15px;
+    margin-top: auto;
 }
 
 .save-btn {
@@ -430,6 +444,12 @@
     font-weight: 800;
     cursor: pointer;
     font-size: 1rem;
+    transition: 0.2s;
+}
+
+.save-btn:hover {
+    background: #a5813a;
+    color: #1a1614;
 }
 
 .save-btn:disabled {
@@ -477,6 +497,7 @@
     padding: 15px;
     border-radius: 10px;
     margin-top: 15px;
+    font-weight: bold;
 }
 
 .btn-close {
@@ -497,4 +518,10 @@
     font-size: 1.2rem;
     font-weight: bold;
     color: #a5813a;
+}
+
+@media (max-width: 800px) {
+    .modal-form-grid {
+        grid-template-columns: 1fr;
+    }
 }

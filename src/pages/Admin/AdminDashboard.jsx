@@ -14,8 +14,11 @@ export default function AdminDashboard() {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
 
+    // EL ESTADO AHORA INCLUYE TODOS LOS DETALLES TÉCNICOS Y MEDIA
     const [newProduct, setNewProduct] = useState({
-        name: '', price: '', stock: '', category: 'mates', description: '', image_url: ''
+        name: '', price: '', stock: '', category: 'mates',
+        material: '', type: '', specs: '', badge: '',
+        description: '', image_url: '', video_url: ''
     });
 
     useEffect(() => { fetchData(); }, [activeTab]);
@@ -32,7 +35,6 @@ export default function AdminDashboard() {
         setLoading(false);
     };
 
-    // --- FUNCIONES DE INVENTARIO ---
     const handleUpdate = async (id, field, value) => {
         setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: value } : p));
         const { error } = await supabase.from('products').update({ [field]: value }).eq('id', id);
@@ -57,7 +59,6 @@ export default function AdminDashboard() {
         }
     };
 
-    // --- FUNCIONES DE IMAGEN Y CREACIÓN ---
     const uploadImage = async (event) => {
         try {
             setUploading(true);
@@ -72,9 +73,9 @@ export default function AdminDashboard() {
 
             const { data } = supabase.storage.from('productos').getPublicUrl(fileName);
             setNewProduct({ ...newProduct, image_url: data.publicUrl });
-            toast.success("Imagen subida con éxito");
+            toast.success("Foto principal subida");
         } catch (error) {
-            toast.error("Error al subir imagen");
+            toast.error("Error al subir imagen. Verificá que el bucket sea público.");
         } finally {
             setUploading(false);
         }
@@ -83,27 +84,33 @@ export default function AdminDashboard() {
     const handleAddProduct = async (e) => {
         e.preventDefault();
         const slug = newProduct.name.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-        const finalImage = newProduct.image_url || '/assets/placeholder.png'; // Imagen por defecto si no subió nada
+        const finalImage = newProduct.image_url || '/assets/placeholder.png';
 
         const { error } = await supabase.from('products').insert([{
-            ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock), image_url: finalImage
+            ...newProduct, slug,
+            price: Number(newProduct.price),
+            stock: Number(newProduct.stock),
+            image_url: finalImage
         }]);
 
         if (!error) {
-            toast.success("¡Producto cargado!");
+            toast.success("¡Catálogo actualizado!");
             setIsModalOpen(false);
-            setNewProduct({ name: '', price: '', stock: '', category: 'mates', description: '', image_url: '' });
+            setNewProduct({
+                name: '', price: '', stock: '', category: 'mates',
+                material: '', type: '', specs: '', badge: '',
+                description: '', image_url: '', video_url: ''
+            });
             fetchData();
         } else {
-            toast.error("Error al guardar en base de datos");
+            toast.error("Error al guardar: " + error.message);
         }
     };
 
-    // --- FUNCIONES DE VENTAS ---
     const handleOrderStatus = async (id, newStatus) => {
         setOrders(prev => prev.map(o => o.id === id ? { ...o, status: newStatus } : o));
         await supabase.from('orders').update({ status: newStatus }).eq('id', id);
-        toast.success("Estado de pedido actualizado");
+        toast.success("Estado actualizado");
     };
 
     const totalRevenue = orders.reduce((acc, o) => acc + o.total, 0);
@@ -168,7 +175,6 @@ export default function AdminDashboard() {
                                                 <button className="btn-qty" onClick={() => handleUpdate(product.id, 'stock', product.stock + 1)}>+</button>
                                             </td>
                                             <td style={{ textAlign: 'center' }}>
-                                                {/* BOTÓN ESTRELLITA */}
                                                 <button className={`btn-star ${product.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(product)}>
                                                     <span className="material-symbols-outlined" style={{ fontVariationSettings: product.is_featured ? "'FILL' 1" : "'FILL' 0" }}>star</span>
                                                 </button>
@@ -221,7 +227,6 @@ export default function AdminDashboard() {
                                             <td>{order.customer_email}</td>
                                             <td><strong>${order.total.toLocaleString()}</strong></td>
                                             <td>
-                                                {/* SELECTOR DE ESTADOS DE PEDIDO */}
                                                 <select className={`status-select ${order.status}`} value={order.status} onChange={(e) => handleOrderStatus(order.id, e.target.value)}>
                                                     <option value="pending">Pendiente</option>
                                                     <option value="shipped">Despachado</option>
@@ -264,41 +269,61 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            {/* MODAL NUEVO PRODUCTO CON SUBIDA DE FOTO */}
+            {/* MODAL NUEVO PRODUCTO (SÚPER FORMULARIO) */}
             {isModalOpen && (
                 <div className="modal-backdrop" onClick={() => setIsModalOpen(false)}>
-                    <div className="modal-card" onClick={e => e.stopPropagation()}>
-                        <h2>Cargar Producto</h2>
-                        <form onSubmit={handleAddProduct} className="modal-form">
+                    <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
+                        <h2>Ficha Técnica del Producto</h2>
 
-                            {/* CAJA DE SUBIDA DE IMAGEN */}
-                            <div className="image-upload-box">
-                                {newProduct.image_url ? (
-                                    <img src={newProduct.image_url} alt="Preview" className="image-preview" />
-                                ) : (
-                                    <div className="upload-placeholder">
-                                        <span className="material-symbols-outlined">add_photo_alternate</span>
-                                        <span>{uploading ? 'Subiendo...' : 'Subir foto del producto'}</span>
-                                    </div>
-                                )}
-                                <input type="file" accept="image/*" onChange={uploadImage} disabled={uploading} className="file-input-hidden" />
+                        <form onSubmit={handleAddProduct} className="modal-form-grid">
+
+                            {/* COLUMNA 1: Multimedia */}
+                            <div className="form-column">
+                                <div className="image-upload-box">
+                                    {newProduct.image_url ? (
+                                        <img src={newProduct.image_url} alt="Preview" className="image-preview" />
+                                    ) : (
+                                        <div className="upload-placeholder">
+                                            <span className="material-symbols-outlined">add_photo_alternate</span>
+                                            <span>{uploading ? 'Subiendo...' : 'Subir Foto Principal'}</span>
+                                        </div>
+                                    )}
+                                    <input type="file" accept="image/*" onChange={uploadImage} disabled={uploading} className="file-input-hidden" />
+                                </div>
+                                <input className="modern-modal-input" placeholder="Link del Reel/Video (Ej: Instagram, YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
+                                <textarea className="modern-modal-input desc-box" placeholder="Descripción para el cliente..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
                             </div>
 
-                            <input className="modern-modal-input" placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
-                            <div className="form-split">
-                                <input className="modern-modal-input" type="number" placeholder="Precio ($)" required value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
-                                <input className="modern-modal-input" type="number" placeholder="Stock" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
-                            </div>
-                            <select className="modern-modal-input" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
-                                <option value="mates">Mates</option>
-                                <option value="yerbas">Yerbas</option>
-                                <option value="bombillas">Bombillas</option>
-                            </select>
-                            <textarea className="modern-modal-input" placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                            {/* COLUMNA 2: Datos */}
+                            <div className="form-column">
+                                <input className="modern-modal-input" placeholder="Nombre completo" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
 
-                            <div className="modal-btns">
-                                <button type="button" className="cancel-btn" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                                <button type="submit" className="save-btn" disabled={uploading}>Guardar</button>
+                                <div className="form-split">
+                                    <input className="modern-modal-input" type="number" placeholder="Precio ($)" required value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
+                                    <input className="modern-modal-input" type="number" placeholder="Stock" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
+                                </div>
+
+                                <div className="form-split">
+                                    <select className="modern-modal-input" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                                        <option value="mates">Mates</option>
+                                        <option value="yerbas">Yerbas</option>
+                                        <option value="bombillas">Bombillas</option>
+                                        <option value="accesorios">Accesorios</option>
+                                    </select>
+                                    <input className="modern-modal-input" placeholder="Etiqueta (Ej: Nuevo, Premium)" value={newProduct.badge} onChange={e => setNewProduct({ ...newProduct, badge: e.target.value })} />
+                                </div>
+
+                                <div className="form-split">
+                                    <input className="modern-modal-input" placeholder="Material (Ej: Alpaca)" value={newProduct.material} onChange={e => setNewProduct({ ...newProduct, material: e.target.value })} />
+                                    <input className="modern-modal-input" placeholder="Tipo (Ej: Imperial)" value={newProduct.type} onChange={e => setNewProduct({ ...newProduct, type: e.target.value })} />
+                                </div>
+
+                                <input className="modern-modal-input" placeholder="Especificaciones extras (Ej: Costura uruguaya)" value={newProduct.specs} onChange={e => setNewProduct({ ...newProduct, specs: e.target.value })} />
+
+                                <div className="modal-btns">
+                                    <button type="button" className="cancel-btn" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                                    <button type="submit" className="save-btn" disabled={uploading}>Guardar en Tienda</button>
+                                </div>
                             </div>
                         </form>
                     </div>
