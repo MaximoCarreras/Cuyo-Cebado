@@ -2,6 +2,7 @@
     padding: 120px 20px 60px;
     max-width: 1100px;
     margin: 0 auto;
+    font-family: 'Inter', sans-serif;
 }
 
 .admin-sidebar-header {
@@ -9,22 +10,32 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.admin-sidebar-header h1 {
+    font-family: 'Noto Serif', serif;
+    color: #1a1614;
+    font-size: 2.2rem;
 }
 
 .tab-switcher {
     display: flex;
-    background: #eee;
-    padding: 5px;
-    border-radius: 10px;
+    background: #f0f0f0;
+    padding: 6px;
+    border-radius: 12px;
 }
 
 .tab-switcher button {
     border: none;
-    padding: 10px 20px;
+    padding: 10px 25px;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 700;
     color: #666;
+    background: transparent;
+    transition: 0.3s;
 }
 
 .tab-switcher button.active {
@@ -42,21 +53,24 @@
 .stat-box {
     background: #1a1614;
     border: 1px solid #a5813a;
-    padding: 20px;
-    border-radius: 12px;
+    padding: 25px;
+    border-radius: 15px;
     text-align: center;
 }
 
 .stat-box .label {
     color: #a5813a;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 800;
+    letter-spacing: 1px;
 }
 
 .stat-box .number {
     color: #fff;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 800;
+    display: block;
+    margin-top: 5px;
 }
 
 .stat-box.warning {
@@ -67,10 +81,37 @@
     color: #ff4d4d;
 }
 
+/* BUSCADOR MODERNO */
+.search-container-modern {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.search-container-modern span {
+    color: #666;
+}
+
+.modern-input-search {
+    border: none !important;
+    background: transparent !important;
+    padding: 15px !important;
+    width: 100%;
+    outline: none;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+/* TABLA */
 .table-container {
     background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
     overflow: hidden;
 }
 
@@ -82,63 +123,145 @@
 .custom-table th {
     background: #1a1614;
     color: #a5813a;
-    padding: 15px;
+    padding: 18px;
     text-align: left;
     font-size: 0.8rem;
 }
 
 .custom-table td {
-    padding: 15px;
-    border-bottom: 1px solid #f5f5f5;
+    padding: 15px 18px;
+    border-bottom: 1px solid #f8f8f8;
 }
 
 .product-info {
     display: flex;
     align-items: center;
     gap: 15px;
-    font-weight: bold;
+    font-weight: 700;
+    color: #1a1614;
 }
 
 .mini-thumb {
-    width: 40px;
-    height: 40px;
-    border-radius: 5px;
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
     object-fit: cover;
+    background: #f0f0f0;
 }
 
 .price-edit {
-    width: 80px;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-weight: bold;
+    width: 90px;
+    padding: 10px;
+    border: 1px solid #eee;
+    background: #fafafa;
+    border-radius: 8px;
+    font-weight: 700;
+    text-align: center;
+    font-family: inherit;
+    outline: none;
 }
 
+.price-edit:focus {
+    border-color: #a5813a;
+    background: #fff;
+}
+
+/* CONTROLES DE STOCK */
 .stock-controls {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
-.stock-controls button {
-    width: 25px;
-    height: 25px;
+.btn-qty {
+    width: 32px;
+    height: 32px;
     background: #1a1614;
     color: #a5813a;
     border: 1px solid #a5813a;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.btn-qty:hover {
+    background: #a5813a;
+    color: #1a1614;
+}
+
+.qty {
+    font-weight: 800;
+    min-width: 25px;
+    text-align: center;
+    color: #1a1614;
+}
+
+/* BOTÓN ELIMINAR MODERNO */
+.btn-delete-modern {
+    background: #fff0f0;
+    color: #ff4d4d;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-flex;
+}
+
+.btn-delete-modern:hover {
+    background: #ff4d4d;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* BOTÓN NUEVO PRODUCTO MODERNO */
+.footer-action {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-add-modern {
+    background: #a5813a;
+    color: #1a1614;
+    border: none;
+    padding: 18px 40px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.3s;
+    box-shadow: 0 5px 20px rgba(165, 129, 58, 0.2);
+    font-size: 1rem;
+}
+
+.btn-add-modern:hover {
+    transform: translateY(-3px);
+    background: #c29d54;
 }
 
 .btn-view {
     background: #1a1614;
     color: #a5813a;
     border: 1px solid #a5813a;
-    border-radius: 5px;
-    padding: 5px;
+    border-radius: 8px;
+    padding: 8px;
     cursor: pointer;
+    transition: 0.2s;
 }
 
+.btn-view:hover {
+    background: #a5813a;
+    color: #1a1614;
+}
+
+/* MODALES */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -149,30 +272,104 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 9999;
 }
 
 .modal-card {
     background: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    width: 400px;
+    padding: 40px;
+    border-radius: 20px;
+    width: 450px;
+    max-width: 90%;
+}
+
+.modal-card h2,
+.modal-card h3 {
+    margin-bottom: 25px;
+    color: #1a1614;
+    font-family: 'Noto Serif', serif;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modern-modal-input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-family: inherit;
+    background: #fdfdfd;
+    outline: none;
+}
+
+.modern-modal-input:focus {
+    border-color: #a5813a;
+}
+
+.form-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.modal-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.save-btn {
+    flex: 2;
+    background: #1a1614;
+    color: #a5813a;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.cancel-btn {
+    flex: 1;
+    background: #eee;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    color: #666;
 }
 
 .item-row-detail {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
+    padding: 15px 0;
     border-bottom: 1px solid #eee;
+    color: #1a1614;
 }
 
 .btn-close {
     width: 100%;
-    margin-top: 20px;
-    padding: 10px;
+    margin-top: 25px;
+    padding: 15px;
     background: #1a1614;
     color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
+    font-weight: 700;
+}
+
+.admin-loading-screen {
+    text-align: center;
+    padding: 150px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #a5813a;
 }

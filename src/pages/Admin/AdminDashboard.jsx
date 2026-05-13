@@ -36,6 +36,17 @@ export default function AdminDashboard() {
         if (!error) toast.success("Sincronizado");
     };
 
+    const handleDelete = async (id) => {
+        if (window.confirm("¿Borrar producto definitivamente?")) {
+            const { error } = await supabase.from('products').delete().eq('id', id);
+            if (error) toast.error("No se pudo borrar");
+            else {
+                toast.success("Eliminado");
+                fetchData();
+            }
+        }
+    };
+
     const handleAddProduct = async (e) => {
         e.preventDefault();
         const slug = newProduct.name.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
@@ -78,8 +89,15 @@ export default function AdminDashboard() {
                             </div>
                         </div>
 
-                        <div className="search-bar-admin">
-                            <input placeholder="Buscar producto..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                        {/* Buscador Modernizado */}
+                        <div className="search-container-modern">
+                            <span className="material-symbols-outlined">search</span>
+                            <input
+                                className="modern-input-search"
+                                placeholder="Buscar en el inventario..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                         </div>
 
                         <div className="table-container">
@@ -89,7 +107,7 @@ export default function AdminDashboard() {
                                         <th>PRODUCTO</th>
                                         <th>PRECIO</th>
                                         <th>STOCK</th>
-                                        <th>ACCIONES</th>
+                                        <th style={{ textAlign: 'center' }}>ACCIONES</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -99,20 +117,37 @@ export default function AdminDashboard() {
                                                 <img src={product.image_url} alt="" className="mini-thumb" />
                                                 <span>{product.name}</span>
                                             </td>
-                                            <td><input type="number" className="price-edit" defaultValue={product.price} onBlur={(e) => handleUpdate(product.id, 'price', Number(e.target.value))} /></td>
-                                            <td className="stock-controls">
-                                                <button onClick={() => handleUpdate(product.id, 'stock', product.stock - 1)}>-</button>
-                                                <span className="qty">{product.stock}</span>
-                                                <button onClick={() => handleUpdate(product.id, 'stock', product.stock + 1)}>+</button>
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    className="price-edit"
+                                                    defaultValue={product.price}
+                                                    onBlur={(e) => handleUpdate(product.id, 'price', Number(e.target.value))}
+                                                />
                                             </td>
-                                            <td><button className="delete-trash" onClick={() => {/* handle delete */ }}><span className="material-symbols-outlined">delete</span></button></td>
+                                            <td className="stock-controls">
+                                                <button className="btn-qty" onClick={() => handleUpdate(product.id, 'stock', product.stock - 1)}>-</button>
+                                                <span className="qty">{product.stock}</span>
+                                                <button className="btn-qty" onClick={() => handleUpdate(product.id, 'stock', product.stock + 1)}>+</button>
+                                            </td>
+                                            <td style={{ textAlign: 'center' }}>
+                                                {/* Botón Eliminar Modernizado */}
+                                                <button className="btn-delete-modern" onClick={() => handleDelete(product.id)}>
+                                                    <span className="material-symbols-outlined">delete</span>
+                                                </button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
+
+                        {/* Botón Agregar Modernizado */}
                         <div className="footer-action">
-                            <button className="main-add-btn" onClick={() => setIsModalOpen(true)}>+ NUEVO PRODUCTO</button>
+                            <button className="btn-add-modern" onClick={() => setIsModalOpen(true)}>
+                                <span className="material-symbols-outlined">add_circle</span>
+                                NUEVO PRODUCTO
+                            </button>
                         </div>
                     </section>
                 ) : (
@@ -135,7 +170,7 @@ export default function AdminDashboard() {
                                         <th>FECHA</th>
                                         <th>CLIENTE</th>
                                         <th>TOTAL</th>
-                                        <th>PEDIDO</th>
+                                        <th style={{ textAlign: 'center' }}>PEDIDO</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -143,8 +178,12 @@ export default function AdminDashboard() {
                                         <tr key={order.id}>
                                             <td>{new Date(order.created_at).toLocaleDateString()}</td>
                                             <td>{order.customer_email}</td>
-                                            <td><strong>${order.total}</strong></td>
-                                            <td><button className="btn-view" onClick={() => setSelectedOrder(order)}><span className="material-symbols-outlined">visibility</span></button></td>
+                                            <td><strong>${order.total.toLocaleString()}</strong></td>
+                                            <td style={{ textAlign: 'center' }}>
+                                                <button className="btn-view" onClick={() => setSelectedOrder(order)}>
+                                                    <span className="material-symbols-outlined">visibility</span>
+                                                </button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -163,11 +202,37 @@ export default function AdminDashboard() {
                             {selectedOrder.items.map((item, i) => (
                                 <div key={i} className="item-row-detail">
                                     <span>{item.quantity}x {item.name}</span>
-                                    <span>${item.price * item.quantity}</span>
+                                    <span>${(item.price * item.quantity).toLocaleString()}</span>
                                 </div>
                             ))}
                         </div>
                         <button className="btn-close" onClick={() => setSelectedOrder(null)}>Cerrar</button>
+                    </div>
+                </div>
+            )}
+
+            {/* MODAL NUEVO PRODUCTO */}
+            {isModalOpen && (
+                <div className="modal-backdrop" onClick={() => setIsModalOpen(false)}>
+                    <div className="modal-card" onClick={e => e.stopPropagation()}>
+                        <h2>Cargar Producto</h2>
+                        <form onSubmit={handleAddProduct} className="modal-form">
+                            <input className="modern-modal-input" placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                            <div className="form-split">
+                                <input className="modern-modal-input" type="number" placeholder="Precio ($)" required value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
+                                <input className="modern-modal-input" type="number" placeholder="Stock" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
+                            </div>
+                            <select className="modern-modal-input" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                                <option value="mates">Mates</option>
+                                <option value="yerbas">Yerbas</option>
+                                <option value="bombillas">Bombillas</option>
+                            </select>
+                            <textarea className="modern-modal-input" placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                            <div className="modal-btns">
+                                <button type="button" className="cancel-btn" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                                <button type="submit" className="save-btn">Guardar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}
