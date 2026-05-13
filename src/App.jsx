@@ -51,7 +51,10 @@ export default function App() {
           <Route path="/guia-curado" element={<Guide />} />
           <Route path="/productos" element={<ProductsPage />} />
           <Route path="/productos/:categoryId" element={<CategoryPage />} />
-          <Route path="/producto/:productId" element={<ProductDetail />} />
+
+          {/* EL CAMBIO CLAVE ESTÁ ACÁ ABAJO: cambiamos :productId por :slug */}
+          <Route path="/producto/:slug" element={<ProductDetail />} />
+
           <Route path="/mi-cuenta" element={<AuthPage />} />
 
           {/* Panel de administración */}
