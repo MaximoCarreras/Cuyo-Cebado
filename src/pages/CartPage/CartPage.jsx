@@ -35,7 +35,7 @@ export default function CartPage() {
             : `${orderData.address}, ${orderData.city} (CP: ${orderData.zip})`;
 
         const { data, error } = await supabase.from('orders').insert([{
-            customer_email: orderData.email,
+            customer_email: orderData.email || 'No proveído',
             customer_name: orderData.name,
             customer_phone: orderData.phone,
             shipping_method: orderData.method,
@@ -57,8 +57,8 @@ export default function CartPage() {
             cart.forEach(item => { message += `- ${item.quantity}x ${item.name} (${formatCurrency(item.price * item.quantity)})%0A`; });
             if (orderData.notes) message += `%0A*Notas:* ${orderData.notes}%0A`;
             message += `%0A*Total:* ${formatCurrency(cartTotal)}%0A`;
-            message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro en local' : 'Envío a domicilio'}%0A%0A`;
-            message += `_Espero tu respuesta para coordinar el pago._`;
+            message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro local' : 'Envío domicilio'}%0A%0A`;
+            message += `_Coordinamos el pago por acá._`;
 
             window.open(`https://wa.me/${businessPhone}?text=${message}`, '_blank');
             clearCart();
@@ -81,6 +81,8 @@ export default function CartPage() {
         <section className="cart-page-modern">
             <Toaster position="top-center" />
             <div className="cart-container-pro">
+
+                {/* LISTA DE PRODUCTOS */}
                 <div className="cart-main-content">
                     <div className="cart-header-actions">
                         <h2>Mi Carrito</h2>
@@ -97,11 +99,11 @@ export default function CartPage() {
                                     <h3>{item.name}</h3>
                                     <div className="item-controls">
                                         <div className="qty-box">
-                                            <button onClick={() => updateQuantity(item.id, -1)}>−</button>
+                                            <button type="button" onClick={() => updateQuantity(item.id, -1)}>−</button>
                                             <span>{item.quantity}</span>
-                                            <button onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
+                                            <button type="button" onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button className="remove-link" onClick={() => { if (window.confirm("¿Quitar del carrito?")) removeFromCart(item.id) }}>Eliminar</button>
+                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id) }}>Eliminar</button>
                                     </div>
                                 </div>
                                 <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
@@ -110,16 +112,18 @@ export default function CartPage() {
                     </div>
                 </div>
 
+                {/* SIDEBAR DE FINALIZACIÓN */}
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Finalizar Compra</h3>
+
                         <div className="shipping-selector">
                             <button type="button" className={orderData.method === 'shipment' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'shipment' })}>🚚 Envío</button>
                             <button type="button" className={orderData.method === 'pickup' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'pickup' })}>🏠 Retiro</button>
                         </div>
 
                         <div className="form-inputs-group">
-                            <input type="text" placeholder="Nombre y Apellido" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
+                            <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp (Ej: 261...)" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
                             {orderData.method === 'shipment' ? (
@@ -143,7 +147,7 @@ export default function CartPage() {
                                         <p>📍 Av. San Martín 1234, Las Heras</p>
                                         <p>⏰ Lun a Sáb: 09:00 a 13:00 y 17:00 a 21:00</p>
                                     </div>
-                                    <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="btn-maps">
+                                    <a href="https://maps.app.goo.gl/E7Xq2N6i18Z6K7s8A" target="_blank" rel="noreferrer" className="btn-maps">
                                         <span className="material-symbols-outlined">map</span> Ver en Google Maps
                                     </a>
                                 </div>
@@ -164,7 +168,7 @@ export default function CartPage() {
                             </div>
                             <p className="payment-coordination-note">
                                 <span className="material-symbols-outlined">info</span>
-                                Coordinamos el pago por WhatsApp (Transferencia, Efectivo o Link)
+                                Coordinamos el pago por WhatsApp
                             </p>
                         </div>
 

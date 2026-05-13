@@ -1,38 +1,226 @@
-/* ... (Todo lo que ya tenías y sumamos esto para la pickup card) ... */
+.cart-page-modern {
+    padding: 140px 5% 80px;
+    background-color: #fdfaf7;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
 
-.pickup-info-card {
-    background: #2a2522;
-    border: 1px solid #a5813a;
-    border-radius: 16px;
+.cart-container-pro {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 40px;
+}
+
+.cart-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.cart-header-actions h2 {
+    font-family: 'Noto Serif', serif;
+    font-size: 2.2rem;
+    color: #1a1614;
+    margin: 0;
+}
+
+.btn-continue-shopping {
+    text-decoration: none;
+    color: #a5813a;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- ITEMS --- */
+.cart-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.cart-item-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #fff;
     padding: 20px;
-    margin: 10px 0;
+    border-radius: 18px;
+    border: 1px solid rgba(165, 129, 58, 0.1);
+}
+
+.item-img {
+    width: 80px;
+    height: 80px;
+    background: #fdfaf7;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-info h3 {
+    font-family: 'Noto Serif', serif;
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+.item-cat {
+    color: #a5813a;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.item-controls {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.qty-box {
+    background: #f4f4f4;
+    padding: 5px 15px;
+    border-radius: 10px;
+    display: flex;
+    gap: 15px;
+    font-weight: 800;
+}
+
+.qty-box button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.remove-link {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.item-price {
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: #1a1614;
+}
+
+/* --- CHECKOUT SIDEBAR --- */
+.cart-checkout-sidebar {
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+}
+
+.checkout-form-premium {
+    background: #1a1614;
+    color: #fff;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.checkout-form-premium h3 {
+    font-family: 'Noto Serif', serif;
+    color: #a5813a;
+    margin-bottom: 25px;
+}
+
+.shipping-selector {
+    display: flex;
+    background: #2a2522;
+    padding: 5px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.shipping-selector button {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    padding: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.shipping-selector button.active {
+    background: #a5813a;
+    color: #1a1614;
+}
+
+.form-inputs-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-inputs-group input,
+.notes-box {
+    width: 100% !important;
+    box-sizing: border-box;
+    /* IMPORTANTE */
+    background: #2a2522;
+    border: 1px solid #3d3530;
+    border-radius: 10px;
+    padding: 14px;
+    color: #fff;
+    outline: none;
+}
+
+.grid-cp {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.notes-box {
+    height: 80px;
+    resize: none;
+    font-family: inherit;
+    margin-top: 10px;
+}
+
+/* --- PICKUP CARD --- */
+.pickup-info-card {
+    background: rgba(165, 129, 58, 0.05);
+    border: 1px solid #a5813a;
+    padding: 20px;
+    border-radius: 15px;
 }
 
 .pickup-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 15px;
+    gap: 10px;
     color: #a5813a;
+    margin-bottom: 10px;
 }
 
 .pickup-header h4 {
     margin: 0;
-    font-family: 'Noto Serif', serif;
-    font-size: 1.1rem;
 }
 
-.pickup-header p {
-    margin: 0;
-    font-size: 0.75rem;
-    color: #94a3b8;
-}
-
-.pickup-details {
+.pickup-details p {
+    margin: 5px 0;
     font-size: 0.85rem;
-    color: #fff;
-    line-height: 1.5;
-    margin-bottom: 15px;
+    color: #ccc;
 }
 
 .btn-maps {
@@ -48,44 +236,64 @@
     font-size: 0.8rem;
     font-weight: 700;
     border: 1px solid #a5813a;
-    transition: 0.3s;
+    margin-top: 10px;
 }
 
-.btn-maps:hover {
-    background: #a5813a;
-    color: #1a1614;
+/* --- TOTAL --- */
+.total-summary-card {
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    margin-top: 20px;
 }
 
-.payment-coordination-note {
+.main-total {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.75rem;
-    color: #94a3b8;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 10px;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.payment-coordination-note span {
-    font-size: 1rem;
+    justify-content: space-between;
+    font-size: 1.8rem;
+    font-weight: 800;
     color: #a5813a;
 }
 
-/* FIX DEL CP Y CIUDAD */
-.grid-cp {
-    display: grid;
-    grid-template-columns: 1fr 100px;
-    /* Ciudad grande, CP fijo 100px */
-    gap: 10px;
-    width: 100%;
-    box-sizing: border-box;
+.payment-coordination-note {
+    font-size: 0.75rem;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
 }
 
-.form-inputs-group input,
-.notes-box {
-    width: 100% !important;
-    box-sizing: border-box;
-    /* Asegura que el padding no ensanche el input */
+.btn-confirm-order {
+    width: 100%;
+    padding: 20px;
+    background: #a5813a;
+    color: #1a1614;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.animate-fade {
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1000px) {
+    .cart-container-pro {
+        grid-template-columns: 1fr;
+    }
 }
