@@ -55,6 +55,12 @@ export default function Navbar() {
             <Link to="/productos" className="nav-item">Productos</Link>
             <Link to="/nosotros" className="nav-item">Nosotros</Link>
             <Link to="/guia-curado" className="nav-item">Guía</Link>
+
+            {/* LINK MI CUENTA ESCRITORIO */}
+            <Link to="/mi-cuenta" className="nav-item nav-item--account">
+              <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', verticalAlign: 'middle', marginRight: '4px' }}>person</span>
+              Mi Cuenta
+            </Link>
           </div>
 
           <Link to="/carrito" className="navbar__cart-link" onClick={closeMenu}>
@@ -68,12 +74,18 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MENÚ MÓVIL (Escondido por defecto) */}
+      {/* MENÚ MÓVIL */}
       <div className={`navbar__mobile-menu ${isMenuOpen ? 'active' : ''}`}>
         <Link to="/" onClick={closeMenu}>Inicio</Link>
         <Link to="/productos" onClick={closeMenu}>Productos</Link>
         <Link to="/nosotros" onClick={closeMenu}>Nosotros</Link>
         <Link to="/guia-curado" onClick={closeMenu}>Guía de Curado</Link>
+
+        {/* LINK MI CUENTA MÓVIL */}
+        <Link to="/mi-cuenta" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span className="material-symbols-outlined">person</span>
+          Mi Cuenta
+        </Link>
       </div>
 
       {isMenuOpen && <div className="navbar__blur-overlay" onClick={closeMenu}></div>}
