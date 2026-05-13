@@ -13,7 +13,8 @@ import Guide from './pages/Guide';
 import CartPage from './pages/CartPage/CartPage';
 import ProductsPage from './pages/ProductsPage/ProductsPage';
 import CategoryPage from './pages/CategoryPage/CategoryPage';
-import ProductDetail from './pages/ProductDetail/ProductDetail'; // <-- AGREGADO
+import ProductDetail from './pages/ProductDetail/ProductDetail';
+import AuthPage from './pages/Auth/AuthPage'; // <-- NUEVO IMPORT
 
 // PÁGINAS DE CHECKOUT
 import SuccessPage from './pages/Checkout/SuccessPage';
@@ -61,7 +62,8 @@ export default function App() {
           <Route path="/guia-curado" element={<Guide />} />
           <Route path="/productos" element={<ProductsPage />} />
           <Route path="/productos/:categoryId" element={<CategoryPage />} />
-          <Route path="/producto/:productId" element={<ProductDetail />} /> {/* <-- AGREGADO */}
+          <Route path="/producto/:productId" element={<ProductDetail />} />
+          <Route path="/mi-cuenta" element={<AuthPage />} /> {/* <-- RUTA AGREGADA */}
           <Route path="/pago-exitoso" element={<SuccessPage />} />
           <Route path="/pago-fallido" element={<FailurePage />} />
         </Routes>

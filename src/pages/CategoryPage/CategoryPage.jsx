@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useMemo, useEffect } from 'react';
 import { categories } from '../../data/products';
 import { useCart } from '../../context/CartContext';
+import { supabase } from '../../lib/supabaseClient'; // <-- IMPORTANTE: CONEXIÓN DIRECTA
 import './CategoryPage.css';
 
 export default function CategoryPage() {
@@ -11,7 +12,6 @@ export default function CategoryPage() {
     const [dbProducts, setDbProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // ESTADOS DE FILTROS
     const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
     const [selectedType, setSelectedType] = useState('todos');
@@ -22,10 +22,14 @@ export default function CategoryPage() {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                const API_URL = import.meta.env.VITE_API_URL || 'https://cuyo-cebado.onrender.com';
-                const response = await fetch(`${API_URL}/api/products`);
-                const data = await response.json();
-                setDbProducts(data);
+                // PEDIDO DIRECTO A SUPABASE
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .eq('category', categoryId);
+
+                if (error) throw error;
+                setDbProducts(data || []);
             } catch (error) {
                 console.error("Error cargando productos:", error);
             } finally {
@@ -33,37 +37,30 @@ export default function CategoryPage() {
             }
         };
         fetchProducts();
-        // Reset de filtros al cambiar de categoría para evitar conflictos
         setSelectedMaterial('todos');
         setSelectedType('todos');
     }, [categoryId]);
 
-    // FILTRADO DINÁMICO
     const filteredProducts = useMemo(() => {
         return dbProducts.filter(p => {
-            const matchCategory = p.category === categoryId;
             const matchPrice = p.price <= maxPrice;
             const matchMaterial = selectedMaterial === 'todos' || p.material === selectedMaterial;
             const matchType = selectedType === 'todos' || p.type === selectedType;
-            return matchCategory && matchPrice && matchMaterial && matchType;
+            return matchPrice && matchMaterial && matchType;
         });
-    }, [dbProducts, categoryId, maxPrice, selectedMaterial, selectedType]);
+    }, [dbProducts, maxPrice, selectedMaterial, selectedType]);
 
-    // OBTENER OPCIONES DE FILTROS DESDE LA DB
     const getOptions = (key) => {
-        const itemsInCategory = dbProducts.filter(p => p.category === categoryId);
-        const uniqueValues = [...new Set(itemsInCategory.map(p => p[key]).filter(Boolean))];
+        const uniqueValues = [...new Set(dbProducts.map(p => p[key]).filter(Boolean))];
         return ['todos', ...uniqueValues];
     };
 
-    // ETIQUETA DINÁMICA DEL FILTRO
     const getTypeLabel = () => {
         if (categoryId === 'yerbas') return 'Variedad';
         if (categoryId === 'bombillas') return 'Estilo';
         return 'Modelo';
     };
 
-    // AGREGAR AL CARRITO SIN NAVEGAR
     const handleQuickAdd = (e, product) => {
         e.preventDefault();
         e.stopPropagation();
@@ -81,13 +78,11 @@ export default function CategoryPage() {
             </div>
 
             <div className="category-page__main">
-                {/* BARRA LATERAL DE FILTROS */}
                 <aside className="sidebar-mafia">
                     <div className="sidebar__title">
                         <h3>Filtros</h3>
                         <div className="gold-dot"></div>
                     </div>
-
                     <div className="filter-group">
                         <label>Precio máximo: <b>${maxPrice.toLocaleString()}</b></label>
                         <input
@@ -100,7 +95,6 @@ export default function CategoryPage() {
                             className="price-slider-mafia"
                         />
                     </div>
-
                     {getOptions('material').length > 1 && (
                         <div className="filter-group">
                             <label>Material</label>
@@ -111,7 +105,6 @@ export default function CategoryPage() {
                             </select>
                         </div>
                     )}
-
                     {getOptions('type').length > 1 && (
                         <div className="filter-group">
                             <label>{getTypeLabel()}</label>
@@ -124,7 +117,6 @@ export default function CategoryPage() {
                     )}
                 </aside>
 
-                {/* CONTENIDO PRINCIPAL */}
                 <section className="products-content">
                     <header className="category-header">
                         <h1 className="section__title">{currentCategory?.label}</h1>
@@ -135,7 +127,6 @@ export default function CategoryPage() {
                         {filteredProducts.map(product => (
                             <Link key={product.id} to={`/producto/${product.id}`} className="product-card-link-mafia">
                                 <div className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
-                                    {/* BADGES */}
                                     {product.stock === 0 ? (
                                         <span className="product-badge out-of-stock">Próximo Ingreso</span>
                                     ) : (
@@ -153,8 +144,6 @@ export default function CategoryPage() {
                                         </p>
                                         <h4 className="product-name-mafia">{product.name}</h4>
                                         <p className="product-price-mafia">${Number(product.price).toLocaleString()}</p>
-
-                                        {/* BOTÓN DE ACCIÓN RÁPIDA */}
                                         <button
                                             className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`}
                                             disabled={product.stock === 0}
@@ -167,13 +156,6 @@ export default function CategoryPage() {
                             </Link>
                         ))}
                     </div>
-
-                    {filteredProducts.length === 0 && (
-                        <div className="no-results-mafia">
-                            <span className="material-symbols-outlined">search_off</span>
-                            <p>No encontramos productos con esos filtros.</p>
-                        </div>
-                    )}
                 </section>
             </div>
         </div>

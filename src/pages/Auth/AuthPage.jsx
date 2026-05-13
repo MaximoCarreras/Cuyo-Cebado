@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabaseClient'; // <-- IMPORTANTE
 import './AuthPage.css';
 
 export default function AuthPage() {
@@ -7,14 +8,41 @@ export default function AuthPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleAuth = async (e) => {
         e.preventDefault();
-        // Aquí irá la lógica de Supabase Auth más adelante
-        console.log("Datos enviados:", { email, password, name });
-        // Simulación de redirección tras éxito
-        navigate('/');
+        setLoading(true);
+
+        try {
+            if (isLogin) {
+                // INICIO DE SESIÓN
+                const { error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
+                if (error) throw error;
+                navigate('/'); // Al inicio tras loguearse
+            } else {
+                // REGISTRO NUEVO
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            full_name: name,
+                        }
+                    }
+                });
+                if (error) throw error;
+                alert("¡Socio registrado! Por favor, revisá tu mail para confirmar tu cuenta.");
+            }
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -26,7 +54,7 @@ export default function AuthPage() {
                     <p>{isLogin ? 'Ingresá a tu cuenta exclusiva' : 'Completá tus datos para empezar'}</p>
                 </div>
 
-                <form className="auth-form" onSubmit={handleSubmit}>
+                <form className="auth-form" onSubmit={handleAuth}>
                     {!isLogin && (
                         <div className="auth-input-group">
                             <label>Nombre Completo</label>
@@ -62,8 +90,8 @@ export default function AuthPage() {
                         />
                     </div>
 
-                    <button type="submit" className="btn-auth-primary">
-                        {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
+                    <button type="submit" className="btn-auth-primary" disabled={loading}>
+                        {loading ? 'Procesando...' : (isLogin ? 'Iniciar Sesión' : 'Crear Cuenta')}
                     </button>
                 </form>
 
