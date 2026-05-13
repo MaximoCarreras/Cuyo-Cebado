@@ -1,13 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
 import { Link } from 'react-router-dom';
-import { categories } from '../../data/products'; // Necesario para los emojis
+import { supabase } from '../../lib/supabaseClient'; // <-- Ahora nos conectamos a la nube
 import './CartPage.css';
 import mpLogo from '../../assets/mp-logo.png';
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
     const [customer, setCustomer] = useState({ name: '', email: '' });
+    const [dbCategories, setDbCategories] = useState([]); // <-- Guardamos los emojis acá
+
+    // Buscamos las categorías reales en Supabase apenas carga la página
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const { data } = await supabase.from('categories').select('*');
+                if (data) setDbCategories(data);
+            } catch (error) {
+                console.error("Error al cargar categorías en el carrito:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('es-AR', {
@@ -17,10 +31,10 @@ export default function CartPage() {
         }).format(value);
     };
 
-    // Función para obtener el emoji según la categoría
+    // Buscamos el emoji en la lista que nos dio Supabase
     const getCategoryIcon = (categorySlug) => {
-        const cat = categories.find(c => c.id === categorySlug);
-        return cat ? cat.icon : '🧉';
+        const cat = dbCategories.find(c => c.id === categorySlug);
+        return cat ? cat.icon : '🧉'; // Si no encuentra, pone el mate por defecto
     };
 
     if (!cart || cart.length === 0) {
@@ -65,15 +79,14 @@ export default function CartPage() {
                                     <div className="cart-item__actions-mafia">
                                         <div className="qty-control-mafia">
                                             <button
-                                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                onClick={() => updateQuantity(item.id, -1)}
                                                 disabled={item.quantity <= 1}
                                             >
                                                 −
                                             </button>
                                             <span className="qty-val">{item.quantity}</span>
                                             <button
-                                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                /* AQUÍ EL CAMBIO: Se deshabilita si alcanza el stock */
+                                                onClick={() => updateQuantity(item.id, 1)}
                                                 disabled={item.quantity >= item.stock}
                                                 style={item.quantity >= item.stock ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
                                             >
