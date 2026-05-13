@@ -1,156 +1,165 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
-import { Link } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient'; // <-- Ahora nos conectamos a la nube
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabaseClient';
+import toast, { Toaster } from 'react-hot-toast';
 import './CartPage.css';
-import mpLogo from '../../assets/mp-logo.png';
 
 export default function CartPage() {
-    const { cart, removeFromCart, updateQuantity, cartTotal } = useCart();
-    const [customer, setCustomer] = useState({ name: '', email: '' });
-    const [dbCategories, setDbCategories] = useState([]); // <-- Guardamos los emojis acá
+    const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
+    const navigate = useNavigate();
+    const [dbCategories, setDbCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    // Buscamos las categorías reales en Supabase apenas carga la página
+    const [orderData, setOrderData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        method: 'shipment', // 'shipment' o 'pickup'
+        address: '',
+        city: '',
+        zip: ''
+    });
+
     useEffect(() => {
         const fetchCategories = async () => {
-            try {
-                const { data } = await supabase.from('categories').select('*');
-                if (data) setDbCategories(data);
-            } catch (error) {
-                console.error("Error al cargar categorías en el carrito:", error);
-            }
+            const { data } = await supabase.from('categories').select('*');
+            if (data) setDbCategories(data);
         };
         fetchCategories();
     }, []);
 
-    const formatCurrency = (value) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0,
-        }).format(value);
-    };
+    const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
+    const getCategoryIcon = (slug) => dbCategories.find(c => c.id === slug)?.icon || '🧉';
 
-    // Buscamos el emoji en la lista que nos dio Supabase
-    const getCategoryIcon = (categorySlug) => {
-        const cat = dbCategories.find(c => c.id === categorySlug);
-        return cat ? cat.icon : '🧉'; // Si no encuentra, pone el mate por defecto
+    const handleCheckout = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        const shippingAddress = orderData.method === 'pickup'
+            ? 'RETIRO EN LOCAL (Código Vinario)'
+            : `${orderData.address}, ${orderData.city} (CP: ${orderData.zip})`;
+
+        const newOrder = {
+            customer_email: orderData.email,
+            customer_name: orderData.name,
+            customer_phone: orderData.phone,
+            shipping_method: orderData.method,
+            shipping_address: shippingAddress,
+            total: cartTotal,
+            items: cart,
+            status: 'pending'
+        };
+
+        const { error } = await supabase.from('orders').insert([newOrder]);
+
+        if (error) {
+            toast.error("Error al procesar pedido. Reintentá en unos minutos.");
+            console.error(error);
+        } else {
+            toast.success("¡Pedido confirmado! Te contactaremos por WhatsApp.");
+            clearCart();
+            setTimeout(() => navigate('/pago-exitoso'), 2000);
+        }
+        setLoading(false);
     };
 
     if (!cart || cart.length === 0) {
         return (
-            <section className="cart-page">
-                <div className="cart-empty-mafia">
-                    <span className="material-symbols-outlined cart-empty__icon">shopping_basket</span>
-                    <h2 className="cart-empty__title">Tu carrito está vacío</h2>
-                    <p className="cart-empty__text">Parece que todavía no elegiste tu próximo compañero de rutas.</p>
-                    <Link to="/productos" className="btn-gold-link-mafia">Explorar Productos</Link>
-                </div>
+            <section className="cart-page-empty">
+                <span className="material-symbols-outlined">shopping_basket</span>
+                <h2>Tu carrito está vacío</h2>
+                <p>Tu próximo compañero de rutas te está esperando.</p>
+                <Link to="/productos" className="btn-gold-mafia">Explorar Productos</Link>
             </section>
         );
     }
 
     return (
-        <section className="cart-page">
-            <div className="cart-container">
-                <div className="cart-header-mafia">
-                    <h2>Tu Pedido Cuyo</h2>
-                    <div className="gold-divider-mafia"></div>
-                </div>
+        <section className="cart-page-modern">
+            <Toaster position="top-center" />
+            <div className="cart-container-pro">
 
-                <div className="cart-page__grid">
-                    <div className="cart-items-mafia">
+                <div className="cart-main-content">
+                    <div className="cart-header-actions">
+                        <h2>Mi Carrito</h2>
+                        <Link to="/productos" className="btn-continue-shopping">
+                            <span className="material-symbols-outlined">arrow_back</span> Seguir comprando
+                        </Link>
+                    </div>
+
+                    <div className="cart-items-list">
                         {cart.map((item) => (
-                            <div key={item.id} className="cart-item-mafia">
-                                <div className="cart-item__img-box">
-                                    <span className="cart-item-emoji">{getCategoryIcon(item.category)}</span>
-                                </div>
-
-                                <div className="cart-item__details">
-                                    <div className="cart-item__header">
-                                        <p className="cart-item__material-tag">{item.material || "Artesanal"}</p>
-                                        <h3>{item.name}</h3>
-                                        {/* Avisamos cuánto stock queda si se acerca al límite */}
-                                        <p style={{ fontSize: '0.7rem', color: '#a5813a' }}>
-                                            Stock disponible: {item.stock}
-                                        </p>
-                                    </div>
-
-                                    <div className="cart-item__actions-mafia">
-                                        <div className="qty-control-mafia">
-                                            <button
-                                                onClick={() => updateQuantity(item.id, -1)}
-                                                disabled={item.quantity <= 1}
-                                            >
-                                                −
-                                            </button>
-                                            <span className="qty-val">{item.quantity}</span>
-                                            <button
-                                                onClick={() => updateQuantity(item.id, 1)}
-                                                disabled={item.quantity >= item.stock}
-                                                style={item.quantity >= item.stock ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
-                                            >
-                                                +
-                                            </button>
+                            <div key={item.id} className="cart-item-card">
+                                <div className="item-img">{getCategoryIcon(item.category)}</div>
+                                <div className="item-info">
+                                    <p className="item-cat">{item.material || 'Seleccionado'}</p>
+                                    <h3>{item.name}</h3>
+                                    <div className="item-controls">
+                                        <div className="qty-box">
+                                            <button onClick={() => updateQuantity(item.id, -1)}>−</button>
+                                            <span>{item.quantity}</span>
+                                            <button onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button className="btn-remove-mafia" onClick={() => removeFromCart(item.id)}>
+                                        <button className="remove-link" onClick={() => removeFromCart(item.id)}>
                                             <span className="material-symbols-outlined">delete</span> Eliminar
                                         </button>
                                     </div>
                                 </div>
-
-                                <div className="cart-item__pricing">
-                                    <p className="unit-price-label">{formatCurrency(item.price)} c/u</p>
-                                    <p className="item-subtotal-mafia">{formatCurrency(item.price * item.quantity)}</p>
+                                <div className="item-price">
+                                    {formatCurrency(item.price * item.quantity)}
                                 </div>
                             </div>
                         ))}
                     </div>
-
-                    <aside className="cart-sidebar-mafia">
-                        <div className="summary-card-mafia">
-                            <h3>Resumen de Compra</h3>
-
-                            <div className="checkout-fields">
-                                <span className="fields-title-mafia">Datos del Matero</span>
-                                <input
-                                    type="text"
-                                    placeholder="Nombre completo"
-                                    value={customer.name}
-                                    onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-                                    className="input-mafia-dark"
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="Tu mejor Email"
-                                    value={customer.email}
-                                    onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
-                                    className="input-mafia-dark"
-                                />
-                            </div>
-
-                            <div className="summary-rows">
-                                <div className="s-row"><span>Subtotal</span><span>{formatCurrency(cartTotal)}</span></div>
-                                <div className="s-row"><span>Envío</span><span className="free-shipping">¡Sin costo!</span></div>
-                                <hr className="s-divider" />
-                                <div className="s-row total-row">
-                                    <span>TOTAL</span>
-                                    <span className="total-gold-mafia">{formatCurrency(cartTotal)}</span>
-                                </div>
-                            </div>
-
-                            <button className="btn-mp-mafia-disabled" disabled>
-                                <img src={mpLogo} alt="MP" className="mp-icon-mini" />
-                                <span>Lanzamiento próximamente</span>
-                            </button>
-
-                            <p className="secure-badge-mafia">
-                                <span className="material-symbols-outlined">verified_user</span>
-                                Pago seguro con Mercado Pago
-                            </p>
-                        </div>
-                    </aside>
                 </div>
+
+                <aside className="cart-checkout-sidebar">
+                    <form className="checkout-form-premium" onSubmit={handleCheckout}>
+                        <h3>Finalizar Compra</h3>
+
+                        <div className="shipping-selector">
+                            <button type="button" className={orderData.method === 'shipment' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'shipment' })}>
+                                🚚 Envío
+                            </button>
+                            <button type="button" className={orderData.method === 'pickup' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'pickup' })}>
+                                🏠 Retiro
+                            </button>
+                        </div>
+
+                        <div className="form-inputs-group">
+                            <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
+                            <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
+                            <input type="tel" placeholder="WhatsApp (Ej: 261...)" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
+
+                            {orderData.method === 'shipment' ? (
+                                <div className="address-fields animate-fade">
+                                    <input type="text" placeholder="Dirección (Calle y N°)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
+                                    <div className="grid-2">
+                                        <input type="text" placeholder="Ciudad" required value={orderData.city} onChange={e => setOrderData({ ...orderData, city: e.target.value })} />
+                                        <input type="text" placeholder="CP" required value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="pickup-box animate-fade">
+                                    <p>📍 <b>Punto de Retiro:</b> Código Vinario (Mendoza)</p>
+                                    <p className="pickup-sub">Coordinamos la entrega por WhatsApp.</p>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="total-summary-card">
+                            <div className="t-row"><span>Subtotal</span><span>{formatCurrency(cartTotal)}</span></div>
+                            <div className="t-row"><span>Envío</span><span className="free-tag">¡GRATIS!</span></div>
+                            <div className="t-row main-total"><span>TOTAL</span><span>{formatCurrency(cartTotal)}</span></div>
+                        </div>
+
+                        <button type="submit" className="btn-confirm-order" disabled={loading}>
+                            {loading ? 'Confirmando...' : 'CONFIRMAR PEDIDO'}
+                        </button>
+                        <span className="pago-note">🛡️ Pago seguro a coordinar</span>
+                    </form>
+                </aside>
             </div>
         </section>
     );
