@@ -45,7 +45,7 @@
     transform: translateX(-5px);
 }
 
-/* --- TARJETAS DE PRODUCTO --- */
+/* Items */
 .cart-item-card {
     display: flex;
     align-items: center;
@@ -56,10 +56,6 @@
     margin-bottom: 15px;
     border: 1px solid rgba(165, 129, 58, 0.15);
     transition: 0.3s;
-}
-
-.cart-item-card:hover {
-    box-shadow: 0 10px 30px rgba(165, 129, 58, 0.08);
 }
 
 .item-img {
@@ -79,7 +75,6 @@
 
 .item-info h3 {
     font-family: 'Noto Serif', serif;
-    margin: 5px 0;
     font-size: 1.1rem;
     color: #1a1614;
 }
@@ -89,8 +84,6 @@
     font-weight: 800;
     color: #a5813a;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
-    margin: 0;
 }
 
 .item-controls {
@@ -115,9 +108,6 @@
     border: none;
     font-size: 1.2rem;
     cursor: pointer;
-    color: #1a1614;
-    display: flex;
-    align-items: center;
 }
 
 .remove-link {
@@ -127,14 +117,6 @@
     font-size: 0.75rem;
     font-weight: 700;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    opacity: 0.8;
-}
-
-.remove-link:hover {
-    opacity: 1;
 }
 
 .item-price {
@@ -145,7 +127,7 @@
     text-align: right;
 }
 
-/* --- SIDEBAR DE PAGO (DERECHA) --- */
+/* Checkout Sidebar */
 .checkout-form-premium {
     background: #1a1614;
     color: #fff;
@@ -153,19 +135,8 @@
     border-radius: 24px;
     position: sticky;
     top: 120px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
 }
 
-.checkout-form-premium h3 {
-    font-family: 'Noto Serif', serif;
-    color: #a5813a;
-    margin-top: 0;
-    font-size: 1.6rem;
-    margin-bottom: 25px;
-    text-align: center;
-}
-
-/* Selector de envío */
 .shipping-selector {
     display: flex;
     background: #2a2522;
@@ -180,48 +151,47 @@
     border: none;
     color: #94a3b8;
     padding: 12px;
-    border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
-    transition: 0.3s;
 }
 
 .shipping-selector button.active {
     background: #a5813a;
     color: #1a1614;
+    border-radius: 10px;
 }
 
-/* Formulario */
 .form-inputs-group {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-bottom: 25px;
 }
 
-.form-inputs-group input {
+.form-inputs-group input,
+.notes-box {
+    width: 100% !important;
+    box-sizing: border-box;
     background: #2a2522;
     border: 1px solid #3d3530;
     border-radius: 12px;
     padding: 15px;
     color: #fff;
     outline: none;
-    transition: 0.2s;
+}
+
+.notes-box {
+    height: 80px;
+    resize: none;
     font-family: inherit;
-    font-size: 0.9rem;
 }
 
-.form-inputs-group input:focus {
-    border-color: #a5813a;
-    box-shadow: 0 0 0 3px rgba(165, 129, 58, 0.1);
-}
-
-/* SOLUCIÓN AL CP GIGANTE: Grid dinámico */
+/* FIX CP GIGANTE */
 .grid-cp {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    /* Ciudad 66%, CP 33% */
+    grid-template-columns: 1fr 100px;
     gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .address-fields {
@@ -231,24 +201,14 @@
     margin-top: 12px;
 }
 
-/* Resumen final */
-.total-summary-card {
-    border-top: 1px solid #3d3530;
-    padding-top: 20px;
-    margin-bottom: 25px;
-}
-
-.t-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .main-total {
     font-size: 2rem;
     font-weight: 800;
     color: #a5813a;
     margin-top: 10px;
+    text-align: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .btn-confirm-order {
@@ -256,45 +216,16 @@
     padding: 20px;
     border-radius: 14px;
     border: none;
-    background: linear-gradient(135deg, #a5813a 0%, #c29d54 100%);
+    background: #a5813a;
     color: #1a1614;
     font-weight: 800;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: 0.3s;
-    letter-spacing: 1px;
+    margin-top: 20px;
 }
 
-.btn-confirm-order:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(165, 129, 58, 0.3);
-}
-
-/* Animaciones */
-.animate-fade {
-    animation: fadeIn 0.5s ease forwards;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Responsivo */
 @media (max-width: 1000px) {
     .cart-container-pro {
         grid-template-columns: 1fr;
-    }
-
-    .checkout-form-premium {
-        position: relative;
-        top: 0;
     }
 }

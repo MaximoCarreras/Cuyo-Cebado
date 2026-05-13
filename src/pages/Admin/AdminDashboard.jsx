@@ -43,17 +43,15 @@ export default function AdminDashboard() {
                 const { data: cData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
                 setCategoriesList(cData || []);
             }
-        } catch (err) {
-            console.error(err);
-        }
+        } catch (err) { console.error(err); }
         setLoading(false);
     };
 
     const handleUpdateField = async (id, field, value) => {
-        const updatedValue = field === 'stock' || field === 'price' ? Number(value) : value;
-        setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: updatedValue } : p));
-        await supabase.from('products').update({ [field]: updatedValue }).eq('id', id);
-        toast.success("Actualizado");
+        const val = (field === 'stock' || field === 'price') ? Number(value) : value;
+        setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: val } : p));
+        await supabase.from('products').update({ [field]: val }).eq('id', id);
+        toast.success("Sincronizado");
     };
 
     const uploadImage = async (event, isExtra = false) => {
@@ -66,54 +64,30 @@ export default function AdminDashboard() {
             const { data } = supabase.storage.from('productos').getPublicUrl(fileName);
 
             if (isExtra) {
-                setNewProduct(prev => ({
-                    ...prev,
-                    extra_images: [...(prev.extra_images || []), data.publicUrl]
-                }));
+                setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), data.publicUrl] }));
             } else {
                 setNewProduct(prev => ({ ...prev, image_url: data.publicUrl }));
             }
-            toast.success("Imagen cargada");
+            toast.success("Imagen lista");
         } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
     };
 
     const handleSaveProduct = async (e) => {
         e.preventDefault();
         const slug = newProduct.name.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-        const data = {
-            ...newProduct,
-            slug,
-            price: Number(newProduct.price),
-            stock: Number(newProduct.stock),
-            extra_images: newProduct.extra_images || []
-        };
-
-        if (isEditing) {
-            await supabase.from('products').update(data).eq('id', editingId);
-        } else {
-            await supabase.from('products').insert([data]);
-        }
-
+        const data = { ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) };
+        if (isEditing) await supabase.from('products').update(data).eq('id', editingId);
+        else await supabase.from('products').insert([data]);
         toast.success("¡Producto guardado!");
         closeModal();
         fetchData();
     };
 
-    const handleDeleteProduct = async (id) => {
-        if (window.confirm("¿Borrar permanentemente?")) {
-            await supabase.from('products').delete().eq('id', id);
-            fetchData();
-        }
-    }
-
     const closeModal = () => {
-        setIsModalOpen(false);
-        setIsEditing(false);
-        setEditingId(null);
-        setNewProduct(initialFormState);
+        setIsModalOpen(false); setIsEditing(false); setEditingId(null); setNewProduct(initialFormState);
     };
 
-    if (loading) return <div className="admin-loading-screen">Cargando datos de Cuyo...</div>;
+    if (loading) return <div className="admin-loading-screen">Abriendo la estancia...</div>;
 
     return (
         <div className="admin-page">
@@ -145,15 +119,12 @@ export default function AdminDashboard() {
                                             <td className="stock-controls-cell">
                                                 <div className="stock-controls-wrapper">
                                                     <button className="btn-stock-qty" onClick={() => handleUpdateField(p.id, 'stock', p.stock - 1)}>-</button>
-                                                    <span>{p.stock}</span>
+                                                    <span className="stock-number-display">{p.stock}</span>
                                                     <button className="btn-stock-qty" onClick={() => handleUpdateField(p.id, 'stock', p.stock + 1)}>+</button>
                                                 </div>
                                             </td>
                                             <td>
-                                                <div style={{ display: 'flex', gap: '10px' }}>
-                                                    <button onClick={() => { setIsEditing(true); setEditingId(p.id); setNewProduct(p); setIsModalOpen(true); }} className="btn-edit-action">Editar</button>
-                                                    <button onClick={() => handleDeleteProduct(p.id)} className="btn-delete-action">Borrar</button>
-                                                </div>
+                                                <button onClick={() => { setIsEditing(true); setEditingId(p.id); setNewProduct(p); setIsModalOpen(true); }} className="btn-edit-action">Editar</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -202,7 +173,7 @@ export default function AdminDashboard() {
                             </table>
                         </div>
                         <div className="category-creator-box">
-                            <h2 style={{ color: '#1a1614' }}>Nueva Categoría</h2>
+                            <h2>Nueva Categoría</h2>
                             <form onSubmit={async (e) => {
                                 e.preventDefault();
                                 const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
@@ -232,7 +203,7 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODAL PEDIDO */}
+            {/* MODALES */}
             {selectedOrder && (
                 <div className="modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="modal-card" onClick={e => e.stopPropagation()} style={{ width: '500px' }}>
@@ -246,7 +217,6 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            {/* MODAL PRODUCTO - ARREGLADO PARA QUE NO SE BLOQUEE */}
             {isModalOpen && (
                 <div className="modal-backdrop">
                     <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
@@ -255,15 +225,14 @@ export default function AdminDashboard() {
                             <div className="form-column">
                                 <label>Foto Principal</label>
                                 <div className="image-upload-box-premium" style={{ position: 'relative', height: '150px', marginBottom: '20px' }}>
-                                    <input type="file" onChange={(e) => uploadImage(e)} style={{ position: 'absolute', width: '100%', height: '100%', opacity: 0, cursor: 'pointer', zIndex: 5 }} />
+                                    <input type="file" onChange={(e) => uploadImage(e)} style={{ position: 'absolute', width: '100%', height: '100%', opacity: 0, cursor: 'pointer', zIndex: 10 }} />
                                     {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" /> : "Hacé clic para subir"}
                                 </div>
-
                                 <label>Galería (Extra)</label>
                                 <div className="extra-images-grid-admin">
                                     {newProduct.extra_images?.map((img, i) => <img key={i} src={img} className="mini-gallery-thumb" />)}
                                     <div className="add-extra-box" style={{ position: 'relative' }}>
-                                        <input type="file" onChange={(e) => uploadImage(e, true)} style={{ position: 'absolute', width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />
+                                        <input type="file" onChange={(e) => uploadImage(e, true)} style={{ position: 'absolute', width: '100%', height: '100%', opacity: 0, cursor: 'pointer', zIndex: 10 }} />
                                         <span>+</span>
                                     </div>
                                 </div>

@@ -12,7 +12,7 @@ export default function CartPage() {
     const [loading, setLoading] = useState(false);
 
     const [orderData, setOrderData] = useState({
-        name: '', email: '', phone: '', method: 'shipment', address: '', city: '', zip: ''
+        name: '', email: '', phone: '', method: 'shipment', address: '', city: '', zip: '', notes: ''
     });
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export default function CartPage() {
             ? 'RETIRO EN LOCAL (Código Vinario)'
             : `${orderData.address}, ${orderData.city} (CP: ${orderData.zip})`;
 
-        const newOrder = {
+        const { data, error } = await supabase.from('orders').insert([{
             customer_email: orderData.email,
             customer_name: orderData.name,
             customer_phone: orderData.phone,
@@ -43,34 +43,24 @@ export default function CartPage() {
             total: cartTotal,
             items: cart,
             status: 'pending'
-        };
+        }]).select();
 
-        const { data, error } = await supabase.from('orders').insert([newOrder]).select();
-
-        if (error) {
-            toast.error("Error al procesar pedido.");
-        } else {
+        if (error) { toast.error("Error al procesar pedido."); }
+        else {
             const businessPhone = "5492612307516";
             const orderId = data[0].id.slice(0, 5).toUpperCase();
-
             let message = `*¡Hola Cuyo Cebado!* 👋%0A`;
             message += `Soy *${orderData.name}* y realicé el pedido *#${orderId}* en la web.%0A%0A`;
             message += `*Detalle:*%0A`;
-            cart.forEach(item => {
-                message += `- ${item.quantity}x ${item.name} (${formatCurrency(item.price * item.quantity)})%0A`;
-            });
+            cart.forEach(item => { message += `- ${item.quantity}x ${item.name} (${formatCurrency(item.price * item.quantity)})%0A`; });
+            if (orderData.notes) message += `%0A*Notas:* ${orderData.notes}%0A`;
             message += `%0A*Total:* ${formatCurrency(cartTotal)}%0A`;
             message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro local' : 'Envío domicilio'}%0A%0A`;
             message += `¿Coordinamos el pago?`;
 
-            const whatsappUrl = `https://wa.me/${businessPhone}?text=${message}`;
-            toast.success("¡Pedido guardado! Abriendo WhatsApp...");
-
-            setTimeout(() => {
-                window.open(whatsappUrl, '_blank');
-                clearCart();
-                navigate('/'); // Volvemos al inicio o a una página de éxito
-            }, 1500);
+            window.open(`https://wa.me/${businessPhone}?text=${message}`, '_blank');
+            clearCart();
+            navigate('/');
         }
         setLoading(false);
     };
@@ -109,7 +99,7 @@ export default function CartPage() {
                                             <span>{item.quantity}</span>
                                             <button onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button className="remove-link" onClick={() => removeFromCart(item.id)}>Eliminar</button>
+                                        <button className="remove-link" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id); }}>Eliminar</button>
                                     </div>
                                 </div>
                                 <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
@@ -129,14 +119,15 @@ export default function CartPage() {
                             <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp (Ej: 261...)" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
                             {orderData.method === 'shipment' && (
-                                <div className="address-fields">
-                                    <input type="text" placeholder="Dirección" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
+                                <div className="address-fields animate-fade">
+                                    <input type="text" placeholder="Dirección (Calle y N°)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
                                     <div className="grid-cp">
                                         <input type="text" placeholder="Ciudad" required value={orderData.city} onChange={e => setOrderData({ ...orderData, city: e.target.value })} />
                                         <input type="text" placeholder="CP" required value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
                                     </div>
                                 </div>
                             )}
+                            <textarea className="notes-box" placeholder="Notas o grabado (Opcional)" value={orderData.notes} onChange={e => setOrderData({ ...orderData, notes: e.target.value })} />
                         </div>
                         <div className="total-summary-card">
                             <div className="t-row main-total"><span>TOTAL</span><span>{formatCurrency(cartTotal)}</span></div>
