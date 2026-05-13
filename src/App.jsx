@@ -10,7 +10,8 @@ import CartPage from './pages/CartPage/CartPage';
 import ProductsPage from './pages/ProductsPage/ProductsPage';
 import CategoryPage from './pages/CategoryPage/CategoryPage';
 import ProductDetail from './pages/ProductDetail/ProductDetail';
-import AuthPage from './pages/Auth/AuthPage'; // <-- Importación agregada
+import AuthPage from './pages/Auth/AuthPage';
+import AdminDashboard from './pages/Admin/AdminDashboard'; // <-- Importación
 import SuccessPage from './pages/Checkout/SuccessPage';
 import FailurePage from './pages/Checkout/FailurePage';
 import './App.css';
@@ -51,7 +52,8 @@ export default function App() {
           <Route path="/productos" element={<ProductsPage />} />
           <Route path="/productos/:categoryId" element={<CategoryPage />} />
           <Route path="/producto/:productId" element={<ProductDetail />} />
-          <Route path="/mi-cuenta" element={<AuthPage />} /> {/* <-- Ruta agregada */}
+          <Route path="/mi-cuenta" element={<AuthPage />} />
+          <Route path="/admin" element={<AdminDashboard />} /> {/* <-- Ruta adentro de Routes */}
           <Route path="/pago-exitoso" element={<SuccessPage />} />
           <Route path="/pago-fallido" element={<FailurePage />} />
         </Routes>
@@ -66,4 +68,3 @@ export default function App() {
     </div>
   );
 }
-<Route path="/admin" element={<AdminDashboard />} />
