@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
-import { useCart } from '../../context/CartContext'; // <-- ACÁ IMPORTAMOS TU CARRITO
+import { useCart } from '../../context/CartContext';
 import toast, { Toaster } from 'react-hot-toast';
 import './ProductDetail.css';
 
@@ -11,7 +11,6 @@ export default function ProductDetail() {
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
 
-    // Traemos la función para agregar al carrito
     const { addToCart } = useCart();
 
     useEffect(() => {
@@ -33,12 +32,9 @@ export default function ProductDetail() {
     }, [slug]);
 
     const handleAddToCart = () => {
-        // Ejecutamos la función de tu carrito tantas veces como cantidad haya elegido el cliente
-        for (let i = 0; i < quantity; i++) {
-            addToCart(product);
-        }
+        // Le pasamos la cantidad exacta al carrito en UN SOLO viaje
+        addToCart(product, quantity);
 
-        // Mostramos el cartelito de éxito
         toast.success(`${quantity}x ${product.name} agregado al carrito`, {
             icon: '🧉',
             style: { background: '#1a1614', color: '#a5813a', border: '1px solid #a5813a' }
@@ -63,7 +59,6 @@ export default function ProductDetail() {
                 <div className="product-image-section">
                     <div className="main-image-wrapper">
                         {product.badge && <span className="product-badge-premium">{product.badge}</span>}
-                        {/* Se muestra la foto real que carga tu socio */}
                         <img src={product.image_url || '/assets/placeholder.png'} alt={product.name} className="product-main-image" />
                     </div>
                 </div>
@@ -77,7 +72,6 @@ export default function ProductDetail() {
                     <h1 className="product-title">{product.name}</h1>
                     <p className="product-price">${product.price.toLocaleString('es-AR')}</p>
 
-                    {/* Ficha Técnica Rápida */}
                     <div className="product-quick-specs">
                         {product.material && (
                             <div className="spec-item">
@@ -110,7 +104,6 @@ export default function ProductDetail() {
                                     <span>{quantity}</span>
                                     <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}>+</button>
                                 </div>
-                                {/* El botón ahora sí dispara la función real */}
                                 <button className="btn-add-to-cart" onClick={handleAddToCart}>
                                     AGREGAR AL CARRITO
                                 </button>
@@ -120,7 +113,6 @@ export default function ProductDetail() {
                         )}
                     </div>
 
-                    {/* Beneficios Cuyo Cebado */}
                     <div className="store-benefits">
                         <div className="benefit">
                             <span className="material-symbols-outlined">local_shipping</span>
@@ -132,7 +124,6 @@ export default function ProductDetail() {
                         </div>
                     </div>
 
-                    {/* Botón de Video (Si el socio cargó uno) */}
                     {product.video_url && (
                         <div className="product-video-section">
                             <a href={product.video_url} target="_blank" rel="noopener noreferrer" className="btn-watch-video">

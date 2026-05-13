@@ -17,27 +17,35 @@ function cartReducer(state, action) {
       return { ...state, items: action.payload };
 
     case ACTIONS.ADD_ITEM: {
-      const existing = state.items.find(item => item.id === action.payload.id);
+      // Ahora recibimos el producto Y la cantidad que el cliente eligió
+      const { product, qty } = action.payload;
+      const existing = state.items.find(item => item.id === product.id);
 
       if (existing) {
-        // VALIDACIÓN: Si ya alcanzó el stock máximo, no sumamos nada
-        if (existing.quantity >= existing.stock) {
-          return state;
-        }
+        // VALIDACIÓN: Calculamos la nueva cantidad sin pasarnos del stock
+        const newQuantity = existing.quantity + qty;
+        const safeQuantity = Math.min(newQuantity, existing.stock);
+
         return {
           ...state,
           items: state.items.map(item =>
-            item.id === action.payload.id
-              ? { ...item, quantity: item.quantity + 1 }
+            item.id === product.id
+              ? { ...item, quantity: safeQuantity }
               : item
           ),
         };
       }
 
-      // Si es nuevo pero por alguna razón no hay stock, no lo agregamos
-      if (action.payload.stock <= 0) return state;
+      // Si es nuevo pero no hay stock, no agregamos
+      if (product.stock <= 0) return state;
 
-      return { ...state, items: [...state.items, { ...action.payload, quantity: 1 }] };
+      // Nos aseguramos de no agregar más del stock disponible en la primera compra
+      const safeNewQuantity = Math.min(qty, product.stock);
+
+      return {
+        ...state,
+        items: [...state.items, { ...product, quantity: safeNewQuantity }]
+      };
     }
 
     case ACTIONS.REMOVE_ITEM:
@@ -48,7 +56,6 @@ function cartReducer(state, action) {
         ...state,
         items: state.items.map(item => {
           if (item.id === action.payload.id) {
-            // VALIDACIÓN: Aseguramos que la nueva cantidad no supere el stock
             const safeQuantity = Math.min(action.payload.quantity, item.stock);
             return { ...item, quantity: Math.max(0, safeQuantity) };
           }
@@ -79,7 +86,9 @@ export function CartProvider({ children }) {
   const cartCount = state.items.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const addToCart = (product) => dispatch({ type: ACTIONS.ADD_ITEM, payload: product });
+  // Le pasamos la cantidad (por defecto 1, por si lo agregás rápido desde el catálogo)
+  const addToCart = (product, qty = 1) => dispatch({ type: ACTIONS.ADD_ITEM, payload: { product, qty } });
+
   const removeFromCart = (id) => dispatch({ type: ACTIONS.REMOVE_ITEM, payload: id });
   const updateQuantity = (id, quantity) => dispatch({ type: ACTIONS.UPDATE_QUANTITY, payload: { id, quantity } });
 
