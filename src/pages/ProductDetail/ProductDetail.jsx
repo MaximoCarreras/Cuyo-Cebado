@@ -1,137 +1,136 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useCart } from '../../context/CartContext';
-import { categories } from '../../data/products';
+import { supabase } from '../../lib/supabaseClient';
+import toast, { Toaster } from 'react-hot-toast';
 import './ProductDetail.css';
 
 export default function ProductDetail() {
-    const { productId } = useParams();
-    const { addToCart } = useCart();
-    const [allProducts, setAllProducts] = useState([]);
+    const { slug } = useParams(); // Saca el nombre de la URL (ej: /producto/mate-imperial)
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         const fetchProduct = async () => {
-            try {
-                setLoading(true);
-                const API_URL = import.meta.env.VITE_API_URL || 'https://cuyo-cebado.onrender.com';
-                const response = await fetch(`${API_URL}/api/products`);
-                const data = await response.json();
-                setAllProducts(data);
-                const found = data.find(p => p.id === productId);
-                setProduct(found);
-            } catch (error) {
-                console.error("Error cargando detalle:", error);
-            } finally {
-                setLoading(false);
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('products')
+                .select('*')
+                .eq('slug', slug)
+                .single();
+
+            if (!error && data) {
+                setProduct(data);
             }
+            setLoading(false);
         };
+
         fetchProduct();
-    }, [productId]);
+    }, [slug]);
 
-    const relatedProducts = useMemo(() => {
-        if (!product) return [];
-        return allProducts
-            .filter(p => p.category === product.category && p.id !== product.id)
-            .slice(0, 4);
-    }, [allProducts, product]);
-
-    const getCategoryIcon = (categorySlug) => {
-        const cat = categories.find(c => c.id === categorySlug);
-        return cat ? cat.icon : '🧉';
+    const handleAddToCart = () => {
+        // Acá luego conectamos el carrito real
+        toast.success(`${quantity}x ${product.name} agregado al carrito`, {
+            icon: '🧉',
+            style: { background: '#1a1614', color: '#a5813a', border: '1px solid #a5813a' }
+        });
     };
 
-    if (loading) return <div className="loading-view-mafia">🧉 Preparando selección premium...</div>;
-    if (!product) return <div className="loading-view-mafia">Producto no encontrado.</div>;
+    if (loading) return <div className="product-loading">Preparando el mate...</div>;
+
+    if (!product) return (
+        <div className="product-not-found">
+            <h2>Pucha, no encontramos este producto.</h2>
+            <Link to="/" className="btn-back-home">Volver al inicio</Link>
+        </div>
+    );
 
     return (
         <div className="product-detail-page">
-            <div className="detail-container">
-                <Link to="/productos" className="btn-back-detail">
-                    <span className="material-symbols-outlined">arrow_back</span> Volver al catálogo
-                </Link>
+            <Toaster position="bottom-center" />
 
-                <div className="detail-grid">
-                    {/* PARTE IZQUIERDA: IMAGEN/EMOJI */}
-                    <div className="detail-visual-side">
-                        <div className="main-image-box-mafia">
-                            <span className="emoji-detail-display">{getCategoryIcon(product.category)}</span>
-                        </div>
-                    </div>
-
-                    {/* PARTE DERECHA: INFO */}
-                    <div className="detail-info-side">
-                        <p className="detail-tag-mafia">{product.category} | {product.material || 'Artesanal'}</p>
-                        <h1 className="detail-title-mafia">{product.name}</h1>
-
-                        <div className="detail-price-box-mafia">
-                            <span className="price-main">${Number(product.price).toLocaleString()}</span>
-                            <span className="installments-tag">HASTA 3 CUOTAS SIN INTERÉS</span>
-                        </div>
-
-                        <div className="detail-description-mafia">
-                            <h3>Descripción</h3>
-                            <p>{product.description}</p>
-                        </div>
-
-                        <div className="technical-sheet-mafia">
-                            <h3>Ficha Técnica</h3>
-                            <div className="specs-grid">
-                                <div className="spec-row">
-                                    <span>Material</span>
-                                    <span>{product.material || "Artesanal"}</span>
-                                </div>
-                                <div className="spec-row">
-                                    <span>Disponibilidad</span>
-                                    <span>{product.stock > 0 ? `${product.stock} unidades` : "Sin Stock"}</span>
-                                </div>
-                                {product.type && (
-                                    <div className="spec-row">
-                                        <span>Estilo</span>
-                                        <span>{product.type}</span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {product.stock > 0 ? (
-                            <div className="purchase-action-area">
-                                <div className="qty-selector-mafia-detail">
-                                    <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button>
-                                    <span>{quantity}</span>
-                                    <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}>+</button>
-                                </div>
-                                <button className="btn-add-to-cart-mafia" onClick={() => addToCart({ ...product, quantity })}>
-                                    Añadir al Carrito
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="out-of-stock-notice-mafia">Próximamente disponible</div>
-                        )}
+            <div className="product-detail-container">
+                {/* COLUMNA IZQUIERDA: Imagen */}
+                <div className="product-image-section">
+                    <div className="main-image-wrapper">
+                        {product.badge && <span className="product-badge-premium">{product.badge}</span>}
+                        <img src={product.image_url || '/assets/placeholder.png'} alt={product.name} className="product-main-image" />
                     </div>
                 </div>
 
-                {/* PRODUCTOS RELACIONADOS */}
-                {relatedProducts.length > 0 && (
-                    <div className="related-section-mafia">
-                        <h2 className="related-title-mafia">También te puede interesar</h2>
-                        <div className="related-grid-mafia">
-                            {relatedProducts.map(rp => (
-                                <Link key={rp.id} to={`/producto/${rp.id}`} className="related-card-mafia">
-                                    <div className="related-img-box">
-                                        <span>{getCategoryIcon(rp.category)}</span>
-                                    </div>
-                                    <div className="related-info">
-                                        <h4>{rp.name}</h4>
-                                        <p>${Number(rp.price).toLocaleString()}</p>
-                                    </div>
-                                </Link>
-                            ))}
+                {/* COLUMNA DERECHA: Info y Compra */}
+                <div className="product-info-section">
+                    <div className="breadcrumbs">
+                        <Link to="/">Inicio</Link> / <span>{product.category}</span> / <span>{product.name}</span>
+                    </div>
+
+                    <h1 className="product-title">{product.name}</h1>
+                    <p className="product-price">${product.price.toLocaleString('es-AR')}</p>
+
+                    {/* Ficha Técnica Rápida */}
+                    <div className="product-quick-specs">
+                        {product.material && (
+                            <div className="spec-item">
+                                <span className="material-symbols-outlined">diamond</span>
+                                <span><strong>Material:</strong> {product.material}</span>
+                            </div>
+                        )}
+                        {product.type && (
+                            <div className="spec-item">
+                                <span className="material-symbols-outlined">category</span>
+                                <span><strong>Tipo:</strong> {product.type}</span>
+                            </div>
+                        )}
+                        {product.specs && (
+                            <div className="spec-item">
+                                <span className="material-symbols-outlined">verified</span>
+                                <span><strong>Detalle:</strong> {product.specs}</span>
+                            </div>
+                        )}
+                    </div>
+
+                    <p className="product-description">{product.description}</p>
+
+                    {/* Controles de Compra */}
+                    <div className="purchase-controls">
+                        {product.stock > 0 ? (
+                            <>
+                                <div className="qty-selector">
+                                    <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+                                    <span>{quantity}</span>
+                                    <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}>+</button>
+                                </div>
+                                <button className="btn-add-to-cart" onClick={handleAddToCart}>
+                                    AGREGAR AL CARRITO
+                                </button>
+                            </>
+                        ) : (
+                            <div className="out-of-stock-alert">Sin stock por el momento</div>
+                        )}
+                    </div>
+
+                    {/* Beneficios Cuyo Cebado */}
+                    <div className="store-benefits">
+                        <div className="benefit">
+                            <span className="material-symbols-outlined">local_shipping</span>
+                            <span>Envíos a todo Mendoza y el país</span>
+                        </div>
+                        <div className="benefit">
+                            <span className="material-symbols-outlined">security</span>
+                            <span>Compra 100% segura</span>
                         </div>
                     </div>
-                )}
+
+                    {/* Botón de Video (Si el socio cargó uno) */}
+                    {product.video_url && (
+                        <div className="product-video-section">
+                            <a href={product.video_url} target="_blank" rel="noopener noreferrer" className="btn-watch-video">
+                                <span className="material-symbols-outlined">play_circle</span>
+                                Ver Reel del Producto
+                            </a>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
