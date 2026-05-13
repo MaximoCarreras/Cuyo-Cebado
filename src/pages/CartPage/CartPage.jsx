@@ -31,7 +31,7 @@ export default function CartPage() {
         setLoading(true);
 
         const shippingAddress = orderData.method === 'pickup'
-            ? 'RETIRO EN LOCAL: CÓDIGO VINARIO'
+            ? 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)'
             : `${orderData.address}, ${orderData.city} (CP: ${orderData.zip})`;
 
         const { data, error } = await supabase.from('orders').insert([{
@@ -54,11 +54,13 @@ export default function CartPage() {
             let message = `*¡Hola Cuyo Cebado!* 👋%0A`;
             message += `Soy *${orderData.name}* y realicé el pedido *#${orderId}* en la web.%0A%0A`;
             message += `*Detalle:*%0A`;
-            cart.forEach(item => { message += `- ${item.quantity}x ${item.name} (${formatCurrency(item.price * item.quantity)})%0A`; });
+            cart.forEach(item => {
+                message += `- ${item.quantity}x ${item.name} (${formatCurrency(item.price * item.quantity)})%0A`;
+            });
             if (orderData.notes) message += `%0A*Notas:* ${orderData.notes}%0A`;
             message += `%0A*Total:* ${formatCurrency(cartTotal)}%0A`;
-            message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro local' : 'Envío domicilio'}%0A%0A`;
-            message += `_Coordinamos el pago por acá._`;
+            message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro en local' : 'Envío a domicilio'}%0A%0A`;
+            message += `_Espero el link de Mercado Pago o datos de transferencia para abonar._`;
 
             window.open(`https://wa.me/${businessPhone}?text=${message}`, '_blank');
             clearCart();
@@ -82,7 +84,7 @@ export default function CartPage() {
             <Toaster position="top-center" />
             <div className="cart-container-pro">
 
-                {/* LISTA DE PRODUCTOS */}
+                {/* IZQUIERDA: LISTA DE PRODUCTOS */}
                 <div className="cart-main-content">
                     <div className="cart-header-actions">
                         <h2>Mi Carrito</h2>
@@ -103,7 +105,7 @@ export default function CartPage() {
                                             <span>{item.quantity}</span>
                                             <button type="button" onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id) }}>Eliminar</button>
+                                        <button type="button" className="remove-link" onClick={() => removeFromCart(item.id)}>Eliminar</button>
                                     </div>
                                 </div>
                                 <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
@@ -112,7 +114,7 @@ export default function CartPage() {
                     </div>
                 </div>
 
-                {/* SIDEBAR DE FINALIZACIÓN */}
+                {/* DERECHA: FINALIZAR COMPRA */}
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Finalizar Compra</h3>
@@ -144,10 +146,11 @@ export default function CartPage() {
                                         </div>
                                     </div>
                                     <div className="pickup-details">
-                                        <p>📍 Av. San Martín 1234, Las Heras</p>
-                                        <p>⏰ Lun a Sáb: 09:00 a 13:00 y 17:00 a 21:00</p>
+                                        <p>📍 Av. Colón 701, Mendoza Capital</p>
+                                        <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
+                                        <p>📞 0261 238-1448</p>
                                     </div>
-                                    <a href="https://maps.app.goo.gl/E7Xq2N6i18Z6K7s8A" target="_blank" rel="noreferrer" className="btn-maps">
+                                    <a href="https://maps.app.goo.gl/PDJvJejLZzuwN4Cu9\ntelefono" target="_blank" rel="noreferrer" className="btn-maps">
                                         <span className="material-symbols-outlined">map</span> Ver en Google Maps
                                     </a>
                                 </div>
@@ -166,14 +169,18 @@ export default function CartPage() {
                                 <span>TOTAL</span>
                                 <span>{formatCurrency(cartTotal)}</span>
                             </div>
-                            <p className="payment-coordination-note">
-                                <span className="material-symbols-outlined">info</span>
-                                Coordinamos el pago por WhatsApp
-                            </p>
+                            <div className="payment-icons-row">
+                                <span>Aceptamos:</span>
+                                <div className="icons-flex">
+                                    <img src="https://img.icons8.com/color/48/mercadopago.png" alt="MP" />
+                                    <img src="https://img.icons8.com/color/48/visa.png" alt="Visa" />
+                                    <img src="https://img.icons8.com/color/48/mastercard.png" alt="Master" />
+                                </div>
+                            </div>
                         </div>
 
                         <button type="submit" className="btn-confirm-order" disabled={loading}>
-                            {loading ? 'PROCESANDO...' : 'FINALIZAR POR WHATSAPP 🧉'}
+                            {loading ? 'PROCESANDO...' : 'PAGAR POR WHATSAPP 🧉'}
                         </button>
                     </form>
                 </aside>
