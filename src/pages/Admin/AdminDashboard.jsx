@@ -64,31 +64,22 @@ export default function AdminDashboard() {
         <div className="admin-container">
             <Toaster position="top-right" />
 
-            {/* CABECERA */}
             <header className="admin-header">
-                <div className="header-info">
-                    <h1>Panel de Gestión</h1>
-                    <p>Administración oficial de Cuyo Cebado.</p>
-                </div>
-                <button className="btn-add-product" onClick={() => setIsModalOpen(true)}>
-                    <span className="material-symbols-outlined">add_circle</span>
-                    NUEVO PRODUCTO
-                </button>
+                <h1>Panel de Gestión</h1>
+                <p>Administración oficial de Cuyo Cebado.</p>
             </header>
 
-            {/* TARJETAS DE ESTADÍSTICAS */}
             <div className="admin-stats">
                 <div className="stat-card">
-                    <span>VARIEDAD TOTAL</span>
-                    <strong>{products.length}</strong>
+                    <span className="stat-label">VARIEDAD TOTAL</span>
+                    <span className="stat-value">{products.length}</span>
                 </div>
                 <div className="stat-card alert">
-                    <span>STOCK BAJO</span>
-                    <strong>{products.filter(p => p.stock < 5).length}</strong>
+                    <span className="stat-label">STOCK BAJO</span>
+                    <span className="stat-value">{products.filter(p => p.stock < 5).length}</span>
                 </div>
             </div>
 
-            {/* BUSCADOR Y FILTROS */}
             <div className="admin-controls">
                 <div className="search-box">
                     <span className="material-symbols-outlined">search</span>
@@ -107,7 +98,6 @@ export default function AdminDashboard() {
                 </select>
             </div>
 
-            {/* TABLA DE PRODUCTOS */}
             <div className="admin-table-wrapper">
                 <table className="admin-table">
                     <thead>
@@ -131,9 +121,9 @@ export default function AdminDashboard() {
                                     />
                                 </td>
                                 <td className="td-stock-actions">
-                                    <button onClick={() => handleUpdate(product.id, 'stock', product.stock - 1)}>-</button>
+                                    <button className="btn-qty" onClick={() => handleUpdate(product.id, 'stock', product.stock - 1)}>-</button>
                                     <span className="stock-number">{product.stock}</span>
-                                    <button onClick={() => handleUpdate(product.id, 'stock', product.stock + 1)}>+</button>
+                                    <button className="btn-qty" onClick={() => handleUpdate(product.id, 'stock', product.stock + 1)}>+</button>
                                 </td>
                                 <td style={{ textAlign: 'center' }}>
                                     <button className="btn-delete" onClick={() => handleDelete(product.id)}>
@@ -141,31 +131,38 @@ export default function AdminDashboard() {
                                     </button>
                                 </td>
                             </tr>
-                        ))}
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
 
-            {/* MODAL PARA AGREGAR PRODUCTO */}
+            {/* BOTÓN AL FINAL DE LA LISTA */}
+            <div className="admin-footer-actions">
+                <button className="btn-add-product-large" onClick={() => setIsModalOpen(true)}>
+                    <span className="material-symbols-outlined">add_circle</span>
+                    AGREGAR NUEVO PRODUCTO
+                </button>
+            </div>
+
+            {/* MODAL */}
             {isModalOpen && (
                 <div className="admin-modal-overlay">
                     <div className="admin-modal">
-                        <h2>Nuevo Producto</h2>
+                        <h2>Cargar Producto</h2>
                         <form onSubmit={handleAddProduct}>
-                            <input placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                            <input className="modal-input" placeholder="Nombre del producto" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
                             <div className="form-row">
-                                <input type="number" placeholder="Precio" required value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
-                                <input type="number" placeholder="Stock" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
+                                <input className="modal-input" type="number" placeholder="Precio ($)" required value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
+                                <input className="modal-input" type="number" placeholder="Stock inicial" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
                             </div>
-                            <select value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                            <select className="modal-input" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                                 <option value="mates">Mates</option>
                                 <option value="yerbas">Yerbas</option>
                                 <option value="bombillas">Bombillas</option>
                             </select>
-                            <textarea placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                            <textarea className="modal-input" placeholder="Descripción breve..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
                             <div className="modal-actions">
                                 <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                                <button type="submit" className="btn-save">Guardar</button>
+                                <button type="submit" className="btn-save">Guardar en Catálogo</button>
                             </div>
                         </form>
                     </div>
