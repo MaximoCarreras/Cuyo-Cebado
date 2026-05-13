@@ -1,6 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useMemo, useEffect } from 'react';
-import { categories } from '../../data/products';
 import { useCart } from '../../context/CartContext';
 import { supabase } from '../../lib/supabaseClient';
 import './CategoryPage.css';
@@ -9,29 +8,41 @@ export default function CategoryPage() {
     const { categoryId } = useParams();
     const { addToCart } = useCart();
     const [dbProducts, setDbProducts] = useState([]);
+    const [currentCategory, setCurrentCategory] = useState(null); // Info de la categoría actual
     const [loading, setLoading] = useState(true);
     const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
     const [selectedType, setSelectedType] = useState('todos');
-    const currentCategory = categories.find(cat => cat.id === categoryId);
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchData = async () => {
             try {
                 setLoading(true);
-                const { data, error } = await supabase
+
+                // 1. Traemos los productos de esta categoría
+                const { data: pData, error: pError } = await supabase
                     .from('products')
                     .select('*')
                     .eq('category', categoryId);
-                if (error) throw error;
-                setDbProducts(data || []);
+                if (pError) throw pError;
+                setDbProducts(pData || []);
+
+                // 2. Traemos la info de la categoría (Para el Título y el Emoji)
+                const { data: cData } = await supabase
+                    .from('categories')
+                    .select('*')
+                    .eq('id', categoryId)
+                    .single();
+                if (cData) setCurrentCategory(cData);
+
             } catch (error) {
-                console.error("Error directo de Supabase:", error);
+                console.error("Error en CategoryPage:", error);
             } finally {
                 setLoading(false);
             }
         };
-        fetchProducts();
+
+        fetchData();
         setSelectedMaterial('todos');
         setSelectedType('todos');
     }, [categoryId]);
@@ -62,7 +73,7 @@ export default function CategoryPage() {
         addToCart(product);
     };
 
-    if (loading) return <div className="loading-view-mafia">🧉 Preparando el catálogo de Cuyo...</div>;
+    if (loading) return <div className="loading-view-mafia">🧉 Preparando la estantería...</div>;
 
     return (
         <div className="category-page">
@@ -101,12 +112,11 @@ export default function CategoryPage() {
 
                 <section className="products-content">
                     <header className="category-header">
-                        <h1 className="section__title">{currentCategory?.label}</h1>
+                        <h1 className="section__title">{currentCategory ? currentCategory.label : 'Productos'}</h1>
                         <p className="products-count">{filteredProducts.length} piezas encontradas</p>
                     </header>
                     <div className="products-grid-mafia">
                         {filteredProducts.map(product => (
-                            /* EL CAMBIO CRUCIAL: Ahora redirige al "Slug" (Nombre amigable) para no dar error */
                             <Link key={product.id} to={`/producto/${product.slug}`} className="product-card-link-mafia">
                                 <div className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
 
@@ -119,7 +129,6 @@ export default function CategoryPage() {
                                     ) : null}
 
                                     <div className="product-image-container-mafia" style={{ overflow: 'hidden' }}>
-                                        {/* MOSTRAMOS LA FOTO REAL DE SUPABASE */}
                                         <img
                                             src={product.image_url || '/assets/placeholder.png'}
                                             alt={product.name}

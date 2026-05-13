@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
-import { categories } from '../../data/products';
 import { useCart } from '../../context/CartContext';
 import heroImg from '../../assets/fondo_hero_principal.png';
 import './Home.css';
@@ -11,6 +10,7 @@ export default function Home() {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('');
     const [featuredKit, setFeaturedKit] = useState(null);
+    const [dbCategories, setDbCategories] = useState([]); // Nuevo estado para categorías
 
     const heroRef = useRef(null);
     const categoryCardRefs = useRef([]);
@@ -18,8 +18,12 @@ export default function Home() {
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                // 1. Buscamos TODOS los destacados, pero ordenamos y agarramos solo 1 para que no se rompa
-                const { data: featuredData, error: featuredError } = await supabase
+                // 1. Traemos las categorías dinámicas
+                const { data: catData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
+                if (catData) setDbCategories(catData);
+
+                // 2. Traemos el producto destacado
+                const { data: featuredData } = await supabase
                     .from('products')
                     .select('*')
                     .eq('is_featured', true)
@@ -29,7 +33,6 @@ export default function Home() {
                 if (featuredData && featuredData.length > 0) {
                     setFeaturedKit(featuredData[0]);
                 } else {
-                    // 2. Si no hay ninguno con estrella, traemos el último producto cargado
                     const { data: fallbackData } = await supabase
                         .from('products')
                         .select('*')
@@ -41,7 +44,7 @@ export default function Home() {
                     }
                 }
             } catch (error) {
-                console.error("Error cargando destacados desde Supabase:", error);
+                console.error("Error cargando Home:", error);
             }
         };
         fetchHomeData();
@@ -77,7 +80,7 @@ export default function Home() {
                 card.removeEventListener('mousemove', (e) => handleCardMouse(e, card));
             });
         };
-    }, [featuredKit]);
+    }, [featuredKit, dbCategories]); // Agregamos dbCategories a las dependencias
 
     const handleNewsletter = (e) => {
         e.preventDefault();
@@ -109,7 +112,8 @@ export default function Home() {
             <section className="home-categories-section">
                 <h2 className="global-section-title">Nuestras Colecciones</h2>
                 <div className="categories-grid-premium">
-                    {categories.map((cat, index) => (
+                    {/* AHORA MAPEAMOS DESDE LA BASE DE DATOS */}
+                    {dbCategories.map((cat, index) => (
                         <Link
                             key={cat.id}
                             to={`/productos/${cat.id}`}
