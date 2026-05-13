@@ -11,8 +11,8 @@ export default function AdminDashboard() {
     const [uploading, setUploading] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isEditing, setIsEditing] = useState(false); // Para saber si estamos editando
-    const [editingId, setEditingId] = useState(null); // ID del producto a editar
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingId, setEditingId] = useState(null);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -38,7 +38,6 @@ export default function AdminDashboard() {
         setLoading(false);
     };
 
-    // --- LOGICA DE EDICIÓN ---
     const handleEditClick = (product) => {
         setIsEditing(true);
         setEditingId(product.id);
@@ -108,7 +107,6 @@ export default function AdminDashboard() {
         };
 
         if (isEditing) {
-            // MODO EDITAR
             const { error } = await supabase.from('products').update(productData).eq('id', editingId);
             if (!error) {
                 toast.success("¡Producto actualizado!");
@@ -116,7 +114,6 @@ export default function AdminDashboard() {
                 fetchData();
             }
         } else {
-            // MODO CREAR
             const { error } = await supabase.from('products').insert([productData]);
             if (!error) {
                 toast.success("¡Nuevo producto en tienda!");
@@ -133,6 +130,13 @@ export default function AdminDashboard() {
         setNewProduct(initialFormState);
     };
 
+    // Función segura para cambiar de pestaña cerrando cualquier modal abierto
+    const switchTab = (tabName) => {
+        closeModal();
+        setSelectedOrder(null);
+        setActiveTab(tabName);
+    };
+
     const totalRevenue = orders.reduce((acc, o) => acc + o.total, 0);
 
     if (loading) return <div className="admin-loading-screen">Abriendo la estancia...</div>;
@@ -144,8 +148,8 @@ export default function AdminDashboard() {
             <header className="admin-sidebar-header">
                 <h1>Gestión Cuyo Cebado</h1>
                 <div className="tab-switcher">
-                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => setActiveTab('inventory')}>Stock</button>
-                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => setActiveTab('orders')}>Ventas</button>
+                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => switchTab('inventory')}>Stock</button>
+                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => switchTab('orders')}>Ventas</button>
                 </div>
             </header>
 
@@ -201,7 +205,6 @@ export default function AdminDashboard() {
                                             </td>
                                             <td style={{ textAlign: 'center' }}>
                                                 <div className="admin-actions-cell">
-                                                    {/* EL LAPICITO DE EDICIÓN */}
                                                     <button className="btn-edit-pencil" onClick={() => handleEditClick(product)}>
                                                         <span className="material-symbols-outlined">edit</span>
                                                     </button>
@@ -224,7 +227,6 @@ export default function AdminDashboard() {
                     </section>
                 ) : (
                     <section>
-                        {/* Pestaña de Ventas (Se mantiene igual de funcional) */}
                         <div className="stats-grid">
                             <div className="stat-box">
                                 <span className="label">TOTAL RECAUDADO</span>
@@ -253,9 +255,10 @@ export default function AdminDashboard() {
                                             <td>{order.customer_email}</td>
                                             <td><strong>${order.total.toLocaleString()}</strong></td>
                                             <td>
-                                                <select className={`status-select ${order.status}`} value={order.status} onChange={(e) => {/* handleStatus */ }}>
+                                                <select className={`status-select ${order.status}`} value={order.status} onChange={(e) => {/* Lógica update estado */ }}>
                                                     <option value="pending">Pendiente</option>
                                                     <option value="shipped">Despachado</option>
+                                                    <option value="delivered">Entregado</option>
                                                 </select>
                                             </td>
                                             <td style={{ textAlign: 'center' }}>
@@ -270,7 +273,29 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODAL MULTIFUNCIÓN (CREAR Y EDITAR) */}
+            {/* MODAL DETALLES DE VENTA */}
+            {selectedOrder && (
+                <div className="modal-backdrop" onClick={() => setSelectedOrder(null)}>
+                    <div className="modal-card" onClick={e => e.stopPropagation()}>
+                        <h3>Pedido de {selectedOrder.customer_email}</h3>
+                        <div className="items-list">
+                            {selectedOrder.items.map((item, i) => (
+                                <div key={i} className="item-row-detail">
+                                    <span>{item.quantity}x {item.name}</span>
+                                    <span>${(item.price * item.quantity).toLocaleString()}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="order-modal-total">
+                            <span>TOTAL A COBRAR:</span>
+                            <strong>${selectedOrder.total.toLocaleString()}</strong>
+                        </div>
+                        <button className="btn-close" onClick={() => setSelectedOrder(null)}>Cerrar</button>
+                    </div>
+                </div>
+            )}
+
+            {/* MODAL MULTIFUNCIÓN (CREAR Y EDITAR) MODERNIZADO */}
             {isModalOpen && (
                 <div className="modal-backdrop" onClick={closeModal}>
                     <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
@@ -289,18 +314,18 @@ export default function AdminDashboard() {
                                     )}
                                     <input type="file" accept="image/*" onChange={uploadImage} disabled={uploading} className="file-input-hidden" />
                                 </div>
-                                <input className="modern-modal-input" placeholder="Link del Reel/Video" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
-                                <textarea className="modern-modal-input desc-box" placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                                <input className="modern-modal-input" placeholder="Link del Reel/Video (Ej: YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
+                                <textarea className="modern-modal-input desc-box" placeholder="Descripción breve..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
                             </div>
 
                             <div className="form-column">
-                                <input className="modern-modal-input" placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                                <input className="modern-modal-input" placeholder="Nombre (Ej: Mate Imperial)" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
                                 <div className="form-split">
                                     <input className="modern-modal-input" type="number" placeholder="Precio ($)" required value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
                                     <input className="modern-modal-input" type="number" placeholder="Stock" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
                                 </div>
                                 <div className="form-split">
-                                    <select className="modern-modal-input" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                                    <select className="modern-modal-input select-modern" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                                         <option value="mates">Mates</option>
                                         <option value="yerbas">Yerbas</option>
                                         <option value="bombillas">Bombillas</option>
@@ -309,10 +334,10 @@ export default function AdminDashboard() {
                                     <input className="modern-modal-input" placeholder="Etiqueta (Ej: Premium)" value={newProduct.badge} onChange={e => setNewProduct({ ...newProduct, badge: e.target.value })} />
                                 </div>
                                 <div className="form-split">
-                                    <input className="modern-modal-input" placeholder="Material" value={newProduct.material} onChange={e => setNewProduct({ ...newProduct, material: e.target.value })} />
-                                    <input className="modern-modal-input" placeholder="Tipo" value={newProduct.type} onChange={e => setNewProduct({ ...newProduct, type: e.target.value })} />
+                                    <input className="modern-modal-input" placeholder="Material (Ej: Alpaca)" value={newProduct.material} onChange={e => setNewProduct({ ...newProduct, material: e.target.value })} />
+                                    <input className="modern-modal-input" placeholder="Tipo (Ej: Camionero)" value={newProduct.type} onChange={e => setNewProduct({ ...newProduct, type: e.target.value })} />
                                 </div>
-                                <input className="modern-modal-input" placeholder="Especificaciones" value={newProduct.specs} onChange={e => setNewProduct({ ...newProduct, specs: e.target.value })} />
+                                <input className="modern-modal-input" placeholder="Especificaciones (Ej: Costura artesanal)" value={newProduct.specs} onChange={e => setNewProduct({ ...newProduct, specs: e.target.value })} />
                                 <div className="modal-btns">
                                     <button type="button" className="cancel-btn" onClick={closeModal}>Cancelar</button>
                                     <button type="submit" className="save-btn" disabled={uploading}>

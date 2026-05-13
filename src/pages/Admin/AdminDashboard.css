@@ -75,12 +75,18 @@
 
 .search-container-modern {
     background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     padding: 0 15px;
     margin-bottom: 25px;
+    transition: 0.3s;
+}
+
+.search-container-modern:focus-within {
+    border-color: #a5813a;
+    box-shadow: 0 0 0 4px rgba(165, 129, 58, 0.1);
 }
 
 .modern-input-search {
@@ -97,6 +103,7 @@
     border-radius: 15px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
     overflow: hidden;
+    border: 1px solid #f1f5f9;
 }
 
 .custom-table {
@@ -131,6 +138,7 @@
     border-radius: 8px;
     object-fit: cover;
     background: #f0f0f0;
+    border: 1px solid #e2e8f0;
 }
 
 .admin-actions-cell {
@@ -139,7 +147,6 @@
     gap: 10px;
 }
 
-/* EL LAPICITO DORADO */
 .btn-edit-pencil {
     background: #fdfaf0;
     color: #a5813a;
@@ -160,7 +167,7 @@
 .btn-delete-modern {
     background: #fff0f0;
     color: #ff4d4d;
-    border: none;
+    border: 1px solid #ffe5e5;
     padding: 8px;
     border-radius: 8px;
     cursor: pointer;
@@ -171,6 +178,7 @@
 .btn-delete-modern:hover {
     background: #ff4d4d;
     color: #fff;
+    border-color: #ff4d4d;
 }
 
 .btn-qty {
@@ -190,7 +198,34 @@
     text-align: center;
 }
 
-/* MODAL LARGE */
+/* MODALES SÚPER BLINDADOS */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    /* Para que nada le pase por arriba */
+}
+
+.modal-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    width: 450px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
 .modal-large {
     width: 850px !important;
 }
@@ -211,14 +246,20 @@
     position: relative;
     width: 100%;
     height: 200px;
-    border: 2px dashed #ccc;
+    border: 2px dashed #cbd5e1;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: #fafafa;
+    background: #f8fafc;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.image-upload-box:hover {
+    border-color: #a5813a;
+    background: #fff;
 }
 
 .image-preview {
@@ -237,13 +278,38 @@
     cursor: pointer;
 }
 
+/* CHAU WINDOWS XP: INPUTS MODERNOS */
 .modern-modal-input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    padding: 14px 18px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
     font-family: inherit;
+    background: #f8fafc;
     outline: none;
+    font-size: 0.95rem;
+    color: #1a1614;
+    transition: all 0.3s ease;
+}
+
+.modern-modal-input:focus {
+    border-color: #a5813a;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(165, 129, 58, 0.1);
+}
+
+/* CHAU WINDOWS XP: SELECTOR MODERNIZADO */
+select.modern-modal-input.select-modern {
+    appearance: none;
+    /* Le quita la flecha fea por defecto */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a5813a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 15px;
+    padding-right: 40px;
+    cursor: pointer;
 }
 
 .desc-box {
@@ -269,26 +335,57 @@
     color: #a5813a;
     border: none;
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 12px;
     font-weight: 800;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.save-btn:hover {
+    background: #a5813a;
+    color: #1a1614;
 }
 
 .cancel-btn {
     flex: 1;
-    background: #eee;
+    background: #f1f5f9;
     border: none;
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
-    color: #666;
+    color: #64748b;
     font-weight: 700;
+    transition: 0.2s;
 }
 
-.admin-loading-screen {
-    text-align: center;
-    padding: 150px 20px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #a5813a;
+.cancel-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.status-select {
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    outline: none;
+    text-transform: uppercase;
+    appearance: none;
+}
+
+.status-select.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-select.shipped {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.status-select.delivered {
+    background: #d4edda;
+    color: #155724;
 }
