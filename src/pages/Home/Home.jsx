@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
+import { supabase } from '../../lib/supabaseClient'; // Conexión oficial a tu base de datos
 import { categories } from '../../data/products';
 import { useCart } from '../../context/CartContext';
 import heroImg from '../../assets/fondo_hero_principal.png';
@@ -17,14 +18,31 @@ export default function Home() {
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-                const response = await fetch(`${API_URL}/api/products`);
-                const data = await response.json();
-                // Buscamos un Kit o el primer producto
-                const kit = data.find(p => p.category === 'kits' || p.category === 'mates') || data[0];
-                setFeaturedKit(kit);
+                // 1. Buscamos si el socio marcó algún producto con la ESTRELLA (is_featured = true)
+                const { data: featuredData, error: featuredError } = await supabase
+                    .from('products')
+                    .select('*')
+                    .eq('is_featured', true)
+                    .limit(1)
+                    .single();
+
+                if (featuredData) {
+                    setFeaturedKit(featuredData);
+                } else {
+                    // 2. Si no hay ninguno con estrella, traemos el último producto cargado
+                    const { data: fallbackData } = await supabase
+                        .from('products')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+                        .limit(1)
+                        .single();
+
+                    if (fallbackData) {
+                        setFeaturedKit(fallbackData);
+                    }
+                }
             } catch (error) {
-                console.error("Error cargando destacados:", error);
+                console.error("Error cargando destacados desde Supabase:", error);
             }
         };
         fetchHomeData();
@@ -117,17 +135,28 @@ export default function Home() {
                     <div className="showcase-container">
                         <div className="showcase-image-side">
                             <div className="badge-premium">DESTACADO</div>
-                            <span className="showcase-emoji">🧉</span>
+                            {/* Acá mostramos la foto real que cargó tu socio */}
+                            <img
+                                src={featuredKit.image_url || '/assets/placeholder.png'}
+                                alt={featuredKit.name}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }}
+                            />
                         </div>
                         <div className="showcase-info-side">
                             <p className="gold-tag">NUESTRO ELEGIDO</p>
                             <h2 className="showcase-title">{featuredKit.name}</h2>
                             <p className="showcase-description">{featuredKit.description || "Calidad artesanal mendocina."}</p>
                             <div className="showcase-actions">
-                                <span className="showcase-price">${Number(featuredKit.price).toLocaleString()}</span>
-                                <button className="btn-gold-mafia" onClick={() => featuredKit.stock > 0 && addToCart(featuredKit)} disabled={featuredKit.stock === 0}>
-                                    {featuredKit.stock > 0 ? 'Comprar Ahora' : 'Sin Stock'}
-                                </button>
+                                <span className="showcase-price">${Number(featuredKit.price).toLocaleString('es-AR')}</span>
+                                <div style={{ display: 'flex', gap: '10px' }}>
+                                    <button className="btn-gold-mafia" onClick={() => featuredKit.stock > 0 && addToCart(featuredKit)} disabled={featuredKit.stock === 0}>
+                                        {featuredKit.stock > 0 ? 'Comprar Ahora' : 'Sin Stock'}
+                                    </button>
+                                    {/* Botón para ir a ver el producto completo (Usa el SLUG para que no dé error) */}
+                                    <Link to={`/producto/${featuredKit.slug}`} className="btn-outline-mafia" style={{ padding: '15px 30px', display: 'flex', alignItems: 'center' }}>
+                                        Ver detalles
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </div>
