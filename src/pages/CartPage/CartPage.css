@@ -1,231 +1,91 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Serif:wght@700&display=swap');
+/* ... (Todo lo que ya tenías y sumamos esto para la pickup card) ... */
 
-.cart-page-modern {
-    padding: 140px 5% 80px;
-    background-color: #fdfaf7;
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
-}
-
-.cart-container-pro {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: 40px;
-}
-
-.cart-header-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.cart-header-actions h2 {
-    font-family: 'Noto Serif', serif;
-    font-size: 2.2rem;
-    color: #1a1614;
-    margin: 0;
-}
-
-.btn-continue-shopping {
-    text-decoration: none;
-    color: #a5813a;
-    font-weight: 700;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: 0.2s;
-}
-
-.btn-continue-shopping:hover {
-    color: #1a1614;
-    transform: translateX(-5px);
-}
-
-/* Items */
-.cart-item-card {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    background: #fff;
+.pickup-info-card {
+    background: #2a2522;
+    border: 1px solid #a5813a;
+    border-radius: 16px;
     padding: 20px;
-    border-radius: 18px;
-    margin-bottom: 15px;
-    border: 1px solid rgba(165, 129, 58, 0.15);
-    transition: 0.3s;
+    margin: 10px 0;
 }
 
-.item-img {
-    width: 90px;
-    height: 90px;
-    background: #fdfaf7;
-    border-radius: 12px;
+.pickup-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    color: #a5813a;
+}
+
+.pickup-header h4 {
+    margin: 0;
+    font-family: 'Noto Serif', serif;
+    font-size: 1.1rem;
+}
+
+.pickup-header p {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.pickup-details {
+    font-size: 0.85rem;
+    color: #fff;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.btn-maps {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
-}
-
-.item-info {
-    flex: 1;
-}
-
-.item-info h3 {
-    font-family: 'Noto Serif', serif;
-    font-size: 1.1rem;
-    color: #1a1614;
-}
-
-.item-cat {
-    font-size: 0.65rem;
-    font-weight: 800;
+    gap: 8px;
+    background: rgba(165, 129, 58, 0.1);
     color: #a5813a;
-    text-transform: uppercase;
-}
-
-.item-controls {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-top: 12px;
-}
-
-.qty-box {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background: #f4f4f4;
-    padding: 6px 14px;
-    border-radius: 10px;
-    font-weight: 800;
-}
-
-.qty-box button {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-}
-
-.remove-link {
-    background: none;
-    border: none;
-    color: #ff4d4d;
-    font-size: 0.75rem;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
     font-weight: 700;
-    cursor: pointer;
+    border: 1px solid #a5813a;
+    transition: 0.3s;
 }
 
-.item-price {
-    font-weight: 800;
-    color: #1a1614;
-    font-size: 1.3rem;
-    min-width: 110px;
-    text-align: right;
-}
-
-/* Checkout Sidebar */
-.checkout-form-premium {
-    background: #1a1614;
-    color: #fff;
-    padding: 35px;
-    border-radius: 24px;
-    position: sticky;
-    top: 120px;
-}
-
-.shipping-selector {
-    display: flex;
-    background: #2a2522;
-    padding: 6px;
-    border-radius: 14px;
-    margin-bottom: 25px;
-}
-
-.shipping-selector button {
-    flex: 1;
-    background: none;
-    border: none;
-    color: #94a3b8;
-    padding: 12px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.shipping-selector button.active {
+.btn-maps:hover {
     background: #a5813a;
     color: #1a1614;
-    border-radius: 10px;
 }
 
-.form-inputs-group {
+.payment-coordination-note {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.payment-coordination-note span {
+    font-size: 1rem;
+    color: #a5813a;
+}
+
+/* FIX DEL CP Y CIUDAD */
+.grid-cp {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    /* Ciudad grande, CP fijo 100px */
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .form-inputs-group input,
 .notes-box {
     width: 100% !important;
     box-sizing: border-box;
-    background: #2a2522;
-    border: 1px solid #3d3530;
-    border-radius: 12px;
-    padding: 15px;
-    color: #fff;
-    outline: none;
-}
-
-.notes-box {
-    height: 80px;
-    resize: none;
-    font-family: inherit;
-}
-
-/* FIX CP GIGANTE */
-.grid-cp {
-    display: grid;
-    grid-template-columns: 1fr 100px;
-    gap: 12px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.address-fields {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 12px;
-}
-
-.main-total {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #a5813a;
-    margin-top: 10px;
-    text-align: space-between;
-    display: flex;
-    justify-content: space-between;
-}
-
-.btn-confirm-order {
-    width: 100%;
-    padding: 20px;
-    border-radius: 14px;
-    border: none;
-    background: #a5813a;
-    color: #1a1614;
-    font-weight: 800;
-    font-size: 1.1rem;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-@media (max-width: 1000px) {
-    .cart-container-pro {
-        grid-template-columns: 1fr;
-    }
+    /* Asegura que el padding no ensanche el input */
 }

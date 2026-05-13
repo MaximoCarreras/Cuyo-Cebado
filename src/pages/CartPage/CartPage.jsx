@@ -31,7 +31,7 @@ export default function CartPage() {
         setLoading(true);
 
         const shippingAddress = orderData.method === 'pickup'
-            ? 'RETIRO EN LOCAL (Código Vinario)'
+            ? 'RETIRO EN LOCAL: CÓDIGO VINARIO'
             : `${orderData.address}, ${orderData.city} (CP: ${orderData.zip})`;
 
         const { data, error } = await supabase.from('orders').insert([{
@@ -45,18 +45,20 @@ export default function CartPage() {
             status: 'pending'
         }]).select();
 
-        if (error) { toast.error("Error al procesar pedido."); }
-        else {
+        if (error) {
+            toast.error("Error al procesar pedido.");
+        } else {
             const businessPhone = "5492612307516";
             const orderId = data[0].id.slice(0, 5).toUpperCase();
+
             let message = `*¡Hola Cuyo Cebado!* 👋%0A`;
             message += `Soy *${orderData.name}* y realicé el pedido *#${orderId}* en la web.%0A%0A`;
             message += `*Detalle:*%0A`;
             cart.forEach(item => { message += `- ${item.quantity}x ${item.name} (${formatCurrency(item.price * item.quantity)})%0A`; });
             if (orderData.notes) message += `%0A*Notas:* ${orderData.notes}%0A`;
             message += `%0A*Total:* ${formatCurrency(cartTotal)}%0A`;
-            message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro local' : 'Envío domicilio'}%0A%0A`;
-            message += `¿Coordinamos el pago?`;
+            message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro en local' : 'Envío a domicilio'}%0A%0A`;
+            message += `_Espero tu respuesta para coordinar el pago._`;
 
             window.open(`https://wa.me/${businessPhone}?text=${message}`, '_blank');
             clearCart();
@@ -99,7 +101,7 @@ export default function CartPage() {
                                             <span>{item.quantity}</span>
                                             <button onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button className="remove-link" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id); }}>Eliminar</button>
+                                        <button className="remove-link" onClick={() => { if (window.confirm("¿Quitar del carrito?")) removeFromCart(item.id) }}>Eliminar</button>
                                     </div>
                                 </div>
                                 <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
@@ -107,6 +109,7 @@ export default function CartPage() {
                         ))}
                     </div>
                 </div>
+
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Finalizar Compra</h3>
@@ -114,11 +117,12 @@ export default function CartPage() {
                             <button type="button" className={orderData.method === 'shipment' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'shipment' })}>🚚 Envío</button>
                             <button type="button" className={orderData.method === 'pickup' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'pickup' })}>🏠 Retiro</button>
                         </div>
+
                         <div className="form-inputs-group">
-                            <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
-                            <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
+                            <input type="text" placeholder="Nombre y Apellido" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp (Ej: 261...)" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
-                            {orderData.method === 'shipment' && (
+
+                            {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
                                     <input type="text" placeholder="Dirección (Calle y N°)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
                                     <div className="grid-cp">
@@ -126,13 +130,47 @@ export default function CartPage() {
                                         <input type="text" placeholder="CP" required value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
                                     </div>
                                 </div>
+                            ) : (
+                                <div className="pickup-info-card animate-fade">
+                                    <div className="pickup-header">
+                                        <span className="material-symbols-outlined">storefront</span>
+                                        <div>
+                                            <h4>Código Vinario</h4>
+                                            <p>Punto de Retiro Oficial</p>
+                                        </div>
+                                    </div>
+                                    <div className="pickup-details">
+                                        <p>📍 Av. San Martín 1234, Las Heras</p>
+                                        <p>⏰ Lun a Sáb: 09:00 a 13:00 y 17:00 a 21:00</p>
+                                    </div>
+                                    <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="btn-maps">
+                                        <span className="material-symbols-outlined">map</span> Ver en Google Maps
+                                    </a>
+                                </div>
                             )}
-                            <textarea className="notes-box" placeholder="Notas o grabado (Opcional)" value={orderData.notes} onChange={e => setOrderData({ ...orderData, notes: e.target.value })} />
+
+                            <textarea
+                                className="notes-box"
+                                placeholder="Notas o pedido de grabado (Opcional)"
+                                value={orderData.notes}
+                                onChange={e => setOrderData({ ...orderData, notes: e.target.value })}
+                            />
                         </div>
+
                         <div className="total-summary-card">
-                            <div className="t-row main-total"><span>TOTAL</span><span>{formatCurrency(cartTotal)}</span></div>
+                            <div className="t-row main-total">
+                                <span>TOTAL</span>
+                                <span>{formatCurrency(cartTotal)}</span>
+                            </div>
+                            <p className="payment-coordination-note">
+                                <span className="material-symbols-outlined">info</span>
+                                Coordinamos el pago por WhatsApp (Transferencia, Efectivo o Link)
+                            </p>
                         </div>
-                        <button type="submit" className="btn-confirm-order" disabled={loading}>CONFIRMAR PEDIDO</button>
+
+                        <button type="submit" className="btn-confirm-order" disabled={loading}>
+                            {loading ? 'PROCESANDO...' : 'FINALIZAR POR WHATSAPP 🧉'}
+                        </button>
                     </form>
                 </aside>
             </div>
