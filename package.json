@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.105.3",
+    "@supabase/supabase-js": "^2.105.4",
     "mercadopago": "^2.12.0",
     "ogl": "^1.0.11",
     "react": "^19.1.0",
