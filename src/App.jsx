@@ -66,3 +66,4 @@ export default function App() {
     </div>
   );
 }
+<Route path="/admin" element={<AdminDashboard />} />

@@ -1,39 +1,42 @@
-import { useState, useEffect } from 'react'; // Agregamos useEffect
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-import { supabase } from '../../lib/supabaseClient'; // Importamos supabase
+import { supabase } from '../../lib/supabaseClient';
 import './Navbar.css';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [userRole, setUserRole] = useState(null); // Estado para el rol del usuario
+  const [userRole, setUserRole] = useState(null);
 
   const navigate = useNavigate();
   const { cart } = useCart();
 
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Detectar el rol del usuario al cargar el Navbar
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id)
-          .single();
-        setUserRole(profile?.role);
-      } else {
+    // Función para verificar rol
+    const checkRole = async (user) => {
+      if (!user) {
         setUserRole(null);
+        return;
       }
+      const { data } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      setUserRole(data?.role || 'cliente');
     };
-    checkUser();
 
-    // Escuchar cambios en la sesión (por si se desloguea)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      checkUser();
+    // Verificar sesión inicial
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      checkRole(user);
+    });
+
+    // Escuchar cambios de auth
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      checkRole(session?.user || null);
     });
 
     return () => subscription.unsubscribe();
@@ -54,8 +57,6 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar__container">
-
-        {/* 1. IZQUIERDA: LOGO */}
         <div className="navbar__left">
           <Link to="/" className="navbar__brand" onClick={closeMenu}>
             <img src="/logo.png" alt="Cuyo Cebado" className="navbar__logo" />
@@ -63,7 +64,6 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* 2. CENTRO: BUSCADOR */}
         <div className="navbar__center">
           <form className="navbar__search" onSubmit={handleSearch}>
             <input
@@ -76,7 +76,6 @@ export default function Navbar() {
           </form>
         </div>
 
-        {/* 3. DERECHA: LINKS + CARRITO */}
         <div className="navbar__right">
           <div className="navbar__desktop-links">
             <Link to="/" className="nav-item">Inicio</Link>
@@ -84,7 +83,6 @@ export default function Navbar() {
             <Link to="/nosotros" className="nav-item">Nosotros</Link>
             <Link to="/guia-curado" className="nav-item">Guía</Link>
 
-            {/* BOTÓN ADMIN ESCRITORIO (Solo si es admin) */}
             {userRole === 'admin' && (
               <Link to="/admin" className="nav-item" style={{ color: '#a5813a', fontWeight: 'bold' }}>
                 <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', verticalAlign: 'middle', marginRight: '4px' }}>admin_panel_settings</span>
@@ -109,14 +107,12 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MENÚ MÓVIL */}
       <div className={`navbar__mobile-menu ${isMenuOpen ? 'active' : ''}`}>
         <Link to="/" onClick={closeMenu}>Inicio</Link>
         <Link to="/productos" onClick={closeMenu}>Productos</Link>
         <Link to="/nosotros" onClick={closeMenu}>Nosotros</Link>
         <Link to="/guia-curado" onClick={closeMenu}>Guía de Curado</Link>
 
-        {/* BOTÓN ADMIN MÓVIL (Solo si es admin) */}
         {userRole === 'admin' && (
           <Link to="/admin" onClick={closeMenu} style={{ color: '#a5813a', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span className="material-symbols-outlined">admin_panel_settings</span>

@@ -9,29 +9,43 @@ export default function AuthPage() {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
-    const [user, setUser] = useState(null); // Estado para el usuario logueado
+    const [user, setUser] = useState(null); // Para saber si hay alguien logueado
+
     const navigate = useNavigate();
 
-    // 1. Verificar si hay una sesión activa al cargar
+    // 1. Escuchar cambios de sesión al cargar
     useEffect(() => {
+        // Obtener sesión actual
         const getSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             setUser(session?.user ?? null);
         };
         getSession();
+
+        // Escuchar cambios (login/logout)
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
 
     const handleAuth = async (e) => {
         e.preventDefault();
         setLoading(true);
+
         try {
             if (isLogin) {
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                const { error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
                 if (error) throw error;
-                setUser(data.user);
+                // Al loguear, el useEffect de arriba detectará el cambio y mostrará el perfil
             } else {
                 const { error } = await supabase.auth.signUp({
-                    email, password,
+                    email,
+                    password,
                     options: { data: { full_name: name } }
                 });
                 if (error) throw error;
@@ -47,11 +61,10 @@ export default function AuthPage() {
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
-        setUser(null);
         navigate('/');
     };
 
-    // SI EL USUARIO ESTÁ LOGUEADO, MOSTRAMOS SU PERFIL
+    // VISTA DE PERFIL (Si está logueado)
     if (user) {
         return (
             <div className="auth-page">
@@ -59,11 +72,15 @@ export default function AuthPage() {
                     <div className="auth-header">
                         <div className="auth-logo">🧉</div>
                         <h2>Mi Perfil</h2>
-                        <p style={{ color: '#a5813a' }}>{user.email}</p>
+                        <p style={{ color: '#a5813a', fontWeight: 'bold' }}>{user.email}</p>
                     </div>
-                    <div style={{ marginTop: '20px' }}>
-                        <p style={{ color: '#888', fontSize: '0.9rem' }}>¡Bienvenido al Club de Cuyo Cebado!</p>
-                        <button onClick={handleLogout} className="btn-auth-primary" style={{ marginTop: '30px', background: '#1a1614', color: '#a5813a', border: '1px solid #a5813a' }}>
+                    <div style={{ marginTop: '30px' }}>
+                        <p style={{ color: '#888' }}>¡Bienvenido al Club de Cuyo Cebado!</p>
+                        <button
+                            onClick={handleLogout}
+                            className="btn-auth-primary"
+                            style={{ marginTop: '20px', background: '#1a1614', color: '#a5813a', border: '1px solid #a5813a' }}
+                        >
                             Cerrar Sesión
                         </button>
                     </div>
@@ -72,7 +89,7 @@ export default function AuthPage() {
         );
     }
 
-    // SI NO ESTÁ LOGUEADO, MOSTRAMOS EL FORMULARIO DE SIEMPRE
+    // VISTA DE FORMULARIO (Si NO está logueado)
     return (
         <div className="auth-page">
             <div className="auth-card">
