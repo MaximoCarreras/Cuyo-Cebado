@@ -23,14 +23,21 @@ export default function AdminDashboard() {
         setLoading(false);
     };
 
-    const createSlug = (text) => text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+    const createSlug = (text) => text.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
 
     const handleAddProduct = async (e) => {
         e.preventDefault();
         const slug = createSlug(newProduct.name);
-        const { error } = await supabase.from('products').insert([{ ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) }]);
-        if (error) toast.error("Error al crear");
-        else {
+        const { error } = await supabase.from('products').insert([{
+            ...newProduct,
+            slug,
+            price: Number(newProduct.price),
+            stock: Number(newProduct.stock)
+        }]);
+
+        if (error) {
+            toast.error("Error al crear: " + error.message);
+        } else {
             toast.success("¡Producto cargado!");
             setIsModalOpen(false);
             setNewProduct({ name: '', price: '', stock: '', category: 'mates', description: '', image_url: '/assets/placeholder.png' });
@@ -45,10 +52,13 @@ export default function AdminDashboard() {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm("¿Borrar producto?")) {
+        if (window.confirm("¿Borrar producto definitivamente?")) {
             const { error } = await supabase.from('products').delete().eq('id', id);
             if (error) toast.error("No se pudo borrar");
-            else { toast.success("Eliminado"); fetchProducts(); }
+            else {
+                toast.success("Eliminado");
+                fetchProducts();
+            }
         }
     };
 
@@ -131,11 +141,11 @@ export default function AdminDashboard() {
                                     </button>
                                 </td>
                             </tr>
-                        </tbody>
+                        ))}
+                    </tbody>
                 </table>
             </div>
 
-            {/* BOTÓN AL FINAL DE LA LISTA */}
             <div className="admin-footer-actions">
                 <button className="btn-add-product-large" onClick={() => setIsModalOpen(true)}>
                     <span className="material-symbols-outlined">add_circle</span>
@@ -143,26 +153,25 @@ export default function AdminDashboard() {
                 </button>
             </div>
 
-            {/* MODAL */}
             {isModalOpen && (
                 <div className="admin-modal-overlay">
                     <div className="admin-modal">
                         <h2>Cargar Producto</h2>
                         <form onSubmit={handleAddProduct}>
-                            <input className="modal-input" placeholder="Nombre del producto" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                            <input className="modal-input" placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
                             <div className="form-row">
                                 <input className="modal-input" type="number" placeholder="Precio ($)" required value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
-                                <input className="modal-input" type="number" placeholder="Stock inicial" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
+                                <input className="modal-input" type="number" placeholder="Stock" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
                             </div>
                             <select className="modal-input" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                                 <option value="mates">Mates</option>
                                 <option value="yerbas">Yerbas</option>
                                 <option value="bombillas">Bombillas</option>
                             </select>
-                            <textarea className="modal-input" placeholder="Descripción breve..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                            <textarea className="modal-input" placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
                             <div className="modal-actions">
                                 <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                                <button type="submit" className="btn-save">Guardar en Catálogo</button>
+                                <button type="submit" className="btn-save">Guardar</button>
                             </div>
                         </form>
                     </div>
