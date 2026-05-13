@@ -122,7 +122,17 @@ export default function Home() {
                         >
                             <div className="spotlight-light-layer"></div>
                             <div className="card-cat-content">
-                                <div className="cat-icon-display">{cat.icon}</div>
+                                <div className="category-card__icon" style={{ display: 'flex', justifyContent: 'center' }}>
+                                    {cat.image_url ? (
+                                        <img
+                                            src={cat.image_url}
+                                            alt={cat.label}
+                                            style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '50%', boxShadow: '0 10px 20px rgba(0,0,0,0.3)', marginBottom: '15px' }}
+                                        />
+                                    ) : (
+                                        cat.icon
+                                    )}
+                                </div>
                                 <div className="cat-text-display">
                                     <h3>{cat.label}</h3>
                                     <span>Explorar</span>

@@ -4,7 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState('inventory'); // inventory, orders, categories
+    const [activeTab, setActiveTab] = useState('inventory');
     const [products, setProducts] = useState([]);
     const [orders, setOrders] = useState([]);
     const [categoriesList, setCategoriesList] = useState([]);
@@ -25,8 +25,8 @@ export default function AdminDashboard() {
 
     const [newProduct, setNewProduct] = useState(initialFormState);
 
-    // Estado para la nueva categoría
-    const [newCategory, setNewCategory] = useState({ label: '', icon: '🧉' });
+    // AHORA LA CATEGORÍA TAMBIÉN TIENE IMAGE_URL
+    const [newCategory, setNewCategory] = useState({ label: '', icon: '🧉', image_url: '' });
 
     useEffect(() => { fetchData(); }, [activeTab]);
 
@@ -35,7 +35,6 @@ export default function AdminDashboard() {
         if (activeTab === 'inventory') {
             const { data } = await supabase.from('products').select('*').order('name');
             setProducts(data || []);
-            // Traemos categorías para el selector del formulario
             const { data: catData } = await supabase.from('categories').select('*').order('label');
             setCategoriesList(catData || []);
         } else if (activeTab === 'orders') {
@@ -48,7 +47,27 @@ export default function AdminDashboard() {
         setLoading(false);
     };
 
-    // --- LÓGICA DE CATEGORÍAS ---
+    // --- SUBIDA DE IMAGEN PARA CATEGORÍAS ---
+    const uploadCategoryImage = async (event) => {
+        try {
+            setUploading(true);
+            const file = event.target.files[0];
+            if (!file) return;
+            const fileExt = file.name.split('.').pop();
+            const fileName = `cat_${Math.random()}.${fileExt}`; // Le ponemos 'cat_' para distinguirlas
+
+            await supabase.storage.from('productos').upload(fileName, file);
+            const { data } = supabase.storage.from('productos').getPublicUrl(fileName);
+
+            setNewCategory({ ...newCategory, image_url: data.publicUrl });
+            toast.success("Foto de categoría cargada");
+        } catch (error) {
+            toast.error("Error al subir imagen");
+        } finally {
+            setUploading(false);
+        }
+    };
+
     const handleAddCategory = async (e) => {
         e.preventDefault();
         const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
@@ -56,12 +75,13 @@ export default function AdminDashboard() {
         const { error } = await supabase.from('categories').insert([{
             id,
             label: newCategory.label,
-            icon: newCategory.icon
+            icon: newCategory.icon,
+            image_url: newCategory.image_url // Guardamos la URL
         }]);
 
         if (!error) {
             toast.success("¡Nueva categoría creada!");
-            setNewCategory({ label: '', icon: '🧉' });
+            setNewCategory({ label: '', icon: '🧉', image_url: '' });
             fetchData();
         } else {
             toast.error("Error al crear categoría. ¿Quizás ya existe?");
@@ -79,7 +99,7 @@ export default function AdminDashboard() {
         }
     };
 
-    // --- LÓGICA DE PRODUCTOS ---
+    // --- FUNCIONES DE PRODUCTOS ---
     const handleEditClick = (product) => {
         setIsEditing(true);
         setEditingId(product.id);
@@ -188,7 +208,6 @@ export default function AdminDashboard() {
             </header>
 
             <main className="admin-content">
-                {/* --- PESTAÑA STOCK --- */}
                 {activeTab === 'inventory' && (
                     <section>
                         <div className="stats-grid">
@@ -265,7 +284,6 @@ export default function AdminDashboard() {
                     </section>
                 )}
 
-                {/* --- PESTAÑA VENTAS --- */}
                 {activeTab === 'orders' && (
                     <section>
                         <div className="stats-grid">
@@ -312,14 +330,14 @@ export default function AdminDashboard() {
                     </section>
                 )}
 
-                {/* --- PESTAÑA CATEGORÍAS (¡NUEVO!) --- */}
+                {/* --- PESTAÑA CATEGORÍAS --- */}
                 {activeTab === 'categories' && (
                     <section>
                         <div className="table-container" style={{ marginBottom: '40px' }}>
                             <table className="custom-table">
                                 <thead>
                                     <tr>
-                                        <th>ICONO</th>
+                                        <th style={{ textAlign: 'center' }}>VISUAL</th>
                                         <th>NOMBRE DE CATEGORÍA</th>
                                         <th>ID SISTEMA</th>
                                         <th style={{ textAlign: 'center' }}>ACCIONES</th>
@@ -328,7 +346,14 @@ export default function AdminDashboard() {
                                 <tbody>
                                     {categoriesList.map(cat => (
                                         <tr key={cat.id}>
-                                            <td style={{ fontSize: '2rem' }}>{cat.icon}</td>
+                                            <td style={{ textAlign: 'center' }}>
+                                                {/* MOSTRAMOS LA FOTO SI HAY, SINO EL EMOJI */}
+                                                {cat.image_url ? (
+                                                    <img src={cat.image_url} alt={cat.label} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '12px', border: '1px solid #e2e8f0' }} />
+                                                ) : (
+                                                    <span style={{ fontSize: '2rem' }}>{cat.icon}</span>
+                                                )}
+                                            </td>
                                             <td style={{ fontWeight: 'bold' }}>{cat.label}</td>
                                             <td style={{ color: '#94a3b8' }}>{cat.id}</td>
                                             <td style={{ textAlign: 'center' }}>
@@ -342,26 +367,47 @@ export default function AdminDashboard() {
                             </table>
                         </div>
 
-                        {/* FORMULARIO CREAR CATEGORÍA */}
+                        {/* FORMULARIO CREAR CATEGORÍA (AHORA CON FOTO) */}
                         <div className="category-creator-box" style={{ background: '#fff', padding: '30px', borderRadius: '18px', border: '1px solid #e2e8f0', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
-                            <h2 style={{ fontFamily: "'Noto Serif', serif", marginTop: 0, marginBottom: '20px' }}>Crear Nueva Categoría</h2>
-                            <form onSubmit={handleAddCategory} style={{ display: 'flex', gap: '20px', alignItems: 'flex-end' }}>
-                                <div style={{ flex: 1 }}>
-                                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold', color: '#64748b' }}>Nombre (Ej: Termos)</label>
-                                    <input className="premium-modal-input" required value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} />
+                            <h2 style={{ fontFamily: "'Noto Serif', serif", marginTop: 0, marginBottom: '25px' }}>Crear Nueva Categoría</h2>
+
+                            <form onSubmit={handleAddCategory} style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '30px', alignItems: 'center' }}>
+
+                                {/* CAJITA SUBIR FOTO */}
+                                <div className="image-upload-box-premium" style={{ height: '150px', margin: 0 }}>
+                                    {newCategory.image_url ? (
+                                        <img src={newCategory.image_url} alt="Preview" className="image-preview" />
+                                    ) : (
+                                        <div className="upload-placeholder-premium">
+                                            <span className="material-symbols-outlined">add_photo_alternate</span>
+                                            <span style={{ fontSize: '0.8rem' }}>Foto (Opcional)</span>
+                                        </div>
+                                    )}
+                                    <input type="file" accept="image/*" onChange={uploadCategoryImage} disabled={uploading} className="file-input-hidden" />
                                 </div>
-                                <div style={{ width: '120px' }}>
-                                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold', color: '#64748b' }}>Emoji</label>
-                                    <input className="premium-modal-input" required style={{ fontSize: '1.5rem', textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold', color: '#64748b' }}>Nombre (Ej: Termos)</label>
+                                        <input className="premium-modal-input" required value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} />
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-end' }}>
+                                        <div style={{ width: '150px' }}>
+                                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold', color: '#64748b' }}>Emoji (Si no hay foto)</label>
+                                            <input className="premium-modal-input" required style={{ fontSize: '1.5rem', textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
+                                        </div>
+                                        <button type="submit" className="btn-add-premium" style={{ flex: 1, justifyContent: 'center' }} disabled={uploading}>
+                                            Crear Categoría
+                                        </button>
+                                    </div>
                                 </div>
-                                <button type="submit" className="btn-add-premium" style={{ padding: '16px 30px' }}>Crear</button>
                             </form>
                         </div>
                     </section>
                 )}
             </main>
 
-            {/* MODALES SE MANTIENEN IGUAL (Detalles de Venta y Formulario Producto) */}
+            {/* MODALES DETALLE DE VENTA Y CREAR PRODUCTO (Igual que antes) */}
             {selectedOrder && (
                 <div className="modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="modal-card" onClick={e => e.stopPropagation()}>
@@ -407,7 +453,6 @@ export default function AdminDashboard() {
                                     <input className="premium-modal-input" type="number" placeholder="Stock" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
                                 </div>
                                 <div className="form-split-modern">
-                                    {/* AHORA LAS CATEGORÍAS EN EL SELECTOR VIENEN DE LA BASE DE DATOS */}
                                     <select className="premium-modal-input selector-premium" required value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                                         <option value="" disabled>Elegir categoría...</option>
                                         {categoriesList.map(cat => (
