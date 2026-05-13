@@ -2,36 +2,31 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useMemo, useEffect } from 'react';
 import { categories } from '../../data/products';
 import { useCart } from '../../context/CartContext';
-import { supabase } from '../../lib/supabaseClient'; // <-- IMPORTANTE: CONEXIÓN DIRECTA
+import { supabase } from '../../lib/supabaseClient'; // <-- Verificá que el archivo se llame así
 import './CategoryPage.css';
 
 export default function CategoryPage() {
     const { categoryId } = useParams();
     const { addToCart } = useCart();
-
     const [dbProducts, setDbProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-
     const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
     const [selectedType, setSelectedType] = useState('todos');
-
     const currentCategory = categories.find(cat => cat.id === categoryId);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                // PEDIDO DIRECTO A SUPABASE
                 const { data, error } = await supabase
                     .from('products')
                     .select('*')
                     .eq('category', categoryId);
-
                 if (error) throw error;
                 setDbProducts(data || []);
             } catch (error) {
-                console.error("Error cargando productos:", error);
+                console.error("Error directo de Supabase:", error);
             } finally {
                 setLoading(false);
             }
@@ -76,7 +71,6 @@ export default function CategoryPage() {
                     <span className="material-symbols-outlined">arrow_back</span> Volver a categorías
                 </Link>
             </div>
-
             <div className="category-page__main">
                 <aside className="sidebar-mafia">
                     <div className="sidebar__title">
@@ -85,23 +79,13 @@ export default function CategoryPage() {
                     </div>
                     <div className="filter-group">
                         <label>Precio máximo: <b>${maxPrice.toLocaleString()}</b></label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="250000"
-                            step="5000"
-                            value={maxPrice}
-                            onChange={(e) => setMaxPrice(Number(e.target.value))}
-                            className="price-slider-mafia"
-                        />
+                        <input type="range" min="0" max="250000" step="5000" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} className="price-slider-mafia" />
                     </div>
                     {getOptions('material').length > 1 && (
                         <div className="filter-group">
                             <label>Material</label>
                             <select value={selectedMaterial} onChange={(e) => setSelectedMaterial(e.target.value)}>
-                                {getOptions('material').map(o => (
-                                    <option key={o} value={o}>{o === 'todos' ? 'TODOS' : o.toUpperCase()}</option>
-                                ))}
+                                {getOptions('material').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
                             </select>
                         </div>
                     )}
@@ -109,46 +93,30 @@ export default function CategoryPage() {
                         <div className="filter-group">
                             <label>{getTypeLabel()}</label>
                             <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
-                                {getOptions('type').map(o => (
-                                    <option key={o} value={o}>{o === 'todos' ? 'TODOS' : o.toUpperCase()}</option>
-                                ))}
+                                {getOptions('type').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
                             </select>
                         </div>
                     )}
                 </aside>
-
                 <section className="products-content">
                     <header className="category-header">
                         <h1 className="section__title">{currentCategory?.label}</h1>
                         <p className="products-count">{filteredProducts.length} piezas encontradas</p>
                     </header>
-
                     <div className="products-grid-mafia">
                         {filteredProducts.map(product => (
                             <Link key={product.id} to={`/producto/${product.id}`} className="product-card-link-mafia">
                                 <div className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
-                                    {product.stock === 0 ? (
-                                        <span className="product-badge out-of-stock">Próximo Ingreso</span>
-                                    ) : (
-                                        product.is_featured && <span className="product-badge">Top Ventas</span>
-                                    )}
-
+                                    {product.stock === 0 ? <span className="product-badge out-of-stock">Próximo Ingreso</span> : product.is_featured && <span className="product-badge">Top Ventas</span>}
                                     <div className="product-image-container-mafia">
                                         <span className="emoji-display">{currentCategory?.icon}</span>
                                         {product.stock === 0 && <div className="out-of-stock-overlay-mafia">Próximamente</div>}
                                     </div>
-
                                     <div className="product-info-mafia">
-                                        <p className="product-tag-mafia">
-                                            {product.type} {product.material ? `| ${product.material}` : ''}
-                                        </p>
+                                        <p className="product-tag-mafia">{product.type} {product.material ? `| ${product.material}` : ''}</p>
                                         <h4 className="product-name-mafia">{product.name}</h4>
                                         <p className="product-price-mafia">${Number(product.price).toLocaleString()}</p>
-                                        <button
-                                            className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`}
-                                            disabled={product.stock === 0}
-                                            onClick={(e) => handleQuickAdd(e, product)}
-                                        >
+                                        <button className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`} disabled={product.stock === 0} onClick={(e) => handleQuickAdd(e, product)}>
                                             {product.stock === 0 ? 'Sin Stock' : 'Agregar al Carrito'}
                                         </button>
                                     </div>
