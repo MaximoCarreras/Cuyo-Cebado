@@ -4,9 +4,10 @@ import toast, { Toaster } from 'react-hot-toast';
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState('inventory');
+    const [activeTab, setActiveTab] = useState('inventory'); // inventory, orders, categories
     const [products, setProducts] = useState([]);
     const [orders, setOrders] = useState([]);
+    const [categoriesList, setCategoriesList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
 
@@ -24,6 +25,9 @@ export default function AdminDashboard() {
 
     const [newProduct, setNewProduct] = useState(initialFormState);
 
+    // Estado para la nueva categoría
+    const [newCategory, setNewCategory] = useState({ label: '', icon: '🧉' });
+
     useEffect(() => { fetchData(); }, [activeTab]);
 
     const fetchData = async () => {
@@ -31,22 +35,59 @@ export default function AdminDashboard() {
         if (activeTab === 'inventory') {
             const { data } = await supabase.from('products').select('*').order('name');
             setProducts(data || []);
-        } else {
+            // Traemos categorías para el selector del formulario
+            const { data: catData } = await supabase.from('categories').select('*').order('label');
+            setCategoriesList(catData || []);
+        } else if (activeTab === 'orders') {
             const { data } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
             setOrders(data || []);
+        } else if (activeTab === 'categories') {
+            const { data } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
+            setCategoriesList(data || []);
         }
         setLoading(false);
     };
 
+    // --- LÓGICA DE CATEGORÍAS ---
+    const handleAddCategory = async (e) => {
+        e.preventDefault();
+        const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+
+        const { error } = await supabase.from('categories').insert([{
+            id,
+            label: newCategory.label,
+            icon: newCategory.icon
+        }]);
+
+        if (!error) {
+            toast.success("¡Nueva categoría creada!");
+            setNewCategory({ label: '', icon: '🧉' });
+            fetchData();
+        } else {
+            toast.error("Error al crear categoría. ¿Quizás ya existe?");
+        }
+    };
+
+    const handleDeleteCategory = async (id) => {
+        if (window.confirm("¿Borrar esta categoría? Asegurate de no tener productos usándola.")) {
+            const { error } = await supabase.from('categories').delete().eq('id', id);
+            if (error) toast.error("Error al borrar");
+            else {
+                toast.success("Categoría eliminada");
+                fetchData();
+            }
+        }
+    };
+
+    // --- LÓGICA DE PRODUCTOS ---
     const handleEditClick = (product) => {
         setIsEditing(true);
         setEditingId(product.id);
-        setNewProduct({ ...product }); // Carga rápida de datos
+        setNewProduct({ ...product });
         setIsModalOpen(true);
     };
 
     const handleUpdateStock = async (id, field, value) => {
-        // Validación rápida para no ir a negativo en stock
         if (field === 'stock' && value < 0) {
             toast.error("El stock no puede ser negativo");
             return;
@@ -123,6 +164,12 @@ export default function AdminDashboard() {
         setNewProduct(initialFormState);
     };
 
+    const switchTab = (tabName) => {
+        closeModal();
+        setSelectedOrder(null);
+        setActiveTab(tabName);
+    };
+
     const totalRevenue = orders.reduce((acc, o) => acc + o.total, 0);
 
     if (loading) return <div className="admin-loading-screen">Abriendo la estancia...</div>;
@@ -134,13 +181,15 @@ export default function AdminDashboard() {
             <header className="admin-sidebar-header">
                 <h1>Gestión Cuyo Cebado</h1>
                 <div className="tab-switcher">
-                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => setActiveTab('inventory')}>Stock</button>
-                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => setActiveTab('orders')}>Ventas</button>
+                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => switchTab('inventory')}>Stock</button>
+                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => switchTab('orders')}>Ventas</button>
+                    <button className={activeTab === 'categories' ? 'active' : ''} onClick={() => switchTab('categories')}>Categorías</button>
                 </div>
             </header>
 
             <main className="admin-content">
-                {activeTab === 'inventory' ? (
+                {/* --- PESTAÑA STOCK --- */}
+                {activeTab === 'inventory' && (
                     <section>
                         <div className="stats-grid">
                             <div className="stat-box">
@@ -153,7 +202,6 @@ export default function AdminDashboard() {
                             </div>
                         </div>
 
-                        {/* BUSCADOR SOFISTICADO */}
                         <div className="search-container-modern">
                             <span className="material-symbols-outlined search-icon">search</span>
                             <input className="modern-input-search" placeholder="Buscar mate, yerba, bombilla..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
@@ -178,11 +226,9 @@ export default function AdminDashboard() {
                                                 <span className="product-name">{product.name}</span>
                                             </td>
                                             <td>
-                                                {/* INPUT DE PRECIO MODERNIZADO */}
                                                 <input type="number" className="price-edit-input" defaultValue={product.price} onBlur={(e) => handleUpdateStock(product.id, 'price', Number(e.target.value))} />
                                             </td>
                                             <td className="stock-controls-cell">
-                                                {/* CONTROLES DE STOCK REESPACIADOS */}
                                                 <div className="stock-controls-wrapper">
                                                     <button className="btn-stock-qty" onClick={() => handleUpdateStock(product.id, 'stock', product.stock - 1)}>-</button>
                                                     <span className="stock-number-display">{product.stock}</span>
@@ -190,7 +236,6 @@ export default function AdminDashboard() {
                                                 </div>
                                             </td>
                                             <td style={{ textAlign: 'center' }}>
-                                                {/* BOTÓN ESTRELLA SOFISTICADO */}
                                                 <button className={`btn-action-star ${product.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(product)}>
                                                     <span className="material-symbols-outlined">star</span>
                                                 </button>
@@ -211,7 +256,6 @@ export default function AdminDashboard() {
                             </table>
                         </div>
 
-                        {/* BOTÓN AGREGAR PREMIUM */}
                         <div className="footer-action-panel">
                             <button className="btn-add-premium" onClick={() => setIsModalOpen(true)}>
                                 <span className="material-symbols-outlined">add</span>
@@ -219,9 +263,11 @@ export default function AdminDashboard() {
                             </button>
                         </div>
                     </section>
-                ) : (
+                )}
+
+                {/* --- PESTAÑA VENTAS --- */}
+                {activeTab === 'orders' && (
                     <section>
-                        {/* Pestaña Ventas (Se mantiene igual, solo cambia el CSS general) */}
                         <div className="stats-grid">
                             <div className="stat-box">
                                 <span className="label">TOTAL RECAUDADO</span>
@@ -265,9 +311,57 @@ export default function AdminDashboard() {
                         </div>
                     </section>
                 )}
+
+                {/* --- PESTAÑA CATEGORÍAS (¡NUEVO!) --- */}
+                {activeTab === 'categories' && (
+                    <section>
+                        <div className="table-container" style={{ marginBottom: '40px' }}>
+                            <table className="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>ICONO</th>
+                                        <th>NOMBRE DE CATEGORÍA</th>
+                                        <th>ID SISTEMA</th>
+                                        <th style={{ textAlign: 'center' }}>ACCIONES</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {categoriesList.map(cat => (
+                                        <tr key={cat.id}>
+                                            <td style={{ fontSize: '2rem' }}>{cat.icon}</td>
+                                            <td style={{ fontWeight: 'bold' }}>{cat.label}</td>
+                                            <td style={{ color: '#94a3b8' }}>{cat.id}</td>
+                                            <td style={{ textAlign: 'center' }}>
+                                                <button className="btn-delete-action" style={{ margin: '0 auto' }} onClick={() => handleDeleteCategory(cat.id)}>
+                                                    <span className="material-symbols-outlined">delete</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* FORMULARIO CREAR CATEGORÍA */}
+                        <div className="category-creator-box" style={{ background: '#fff', padding: '30px', borderRadius: '18px', border: '1px solid #e2e8f0', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
+                            <h2 style={{ fontFamily: "'Noto Serif', serif", marginTop: 0, marginBottom: '20px' }}>Crear Nueva Categoría</h2>
+                            <form onSubmit={handleAddCategory} style={{ display: 'flex', gap: '20px', alignItems: 'flex-end' }}>
+                                <div style={{ flex: 1 }}>
+                                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold', color: '#64748b' }}>Nombre (Ej: Termos)</label>
+                                    <input className="premium-modal-input" required value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} />
+                                </div>
+                                <div style={{ width: '120px' }}>
+                                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold', color: '#64748b' }}>Emoji</label>
+                                    <input className="premium-modal-input" required style={{ fontSize: '1.5rem', textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
+                                </div>
+                                <button type="submit" className="btn-add-premium" style={{ padding: '16px 30px' }}>Crear</button>
+                            </form>
+                        </div>
+                    </section>
+                )}
             </main>
 
-            {/* MODAL DETALLES VENTA (Se mantiene lógica, cambia CSS) */}
+            {/* MODALES SE MANTIENEN IGUAL (Detalles de Venta y Formulario Producto) */}
             {selectedOrder && (
                 <div className="modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="modal-card" onClick={e => e.stopPropagation()}>
@@ -285,12 +379,10 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            {/* MODAL CREAR/EDITAR (Súper Formulario con CSS Moderno) */}
             {isModalOpen && (
                 <div className="modal-backdrop" onClick={closeModal}>
                     <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
                         <h2>{isEditing ? 'Editar Ficha' : 'Nueva Ficha de Producto'}</h2>
-
                         <form onSubmit={handleSaveProduct} className="modal-form-grid">
                             <div className="form-column Multimedia-col">
                                 <div className="image-upload-box-premium">
@@ -315,11 +407,12 @@ export default function AdminDashboard() {
                                     <input className="premium-modal-input" type="number" placeholder="Stock" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
                                 </div>
                                 <div className="form-split-modern">
-                                    <select className="premium-modal-input selector-premium" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
-                                        <option value="mates">Mates</option>
-                                        <option value="yerbas">Yerbas</option>
-                                        <option value="bombillas">Bombillas</option>
-                                        <option value="accesorios">Accesorios</option>
+                                    {/* AHORA LAS CATEGORÍAS EN EL SELECTOR VIENEN DE LA BASE DE DATOS */}
+                                    <select className="premium-modal-input selector-premium" required value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                                        <option value="" disabled>Elegir categoría...</option>
+                                        {categoriesList.map(cat => (
+                                            <option key={cat.id} value={cat.id}>{cat.label}</option>
+                                        ))}
                                     </select>
                                     <input className="premium-modal-input" placeholder="Etiqueta (Ej: Premium)" value={newProduct.badge} onChange={e => setNewProduct({ ...newProduct, badge: e.target.value })} />
                                 </div>
