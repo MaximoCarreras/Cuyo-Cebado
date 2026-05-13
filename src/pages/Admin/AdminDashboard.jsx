@@ -1,56 +1,39 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
 
     useEffect(() => {
-        const checkAdmin = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                navigate('/mi-cuenta');
-                return;
-            }
-
-            const { data: profile } = await supabase
-                .from('profiles')
-                .select('role')
-                .eq('id', user.id)
-                .single();
-
-            if (profile?.role !== 'admin') {
-                navigate('/');
-            } else {
-                fetchProducts();
-            }
-        };
-
-        checkAdmin();
-    }, [navigate]);
+        fetchProducts();
+    }, []);
 
     const fetchProducts = async () => {
         setLoading(true);
         const { data, error } = await supabase
             .from('products')
             .select('*')
-            .order('name', { ascending: true });
-
+            .order('name');
         if (!error) setProducts(data);
         setLoading(false);
     };
 
+    // ESTA ES LA FUNCIÓN CLAVE QUE GUARDA EN SUPABASE
     const handleUpdate = async (id, field, value) => {
+        // 1. Actualizamos visualmente primero para que sea rápido
+        setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: value } : p));
+
+        // 2. Guardamos en Supabase inmediatamente
         const { error } = await supabase
             .from('products')
             .update({ [field]: value })
             .eq('id', id);
 
-        if (!error) {
-            setProducts(products.map(p => p.id === id ? { ...p, [field]: value } : p));
+        if (error) {
+            alert("Error al guardar: " + error.message);
+            fetchProducts(); // Si falla, recargamos los datos originales
         }
     };
 
@@ -60,43 +43,29 @@ export default function AdminDashboard() {
         <div className="admin-container">
             <header className="admin-header">
                 <h1>Panel de Control</h1>
-                <p>Gestión de Stock y Precios - Cuyo Cebado</p>
+                <p>Los cambios se guardan automáticamente al modificar los valores.</p>
             </header>
-
-            <div className="admin-stats">
-                <div className="stat-card">
-                    <span>Total Productos</span>
-                    <strong>{products.length}</strong>
-                </div>
-                <div className="stat-card">
-                    <span>Sin Stock</span>
-                    <strong style={{ color: '#ff4d4d' }}>
-                        {products.filter(p => p.stock === 0).length}
-                    </strong>
-                </div>
-            </div>
 
             <div className="admin-table-wrapper">
                 <table className="admin-table">
                     <thead>
                         <tr>
                             <th>Producto</th>
-                            <th>Categoría</th>
                             <th>Precio ($)</th>
                             <th>Stock</th>
-                            <th>Acciones Rápidas</th>
+                            <th>Acciones de Stock</th>
                         </tr>
                     </thead>
                     <tbody>
                         {products.map(product => (
-                            <tr key={product.id} className={product.stock === 0 ? 'row-no-stock' : ''}>
-                                <td className="td-name">{product.name}</td>
-                                <td className="td-cat">{product.category}</td>
+                            <tr key={product.id}>
+                                <td>{product.name}</td>
                                 <td>
                                     <input
                                         type="number"
                                         className="admin-input-price"
                                         defaultValue={product.price}
+                                        // Cuando el usuario deja de escribir (onBlur), guardamos
                                         onBlur={(e) => handleUpdate(product.id, 'price', Number(e.target.value))}
                                     />
                                 </td>
