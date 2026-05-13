@@ -2,7 +2,6 @@
     padding: 120px 20px 60px;
     max-width: 1100px;
     margin: 0 auto;
-    font-family: 'Inter', sans-serif;
 }
 
 .admin-sidebar-header {
@@ -10,16 +9,13 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
-    flex-wrap: wrap;
-    gap: 20px;
 }
 
-/* TABS */
 .tab-switcher {
     display: flex;
-    background: #f4f4f4;
-    padding: 6px;
-    border-radius: 12px;
+    background: #eee;
+    padding: 5px;
+    border-radius: 10px;
 }
 
 .tab-switcher button {
@@ -27,12 +23,8 @@
     padding: 10px 20px;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-weight: bold;
     color: #666;
-    transition: 0.2s;
 }
 
 .tab-switcher button.active {
@@ -40,7 +32,6 @@
     color: #a5813a;
 }
 
-/* STATS */
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -51,8 +42,8 @@
 .stat-box {
     background: #1a1614;
     border: 1px solid #a5813a;
-    padding: 25px;
-    border-radius: 15px;
+    padding: 20px;
+    border-radius: 12px;
     text-align: center;
 }
 
@@ -60,13 +51,11 @@
     color: #a5813a;
     font-size: 0.7rem;
     font-weight: 800;
-    letter-spacing: 1px;
 }
 
 .stat-box .number {
     color: #fff;
-    font-size: 2.2rem;
-    display: block;
+    font-size: 2rem;
     font-weight: 800;
 }
 
@@ -78,11 +67,10 @@
     color: #ff4d4d;
 }
 
-/* TABLE */
 .table-container {
     background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     overflow: hidden;
 }
 
@@ -94,153 +82,97 @@
 .custom-table th {
     background: #1a1614;
     color: #a5813a;
-    padding: 18px;
+    padding: 15px;
     text-align: left;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
 }
 
 .custom-table td {
-    padding: 15px 18px;
-    border-bottom: 1px solid #f8f8f8;
+    padding: 15px;
+    border-bottom: 1px solid #f5f5f5;
 }
 
 .product-info {
     display: flex;
     align-items: center;
     gap: 15px;
-    font-weight: 700;
+    font-weight: bold;
 }
 
 .mini-thumb {
-    width: 45px;
-    height: 45px;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
     object-fit: cover;
-    background: #f0f0f0;
 }
 
 .price-edit {
-    width: 90px;
-    padding: 8px;
+    width: 80px;
+    padding: 5px;
     border: 1px solid #ddd;
-    border-radius: 6px;
-    font-weight: 700;
+    border-radius: 4px;
+    font-weight: bold;
 }
 
 .stock-controls {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .stock-controls button {
-    width: 28px;
-    height: 28px;
+    width: 25px;
+    height: 25px;
     background: #1a1614;
     color: #a5813a;
     border: 1px solid #a5813a;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
-.qty {
-    font-weight: 800;
-    min-width: 20px;
-    text-align: center;
-}
-
-/* FOOTER & BUTTONS */
-.footer-action {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-}
-
-.main-add-btn {
-    background: #a5813a;
-    color: #1a1614;
-    border: none;
-    padding: 18px 45px;
-    border-radius: 12px;
-    font-weight: 900;
+.btn-view {
+    background: #1a1614;
+    color: #a5813a;
+    border: 1px solid #a5813a;
+    border-radius: 5px;
+    padding: 5px;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-.badge {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 800;
-}
-
-.badge.approved {
-    background: #e6fffa;
-    color: #2c7a7b;
-}
-
-/* MODAL */
 .modal-backdrop {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 1000;
 }
 
 .modal-card {
     background: #fff;
-    padding: 40px;
-    border-radius: 20px;
-    width: 450px;
+    padding: 30px;
+    border-radius: 15px;
+    width: 400px;
 }
 
-.modal-form {
+.item-row-detail {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
 }
 
-.modal-form input,
-.modal-form select,
-.modal-form textarea {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-.form-split {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.modal-btns {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.save-btn {
-    flex: 2;
+.btn-close {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
     background: #1a1614;
-    color: #a5813a;
+    color: #fff;
     border: none;
-    padding: 15px;
-    border-radius: 10px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.cancel-btn {
-    flex: 1;
-    background: #eee;
-    border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
 }
