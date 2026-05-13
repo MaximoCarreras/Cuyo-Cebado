@@ -8,12 +8,14 @@ export default function AdminDashboard() {
     const [products, setProducts] = useState([]);
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [uploading, setUploading] = useState(false);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
 
     const [newProduct, setNewProduct] = useState({
-        name: '', price: '', stock: '', category: 'mates', description: '', image_url: '/assets/placeholder.png'
+        name: '', price: '', stock: '', category: 'mates', description: '', image_url: ''
     });
 
     useEffect(() => { fetchData(); }, [activeTab]);
@@ -30,10 +32,18 @@ export default function AdminDashboard() {
         setLoading(false);
     };
 
+    // --- FUNCIONES DE INVENTARIO ---
     const handleUpdate = async (id, field, value) => {
         setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: value } : p));
         const { error } = await supabase.from('products').update({ [field]: value }).eq('id', id);
-        if (!error) toast.success("Sincronizado");
+        if (!error && field !== 'is_featured') toast.success("Sincronizado");
+    };
+
+    const handleToggleFeatured = async (product) => {
+        const newValue = !product.is_featured;
+        setProducts(prev => prev.map(p => p.id === product.id ? { ...p, is_featured: newValue } : p));
+        await supabase.from('products').update({ is_featured: newValue }).eq('id', product.id);
+        toast.success(newValue ? "¡Destacado en Inicio!" : "Quitado de Destacados");
     };
 
     const handleDelete = async (id) => {
@@ -47,16 +57,53 @@ export default function AdminDashboard() {
         }
     };
 
+    // --- FUNCIONES DE IMAGEN Y CREACIÓN ---
+    const uploadImage = async (event) => {
+        try {
+            setUploading(true);
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Math.random()}.${fileExt}`;
+
+            const { error: uploadError } = await supabase.storage.from('productos').upload(fileName, file);
+            if (uploadError) throw uploadError;
+
+            const { data } = supabase.storage.from('productos').getPublicUrl(fileName);
+            setNewProduct({ ...newProduct, image_url: data.publicUrl });
+            toast.success("Imagen subida con éxito");
+        } catch (error) {
+            toast.error("Error al subir imagen");
+        } finally {
+            setUploading(false);
+        }
+    };
+
     const handleAddProduct = async (e) => {
         e.preventDefault();
         const slug = newProduct.name.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-        const { error } = await supabase.from('products').insert([{ ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) }]);
+        const finalImage = newProduct.image_url || '/assets/placeholder.png'; // Imagen por defecto si no subió nada
+
+        const { error } = await supabase.from('products').insert([{
+            ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock), image_url: finalImage
+        }]);
+
         if (!error) {
             toast.success("¡Producto cargado!");
             setIsModalOpen(false);
-            setNewProduct({ name: '', price: '', stock: '', category: 'mates', description: '', image_url: '/assets/placeholder.png' });
+            setNewProduct({ name: '', price: '', stock: '', category: 'mates', description: '', image_url: '' });
             fetchData();
+        } else {
+            toast.error("Error al guardar en base de datos");
         }
+    };
+
+    // --- FUNCIONES DE VENTAS ---
+    const handleOrderStatus = async (id, newStatus) => {
+        setOrders(prev => prev.map(o => o.id === id ? { ...o, status: newStatus } : o));
+        await supabase.from('orders').update({ status: newStatus }).eq('id', id);
+        toast.success("Estado de pedido actualizado");
     };
 
     const totalRevenue = orders.reduce((acc, o) => acc + o.total, 0);
@@ -89,15 +136,9 @@ export default function AdminDashboard() {
                             </div>
                         </div>
 
-                        {/* Buscador Modernizado */}
                         <div className="search-container-modern">
                             <span className="material-symbols-outlined">search</span>
-                            <input
-                                className="modern-input-search"
-                                placeholder="Buscar en el inventario..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
+                            <input className="modern-input-search" placeholder="Buscar en el inventario..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                         </div>
 
                         <div className="table-container">
@@ -107,6 +148,7 @@ export default function AdminDashboard() {
                                         <th>PRODUCTO</th>
                                         <th>PRECIO</th>
                                         <th>STOCK</th>
+                                        <th style={{ textAlign: 'center' }}>DESTACAR</th>
                                         <th style={{ textAlign: 'center' }}>ACCIONES</th>
                                     </tr>
                                 </thead>
@@ -118,12 +160,7 @@ export default function AdminDashboard() {
                                                 <span>{product.name}</span>
                                             </td>
                                             <td>
-                                                <input
-                                                    type="number"
-                                                    className="price-edit"
-                                                    defaultValue={product.price}
-                                                    onBlur={(e) => handleUpdate(product.id, 'price', Number(e.target.value))}
-                                                />
+                                                <input type="number" className="price-edit" defaultValue={product.price} onBlur={(e) => handleUpdate(product.id, 'price', Number(e.target.value))} />
                                             </td>
                                             <td className="stock-controls">
                                                 <button className="btn-qty" onClick={() => handleUpdate(product.id, 'stock', product.stock - 1)}>-</button>
@@ -131,7 +168,12 @@ export default function AdminDashboard() {
                                                 <button className="btn-qty" onClick={() => handleUpdate(product.id, 'stock', product.stock + 1)}>+</button>
                                             </td>
                                             <td style={{ textAlign: 'center' }}>
-                                                {/* Botón Eliminar Modernizado */}
+                                                {/* BOTÓN ESTRELLITA */}
+                                                <button className={`btn-star ${product.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(product)}>
+                                                    <span className="material-symbols-outlined" style={{ fontVariationSettings: product.is_featured ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                                                </button>
+                                            </td>
+                                            <td style={{ textAlign: 'center' }}>
                                                 <button className="btn-delete-modern" onClick={() => handleDelete(product.id)}>
                                                     <span className="material-symbols-outlined">delete</span>
                                                 </button>
@@ -142,11 +184,9 @@ export default function AdminDashboard() {
                             </table>
                         </div>
 
-                        {/* Botón Agregar Modernizado */}
                         <div className="footer-action">
                             <button className="btn-add-modern" onClick={() => setIsModalOpen(true)}>
-                                <span className="material-symbols-outlined">add_circle</span>
-                                NUEVO PRODUCTO
+                                <span className="material-symbols-outlined">add_circle</span> NUEVO PRODUCTO
                             </button>
                         </div>
                     </section>
@@ -158,7 +198,7 @@ export default function AdminDashboard() {
                                 <span className="number">${totalRevenue.toLocaleString()}</span>
                             </div>
                             <div className="stat-box">
-                                <span className="label">PEDIDOS</span>
+                                <span className="label">PEDIDOS TOTALES</span>
                                 <span className="number">{orders.length}</span>
                             </div>
                         </div>
@@ -170,7 +210,8 @@ export default function AdminDashboard() {
                                         <th>FECHA</th>
                                         <th>CLIENTE</th>
                                         <th>TOTAL</th>
-                                        <th style={{ textAlign: 'center' }}>PEDIDO</th>
+                                        <th>ESTADO</th>
+                                        <th style={{ textAlign: 'center' }}>VER</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -179,6 +220,14 @@ export default function AdminDashboard() {
                                             <td>{new Date(order.created_at).toLocaleDateString()}</td>
                                             <td>{order.customer_email}</td>
                                             <td><strong>${order.total.toLocaleString()}</strong></td>
+                                            <td>
+                                                {/* SELECTOR DE ESTADOS DE PEDIDO */}
+                                                <select className={`status-select ${order.status}`} value={order.status} onChange={(e) => handleOrderStatus(order.id, e.target.value)}>
+                                                    <option value="pending">Pendiente</option>
+                                                    <option value="shipped">Despachado</option>
+                                                    <option value="delivered">Entregado</option>
+                                                </select>
+                                            </td>
                                             <td style={{ textAlign: 'center' }}>
                                                 <button className="btn-view" onClick={() => setSelectedOrder(order)}>
                                                     <span className="material-symbols-outlined">visibility</span>
@@ -206,17 +255,35 @@ export default function AdminDashboard() {
                                 </div>
                             ))}
                         </div>
+                        <div className="order-modal-total">
+                            <span>TOTAL A COBRAR:</span>
+                            <strong>${selectedOrder.total.toLocaleString()}</strong>
+                        </div>
                         <button className="btn-close" onClick={() => setSelectedOrder(null)}>Cerrar</button>
                     </div>
                 </div>
             )}
 
-            {/* MODAL NUEVO PRODUCTO */}
+            {/* MODAL NUEVO PRODUCTO CON SUBIDA DE FOTO */}
             {isModalOpen && (
                 <div className="modal-backdrop" onClick={() => setIsModalOpen(false)}>
                     <div className="modal-card" onClick={e => e.stopPropagation()}>
                         <h2>Cargar Producto</h2>
                         <form onSubmit={handleAddProduct} className="modal-form">
+
+                            {/* CAJA DE SUBIDA DE IMAGEN */}
+                            <div className="image-upload-box">
+                                {newProduct.image_url ? (
+                                    <img src={newProduct.image_url} alt="Preview" className="image-preview" />
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <span className="material-symbols-outlined">add_photo_alternate</span>
+                                        <span>{uploading ? 'Subiendo...' : 'Subir foto del producto'}</span>
+                                    </div>
+                                )}
+                                <input type="file" accept="image/*" onChange={uploadImage} disabled={uploading} className="file-input-hidden" />
+                            </div>
+
                             <input className="modern-modal-input" placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
                             <div className="form-split">
                                 <input className="modern-modal-input" type="number" placeholder="Precio ($)" required value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
@@ -228,9 +295,10 @@ export default function AdminDashboard() {
                                 <option value="bombillas">Bombillas</option>
                             </select>
                             <textarea className="modern-modal-input" placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+
                             <div className="modal-btns">
                                 <button type="button" className="cancel-btn" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                                <button type="submit" className="save-btn">Guardar</button>
+                                <button type="submit" className="save-btn" disabled={uploading}>Guardar</button>
                             </div>
                         </form>
                     </div>
