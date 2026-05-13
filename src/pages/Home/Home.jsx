@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient'; // Conexión oficial a tu base de datos
+import { supabase } from '../../lib/supabaseClient';
 import { categories } from '../../data/products';
 import { useCart } from '../../context/CartContext';
 import heroImg from '../../assets/fondo_hero_principal.png';
@@ -18,27 +18,26 @@ export default function Home() {
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                // 1. Buscamos si el socio marcó algún producto con la ESTRELLA (is_featured = true)
+                // 1. Buscamos TODOS los destacados, pero ordenamos y agarramos solo 1 para que no se rompa
                 const { data: featuredData, error: featuredError } = await supabase
                     .from('products')
                     .select('*')
                     .eq('is_featured', true)
-                    .limit(1)
-                    .single();
+                    .order('created_at', { ascending: false })
+                    .limit(1);
 
-                if (featuredData) {
-                    setFeaturedKit(featuredData);
+                if (featuredData && featuredData.length > 0) {
+                    setFeaturedKit(featuredData[0]);
                 } else {
                     // 2. Si no hay ninguno con estrella, traemos el último producto cargado
                     const { data: fallbackData } = await supabase
                         .from('products')
                         .select('*')
                         .order('created_at', { ascending: false })
-                        .limit(1)
-                        .single();
+                        .limit(1);
 
-                    if (fallbackData) {
-                        setFeaturedKit(fallbackData);
+                    if (fallbackData && fallbackData.length > 0) {
+                        setFeaturedKit(fallbackData[0]);
                     }
                 }
             } catch (error) {
@@ -135,7 +134,6 @@ export default function Home() {
                     <div className="showcase-container">
                         <div className="showcase-image-side">
                             <div className="badge-premium">DESTACADO</div>
-                            {/* Acá mostramos la foto real que cargó tu socio */}
                             <img
                                 src={featuredKit.image_url || '/assets/placeholder.png'}
                                 alt={featuredKit.name}
@@ -152,7 +150,6 @@ export default function Home() {
                                     <button className="btn-gold-mafia" onClick={() => featuredKit.stock > 0 && addToCart(featuredKit)} disabled={featuredKit.stock === 0}>
                                         {featuredKit.stock > 0 ? 'Comprar Ahora' : 'Sin Stock'}
                                     </button>
-                                    {/* Botón para ir a ver el producto completo (Usa el SLUG para que no dé error) */}
                                     <Link to={`/producto/${featuredKit.slug}`} className="btn-outline-mafia" style={{ padding: '15px 30px', display: 'flex', alignItems: 'center' }}>
                                         Ver detalles
                                     </Link>

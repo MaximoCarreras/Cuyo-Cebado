@@ -59,7 +59,8 @@ export default function Navbar() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      navigate(`/productos?search=${searchTerm.trim()}`);
+      // Mandamos la búsqueda limpia a la página de productos
+      navigate(`/productos?search=${encodeURIComponent(searchTerm.trim())}`);
       setSearchTerm('');
       closeMenu();
     }

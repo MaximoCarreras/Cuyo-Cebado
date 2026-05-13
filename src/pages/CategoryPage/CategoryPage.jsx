@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useMemo, useEffect } from 'react';
 import { categories } from '../../data/products';
 import { useCart } from '../../context/CartContext';
-import { supabase } from '../../lib/supabaseClient'; // <-- Verificá que el archivo se llame así
+import { supabase } from '../../lib/supabaseClient';
 import './CategoryPage.css';
 
 export default function CategoryPage() {
@@ -78,7 +78,7 @@ export default function CategoryPage() {
                         <div className="gold-dot"></div>
                     </div>
                     <div className="filter-group">
-                        <label>Precio máximo: <b>${maxPrice.toLocaleString()}</b></label>
+                        <label>Precio máximo: <b>${maxPrice.toLocaleString('es-AR')}</b></label>
                         <input type="range" min="0" max="250000" step="5000" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} className="price-slider-mafia" />
                     </div>
                     {getOptions('material').length > 1 && (
@@ -98,6 +98,7 @@ export default function CategoryPage() {
                         </div>
                     )}
                 </aside>
+
                 <section className="products-content">
                     <header className="category-header">
                         <h1 className="section__title">{currentCategory?.label}</h1>
@@ -105,17 +106,32 @@ export default function CategoryPage() {
                     </header>
                     <div className="products-grid-mafia">
                         {filteredProducts.map(product => (
-                            <Link key={product.id} to={`/producto/${product.id}`} className="product-card-link-mafia">
+                            /* EL CAMBIO CRUCIAL: Ahora redirige al "Slug" (Nombre amigable) para no dar error */
+                            <Link key={product.id} to={`/producto/${product.slug}`} className="product-card-link-mafia">
                                 <div className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
-                                    {product.stock === 0 ? <span className="product-badge out-of-stock">Próximo Ingreso</span> : product.is_featured && <span className="product-badge">Top Ventas</span>}
-                                    <div className="product-image-container-mafia">
-                                        <span className="emoji-display">{currentCategory?.icon}</span>
+
+                                    {product.stock === 0 ? (
+                                        <span className="product-badge out-of-stock">Próximo Ingreso</span>
+                                    ) : product.is_featured ? (
+                                        <span className="product-badge">Top Ventas</span>
+                                    ) : product.badge ? (
+                                        <span className="product-badge">{product.badge}</span>
+                                    ) : null}
+
+                                    <div className="product-image-container-mafia" style={{ overflow: 'hidden' }}>
+                                        {/* MOSTRAMOS LA FOTO REAL DE SUPABASE */}
+                                        <img
+                                            src={product.image_url || '/assets/placeholder.png'}
+                                            alt={product.name}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
                                         {product.stock === 0 && <div className="out-of-stock-overlay-mafia">Próximamente</div>}
                                     </div>
+
                                     <div className="product-info-mafia">
                                         <p className="product-tag-mafia">{product.type} {product.material ? `| ${product.material}` : ''}</p>
                                         <h4 className="product-name-mafia">{product.name}</h4>
-                                        <p className="product-price-mafia">${Number(product.price).toLocaleString()}</p>
+                                        <p className="product-price-mafia">${Number(product.price).toLocaleString('es-AR')}</p>
                                         <button className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`} disabled={product.stock === 0} onClick={(e) => handleQuickAdd(e, product)}>
                                             {product.stock === 0 ? 'Sin Stock' : 'Agregar al Carrito'}
                                         </button>
