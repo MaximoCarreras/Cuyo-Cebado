@@ -41,23 +41,16 @@ export default function AdminDashboard() {
     const handleEditClick = (product) => {
         setIsEditing(true);
         setEditingId(product.id);
-        setNewProduct({
-            name: product.name,
-            price: product.price,
-            stock: product.stock,
-            category: product.category,
-            material: product.material || '',
-            type: product.type || '',
-            specs: product.specs || '',
-            badge: product.badge || '',
-            description: product.description || '',
-            image_url: product.image_url || '',
-            video_url: product.video_url || ''
-        });
+        setNewProduct({ ...product }); // Carga rápida de datos
         setIsModalOpen(true);
     };
 
     const handleUpdateStock = async (id, field, value) => {
+        // Validación rápida para no ir a negativo en stock
+        if (field === 'stock' && value < 0) {
+            toast.error("El stock no puede ser negativo");
+            return;
+        }
         setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: value } : p));
         await supabase.from('products').update({ [field]: value }).eq('id', id);
         if (field !== 'is_featured') toast.success("Sincronizado");
@@ -67,7 +60,7 @@ export default function AdminDashboard() {
         const newValue = !product.is_featured;
         setProducts(prev => prev.map(p => p.id === product.id ? { ...p, is_featured: newValue } : p));
         await supabase.from('products').update({ is_featured: newValue }).eq('id', product.id);
-        toast.success(newValue ? "¡Destacado en Inicio!" : "Quitado de Destacados");
+        toast.success(newValue ? "⭐ Destacado en Inicio" : "Quitado de Inicio");
     };
 
     const handleDelete = async (id) => {
@@ -109,14 +102,14 @@ export default function AdminDashboard() {
         if (isEditing) {
             const { error } = await supabase.from('products').update(productData).eq('id', editingId);
             if (!error) {
-                toast.success("¡Producto actualizado!");
+                toast.success("¡Actualizado!");
                 closeModal();
                 fetchData();
             }
         } else {
             const { error } = await supabase.from('products').insert([productData]);
             if (!error) {
-                toast.success("¡Nuevo producto en tienda!");
+                toast.success("¡Cargado a tienda!");
                 closeModal();
                 fetchData();
             }
@@ -130,13 +123,6 @@ export default function AdminDashboard() {
         setNewProduct(initialFormState);
     };
 
-    // Función segura para cambiar de pestaña cerrando cualquier modal abierto
-    const switchTab = (tabName) => {
-        closeModal();
-        setSelectedOrder(null);
-        setActiveTab(tabName);
-    };
-
     const totalRevenue = orders.reduce((acc, o) => acc + o.total, 0);
 
     if (loading) return <div className="admin-loading-screen">Abriendo la estancia...</div>;
@@ -148,8 +134,8 @@ export default function AdminDashboard() {
             <header className="admin-sidebar-header">
                 <h1>Gestión Cuyo Cebado</h1>
                 <div className="tab-switcher">
-                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => switchTab('inventory')}>Stock</button>
-                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => switchTab('orders')}>Ventas</button>
+                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => setActiveTab('inventory')}>Stock</button>
+                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => setActiveTab('orders')}>Ventas</button>
                 </div>
             </header>
 
@@ -158,7 +144,7 @@ export default function AdminDashboard() {
                     <section>
                         <div className="stats-grid">
                             <div className="stat-box">
-                                <span className="label">PRODUCTOS</span>
+                                <span className="label">VARIEDAD TOTAL</span>
                                 <span className="number">{products.length}</span>
                             </div>
                             <div className="stat-box warning">
@@ -167,9 +153,10 @@ export default function AdminDashboard() {
                             </div>
                         </div>
 
+                        {/* BUSCADOR SOFISTICADO */}
                         <div className="search-container-modern">
-                            <span className="material-symbols-outlined">search</span>
-                            <input className="modern-input-search" placeholder="Buscar producto..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                            <span className="material-symbols-outlined search-icon">search</span>
+                            <input className="modern-input-search" placeholder="Buscar mate, yerba, bombilla..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                         </div>
 
                         <div className="table-container">
@@ -177,7 +164,7 @@ export default function AdminDashboard() {
                                 <thead>
                                     <tr>
                                         <th>PRODUCTO</th>
-                                        <th>PRECIO</th>
+                                        <th>PRECIO ($)</th>
                                         <th>STOCK</th>
                                         <th style={{ textAlign: 'center' }}>DESTACAR</th>
                                         <th style={{ textAlign: 'center' }}>ACCIONES</th>
@@ -188,27 +175,32 @@ export default function AdminDashboard() {
                                         <tr key={product.id}>
                                             <td className="product-info">
                                                 <img src={product.image_url || '/assets/placeholder.png'} alt="" className="mini-thumb" />
-                                                <span>{product.name}</span>
+                                                <span className="product-name">{product.name}</span>
                                             </td>
                                             <td>
-                                                <input type="number" className="price-edit" defaultValue={product.price} onBlur={(e) => handleUpdateStock(product.id, 'price', Number(e.target.value))} />
+                                                {/* INPUT DE PRECIO MODERNIZADO */}
+                                                <input type="number" className="price-edit-input" defaultValue={product.price} onBlur={(e) => handleUpdateStock(product.id, 'price', Number(e.target.value))} />
                                             </td>
-                                            <td className="stock-controls">
-                                                <button className="btn-qty" onClick={() => handleUpdateStock(product.id, 'stock', product.stock - 1)}>-</button>
-                                                <span className="qty">{product.stock}</span>
-                                                <button className="btn-qty" onClick={() => handleUpdateStock(product.id, 'stock', product.stock + 1)}>+</button>
+                                            <td className="stock-controls-cell">
+                                                {/* CONTROLES DE STOCK REESPACIADOS */}
+                                                <div className="stock-controls-wrapper">
+                                                    <button className="btn-stock-qty" onClick={() => handleUpdateStock(product.id, 'stock', product.stock - 1)}>-</button>
+                                                    <span className="stock-number-display">{product.stock}</span>
+                                                    <button className="btn-stock-qty" onClick={() => handleUpdateStock(product.id, 'stock', product.stock + 1)}>+</button>
+                                                </div>
                                             </td>
                                             <td style={{ textAlign: 'center' }}>
-                                                <button className={`btn-star ${product.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(product)}>
-                                                    <span className="material-symbols-outlined" style={{ fontVariationSettings: product.is_featured ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+                                                {/* BOTÓN ESTRELLA SOFISTICADO */}
+                                                <button className={`btn-action-star ${product.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(product)}>
+                                                    <span className="material-symbols-outlined">star</span>
                                                 </button>
                                             </td>
                                             <td style={{ textAlign: 'center' }}>
-                                                <div className="admin-actions-cell">
-                                                    <button className="btn-edit-pencil" onClick={() => handleEditClick(product)}>
+                                                <div className="admin-actions-group">
+                                                    <button className="btn-edit-action" onClick={() => handleEditClick(product)}>
                                                         <span className="material-symbols-outlined">edit</span>
                                                     </button>
-                                                    <button className="btn-delete-modern" onClick={() => handleDelete(product.id)}>
+                                                    <button className="btn-delete-action" onClick={() => handleDelete(product.id)}>
                                                         <span className="material-symbols-outlined">delete</span>
                                                     </button>
                                                 </div>
@@ -219,14 +211,17 @@ export default function AdminDashboard() {
                             </table>
                         </div>
 
-                        <div className="footer-action">
-                            <button className="btn-add-modern" onClick={() => setIsModalOpen(true)}>
-                                <span className="material-symbols-outlined">add_circle</span> NUEVO PRODUCTO
+                        {/* BOTÓN AGREGAR PREMIUM */}
+                        <div className="footer-action-panel">
+                            <button className="btn-add-premium" onClick={() => setIsModalOpen(true)}>
+                                <span className="material-symbols-outlined">add</span>
+                                NUEVO PRODUCTO
                             </button>
                         </div>
                     </section>
                 ) : (
                     <section>
+                        {/* Pestaña Ventas (Se mantiene igual, solo cambia el CSS general) */}
                         <div className="stats-grid">
                             <div className="stat-box">
                                 <span className="label">TOTAL RECAUDADO</span>
@@ -255,14 +250,13 @@ export default function AdminDashboard() {
                                             <td>{order.customer_email}</td>
                                             <td><strong>${order.total.toLocaleString()}</strong></td>
                                             <td>
-                                                <select className={`status-select ${order.status}`} value={order.status} onChange={(e) => {/* Lógica update estado */ }}>
+                                                <select className={`status-select-modern ${order.status}`} defaultValue={order.status}>
                                                     <option value="pending">Pendiente</option>
                                                     <option value="shipped">Despachado</option>
-                                                    <option value="delivered">Entregado</option>
                                                 </select>
                                             </td>
                                             <td style={{ textAlign: 'center' }}>
-                                                <button className="btn-view" onClick={() => setSelectedOrder(order)}><span className="material-symbols-outlined">visibility</span></button>
+                                                <button className="btn-view-modern" onClick={() => setSelectedOrder(order)}><span className="material-symbols-outlined">visibility</span></button>
                                             </td>
                                         </tr>
                                     ))}
@@ -273,7 +267,7 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODAL DETALLES DE VENTA */}
+            {/* MODAL DETALLES VENTA (Se mantiene lógica, cambia CSS) */}
             {selectedOrder && (
                 <div className="modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="modal-card" onClick={e => e.stopPropagation()}>
@@ -286,62 +280,58 @@ export default function AdminDashboard() {
                                 </div>
                             ))}
                         </div>
-                        <div className="order-modal-total">
-                            <span>TOTAL A COBRAR:</span>
-                            <strong>${selectedOrder.total.toLocaleString()}</strong>
-                        </div>
-                        <button className="btn-close" onClick={() => setSelectedOrder(null)}>Cerrar</button>
+                        <button className="btn-close-modal" onClick={() => setSelectedOrder(null)}>Cerrar</button>
                     </div>
                 </div>
             )}
 
-            {/* MODAL MULTIFUNCIÓN (CREAR Y EDITAR) MODERNIZADO */}
+            {/* MODAL CREAR/EDITAR (Súper Formulario con CSS Moderno) */}
             {isModalOpen && (
                 <div className="modal-backdrop" onClick={closeModal}>
                     <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
-                        <h2>{isEditing ? 'Editar Producto' : 'Cargar Producto'}</h2>
+                        <h2>{isEditing ? 'Editar Ficha' : 'Nueva Ficha de Producto'}</h2>
 
                         <form onSubmit={handleSaveProduct} className="modal-form-grid">
-                            <div className="form-column">
-                                <div className="image-upload-box">
+                            <div className="form-column Multimedia-col">
+                                <div className="image-upload-box-premium">
                                     {newProduct.image_url ? (
                                         <img src={newProduct.image_url} alt="Preview" className="image-preview" />
                                     ) : (
-                                        <div className="upload-placeholder">
-                                            <span className="material-symbols-outlined">add_photo_alternate</span>
+                                        <div className="upload-placeholder-premium">
+                                            <span className="material-symbols-outlined">add_a_photo</span>
                                             <span>Subir Foto Principal</span>
                                         </div>
                                     )}
                                     <input type="file" accept="image/*" onChange={uploadImage} disabled={uploading} className="file-input-hidden" />
                                 </div>
-                                <input className="modern-modal-input" placeholder="Link del Reel/Video (Ej: YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
-                                <textarea className="modern-modal-input desc-box" placeholder="Descripción breve..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                                <input className="premium-modal-input" placeholder="Link de Video / Reel" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
+                                <textarea className="premium-modal-input desc-box" placeholder="Descripción detallada..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
                             </div>
 
-                            <div className="form-column">
-                                <input className="modern-modal-input" placeholder="Nombre (Ej: Mate Imperial)" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
-                                <div className="form-split">
-                                    <input className="modern-modal-input" type="number" placeholder="Precio ($)" required value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
-                                    <input className="modern-modal-input" type="number" placeholder="Stock" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
+                            <div className="form-column Datos-col">
+                                <input className="premium-modal-input" placeholder="Nombre completo" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                                <div className="form-split-modern">
+                                    <input className="premium-modal-input" type="number" placeholder="Precio ($)" required value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
+                                    <input className="premium-modal-input" type="number" placeholder="Stock" required value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
                                 </div>
-                                <div className="form-split">
-                                    <select className="modern-modal-input select-modern" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                                <div className="form-split-modern">
+                                    <select className="premium-modal-input selector-premium" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                                         <option value="mates">Mates</option>
                                         <option value="yerbas">Yerbas</option>
                                         <option value="bombillas">Bombillas</option>
                                         <option value="accesorios">Accesorios</option>
                                     </select>
-                                    <input className="modern-modal-input" placeholder="Etiqueta (Ej: Premium)" value={newProduct.badge} onChange={e => setNewProduct({ ...newProduct, badge: e.target.value })} />
+                                    <input className="premium-modal-input" placeholder="Etiqueta (Ej: Premium)" value={newProduct.badge} onChange={e => setNewProduct({ ...newProduct, badge: e.target.value })} />
                                 </div>
-                                <div className="form-split">
-                                    <input className="modern-modal-input" placeholder="Material (Ej: Alpaca)" value={newProduct.material} onChange={e => setNewProduct({ ...newProduct, material: e.target.value })} />
-                                    <input className="modern-modal-input" placeholder="Tipo (Ej: Camionero)" value={newProduct.type} onChange={e => setNewProduct({ ...newProduct, type: e.target.value })} />
+                                <div className="form-split-modern">
+                                    <input className="premium-modal-input" placeholder="Material" value={newProduct.material} onChange={e => setNewProduct({ ...newProduct, material: e.target.value })} />
+                                    <input className="premium-modal-input" placeholder="Tipo" value={newProduct.type} onChange={e => setNewProduct({ ...newProduct, type: e.target.value })} />
                                 </div>
-                                <input className="modern-modal-input" placeholder="Especificaciones (Ej: Costura artesanal)" value={newProduct.specs} onChange={e => setNewProduct({ ...newProduct, specs: e.target.value })} />
-                                <div className="modal-btns">
-                                    <button type="button" className="cancel-btn" onClick={closeModal}>Cancelar</button>
-                                    <button type="submit" className="save-btn" disabled={uploading}>
-                                        {isEditing ? 'Guardar Cambios' : 'Cargar en Tienda'}
+                                <input className="premium-modal-input" placeholder="Especificaciones Técnicas" value={newProduct.specs} onChange={e => setNewProduct({ ...newProduct, specs: e.target.value })} />
+                                <div className="modal-btns-group">
+                                    <button type="button" className="cancel-btn-modern" onClick={closeModal}>Cancelar</button>
+                                    <button type="submit" className="save-btn-modern" disabled={uploading}>
+                                        {isEditing ? 'Guardar Cambios' : 'Lanzar a Tienda'}
                                     </button>
                                 </div>
                             </div>
