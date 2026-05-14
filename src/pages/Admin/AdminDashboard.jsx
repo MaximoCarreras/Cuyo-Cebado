@@ -42,7 +42,7 @@ export default function AdminDashboard() {
                 const { data: cData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
                 setCategoriesList(cData || []);
             }
-        } catch (err) { console.error(err); }
+        } catch (err) { console.error("Error en fetchData:", err); }
         setLoading(false);
     };
 
@@ -76,7 +76,10 @@ export default function AdminDashboard() {
     const handleDeleteProduct = async (id) => {
         if (window.confirm("¿Confirmás que querés eliminar este producto?")) {
             const { error } = await supabase.from('products').delete().eq('id', id);
-            if (!error) { toast.success("Producto borrado"); fetchData(); }
+            if (!error) {
+                toast.success("Producto borrado");
+                fetchData();
+            }
         }
     };
 
@@ -87,7 +90,9 @@ export default function AdminDashboard() {
             if (!file) return;
             const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
 
-            await supabase.storage.from('productos').upload(fileName, file);
+            const { error: uploadError } = await supabase.storage.from('productos').upload(fileName, file);
+            if (uploadError) throw uploadError;
+
             const { data } = supabase.storage.from('productos').getPublicUrl(fileName);
             const publicUrl = data.publicUrl;
 
@@ -101,15 +106,37 @@ export default function AdminDashboard() {
                 setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), publicUrl] }));
                 toast.success("Agregada a galería");
             }
-        } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
+        } catch (e) {
+            toast.error("Error al subir");
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    // FUNCIONES PARA ELIMINAR IMÁGENES (NUEVO)
+    const removeMainImage = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setNewProduct(prev => ({ ...prev, image_url: '' }));
+        toast.success("Portada eliminada");
+    };
+
+    const removeExtraImage = (e, index) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const filtered = newProduct.extra_images.filter((_, i) => i !== index);
+        setNewProduct(prev => ({ ...prev, extra_images: filtered }));
+        toast.success("Imagen quitada");
     };
 
     const handleSaveProduct = async (e) => {
         e.preventDefault();
         const slug = newProduct.name.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         const data = { ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) };
+
         if (isEditing) await supabase.from('products').update(data).eq('id', editingId);
         else await supabase.from('products').insert([data]);
+
         toast.success("¡Guardado!");
         closeModal();
         fetchData();
@@ -180,7 +207,9 @@ export default function AdminDashboard() {
                                             <td>
                                                 <div className="actions-flex-row">
                                                     <button onClick={() => { setIsEditing(true); setEditingId(p.id); setNewProduct(p); setIsModalOpen(true); }} className="btn-edit-modern">EDITAR</button>
-                                                    <button onClick={() => handleDeleteProduct(p.id)} className="btn-delete-icon-only"><span className="material-symbols-outlined">delete</span></button>
+                                                    <button onClick={() => handleDeleteProduct(p.id)} className="btn-delete-icon-only">
+                                                        <span className="material-symbols-outlined">delete</span>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -260,7 +289,7 @@ export default function AdminDashboard() {
                     <div className="refined-modal-card" onClick={e => e.stopPropagation()}>
                         <header className="modal-refined-header">
                             <h2>{isEditing ? 'Editar Ficha' : 'Nueva Ficha'}</h2>
-                            <button className="btn-close-modern-circle" onClick={closeModal}><span className="material-symbols-outlined">close</span></button>
+                            <button type="button" onClick={closeModal} className="btn-close-modern-circle"><span className="material-symbols-outlined">close</span></button>
                         </header>
                         <form className="modal-refined-form" onSubmit={handleSaveProduct}>
                             <div className="form-refined-grid">
@@ -269,12 +298,26 @@ export default function AdminDashboard() {
                                     <div className="upload-refined-main">
                                         <input type="file" id="main-img" className="hidden-input" onChange={(e) => uploadImage(e, 'main')} />
                                         <label htmlFor="main-img">
-                                            {newProduct.image_url ? <img src={newProduct.image_url} alt="" /> : <div className="placeholder"><span className="material-symbols-outlined">image</span><p>Subir portada</p></div>}
+                                            {newProduct.image_url ? (
+                                                <div className="preview-container">
+                                                    <img src={newProduct.image_url} className="image-preview" alt="" />
+                                                    <button className="btn-remove-photo" onClick={removeMainImage}>
+                                                        <span className="material-symbols-outlined">delete</span>
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className="placeholder"><span className="material-symbols-outlined">image</span><p>Subir portada</p></div>
+                                            )}
                                         </label>
                                     </div>
                                     <label className="admin-label">Galería de Detalles</label>
                                     <div className="extra-images-grid-admin">
-                                        {newProduct.extra_images?.map((img, i) => <img key={i} src={img} alt="" className="mini-thumb" />)}
+                                        {newProduct.extra_images?.map((img, i) => (
+                                            <div key={i} className="mini-thumb-container">
+                                                <img src={img} alt="" className="mini-gallery-thumb" />
+                                                <button className="btn-remove-mini" onClick={(e) => removeExtraImage(e, i)}>×</button>
+                                            </div>
+                                        ))}
                                         <div className="upload-extra-pro">
                                             <input type="file" id="extra-img" className="hidden-input" onChange={(e) => uploadImage(e, 'extra')} />
                                             <label htmlFor="extra-img"><span className="material-symbols-outlined">add_photo_alternate</span><p>Subir vistas</p></label>
