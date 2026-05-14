@@ -78,7 +78,7 @@ export default function AdminDashboard() {
             } else {
                 setNewProduct(prev => ({ ...prev, image_url: data.publicUrl }));
             }
-            toast.success("Imagen lista");
+            toast.success("Imagen cargada");
         } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
     };
 
@@ -135,8 +135,6 @@ export default function AdminDashboard() {
                                 </tbody>
                             </table>
                         </div>
-
-                        {/* BOTÓN NUEVO PRODUCTO - CENTRADO Y PREMIUM */}
                         <div className="footer-action-panel">
                             <button className="btn-add-premium" onClick={() => setIsModalOpen(true)}>
                                 <span className="material-symbols-outlined">add_circle</span>
@@ -183,7 +181,6 @@ export default function AdminDashboard() {
                                 </tbody>
                             </table>
                         </div>
-
                         <div className="category-creator-card-modern">
                             <h3>Nueva Categoría</h3>
                             <form onSubmit={async (e) => {
@@ -220,7 +217,9 @@ export default function AdminDashboard() {
                         <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
                             <div className="modal-header-premium">
                                 <h2>{isEditing ? 'Editar Ficha' : 'Nueva Ficha'}</h2>
-                                <button onClick={closeModal} className="btn-close-modern"><span className="material-symbols-outlined">close</span></button>
+                                <button onClick={closeModal} className="btn-close-modern-circle">
+                                    <span className="material-symbols-outlined">close</span>
+                                </button>
                             </div>
                             <form onSubmit={handleSaveProduct} className="modal-form-grid">
                                 <div className="form-column">
@@ -229,10 +228,13 @@ export default function AdminDashboard() {
                                         <input type="file" onChange={(e) => uploadImage(e)} />
                                         {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir foto principal</p></div>}
                                     </label>
-                                    <label className="admin-label">Galería de Detalles</label>
+                                    <label className="admin-label">Galería de Detalles (Extras)</label>
                                     <div className="extra-images-grid-admin">
                                         {newProduct.extra_images?.map((img, i) => <img key={i} src={img} className="mini-gallery-thumb" />)}
-                                        <label className="add-extra-box-modern"><input type="file" onChange={(e) => uploadImage(e, true)} /><span>+</span></label>
+                                        <label className="add-extra-box-modern">
+                                            <input type="file" onChange={(e) => uploadImage(e, true)} />
+                                            <span className="material-symbols-outlined">add_photo_alternate</span>
+                                        </label>
                                     </div>
                                 </div>
                                 <div className="form-column">
@@ -246,8 +248,10 @@ export default function AdminDashboard() {
                                     </select>
                                     <textarea className="modern-admin-input desc-box" placeholder="Descripción detallada..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
                                     <input className="modern-admin-input" placeholder="URL Video (Instagram/YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
-                                    <div className="modal-btns-group">
-                                        <button type="button" onClick={closeModal} className="btn-cancel-flat">DESCARTAR</button>
+
+                                    {/* BOTONES DE ACCIÓN MEJORADOS */}
+                                    <div className="modal-actions-footer">
+                                        <button type="button" onClick={closeModal} className="btn-discard-modern">DESCARTAR</button>
                                         <button type="submit" className="btn-save-gold-full" disabled={uploading}>GUARDAR CAMBIOS</button>
                                     </div>
                                 </div>
@@ -259,7 +263,7 @@ export default function AdminDashboard() {
                         <div className="modal-card" onClick={e => e.stopPropagation()} style={{ width: '500px' }}>
                             <div className="modal-header-premium">
                                 <h2>Pedido #{selectedOrder.id.slice(0, 5).toUpperCase()}</h2>
-                                <button onClick={() => setSelectedOrder(null)} className="btn-close-modern"><span className="material-symbols-outlined">close</span></button>
+                                <button onClick={() => setSelectedOrder(null)} className="btn-close-modern-circle"><span className="material-symbols-outlined">close</span></button>
                             </div>
                             <div className="order-details-pro">
                                 <p><strong>Cliente:</strong> {selectedOrder.customer_name}</p>
