@@ -166,7 +166,6 @@ export default function AdminDashboard() {
                             </table>
                         </div>
 
-                        {/* SECCIÓN NUEVA CATEGORÍA - CHAU XP */}
                         <div className="category-creator-card-modern">
                             <h3>Nueva Categoría</h3>
                             <form onSubmit={async (e) => {
@@ -177,26 +176,25 @@ export default function AdminDashboard() {
                                 setNewCategory({ label: '', icon: '🧉', image_url: '' });
                                 fetchData();
                             }} className="cat-modern-grid">
-                                <div className="image-upload-box-mini">
+                                <label className="upload-box-mini">
                                     <input type="file" onChange={async (e) => {
                                         const file = e.target.files[0];
                                         const name = `cat_${Math.random()}`;
                                         await supabase.storage.from('productos').upload(name, file);
                                         const { data } = supabase.storage.from('productos').getPublicUrl(name);
                                         setNewCategory({ ...newCategory, image_url: data.publicUrl });
-                                    }} className="file-input-hidden" />
+                                    }} />
                                     {newCategory.image_url ? <img src={newCategory.image_url} className="image-preview" /> : <span className="material-symbols-outlined">add_a_photo</span>}
-                                </div>
+                                </label>
                                 <input className="premium-modal-input" placeholder="Nombre (Ej: Mates)" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required />
                                 <input className="premium-modal-input" style={{ width: '80px', textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
-                                <button type="submit" className="btn-save-modern-small">CREAR CATEGORÍA</button>
+                                <button type="submit" className="btn-save-modern-small">CREAR</button>
                             </form>
                         </div>
                     </section>
                 )}
             </main>
 
-            {/* MODAL PRODUCTO - DISEÑO RENOVADO */}
             {isModalOpen && (
                 <div className="modal-backdrop">
                     <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
@@ -207,18 +205,24 @@ export default function AdminDashboard() {
                         <form onSubmit={handleSaveProduct} className="modal-form-grid">
                             <div className="form-column">
                                 <label className="admin-label">Imagen Principal</label>
-                                <div className="image-upload-box-premium">
-                                    <input type="file" onChange={(e) => uploadImage(e)} className="file-input-hidden" />
-                                    {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">cloud_upload</span><p>Hacé clic para subir</p></div>}
-                                </div>
+                                <label className="image-upload-box-premium">
+                                    <input type="file" onChange={(e) => uploadImage(e)} />
+                                    {newProduct.image_url ?
+                                        <img src={newProduct.image_url} className="image-preview" /> :
+                                        <div className="upload-placeholder">
+                                            <span className="material-symbols-outlined">cloud_upload</span>
+                                            <p>Hacé clic para subir</p>
+                                        </div>
+                                    }
+                                </label>
 
                                 <label className="admin-label">Galería (Extras)</label>
                                 <div className="extra-images-grid-admin">
                                     {newProduct.extra_images?.map((img, i) => <img key={i} src={img} className="mini-gallery-thumb" />)}
-                                    <div className="add-extra-box-modern">
-                                        <input type="file" onChange={(e) => uploadImage(e, true)} className="file-input-hidden" />
+                                    <label className="add-extra-box-modern">
+                                        <input type="file" onChange={(e) => uploadImage(e, true)} />
                                         <span>+</span>
-                                    </div>
+                                    </label>
                                 </div>
                             </div>
                             <div className="form-column">
