@@ -137,13 +137,6 @@
     color: #1a1614;
 }
 
-.cell-product {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-weight: 700;
-}
-
 .mini-thumb {
     width: 50px;
     height: 50px;
@@ -164,7 +157,7 @@
     width: fit-content;
 }
 
-.refined-stock-pill button {
+.stock-btn {
     width: 28px;
     height: 28px;
     border: none;
@@ -210,11 +203,6 @@
     font-size: 0.7rem;
     cursor: pointer;
     transition: 0.3s;
-}
-
-.btn-edit-modern:hover {
-    background: #a5813a;
-    color: #fff;
 }
 
 .btn-delete-icon-only {
@@ -314,12 +302,6 @@
     right: 20px;
 }
 
-.btn-close-modern-circle:hover {
-    background: #1a1614;
-    color: #a5813a;
-    transform: rotate(90deg);
-}
-
 .refined-input {
     width: 100%;
     padding: 14px 18px;
@@ -339,7 +321,7 @@
     box-shadow: 0 0 0 4px rgba(165, 129, 58, 0.1);
 }
 
-/* --- UPLOAD BOXES (CORREGIDO) --- */
+/* UPLOAD & TACHITO (INALTERADO) */
 .upload-refined-main {
     height: 220px;
     border: 2.5px dashed #cbd5e1;
@@ -362,24 +344,6 @@
     justify-content: center;
 }
 
-.placeholder-main-label {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #94a3b8;
-}
-
-.image-preview {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-/* TACHITO FLOTANTE (REPARADO) */
 .btn-remove-photo-pro {
     position: absolute;
     top: 15px;
@@ -404,7 +368,6 @@
     background: #ff0000;
 }
 
-/* GALERÍA EXTRA */
 .mini-thumb-container-pro {
     position: relative;
 }
@@ -438,19 +401,6 @@
     justify-content: center;
     cursor: pointer;
     background: #f8fafc;
-}
-
-.upload-extra-pro label {
-    cursor: pointer;
-    text-align: center;
-    color: #94a3b8;
-}
-
-.upload-extra-pro label p {
-    font-size: 0.55rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    margin: 0;
 }
 
 .modal-actions-footer {
@@ -498,6 +448,26 @@
     transition: 0.3s;
 }
 
+/* --- BOTÓN DORADO PREMIUM (NUEVO) --- */
+.btn-save-gold-full {
+    width: 100%;
+    padding: 18px;
+    background: #1a1614;
+    color: #a5813a;
+    border: 1.5px solid #a5813a;
+    border-radius: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-save-gold-full:hover {
+    background: #a5813a;
+    color: #1a1614;
+}
+
 .hidden-input {
     position: absolute;
     width: 0.1px;
@@ -505,6 +475,12 @@
     opacity: 0;
     overflow: hidden;
     z-index: -1;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .mini-gallery-thumb {
