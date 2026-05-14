@@ -7,7 +7,7 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* CABECERA Y TABS */
+/* HEADER */
 .admin-sidebar-header {
     display: flex;
     justify-content: space-between;
@@ -66,12 +66,14 @@
     color: #a5813a;
     font-size: 0.8rem;
     font-weight: 800;
+    letter-spacing: 1px;
 }
 
 .stat-box .number {
     font-size: 3rem;
     font-weight: 800;
     display: block;
+    margin-top: 5px;
 }
 
 .stat-box.warning {
@@ -123,13 +125,13 @@
 }
 
 .cat-mini-thumb {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
     object-fit: cover;
 }
 
-/* BOTONES DE STOCK (CHAU XP) */
+/* STOCK PILL */
 .stock-pill {
     display: flex;
     align-items: center;
@@ -147,7 +149,6 @@
     border-radius: 50%;
     cursor: pointer;
     font-weight: 800;
-    font-size: 1.1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -206,7 +207,43 @@
     color: #fff;
 }
 
-/* CATEGORÍAS (MODERNIZADO) */
+/* --- BOTÓN NUEVO PRODUCTO (ADIÓS WINDOWS XP) --- */
+.footer-action-panel {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-add-premium {
+    background: #a5813a;
+    /* Dorado */
+    color: #1a1614;
+    /* Negro */
+    border: none;
+    padding: 18px 45px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 25px rgba(165, 129, 58, 0.25);
+    letter-spacing: 1px;
+}
+
+.btn-add-premium:hover {
+    transform: translateY(-5px);
+    background: #c29d54;
+    box-shadow: 0 15px 35px rgba(165, 129, 58, 0.4);
+}
+
+.btn-add-premium span {
+    font-size: 1.4rem;
+}
+
+/* CATEGORÍAS */
 .category-creator-card-modern {
     background: #fff;
     padding: 35px;
@@ -251,7 +288,7 @@
     cursor: pointer;
 }
 
-/* --- MODAL REAL (Z-INDEX SUPERIOR) --- */
+/* MODAL */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -280,35 +317,6 @@
 .modal-large {
     width: 900px;
     max-width: 95%;
-}
-
-.modal-header-premium {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #f0f0f0;
-    padding-bottom: 15px;
-}
-
-.btn-close-modern {
-    background: #f8f8f8;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    color: #666;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-}
-
-.btn-close-modern:hover {
-    background: #1a1614;
-    color: #a5813a;
-    transform: rotate(90deg);
 }
 
 .modern-admin-input {
@@ -370,62 +378,18 @@
     cursor: pointer;
 }
 
-/* OTROS */
-.extra-images-grid-admin {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 10px;
+.animate-fade {
+    animation: fadeIn 0.4s ease-out;
 }
 
-.mini-gallery-thumb {
-    width: 65px;
-    height: 65px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 1px solid #eee;
-}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
 
-.add-extra-box-modern {
-    width: 65px;
-    height: 65px;
-    border: 1.5px dashed #aaa;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #94a3b8;
-    position: relative;
-}
-
-.add-extra-box-modern input {
-    position: absolute;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-}
-
-.order-items-summary {
-    margin: 20px 0;
-    border: 1px solid #f0f0f0;
-    border-radius: 12px;
-    padding: 15px;
-}
-
-.order-items-summary .item-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #f8f8f8;
-}
-
-.order-total-row {
-    display: flex;
-    justify-content: space-between;
-    font-weight: 800;
-    font-size: 1.2rem;
-    color: #a5813a;
-    margin-top: 15px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

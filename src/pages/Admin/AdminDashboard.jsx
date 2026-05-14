@@ -52,7 +52,6 @@ export default function AdminDashboard() {
         setNewProduct(initialFormState);
     };
 
-    // Función para cambiar de pestaña cerrando todo lo abierto
     const handleTabChange = (tab) => {
         closeModal();
         setSelectedOrder(null);
@@ -110,7 +109,7 @@ export default function AdminDashboard() {
 
             <main className="admin-content">
                 {activeTab === 'inventory' && (
-                    <section>
+                    <section className="animate-fade">
                         <div className="stats-grid">
                             <div className="stat-box"><span className="label">VARIEDAD</span><span className="number">{products.length}</span></div>
                             <div className="stat-box warning"><span className="label">STOCK BAJO</span><span className="number">{products.filter(p => p.stock < 5).length}</span></div>
@@ -136,12 +135,19 @@ export default function AdminDashboard() {
                                 </tbody>
                             </table>
                         </div>
-                        <div className="footer-action-panel"><button className="btn-add-premium" onClick={() => setIsModalOpen(true)}>+ NUEVO PRODUCTO</button></div>
+
+                        {/* BOTÓN NUEVO PRODUCTO - CENTRADO Y PREMIUM */}
+                        <div className="footer-action-panel">
+                            <button className="btn-add-premium" onClick={() => setIsModalOpen(true)}>
+                                <span className="material-symbols-outlined">add_circle</span>
+                                NUEVO PRODUCTO
+                            </button>
+                        </div>
                     </section>
                 )}
 
                 {activeTab === 'orders' && (
-                    <section>
+                    <section className="animate-fade">
                         <div className="table-container">
                             <table className="custom-table">
                                 <thead><tr><th>FECHA</th><th>CLIENTE</th><th>TOTAL</th><th>ESTADO</th><th>VER</th></tr></thead>
@@ -162,7 +168,7 @@ export default function AdminDashboard() {
                 )}
 
                 {activeTab === 'categories' && (
-                    <section>
+                    <section className="animate-fade">
                         <div className="table-container">
                             <table className="custom-table">
                                 <thead><tr><th>VISUAL</th><th>NOMBRE</th><th>ACCIONES</th></tr></thead>
@@ -207,10 +213,9 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODALES - AHORA SON CAPAS SUPERIORES (REAL MODALS) */}
+            {/* MODALES DE EDICIÓN / DETALLES */}
             {(isModalOpen || selectedOrder) && (
                 <div className="modal-backdrop" onClick={closeModal}>
-                    {/* MODAL PRODUCTO */}
                     {isModalOpen && (
                         <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
                             <div className="modal-header-premium">
@@ -224,7 +229,7 @@ export default function AdminDashboard() {
                                         <input type="file" onChange={(e) => uploadImage(e)} />
                                         {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir foto principal</p></div>}
                                     </label>
-                                    <label className="admin-label">Galería de Detalles (Otras vistas)</label>
+                                    <label className="admin-label">Galería de Detalles</label>
                                     <div className="extra-images-grid-admin">
                                         {newProduct.extra_images?.map((img, i) => <img key={i} src={img} className="mini-gallery-thumb" />)}
                                         <label className="add-extra-box-modern"><input type="file" onChange={(e) => uploadImage(e, true)} /><span>+</span></label>
@@ -240,7 +245,7 @@ export default function AdminDashboard() {
                                         {categoriesList.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                                     </select>
                                     <textarea className="modern-admin-input desc-box" placeholder="Descripción detallada..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
-                                    <input className="modern-admin-input" placeholder="URL Video (Reel/YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
+                                    <input className="modern-admin-input" placeholder="URL Video (Instagram/YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
                                     <div className="modal-btns-group">
                                         <button type="button" onClick={closeModal} className="btn-cancel-flat">DESCARTAR</button>
                                         <button type="submit" className="btn-save-gold-full" disabled={uploading}>GUARDAR CAMBIOS</button>
@@ -250,7 +255,6 @@ export default function AdminDashboard() {
                         </div>
                     )}
 
-                    {/* MODAL ORDEN */}
                     {selectedOrder && (
                         <div className="modal-card" onClick={e => e.stopPropagation()} style={{ width: '500px' }}>
                             <div className="modal-header-premium">
@@ -259,14 +263,13 @@ export default function AdminDashboard() {
                             </div>
                             <div className="order-details-pro">
                                 <p><strong>Cliente:</strong> {selectedOrder.customer_name}</p>
-                                <p><strong>WhatsApp:</strong> {selectedOrder.customer_phone}</p>
                                 <p><strong>Dirección:</strong> {selectedOrder.shipping_address}</p>
                                 <div className="order-items-summary">
                                     {selectedOrder.items.map((it, i) => <div key={i} className="item-row"><span>{it.quantity}x {it.name}</span><span>${(it.price * it.quantity).toLocaleString()}</span></div>)}
                                 </div>
                                 <div className="order-total-row"><span>TOTAL</span><span>${selectedOrder.total.toLocaleString()}</span></div>
                             </div>
-                            <button className="btn-save-gold-full" style={{ marginTop: '20px' }} onClick={() => setSelectedOrder(null)}>CERRAR FICHA</button>
+                            <button className="btn-save-gold-full" style={{ marginTop: '20px' }} onClick={() => setSelectedOrder(null)}>CERRAR</button>
                         </div>
                     )}
                 </div>
