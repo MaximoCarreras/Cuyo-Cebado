@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
 import './CartPage.css';
 
-// Asegurate de tener el logo en src/assets/mp-logo.png
+// Asegurate de que el logo esté en src/assets/mp-logo.png
 import mpLogo from '../../assets/mp-logo.png';
 
 export default function CartPage() {
@@ -60,12 +60,16 @@ export default function CartPage() {
         }
     };
 
+    // --- VISTA CARRITO VACÍO (REPARADA Y CENTRADA) ---
     if (!cart || cart.length === 0) {
         return (
-            <section className="cart-page-empty">
-                <span className="material-symbols-outlined">shopping_basket</span>
-                <h2>Tu carrito está vacío</h2>
-                <Link to="/productos" className="btn-gold-mafia">Explorar Productos</Link>
+            <section className="cart-page-empty-container">
+                <div className="cart-empty-content">
+                    <span className="material-symbols-outlined empty-icon">shopping_basket</span>
+                    <h2 className="empty-title">Tu carrito está vacío</h2>
+                    <p className="empty-subtitle">Parece que todavía no elegiste tu próximo compañero de rutas.</p>
+                    <Link to="/productos" className="btn-gold-empty">EXPLORAR PRODUCTOS</Link>
+                </div>
             </section>
         );
     }
@@ -75,6 +79,7 @@ export default function CartPage() {
             <Toaster position="top-center" />
             <div className="cart-container-pro">
 
+                {/* IZQUIERDA: LISTA DE PRODUCTOS */}
                 <div className="cart-main-content">
                     <div className="cart-header-actions">
                         <h2>Mi Carrito</h2>
@@ -95,7 +100,7 @@ export default function CartPage() {
                                             <span>{item.quantity}</span>
                                             <button type="button" onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id) }}>Eliminar</button>
+                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar del carrito?")) removeFromCart(item.id) }}>Eliminar</button>
                                     </div>
                                 </div>
                                 <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
@@ -104,6 +109,7 @@ export default function CartPage() {
                     </div>
                 </div>
 
+                {/* DERECHA: SIDEBAR DE PAGO */}
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Finalizar Compra</h3>
@@ -114,12 +120,12 @@ export default function CartPage() {
                         </div>
 
                         <div className="form-inputs-group">
-                            <input type="text" placeholder="Nombre y Apellido" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
+                            <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
                             {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
-                                    <input type="text" placeholder="Dirección y Altura" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
+                                    <input type="text" placeholder="Dirección (Calle y N°)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
                                     <div className="grid-cp">
                                         <input type="text" placeholder="Ciudad" required value={orderData.city} onChange={e => setOrderData({ ...orderData, city: e.target.value })} />
                                         <input type="text" placeholder="CP" required value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
@@ -131,22 +137,15 @@ export default function CartPage() {
                                         <span className="material-symbols-outlined">store</span>
                                         <div>
                                             <h4>Código Vinario</h4>
-                                            <p>Punto de Retiro</p>
+                                            <p>Punto de Retiro Oficial</p>
                                         </div>
                                     </div>
                                     <div className="pickup-details">
-                                        <p>📍 Av. Colón 701, Mendoza</p>
+                                        <p>📍 Av. Colón 701, Mendoza Capital</p>
                                         <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
                                         <p>📞 261 238-1448</p>
                                     </div>
-
-                                    {/* LINK DE BÚSQUEDA DIRECTA: Infalible */}
-                                    <a
-                                        href="https://www.google.com/maps/search/?api=1&query=Codigo+Vinario+Av+Colón+701+Mendoza"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="btn-maps-dorado"
-                                    >
+                                    <a href="https://share.google/c76gmYsh1bYwmbVUc" target="_blank" rel="noreferrer" className="btn-maps-dorado">
                                         <span className="material-symbols-outlined">location_on</span>
                                         VER EN GOOGLE MAPS
                                     </a>

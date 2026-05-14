@@ -43,7 +43,7 @@ export default function AdminDashboard() {
                 const { data: cData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
                 setCategoriesList(cData || []);
             }
-        } catch (err) { console.error(err); }
+        } catch (err) { console.error("Error cargando datos:", err); }
         setLoading(false);
     };
 
@@ -51,7 +51,7 @@ export default function AdminDashboard() {
         const val = (field === 'stock' || field === 'price') ? Number(value) : value;
         setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: val } : p));
         await supabase.from('products').update({ [field]: val }).eq('id', id);
-        toast.success("Sincronizado");
+        toast.success("Actualizado");
     };
 
     const uploadImage = async (event, isExtra = false) => {
@@ -76,9 +76,11 @@ export default function AdminDashboard() {
         e.preventDefault();
         const slug = newProduct.name.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         const data = { ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) };
+
         if (isEditing) await supabase.from('products').update(data).eq('id', editingId);
         else await supabase.from('products').insert([data]);
-        toast.success("¡Producto guardado!");
+
+        toast.success("¡Guardado!");
         closeModal();
         fetchData();
     };
@@ -118,7 +120,7 @@ export default function AdminDashboard() {
                                             <td>${p.price}</td>
                                             <td className="stock-controls-cell">
                                                 <div className="stock-controls-wrapper">
-                                                    <button className="btn-stock-qty" onClick={() => handleUpdateField(p.id, 'stock', p.stock - 1)}>-</button>
+                                                    <button className="btn-stock-qty" onClick={() => handleUpdateField(p.id, 'stock', p.stock - 1)}>−</button>
                                                     <span className="stock-number-display">{p.stock}</span>
                                                     <button className="btn-stock-qty" onClick={() => handleUpdateField(p.id, 'stock', p.stock + 1)}>+</button>
                                                 </div>
@@ -166,14 +168,14 @@ export default function AdminDashboard() {
                                         <tr key={c.id}>
                                             <td>{c.image_url ? <img src={c.image_url} style={{ width: '40px', borderRadius: '8px' }} /> : c.icon}</td>
                                             <td>{c.label}</td>
-                                            <td><button className="btn-delete-action" onClick={async () => { if (window.confirm("¿Borrar?")) await supabase.from('categories').delete().eq('id', c.id); fetchData(); }}>Borrar</button></td>
+                                            <td><button className="btn-delete-action" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>Borrar</button></td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
                         <div className="category-creator-box">
-                            <h2>Nueva Categoría</h2>
+                            <h2 style={{ color: '#1a1614' }}>Nueva Categoría</h2>
                             <form onSubmit={async (e) => {
                                 e.preventDefault();
                                 const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
@@ -203,7 +205,7 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODALES */}
+            {/* MODAL PEDIDO */}
             {selectedOrder && (
                 <div className="modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="modal-card" onClick={e => e.stopPropagation()} style={{ width: '500px' }}>
@@ -211,12 +213,20 @@ export default function AdminDashboard() {
                         <p><strong>Cliente:</strong> {selectedOrder.customer_name} ({selectedOrder.customer_phone})</p>
                         <p><strong>Dirección:</strong> {selectedOrder.shipping_address}</p>
                         <hr />
-                        {selectedOrder.items.map((it, i) => <div key={i}>{it.quantity}x {it.name}</div>)}
-                        <button className="btn-confirm-order" style={{ marginTop: '20px' }} onClick={() => setSelectedOrder(null)}>Cerrar</button>
+                        <div className="items-list">
+                            {selectedOrder.items.map((it, i) => (
+                                <div key={i} className="item-row-detail">
+                                    <span>{it.quantity}x {it.name}</span>
+                                    <span>${(it.price * it.quantity).toLocaleString()}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <button className="btn-close-modal" onClick={() => setSelectedOrder(null)}>Cerrar</button>
                     </div>
                 </div>
             )}
 
+            {/* MODAL PRODUCTO - ARREGLADO HIT AREA */}
             {isModalOpen && (
                 <div className="modal-backdrop">
                     <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
@@ -225,9 +235,11 @@ export default function AdminDashboard() {
                             <div className="form-column">
                                 <label>Foto Principal</label>
                                 <div className="image-upload-box-premium" style={{ position: 'relative', height: '150px', marginBottom: '20px' }}>
+                                    {/* El input tiene z-index alto pero el contenedor es pequeño, así no bloquea el resto */}
                                     <input type="file" onChange={(e) => uploadImage(e)} style={{ position: 'absolute', width: '100%', height: '100%', opacity: 0, cursor: 'pointer', zIndex: 10 }} />
                                     {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" /> : "Hacé clic para subir"}
                                 </div>
+
                                 <label>Galería (Extra)</label>
                                 <div className="extra-images-grid-admin">
                                     {newProduct.extra_images?.map((img, i) => <img key={i} src={img} className="mini-gallery-thumb" />)}
@@ -246,7 +258,7 @@ export default function AdminDashboard() {
                                 <select className="premium-modal-input selector-premium" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                                     {categoriesList.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                                 </select>
-                                <textarea className="premium-modal-input" placeholder="Descripción" value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                                <textarea className="premium-modal-input desc-box" placeholder="Descripción" value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
                                 <div className="modal-btns-group">
                                     <button type="button" onClick={closeModal} className="cancel-btn-modern">Cerrar</button>
                                     <button type="submit" className="save-btn-modern" disabled={uploading}>Guardar</button>
