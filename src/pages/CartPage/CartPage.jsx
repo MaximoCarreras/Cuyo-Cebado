@@ -34,6 +34,7 @@ export default function CartPage() {
             ? 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)'
             : `${orderData.address}, ${orderData.city} (CP: ${orderData.zip})`;
 
+        // 1. Guardamos la orden en Supabase para que tu socio la vea en el panel
         const { data, error } = await supabase.from('orders').insert([{
             customer_email: orderData.email || 'No proveído',
             customer_name: orderData.name,
@@ -46,27 +47,18 @@ export default function CartPage() {
         }]).select();
 
         if (error) {
-            toast.error("Error al procesar pedido.");
+            toast.error("Error al procesar el pedido.");
+            setLoading(false);
         } else {
-            const businessPhone = "5492612307516";
-            const orderId = data[0].id.slice(0, 5).toUpperCase();
+            // 2. Aquí es donde iría la integración real de Mercado Pago.
+            // Por ahora, simulamos el éxito y redirigimos.
+            toast.success("Redirigiendo a Mercado Pago...");
 
-            let message = `*¡Hola Cuyo Cebado!* 👋%0A`;
-            message += `Soy *${orderData.name}* y realicé el pedido *#${orderId}* en la web.%0A%0A`;
-            message += `*Detalle:*%0A`;
-            cart.forEach(item => {
-                message += `- ${item.quantity}x ${item.name} (${formatCurrency(item.price * item.quantity)})%0A`;
-            });
-            if (orderData.notes) message += `%0A*Notas:* ${orderData.notes}%0A`;
-            message += `%0A*Total:* ${formatCurrency(cartTotal)}%0A`;
-            message += `*Entrega:* ${orderData.method === 'pickup' ? 'Retiro en local' : 'Envío a domicilio'}%0A%0A`;
-            message += `_Espero el link de Mercado Pago o datos de transferencia para abonar._`;
-
-            window.open(`https://wa.me/${businessPhone}?text=${message}`, '_blank');
-            clearCart();
-            navigate('/');
+            setTimeout(() => {
+                clearCart();
+                navigate('/pago-exitoso'); // O a la URL que te devuelva el SDK de MP
+            }, 2000);
         }
-        setLoading(false);
     };
 
     if (!cart || cart.length === 0) {
@@ -84,7 +76,7 @@ export default function CartPage() {
             <Toaster position="top-center" />
             <div className="cart-container-pro">
 
-                {/* IZQUIERDA: LISTA DE PRODUCTOS */}
+                {/* IZQUIERDA: PRODUCTOS */}
                 <div className="cart-main-content">
                     <div className="cart-header-actions">
                         <h2>Mi Carrito</h2>
@@ -114,7 +106,7 @@ export default function CartPage() {
                     </div>
                 </div>
 
-                {/* DERECHA: FINALIZAR COMPRA */}
+                {/* DERECHA: FORMULARIO Y PAGO */}
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Finalizar Compra</h3>
@@ -125,8 +117,9 @@ export default function CartPage() {
                         </div>
 
                         <div className="form-inputs-group">
-                            <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
-                            <input type="tel" placeholder="WhatsApp (Ej: 261...)" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
+                            <input type="text" placeholder="Nombre y Apellido" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
+                            <input type="email" placeholder="Correo electrónico (opcional)" value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
+                            <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
                             {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
@@ -150,7 +143,7 @@ export default function CartPage() {
                                         <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
                                         <p>📞 0261 238-1448</p>
                                     </div>
-                                    <a href="https://maps.app.goo.gl/PDJvJejLZzuwN4Cu9\ntelefono" target="_blank" rel="noreferrer" className="btn-maps">
+                                    <a href="https://maps.app.goo.gl/c76gmYsh1bYwmbVUc" target="_blank" rel="noreferrer" className="btn-maps">
                                         <span className="material-symbols-outlined">map</span> Ver en Google Maps
                                     </a>
                                 </div>
@@ -169,19 +162,22 @@ export default function CartPage() {
                                 <span>TOTAL</span>
                                 <span>{formatCurrency(cartTotal)}</span>
                             </div>
-                            <div className="payment-icons-row">
-                                <span>Aceptamos:</span>
-                                <div className="icons-flex">
-                                    <img src="https://img.icons8.com/color/48/mercadopago.png" alt="MP" />
-                                    <img src="https://img.icons8.com/color/48/visa.png" alt="Visa" />
-                                    <img src="https://img.icons8.com/color/48/mastercard.png" alt="Master" />
-                                </div>
-                            </div>
                         </div>
 
-                        <button type="submit" className="btn-confirm-order" disabled={loading}>
-                            {loading ? 'PROCESANDO...' : 'PAGAR POR WHATSAPP 🧉'}
+                        <button type="submit" className="btn-mercadopago" disabled={loading}>
+                            {loading ? (
+                                'Procesando...'
+                            ) : (
+                                <>
+                                    <img src="https://img.icons8.com/color/48/mercadopago.png" alt="MP" className="mp-icon-btn" />
+                                    PAGAR CON MERCADO PAGO
+                                </>
+                            )}
                         </button>
+                        <p className="secure-payment-tag">
+                            <span className="material-symbols-outlined">verified_user</span>
+                            Pago procesado de forma segura
+                        </p>
                     </form>
                 </aside>
             </div>

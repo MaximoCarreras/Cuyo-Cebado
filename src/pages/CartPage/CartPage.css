@@ -135,6 +135,7 @@
     color: #a5813a;
     margin-bottom: 25px;
     margin-top: 0;
+    text-align: center;
 }
 
 .shipping-selector {
@@ -239,12 +240,54 @@
     transition: 0.3s;
 }
 
-.btn-maps:hover {
-    background: #a5813a;
-    color: #1a1614;
+/* BOTÓN MERCADO PAGO */
+.btn-mercadopago {
+    width: 100%;
+    padding: 18px;
+    background-color: #009ee3;
+    /* Azul oficial MP */
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.3s;
+    letter-spacing: 0.5px;
 }
 
-/* TOTAL Y PAGOS */
+.btn-mercadopago:hover {
+    background-color: #008ad0;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 158, 227, 0.3);
+}
+
+.mp-icon-btn {
+    height: 24px;
+}
+
+.secure-payment-tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    color: #64748b;
+    margin-top: 15px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.secure-payment-tag span {
+    font-size: 1rem;
+    color: #4caf50;
+}
+
 .total-summary-card {
     border-top: 1px solid #333;
     padding-top: 20px;
@@ -257,44 +300,6 @@
     font-size: 1.8rem;
     font-weight: 800;
     color: #a5813a;
-    margin-bottom: 15px;
-}
-
-.payment-icons-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.75rem;
-    color: #94a3b8;
-}
-
-.icons-flex {
-    display: flex;
-    gap: 8px;
-}
-
-.icons-flex img {
-    height: 22px;
-    filter: grayscale(0.3);
-}
-
-.btn-confirm-order {
-    width: 100%;
-    padding: 20px;
-    background: #a5813a;
-    color: #1a1614;
-    border: none;
-    border-radius: 12px;
-    font-weight: 800;
-    font-size: 1.1rem;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: 0.3s;
-}
-
-.btn-confirm-order:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(165, 129, 58, 0.3);
 }
 
 .animate-fade {
