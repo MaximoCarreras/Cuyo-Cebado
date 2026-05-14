@@ -32,10 +32,7 @@ export default function AdminDashboard() {
 
     const checkAdmin = async () => {
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-            setLoading(false);
-            return;
-        }
+        if (!user) { setLoading(false); return; }
         const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
         if (profile?.role === 'admin') setIsAdmin(true);
         setLoading(false);
@@ -58,14 +55,6 @@ export default function AdminDashboard() {
             }
         } catch (err) { console.error(err); }
         setLoading(false);
-    };
-
-    const handleUpdateOrderStatus = async (orderId, newStatus) => {
-        const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
-        if (!error) {
-            setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-            toast.success(`Pedido ${newStatus}`);
-        }
     };
 
     const uploadImage = async (event, type) => {
@@ -101,6 +90,12 @@ export default function AdminDashboard() {
         fetchData();
     };
 
+    const handleUpdateOrderStatus = async (orderId, newStatus) => {
+        await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
+        setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+        toast.success(`Pedido ${newStatus}`);
+    };
+
     const removeMainImage = (e) => { e.preventDefault(); e.stopPropagation(); setNewProduct(prev => ({ ...prev, image_url: '' })); };
     const removeExtraImage = (e, index) => { e.preventDefault(); e.stopPropagation(); const filtered = newProduct.extra_images.filter((_, i) => i !== index); setNewProduct(prev => ({ ...prev, extra_images: filtered })); };
     const closeModal = () => { setIsModalOpen(false); setIsEditing(false); setEditingId(null); setNewProduct(initialFormState); };
@@ -116,14 +111,13 @@ export default function AdminDashboard() {
         await supabase.from('products').update({ is_featured: newValue }).eq('id', product.id);
     };
 
-    // FILTRO DE BÚSQUEDA
     const filteredProducts = products.filter(p =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.category.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (loading) return <div className="admin-loader">Cargando estancia...</div>;
-    if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Denegado</h1><p>Solo el capataz de Cuyo Cebado puede entrar aquí.</p><button onClick={() => window.location.href = '/'}>Volver al Inicio</button></div>;
+    if (loading) return <div className="admin-loader">Abriendo la estancia...</div>;
+    if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Restringido</h1><p>Solo el administrador de Cuyo Cebado puede entrar.</p><button onClick={() => window.location.href = '/'}>Volver al Inicio</button></div>;
 
     return (
         <div className="admin-refined-page">
@@ -154,10 +148,9 @@ export default function AdminDashboard() {
                             </div>
                         </div>
 
-                        {/* BUSCADOR PREMIUM */}
                         <div className="search-bar-container">
                             <span className="material-symbols-outlined">search</span>
-                            <input type="text" placeholder="Buscar por nombre o categoría..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                            <input type="text" placeholder="Buscar mate por nombre o categoría..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                         </div>
 
                         <div className="table-container">
@@ -248,7 +241,7 @@ export default function AdminDashboard() {
                                     await supabase.from('categories').insert([{ id, label: newCategory.label, icon: newCategory.icon, image_url: newCategory.image_url }]);
                                     setNewCategory({ label: '', icon: '🧉', image_url: '' });
                                     fetchData();
-                                    toast.success("Creada");
+                                    toast.success("Categoría creada");
                                 }}>CREAR CATEGORÍA</button>
                             </div>
                         </div>

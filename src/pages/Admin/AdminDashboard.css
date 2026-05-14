@@ -58,7 +58,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* SEARCH BAR */
+/* SEARCH BAR PREMIUM */
 .search-bar-container {
     background: #fff;
     border-radius: 15px;
@@ -164,16 +164,7 @@
     color: #1a1614;
 }
 
-.mini-thumb {
-    width: 50px;
-    height: 50px;
-    border-radius: 10px;
-    object-fit: cover;
-    background: #fdfaf7;
-    border: 1px solid #eee;
-}
-
-/* STOCK & BUTTONS */
+/* STOCK & PILLS */
 .refined-stock-pill {
     display: flex;
     align-items: center;
@@ -197,6 +188,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #1a1614;
     transition: 0.2s;
 }
 
@@ -247,7 +239,49 @@
     display: flex;
 }
 
-/* MODAL */
+/* CATEGORÍAS */
+.category-refined-add {
+    background: #fff;
+    padding: 35px;
+    border-radius: 24px;
+    border: 1px solid rgba(165, 129, 58, 0.1);
+    margin-top: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+.cat-modern-grid {
+    display: grid;
+    grid-template-columns: 80px 1fr 100px 200px;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.input-with-label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-with-label label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #8a837b;
+    text-transform: uppercase;
+}
+
+.btn-delete-pro {
+    background: #fff0f0;
+    border: 1.5px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* MODAL & UPLOADS */
 .refined-modal-backdrop {
     position: fixed;
     top: 0;
@@ -316,7 +350,6 @@
     resize: none;
 }
 
-/* UPLOAD & TACHITO (FIXED) */
 .upload-refined-main {
     height: 220px;
     border: 2.5px dashed #cbd5e1;
@@ -395,7 +428,7 @@
     margin: 0;
 }
 
-/* STATUS & ORDER MODAL */
+/* ORDERS & STATUS */
 .status-selector {
     background: #fdfaf0;
     border: 1px solid #a5813a;
@@ -404,16 +437,6 @@
     border-radius: 8px;
     font-weight: 700;
     cursor: pointer;
-}
-
-.order-modal {
-    max-width: 600px;
-}
-
-.order-details-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
 }
 
 .it-row {
@@ -433,7 +456,7 @@
     color: #a5813a;
 }
 
-/* GENERAL */
+/* BUTTONS DORADOS */
 .btn-save-gold-full {
     width: 100%;
     padding: 18px;
@@ -451,6 +474,29 @@
 .btn-save-gold-full:hover {
     background: #a5813a;
     color: #1a1614;
+}
+
+.btn-modal-action {
+    flex: 1;
+    padding: 18px;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-modal-action.discard {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.btn-modal-action.save {
+    background: #1a1614;
+    color: #a5813a;
+    border: 1.5px solid #a5813a;
 }
 
 .btn-add-main {
@@ -490,6 +536,27 @@
     border-radius: 10px;
     margin-top: 20px;
     cursor: pointer;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.mini-thumb {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.mini-gallery-thumb {
+    width: 85px;
+    height: 85px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid #eee;
 }
 
 .fade-in {
