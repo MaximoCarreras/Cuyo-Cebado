@@ -1,6 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@700&display=swap');
+
+/* --- BARRA DORADA SUPERIOR (ANNOUNCEMENT) --- */
+.announcement-banner {
+  background: #a5813a;
+  color: #1a1614;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3000;
+  /* Por encima de todo */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- NAVBAR BASE --- */
 .navbar {
   position: fixed;
   top: 0;
+  /* Por defecto arriba */
   left: 0;
   width: 100%;
   height: 90px;
@@ -9,8 +36,27 @@
   z-index: 2000;
   display: flex;
   align-items: center;
+  transition: top 0.3s ease;
+  /* Para que baje suave si aparece el banner */
 }
 
+/* --- AJUSTES DINÁMICOS (Si el banner existe) --- */
+/* Si el banner está presente, bajamos la Navbar 40px */
+body:has(.announcement-banner) .navbar {
+  top: 40px;
+}
+
+/* Si el banner está presente, bajamos el contenido de la web para que no lo tape la Navbar */
+body:has(.announcement-banner) main {
+  padding-top: 40px;
+}
+
+/* Ajuste específico para el Admin para que no se pegue al banner */
+body:has(.announcement-banner) .admin-refined-page {
+  padding-top: 160px;
+}
+
+/* --- CONTENEDOR NAVBAR --- */
 .navbar__container {
   width: 100%;
   max-width: 1600px;
@@ -22,10 +68,6 @@
 }
 
 /* LOGO */
-.navbar__left {
-  flex-shrink: 0;
-}
-
 .navbar__brand {
   display: flex;
   align-items: center;
@@ -51,7 +93,7 @@
   color: #a5813a;
 }
 
-/* BUSCADOR CENTRO */
+/* BUSCADOR */
 .navbar__center {
   flex: 0 1 400px;
   margin: 0 15px;
@@ -88,12 +130,11 @@
   cursor: pointer;
 }
 
-/* LINKS ESCRITORIO */
+/* LINKS DERECHA */
 .navbar__right {
   display: flex;
   align-items: center;
   gap: 15px;
-  flex-shrink: 0;
 }
 
 .navbar__desktop-links {
@@ -103,13 +144,14 @@
 
 .nav-item {
   color: #fdfaf7 !important;
-  /* Forzamos el color blanco cremoso */
   text-decoration: none;
   font-size: 0.75rem;
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 1.5px;
   transition: 0.3s;
+  display: flex;
+  align-items: center;
 }
 
 .nav-item:hover {
@@ -147,25 +189,22 @@
   border: 1px solid #1a1614;
 }
 
-/* BOTÓN HAMBURGUESA (Escondido en PC) */
+/* RESPONSIVE MÓVIL */
 .navbar__hamburger-btn {
   display: none;
   background: none;
   border: none;
   color: #fff;
   cursor: pointer;
-  padding: 10px;
 }
 
-/* MENÚ MÓVIL (Escondido en PC) */
-.navbar__mobile-menu {
-  display: none;
-}
-
-/* --- RESPONSIVE MÓVIL (Menos de 1000px) --- */
 @media (max-width: 1000px) {
   .navbar {
     height: 75px;
+  }
+
+  body:has(.announcement-banner) .navbar {
+    top: 40px;
   }
 
   .navbar__desktop-links,
@@ -175,23 +214,6 @@
 
   .navbar__hamburger-btn {
     display: block;
-  }
-
-  .navbar__container {
-    padding: 0 10px;
-  }
-
-  .navbar__logo {
-    height: 32px;
-  }
-
-  .navbar__center {
-    flex: 1;
-    margin: 0 8px;
-  }
-
-  .navbar__search input {
-    font-size: 0.75rem;
   }
 
   /* CAJÓN MÓVIL */
@@ -212,16 +234,6 @@
 
   .navbar__mobile-menu.active {
     right: 0;
-  }
-
-  .navbar__mobile-menu a {
-    color: #fdfaf7 !important;
-    text-decoration: none;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    font-weight: 600;
-    border-bottom: 1px solid rgba(165, 129, 58, 0.1);
-    padding-bottom: 10px;
   }
 
   .navbar__blur-overlay {
