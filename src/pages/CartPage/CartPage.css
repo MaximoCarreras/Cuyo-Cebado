@@ -124,16 +124,18 @@
     text-align: right;
 }
 
-/* CHECKOUT SIDEBAR - FONDO OSCURO */
+/* CHECKOUT SIDEBAR */
 .checkout-form-premium {
     background: #1a1614;
     color: #fff;
     padding: 35px;
+    border-radius: 24 heart;
     border-radius: 24px;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
     position: sticky;
     top: 120px;
     box-sizing: border-box;
+    width: 100%;
 }
 
 .checkout-form-premium h3 {
@@ -190,10 +192,6 @@
     font-size: 0.9rem;
 }
 
-.form-inputs-group input:focus {
-    border-color: #a5813a;
-}
-
 .grid-cp {
     display: grid;
     grid-template-columns: 1fr 90px;
@@ -207,7 +205,7 @@
     margin-top: 5px;
 }
 
-/* PICKUP CARD - DORADO */
+/* PICKUP CARD - DORADA */
 .pickup-info-card {
     background: rgba(165, 129, 58, 0.08);
     border: 1px solid #a5813a;
@@ -237,16 +235,14 @@
     line-height: 1.4;
 }
 
-/* BOTÓN GOOGLE MAPS - DORADO/CREMA */
-.btn-maps-link-dorado {
+.btn-maps-dorado {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     background: #a5813a;
-    /* Dorado */
+    /* Dorado Cuyo */
     color: #1a1614;
-    /* Texto negro para contraste */
     text-decoration: none;
     padding: 12px;
     border-radius: 10px;
@@ -254,33 +250,15 @@
     font-weight: 800;
     margin-top: 15px;
     transition: 0.3s;
-    letter-spacing: 0.5px;
-    border: 1px solid #1a1614;
 }
 
-.btn-maps-link-dorado:hover {
-    transform: translateY(-2px);
+.btn-maps-dorado:hover {
     background: #c29d54;
-    /* Un dorado más claro */
+    transform: translateY(-2px);
 }
 
-/* TOTAL */
-.total-summary-card {
-    border-top: 1px solid #333;
-    padding-top: 20px;
-    margin-top: 25px;
-}
-
-.main-total {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.9rem;
-    font-weight: 800;
-    color: #a5813a;
-}
-
-/* BOTÓN MERCADO PAGO - AZUL */
-.btn-mercadopago-definitivo {
+/* BOTÓN MERCADO PAGO */
+.btn-mercadopago-pro {
     width: 100%;
     padding: 18px;
     background-color: #009ee3;
@@ -296,40 +274,37 @@
     justify-content: center;
     gap: 12px;
     transition: 0.3s;
-    box-shadow: 0 10px 20px rgba(0, 158, 227, 0.2);
 }
 
-.btn-mercadopago-definitivo:hover {
+.btn-mercadopago-pro:hover {
     background-color: #008ad0;
     transform: translateY(-2px);
     box-shadow: 0 15px 30px rgba(0, 158, 227, 0.4);
 }
 
-.mp-logo-btn {
-    height: 24px;
+.mp-icon-final {
+    height: 26px;
+    width: auto;
 }
 
-/* FOOTER SEGURO - CORREGIDO */
-.secure-footer-pro {
+/* FOOTER SEGURO - FIX ÍCONO */
+.secure-footer-real {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: #64748b;
     margin-top: 15px;
     text-transform: uppercase;
     font-weight: 700;
 }
 
-.secure-footer-pro span {
+.secure-footer-real span {
     font-size: 1.1rem;
     color: #4caf50;
 }
 
-/* El escudo ahora carga verde */
-
-/* Animaciones y Media Queries */
 .animate-fade {
     animation: fadeIn 0.4s ease-out;
 }

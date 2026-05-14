@@ -5,6 +5,9 @@ import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
 import './CartPage.css';
 
+// Importamos el logo que pusiste en assets
+import mpLogo from '../../assets/mp-logo.png';
+
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
     const navigate = useNavigate();
@@ -49,11 +52,10 @@ export default function CartPage() {
             toast.error("Error al procesar el pedido.");
             setLoading(false);
         } else {
-            // Simulamos éxito de MP
-            toast.success("Redirigiendo a Mercado Pago...");
+            toast.success("Iniciando pago seguro...");
             setTimeout(() => {
                 clearCart();
-                navigate('/pago-exitoso');
+                navigate('/');
             }, 2000);
         }
     };
@@ -93,7 +95,7 @@ export default function CartPage() {
                                             <span>{item.quantity}</span>
                                             <button type="button" onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar del carrito?")) removeFromCart(item.id) }}>Eliminar</button>
+                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id) }}>Eliminar</button>
                                     </div>
                                 </div>
                                 <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
@@ -112,12 +114,12 @@ export default function CartPage() {
                         </div>
 
                         <div className="form-inputs-group">
-                            <input type="text" placeholder="Nombre y Apellido" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
+                            <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
                             {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
-                                    <input type="text" placeholder="Dirección (Calle y N°)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
+                                    <input type="text" placeholder="Dirección y Altura" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
                                     <div className="grid-cp">
                                         <input type="text" placeholder="Ciudad" required value={orderData.city} onChange={e => setOrderData({ ...orderData, city: e.target.value })} />
                                         <input type="text" placeholder="CP" required value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
@@ -126,21 +128,21 @@ export default function CartPage() {
                             ) : (
                                 <div className="pickup-info-card animate-fade">
                                     <div className="pickup-header">
-                                        <span className="material-symbols-outlined">storefront</span>
+                                        <span className="material-symbols-outlined">store</span>
                                         <div>
                                             <h4>Código Vinario</h4>
-                                            <p>Punto de Retiro Oficial</p>
+                                            <p>Punto de Retiro</p>
                                         </div>
                                     </div>
                                     <div className="pickup-details">
-                                        <p>📍 Av. Colón 701, Mendoza Capital</p>
+                                        <p>📍 Av. Colón 701, Mendoza</p>
                                         <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
                                         <p>📞 261 238-1448</p>
                                     </div>
-                                    {/* Botón de maps ahora dorado */}
-                                    <a href="http://googleusercontent.com/maps.google.com/7" target="_blank" rel="noreferrer" className="btn-maps-link-dorado">
-                                        <span className="material-symbols-outlined">map</span>
-                                        Ver en Google Maps
+                                    {/* Botón de maps dorado */}
+                                    <a href="https://share.google/c76gmYsh1bYwmbVUc" target="_blank" rel="noreferrer" className="btn-maps-dorado">
+                                        <span className="material-symbols-outlined">location_on</span>
+                                        VER EN GOOGLE MAPS
                                     </a>
                                 </div>
                             )}
@@ -160,19 +162,17 @@ export default function CartPage() {
                             </div>
                         </div>
 
-                        {/* Botón MP con logo oficial directo */}
-                        <button type="submit" className="btn-mercadopago-definitivo" disabled={loading}>
+                        <button type="submit" className="btn-mercadopago-pro" disabled={loading}>
                             {loading ? 'Procesando...' : (
                                 <>
-                                    <img src="https://img.icons8.com/color/48/mercadopago.png" alt="MP" className="mp-logo-btn" />
+                                    <img src={mpLogo} alt="" className="mp-icon-final" />
                                     PAGAR CON MERCADO PAGO
                                 </>
                             )}
                         </button>
 
-                        {/* ÍCONO CORREGIDO */}
-                        <div className="secure-footer-pro">
-                            <span className="material-symbols-outlined">shield_check</span>
+                        <div className="secure-footer-real">
+                            <span className="material-symbols-outlined">verified_user</span>
                             Pago procesado por Mercado Pago
                         </div>
                     </form>
