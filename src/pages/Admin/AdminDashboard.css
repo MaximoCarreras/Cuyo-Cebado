@@ -105,7 +105,7 @@
 }
 
 /* TABLES */
-.table-refined-wrapper {
+.table-container {
     background: #fff;
     border-radius: 24px;
     overflow: hidden;
@@ -126,6 +126,7 @@
     padding: 20px;
     font-size: 0.8rem;
     font-weight: 800;
+    text-transform: uppercase;
     letter-spacing: 1px;
 }
 
@@ -133,6 +134,7 @@
     padding: 18px 20px;
     border-bottom: 1px solid #f9f6f2;
     vertical-align: middle;
+    color: #1a1614;
 }
 
 .cell-product {
@@ -190,7 +192,8 @@
     gap: 10px;
 }
 
-.btn-edit {
+.btn-edit-modern,
+.btn-view-modern {
     background: #fdfaf0;
     border: 1px solid #a5813a;
     color: #a5813a;
@@ -200,14 +203,15 @@
     font-size: 0.7rem;
     cursor: pointer;
     transition: 0.3s;
+    text-transform: uppercase;
 }
 
-.btn-edit:hover {
+.btn-edit-modern:hover {
     background: #a5813a;
     color: #fff;
 }
 
-.btn-delete {
+.btn-delete-icon-only {
     background: #fff0f0;
     border: 1px solid #ff4d4d;
     color: #ff4d4d;
@@ -284,6 +288,18 @@
     object-fit: contain;
 }
 
+.refined-modal-form label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #8a837b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 8px;
+    margin-top: 15px;
+}
+
+/* REFINED INPUT (MODERNO) */
 .refined-input {
     width: 100%;
     padding: 15px 20px;
@@ -295,12 +311,18 @@
     font-size: 1rem;
     outline: none;
     transition: 0.3s;
+    box-sizing: border-box;
 }
 
 .refined-input:focus {
     border-color: #a5813a;
     background: #fff;
     box-shadow: 0 0 0 4px rgba(165, 129, 58, 0.1);
+}
+
+textarea.refined-input {
+    height: 120px;
+    resize: none;
 }
 
 .modal-refined-actions {
@@ -330,6 +352,62 @@
     border-radius: 15px;
     font-weight: 700;
     cursor: pointer;
+}
+
+/* GALERÍA REFINADA (MODERNA CON TEXTO) */
+.extra-refined-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.extra-refined-grid img.mini-thumb {
+    width: 65px;
+    height: 65px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid #eee;
+}
+
+.upload-extra {
+    width: 100px;
+    height: 100px;
+}
+
+.upload-extra label {
+    border: 2px dashed #ddd;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: #fdfaf7;
+    transition: 0.3s;
+    color: #cbd5e1;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    /* Override modal label margin */
+}
+
+.upload-extra label:hover {
+    border-color: #a5813a;
+    color: #a5813a;
+}
+
+.upload-extra label span {
+    font-size: 1.8rem;
+}
+
+.upload-extra label p {
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-top: 5px;
+    margin-bottom: 0;
+    letter-spacing: 0.5px;
 }
 
 .btn-add-main {
@@ -370,12 +448,13 @@
     }
 }
 
-/* CATEGORIAS REFINED */
+/* CATEGORIAS REFINED (INPUTS MODERNOS) */
 .category-refined-add {
     background: #fdfaf7;
     padding: 30px;
     border-radius: 24px;
     border: 1px solid rgba(165, 129, 58, 0.1);
+    margin-top: 40px;
 }
 
 .cat-inputs {
@@ -384,6 +463,16 @@
     gap: 15px;
     align-items: center;
     margin-top: 15px;
+}
+
+.cat-inputs input.refined-input {
+    margin-bottom: 0;
+}
+
+/* Remove bottom margin for grid alignment */
+.cat-inputs .btn-save {
+    padding: 15px 30px;
+    border-radius: 12px;
 }
 
 .cat-img-box {
@@ -402,4 +491,33 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.cell-icon {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.cell-icon img {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.cell-name {
+    font-weight: 700;
+    color: #1a1614;
+}
+
+.btn-delete {
+    background: #fff0f0;
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
 }
