@@ -7,7 +7,7 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* HEADER Y TABS */
+/* CABECERA Y TABS */
 .admin-sidebar-header {
     display: flex;
     justify-content: space-between;
@@ -153,7 +153,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.2s;
 }
 
 .stock-btn.minus {
@@ -164,6 +163,12 @@
 .stock-btn.plus {
     background: #a5813a;
     color: #1a1614;
+}
+
+.stock-qty {
+    color: #fff;
+    min-width: 20px;
+    text-align: center;
 }
 
 /* ESTRELLA */
@@ -180,12 +185,11 @@
     transform: scale(1.2);
 }
 
-/* --- ACCIONES EN FILA (REPARADO) --- */
+/* ACCIONES (UNO AL LADO DEL OTRO) */
 .actions-flex-row {
     display: flex;
     align-items: center;
     gap: 10px;
-    justify-content: flex-start;
 }
 
 .btn-edit-modern {
@@ -197,12 +201,6 @@
     font-weight: 800;
     font-size: 0.7rem;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-edit-modern:hover {
-    background: #a5813a;
-    color: #fff;
 }
 
 .btn-delete-icon-only {
@@ -213,42 +211,9 @@
     border-radius: 10px;
     cursor: pointer;
     display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.btn-delete-icon-only:hover {
-    background: #ff4d4d;
-    color: #fff;
-}
-
-/* CATEGORÍAS */
-.category-creator-card-modern {
-    background: #fff;
-    padding: 35px;
-    border-radius: 20px;
-    margin-top: 40px;
-    border: 1px solid #eee;
-}
-
-.cat-modern-grid {
-    display: grid;
-    grid-template-columns: 60px 1fr 100px 150px;
-    gap: 15px;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.btn-save-gold-full {
-    background: #1a1614;
-    color: #a5813a;
-    border: 1.5px solid #a5813a;
-    border-radius: 12px;
-    font-weight: 800;
-    cursor: pointer;
-}
-
-/* MODALES */
+/* --- MODAL (Z-INDEX SUPERIOR) --- */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -279,6 +244,37 @@
     max-width: 95%;
 }
 
+/* Botón cerrar circular moderno (ARREGLADO) */
+.btn-close-modern-circle {
+    background: #f1f5f9;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #64748b;
+    transition: 0.2s;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.btn-close-modern-circle:hover {
+    background: #1a1614;
+    color: #a5813a;
+    transform: rotate(90deg);
+}
+
+.modal-header-premium {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+/* INPUTS MODAL */
 .modern-admin-input {
     width: 100%;
     padding: 14px 18px;
@@ -288,6 +284,7 @@
     font-family: inherit;
     font-weight: 600;
     outline: none;
+    box-sizing: border-box;
 }
 
 .modern-admin-input:focus {
@@ -295,6 +292,7 @@
     box-shadow: 0 0 0 4px rgba(165, 129, 58, 0.1);
 }
 
+/* UPLOADS */
 .image-upload-box-premium {
     height: 180px;
     border: 2.5px dashed #cbd5e1;
@@ -323,24 +321,50 @@
     z-index: -1;
 }
 
+/* --- FOOTER DE BOTONES (SIMÉTRICOS) --- */
 .modal-actions-footer {
     display: flex;
-    align-items: center;
     gap: 15px;
     margin-top: 25px;
 }
 
-.btn-discard-modern {
+.btn-modal-action {
     flex: 1;
-    padding: 16px;
-    background: #f1f5f9;
-    border: none;
-    border-radius: 12px;
-    color: #64748b;
+    /* Esto hace que ambos midan lo mismo */
+    padding: 18px;
     font-weight: 800;
+    border-radius: 12px;
+    /* Forma cuadrada moderna, no ovalada */
     cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.9rem;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
+.btn-modal-action.discard {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.btn-modal-action.discard:hover {
+    background: #e2e8f0;
+    color: #1a1614;
+}
+
+.btn-modal-action.save {
+    background: #1a1614;
+    color: #a5813a;
+    border: 1.5px solid #a5813a;
+}
+
+.btn-modal-action.save:hover {
+    background: #a5813a;
+    color: #1a1614;
+}
+
+/* OTROS */
 .btn-add-premium {
     background: #a5813a;
     color: #1a1614;
@@ -355,18 +379,18 @@
     gap: 12px;
 }
 
-.animate-fade {
-    animation: fadeIn 0.4s ease-out;
+.category-creator-card-modern {
+    background: #fff;
+    padding: 35px;
+    border-radius: 20px;
+    margin-top: 40px;
+    border: 1px solid #eee;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.cat-modern-grid {
+    display: grid;
+    grid-template-columns: 60px 1fr 100px 150px;
+    gap: 15px;
+    align-items: center;
+    margin-top: 20px;
 }
