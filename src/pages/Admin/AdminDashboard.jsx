@@ -192,10 +192,11 @@ export default function AdminDashboard() {
                                             </td>
                                             <td className="cell-price">${p.price.toLocaleString()}</td>
                                             <td className="cell-stock">
+                                                {/* CONTROLES DE STOCK REPARADOS */}
                                                 <div className="refined-stock-pill">
-                                                    <button onClick={() => handleUpdateField(p.id, 'stock', p.stock - 1)}>−</button>
-                                                    <span>{p.stock}</span>
-                                                    <button onClick={() => handleUpdateField(p.id, 'stock', p.stock + 1)}>+</button>
+                                                    <button className="stock-btn minus" onClick={() => handleUpdateField(p.id, 'stock', p.stock - 1)}>−</button>
+                                                    <span className="stock-qty">{p.stock}</span>
+                                                    <button className="stock-btn plus" onClick={() => handleUpdateField(p.id, 'stock', p.stock + 1)}>+</button>
                                                 </div>
                                             </td>
                                             <td>
@@ -236,7 +237,7 @@ export default function AdminDashboard() {
                                             <td>{o.customer_name}</td>
                                             <td className="cell-price">${o.total.toLocaleString()}</td>
                                             <td><span className={`status-tag ${o.status}`}>{o.status.toUpperCase()}</span></td>
-                                            <td><button className="btn-view-modern" onClick={() => setSelectedOrder(o)}>DETALLES</button></td>
+                                            <td><button className="btn-edit-modern" onClick={() => setSelectedOrder(o)}>DETALLES</button></td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -270,7 +271,6 @@ export default function AdminDashboard() {
                                 </div>
                                 <div className="input-with-label"><label>Nombre</label><input className="refined-input" placeholder="Ej: Mates Imperiales" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required /></div>
                                 <div className="input-with-label" style={{ width: '100px' }}><label>Icono</label><input className="refined-input" style={{ textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} /></div>
-                                {/* BOTÓN DE CREAR REPARADO - ADIÓS WINDOWS XP */}
                                 <button className="btn-save-gold-full" style={{ marginTop: '22px', height: '54px' }} onClick={async () => {
                                     const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
                                     await supabase.from('categories').insert([{ id, label: newCategory.label, icon: newCategory.icon, image_url: newCategory.image_url }]);
@@ -300,7 +300,7 @@ export default function AdminDashboard() {
                                         {newProduct.image_url ? (
                                             <div className="preview-container-main">
                                                 <img src={newProduct.image_url} className="image-preview" alt="" />
-                                                <button className="btn-remove-photo-pro" onClick={removeMainImage}>
+                                                <button type="button" className="btn-remove-photo-pro" onClick={removeMainImage}>
                                                     <span className="material-symbols-outlined">delete</span>
                                                 </button>
                                             </div>
@@ -316,7 +316,7 @@ export default function AdminDashboard() {
                                         {newProduct.extra_images?.map((img, i) => (
                                             <div key={i} className="mini-thumb-container-pro">
                                                 <img src={img} alt="" className="mini-gallery-thumb" />
-                                                <button className="btn-remove-extra-pro" onClick={(e) => removeExtraImage(e, i)}>×</button>
+                                                <button type="button" className="btn-remove-extra-pro" onClick={(e) => removeExtraImage(e, i)}>×</button>
                                             </div>
                                         ))}
                                         <div className="upload-extra-pro">
@@ -327,7 +327,7 @@ export default function AdminDashboard() {
                                 </div>
                                 <div className="form-side inputs-side">
                                     <input className="refined-input" placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
-                                    <div className="input-row">
+                                    <div className="form-split-modern">
                                         <input type="number" className="refined-input" placeholder="Precio ($)" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
                                         <input type="number" className="refined-input" placeholder="Stock" value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
                                     </div>

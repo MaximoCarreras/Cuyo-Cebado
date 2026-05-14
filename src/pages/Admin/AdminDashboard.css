@@ -146,7 +146,7 @@
     border: 1px solid #eee;
 }
 
-/* STOCK PILL */
+/* --- STOCK PILL (ARREGLADO) --- */
 .refined-stock-pill {
     display: flex;
     align-items: center;
@@ -155,6 +155,7 @@
     padding: 5px 12px;
     border-radius: 50px;
     width: fit-content;
+    border: 1px solid #e0dbd6;
 }
 
 .stock-btn {
@@ -166,9 +167,27 @@
     font-weight: 800;
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1614;
+    transition: 0.2s;
 }
 
-/* ESTRELLA REFINADA */
+.stock-btn:hover {
+    background: #1a1614;
+    color: #a5813a;
+    transform: scale(1.1);
+}
+
+.stock-qty {
+    font-weight: 800;
+    color: #1a1614;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ESTRELLA */
 .star-refined-btn {
     background: none;
     border: none;
@@ -245,18 +264,6 @@
     text-transform: uppercase;
 }
 
-.btn-delete-pro {
-    background: #fff0f0;
-    border: 1.5px solid #ff4d4d;
-    color: #ff4d4d;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: 800;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
 /* MODAL */
 .refined-modal-backdrop {
     position: fixed;
@@ -321,7 +328,7 @@
     box-shadow: 0 0 0 4px rgba(165, 129, 58, 0.1);
 }
 
-/* UPLOAD & TACHITO (INALTERADO) */
+/* UPLOAD & TACHITO */
 .upload-refined-main {
     height: 220px;
     border: 2.5px dashed #cbd5e1;
@@ -448,7 +455,7 @@
     transition: 0.3s;
 }
 
-/* --- BOTÓN DORADO PREMIUM (NUEVO) --- */
+/* --- BOTÓN DORADO PREMIUM --- */
 .btn-save-gold-full {
     width: 100%;
     padding: 18px;
@@ -475,12 +482,6 @@
     opacity: 0;
     overflow: hidden;
     z-index: -1;
-}
-
-.image-preview {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
 }
 
 .mini-gallery-thumb {
