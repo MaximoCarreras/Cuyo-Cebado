@@ -1,62 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@700&display=swap');
 
-/* --- BARRA DORADA SUPERIOR (ANNOUNCEMENT) --- */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 5000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* BARRA DORADA */
 .announcement-banner {
   background: #a5813a;
   color: #1a1614;
   text-align: center;
-  padding: 10px 0;
-  font-size: 0.85rem;
+  padding: 8px 0;
+  font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 3000;
-  /* Por encima de todo */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-/* --- NAVBAR BASE --- */
+/* NAVBAR */
 .navbar {
-  position: fixed;
-  top: 0;
-  /* Por defecto arriba */
-  left: 0;
   width: 100%;
-  height: 90px;
+  height: 85px;
   background-color: #1a1614;
   border-bottom: 1px solid rgba(165, 129, 58, 0.2);
-  z-index: 2000;
   display: flex;
   align-items: center;
-  transition: top 0.3s ease;
-  /* Para que baje suave si aparece el banner */
 }
 
-/* --- AJUSTES DINÁMICOS (Si el banner existe) --- */
-/* Si el banner está presente, bajamos la Navbar 40px */
-body:has(.announcement-banner) .navbar {
-  top: 40px;
-}
+/* AJUSTE DE CONTENIDO PARA NO SER TAPADO */
+/* En el archivo App.css o similar, asegurate que el main tenga un margin-top grande */
+/* Ejemplo: main { margin-top: 130px; } */
 
-/* Si el banner está presente, bajamos el contenido de la web para que no lo tape la Navbar */
-body:has(.announcement-banner) main {
-  padding-top: 40px;
-}
-
-/* Ajuste específico para el Admin para que no se pegue al banner */
-body:has(.announcement-banner) .admin-refined-page {
-  padding-top: 160px;
-}
-
-/* --- CONTENEDOR NAVBAR --- */
 .navbar__container {
   width: 100%;
   max-width: 1600px;
@@ -67,7 +47,6 @@ body:has(.announcement-banner) .admin-refined-page {
   align-items: center;
 }
 
-/* LOGO */
 .navbar__brand {
   display: flex;
   align-items: center;
@@ -76,7 +55,7 @@ body:has(.announcement-banner) .admin-refined-page {
 }
 
 .navbar__logo {
-  height: 42px;
+  height: 40px;
   width: auto;
 }
 
@@ -84,8 +63,7 @@ body:has(.announcement-banner) .admin-refined-page {
   color: #fdfaf7;
   font-family: 'Noto Serif', serif;
   font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: 1px;
+  font-size: 0.95rem;
   text-transform: uppercase;
 }
 
@@ -93,7 +71,6 @@ body:has(.announcement-banner) .admin-refined-page {
   color: #a5813a;
 }
 
-/* BUSCADOR */
 .navbar__center {
   flex: 0 1 400px;
   margin: 0 15px;
@@ -105,12 +82,6 @@ body:has(.announcement-banner) .admin-refined-page {
   border: 1px solid rgba(165, 129, 58, 0.2);
   border-radius: 50px;
   padding: 2px 12px;
-  transition: 0.3s;
-}
-
-.navbar__search:focus-within {
-  border-color: #a5813a;
-  background: rgba(255, 255, 255, 0.08);
 }
 
 .navbar__search input {
@@ -130,13 +101,6 @@ body:has(.announcement-banner) .admin-refined-page {
   cursor: pointer;
 }
 
-/* LINKS DERECHA */
-.navbar__right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
 .navbar__desktop-links {
   display: flex;
   gap: 20px;
@@ -145,20 +109,17 @@ body:has(.announcement-banner) .admin-refined-page {
 .nav-item {
   color: #fdfaf7 !important;
   text-decoration: none;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   transition: 0.3s;
-  display: flex;
-  align-items: center;
 }
 
 .nav-item:hover {
   color: #a5813a !important;
 }
 
-/* CARRITO */
 .navbar__cart-link {
   position: relative;
   color: #fdfaf7;
@@ -169,7 +130,7 @@ body:has(.announcement-banner) .admin-refined-page {
 }
 
 .cart-icon-nav {
-  font-size: 28px !important;
+  font-size: 26px !important;
 }
 
 .cart-count-premium {
@@ -180,8 +141,8 @@ body:has(.announcement-banner) .admin-refined-page {
   color: #1a1614;
   font-size: 9px;
   font-weight: 900;
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -189,7 +150,6 @@ body:has(.announcement-banner) .admin-refined-page {
   border: 1px solid #1a1614;
 }
 
-/* RESPONSIVE MÓVIL */
 .navbar__hamburger-btn {
   display: none;
   background: none;
@@ -203,10 +163,6 @@ body:has(.announcement-banner) .admin-refined-page {
     height: 75px;
   }
 
-  body:has(.announcement-banner) .navbar {
-    top: 40px;
-  }
-
   .navbar__desktop-links,
   .navbar__logo-text {
     display: none !important;
@@ -214,36 +170,5 @@ body:has(.announcement-banner) .admin-refined-page {
 
   .navbar__hamburger-btn {
     display: block;
-  }
-
-  /* CAJÓN MÓVIL */
-  .navbar__mobile-menu {
-    display: flex;
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 280px;
-    height: 100vh;
-    background: #1a1614;
-    flex-direction: column;
-    padding: 100px 30px;
-    gap: 25px;
-    transition: 0.4s ease;
-    z-index: 2500;
-  }
-
-  .navbar__mobile-menu.active {
-    right: 0;
-  }
-
-  .navbar__blur-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-    z-index: 2400;
   }
 }

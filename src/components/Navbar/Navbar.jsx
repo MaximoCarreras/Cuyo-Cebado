@@ -16,11 +16,9 @@ export default function Navbar() {
 
   useEffect(() => {
     const fetchNavbarData = async () => {
-      // 1. Obtener Banner
       const { data: bData } = await supabase.from('site_settings').select('*').eq('id', 'global').single();
       if (bData) setBanner({ text: bData.banner_text, active: bData.banner_active });
 
-      // 2. Obtener Rol
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: pData } = await supabase.from('profiles').select('role').eq('id', user.id).single();
@@ -29,7 +27,6 @@ export default function Navbar() {
     };
     fetchNavbarData();
 
-    // 3. Escuchar cambios en vivo de site_settings
     const channel = supabase.channel('site_settings_changes')
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'site_settings' }, (payload) => {
         setBanner({ text: payload.new.banner_text, active: payload.new.banner_active });
@@ -49,13 +46,13 @@ export default function Navbar() {
   };
 
   return (
-    <>
+    <header className="main-header">
       {banner.active && (
         <div className="announcement-banner">
           <p>{banner.text}</p>
         </div>
       )}
-      <nav className="navbar" style={banner.active ? { top: '40px' } : { top: '0' }}>
+      <nav className="navbar">
         <div className="navbar__container">
           <div className="navbar__left">
             <Link to="/" className="navbar__brand" onClick={() => setIsMenuOpen(false)}>
@@ -99,6 +96,6 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-    </>
+    </header>
   );
 }

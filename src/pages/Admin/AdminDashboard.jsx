@@ -15,12 +15,16 @@ export default function AdminDashboard() {
     const [searchTerm, setSearchTerm] = useState('');
     const [isAdmin, setIsAdmin] = useState(false);
 
+    // Estados para Modales y Edición
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [selectedOrder, setSelectedOrder] = useState(null);
 
-    const [newFAQ, setNewFAQ] = useState({ question: '', answer: '' });
+    // Estado para FAQs
+    const [isEditingFAQ, setIsEditingFAQ] = useState(false);
+    const [editingFAQId, setEditingFAQId] = useState(null);
+    const [faqForm, setFaqForm] = useState({ question: '', answer: '' });
 
     const initialFormState = {
         name: '', price: '', stock: 0, category: 'mates',
@@ -67,36 +71,39 @@ export default function AdminDashboard() {
         setLoading(false);
     };
 
-    const handleUpdateSettings = async () => {
-        const { error } = await supabase.from('site_settings').update({
-            banner_text: siteSettings.banner_text,
-            banner_active: siteSettings.banner_active
-        }).eq('id', 'global');
-
-        if (error) toast.error("Error al guardar");
-        else {
-            toast.success("Barra Dorada actualizada 🧉");
-            fetchData();
-        }
-    };
-
-    const handleAddFAQ = async (e) => {
-        e.preventDefault();
-        const { error } = await supabase.from('faqs').insert([newFAQ]);
+    // --- LOGICA DE VENTAS ---
+    const handleUpdateOrderStatus = async (orderId, newStatus) => {
+        const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
         if (!error) {
-            toast.success("Pregunta añadida");
-            setNewFAQ({ question: '', answer: '' });
-            fetchData();
+            setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+            toast.success("Estado actualizado");
         }
     };
 
-    const handleDeleteFAQ = async (id) => {
-        if (window.confirm("¿Borrar esta pregunta?")) {
-            await supabase.from('faqs').delete().eq('id', id);
-            fetchData();
+    // --- LOGICA DE FAQS ---
+    const handleSaveFAQ = async (e) => {
+        e.preventDefault();
+        if (isEditingFAQ) {
+            await supabase.from('faqs').update(faqForm).eq('id', editingFAQId);
+            toast.success("Pregunta actualizada");
+        } else {
+            await supabase.from('faqs').insert([faqForm]);
+            toast.success("Pregunta creada");
         }
+        setFaqForm({ question: '', answer: '' });
+        setIsEditingFAQ(false);
+        setEditingFAQId(null);
+        fetchData();
     };
 
+    const handleEditFAQ = (faq) => {
+        setFaqForm({ question: faq.question, answer: faq.answer });
+        setIsEditingFAQ(true);
+        setEditingFAQId(faq.id);
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    };
+
+    // --- RESTO DE FUNCIONES (IMÁGENES, PRODUCTOS) ---
     const uploadImage = async (event, type) => {
         try {
             setUploading(true);
@@ -108,7 +115,7 @@ export default function AdminDashboard() {
             if (type === 'main') setNewProduct(prev => ({ ...prev, image_url: data.publicUrl }));
             else if (type === 'category') setNewCategory(prev => ({ ...prev, image_url: data.publicUrl }));
             else setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), data.publicUrl] }));
-            toast.success("Imagen cargada");
+            toast.success("Cargada con éxito");
         } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
     };
 
@@ -118,15 +125,19 @@ export default function AdminDashboard() {
         const data = { ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) };
         if (isEditing) await supabase.from('products').update(data).eq('id', editingId);
         else await supabase.from('products').insert([data]);
-        toast.success("Producto guardado");
+        toast.success("¡Guardado!");
         closeModal();
         fetchData();
     };
 
+    const handleUpdateSettings = async () => {
+        await supabase.from('site_settings').update(siteSettings).eq('id', 'global');
+        toast.success("Banner actualizado 🧉");
+    };
+
+    const closeModal = () => { setIsModalOpen(false); setIsEditing(false); setEditingId(null); setNewProduct(initialFormState); };
     const removeMainImage = (e) => { e.preventDefault(); e.stopPropagation(); setNewProduct(prev => ({ ...prev, image_url: '' })); };
     const removeExtraImage = (e, index) => { e.preventDefault(); e.stopPropagation(); const filtered = newProduct.extra_images.filter((_, i) => i !== index); setNewProduct(prev => ({ ...prev, extra_images: filtered })); };
-    const closeModal = () => { setIsModalOpen(false); setIsEditing(false); setEditingId(null); setNewProduct(initialFormState); };
-    const handleTabChange = (tab) => { closeModal(); setSelectedOrder(null); setActiveTab(tab); };
     const handleUpdateField = async (id, field, value) => {
         const val = (field === 'stock' || field === 'price') ? Number(value) : value;
         setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: val } : p));
@@ -149,15 +160,16 @@ export default function AdminDashboard() {
             <header className="admin-refined-header">
                 <div className="header-info"><h1>Gestión Cuyo Cebado</h1><p>Boutique Digital Admin</p></div>
                 <div className="tab-refined-switcher">
-                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => handleTabChange('inventory')}>Stock</button>
-                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => handleTabChange('orders')}>Ventas</button>
-                    <button className={activeTab === 'categories' ? 'active' : ''} onClick={() => handleTabChange('categories')}>Categorías</button>
-                    <button className={activeTab === 'settings' ? 'active' : ''} onClick={() => handleTabChange('settings')}>Web</button>
-                    <button className={activeTab === 'faq' ? 'active' : ''} onClick={() => handleTabChange('faq')}>FAQ</button>
+                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => setActiveTab('inventory')}>Stock</button>
+                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => setActiveTab('orders')}>Ventas</button>
+                    <button className={activeTab === 'categories' ? 'active' : ''} onClick={() => setActiveTab('categories')}>Categorías</button>
+                    <button className={activeTab === 'settings' ? 'active' : ''} onClick={() => setActiveTab('settings')}>Web</button>
+                    <button className={activeTab === 'faq' ? 'active' : ''} onClick={() => setActiveTab('faq')}>FAQ</button>
                 </div>
             </header>
 
             <main className="admin-refined-content">
+                {/* VISTA STOCK (INVENTORY) */}
                 {activeTab === 'inventory' && (
                     <section className="fade-in">
                         <div className="stats-refined-grid">
@@ -167,7 +179,7 @@ export default function AdminDashboard() {
                             </div>
                             <div className="stat-card critical">
                                 <span className="material-symbols-outlined icon-stat">priority_high</span>
-                                <div className="stat-data"><span className="stat-label">Crítico</span><span className="stat-value">{products.filter(p => p.stock < 5).length}</span></div>
+                                <div className="stat-data"><span className="stat-label">Stock Crítico</span><span className="stat-value">{products.filter(p => p.stock < 5).length}</span></div>
                             </div>
                         </div>
                         <div className="search-bar-container">
@@ -176,7 +188,7 @@ export default function AdminDashboard() {
                         </div>
                         <div className="table-container">
                             <table className="refined-table">
-                                <thead><tr><th>PRODUCTO</th><th>PRECIO</th><th>STOCK</th><th>DESTACADO</th><th>ACCIONES</th></tr></thead>
+                                <thead><tr><th>PRODUCTO</th><th>PRECIO</th><th>STOCK</th><th>ESTRELLA</th><th>ACCIONES</th></tr></thead>
                                 <tbody>
                                     {filteredProducts.map(p => (
                                         <tr key={p.id}>
@@ -203,6 +215,71 @@ export default function AdminDashboard() {
                     </section>
                 )}
 
+                {/* VISTA VENTAS (ARREGLADA) */}
+                {activeTab === 'orders' && (
+                    <section className="fade-in">
+                        <div className="table-container">
+                            <table className="refined-table">
+                                <thead><tr><th>FECHA</th><th>CLIENTE</th><th>TOTAL</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
+                                <tbody>
+                                    {orders.length > 0 ? orders.map(o => (
+                                        <tr key={o.id}>
+                                            <td>{new Date(o.created_at).toLocaleDateString()}</td>
+                                            <td>{o.customer_name}</td>
+                                            <td>${o.total.toLocaleString()}</td>
+                                            <td>
+                                                <select className="status-selector" value={o.status} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}>
+                                                    <option value="pending">Pendiente</option>
+                                                    <option value="shipped">Enviado</option>
+                                                    <option value="completed">Completado</option>
+                                                </select>
+                                            </td>
+                                            <td><button className="btn-edit-modern" onClick={() => setSelectedOrder(o)}>DETALLES</button></td>
+                                        </tr>
+                                    )) : <tr><td colSpan="5" style={{ textAlign: 'center', padding: '40px' }}>No hay ventas registradas aún.</td></tr>}
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                )}
+
+                {/* VISTA FAQ (CON EDICIÓN) */}
+                {activeTab === 'faq' && (
+                    <section className="fade-in">
+                        <div className="table-container">
+                            <table className="refined-table">
+                                <thead><tr><th>PREGUNTA</th><th>RESPUESTA</th><th>ACCIONES</th></tr></thead>
+                                <tbody>
+                                    {faqs.map(f => (
+                                        <tr key={f.id}>
+                                            <td style={{ width: '30%' }}><strong>{f.question}</strong></td>
+                                            <td>{f.answer.substring(0, 100)}...</td>
+                                            <td>
+                                                <div className="actions-flex-row">
+                                                    <button className="btn-edit-modern" onClick={() => handleEditFAQ(f)}>EDITAR</button>
+                                                    <button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('faqs').delete().eq('id', f.id); fetchData(); } }}>X</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="category-refined-add">
+                            <h3>{isEditingFAQ ? 'Editar Pregunta' : 'Nueva Pregunta Frecuente'}</h3>
+                            <form onSubmit={handleSaveFAQ} className="faq-form-pro">
+                                <input className="refined-input" placeholder="Pregunta" value={faqForm.question} onChange={e => setFaqForm({ ...faqForm, question: e.target.value })} required />
+                                <textarea className="refined-input" style={{ height: '100px' }} placeholder="Respuesta..." value={faqForm.answer} onChange={e => setFaqForm({ ...faqForm, answer: e.target.value })} required />
+                                <div className="actions-flex-row">
+                                    <button type="submit" className="btn-save-gold-full">{isEditingFAQ ? 'GUARDAR CAMBIOS' : 'AÑADIR PREGUNTA'}</button>
+                                    {isEditingFAQ && <button type="button" className="btn-delete-pro" onClick={() => { setIsEditingFAQ(false); setFaqForm({ question: '', answer: '' }); }}>CANCELAR</button>}
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                )}
+
+                {/* VISTA WEB (SETTINGS) */}
                 {activeTab === 'settings' && (
                     <section className="fade-in">
                         <div className="category-refined-add">
@@ -220,33 +297,7 @@ export default function AdminDashboard() {
                     </section>
                 )}
 
-                {activeTab === 'faq' && (
-                    <section className="fade-in">
-                        <div className="table-container">
-                            <table className="refined-table">
-                                <thead><tr><th>PREGUNTA</th><th>RESPUESTA</th><th>ACCIONES</th></tr></thead>
-                                <tbody>
-                                    {faqs.map(f => (
-                                        <tr key={f.id}>
-                                            <td><strong>{f.question}</strong></td>
-                                            <td>{f.answer.substring(0, 50)}...</td>
-                                            <td><button className="btn-delete-pro" onClick={() => handleDeleteFAQ(f.id)}>ELIMINAR</button></td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="category-refined-add">
-                            <h3>Nueva Pregunta Frecuente</h3>
-                            <form onSubmit={handleAddFAQ} className="faq-form-pro">
-                                <input className="refined-input" placeholder="Pregunta (Ej: ¿Cómo curar el mate?)" value={newFAQ.question} onChange={e => setNewFAQ({ ...newFAQ, question: e.target.value })} required />
-                                <textarea className="refined-input" placeholder="Respuesta..." value={newFAQ.answer} onChange={e => setNewFAQ({ ...newFAQ, answer: e.target.value })} required />
-                                <button type="submit" className="btn-save-gold-full">AÑADIR PREGUNTA</button>
-                            </form>
-                        </div>
-                    </section>
-                )}
-
+                {/* VISTA CATEGORÍAS */}
                 {activeTab === 'categories' && (
                     <section className="fade-in">
                         <div className="table-container">
@@ -285,6 +336,7 @@ export default function AdminDashboard() {
                 )}
             </main>
 
+            {/* MODAL PRODUCTO (INALTERADO) */}
             {isModalOpen && (
                 <div className="refined-modal-backdrop" onClick={closeModal}>
                     <div className="refined-modal-card" onClick={e => e.stopPropagation()}>
@@ -311,7 +363,7 @@ export default function AdminDashboard() {
                                     <div className="extra-images-grid-admin">
                                         {newProduct.extra_images?.map((img, i) => (
                                             <div key={i} className="mini-thumb-container-pro">
-                                                <img src={img} className="mini-gallery-thumb" />
+                                                <img src={img} alt="" className="mini-gallery-thumb" />
                                                 <button type="button" className="btn-remove-extra-pro" onClick={(e) => removeExtraImage(e, i)}>×</button>
                                             </div>
                                         ))}
@@ -322,7 +374,7 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
                                 <div className="form-side inputs-side">
-                                    <input className="refined-input" placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                                    <input className="refined-input" placeholder="Nombre del Mate" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
                                     <div className="form-split-modern">
                                         <input type="number" className="refined-input" placeholder="Precio ($)" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
                                         <input type="number" className="refined-input" placeholder="Stock" value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
