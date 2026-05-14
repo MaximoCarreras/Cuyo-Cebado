@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
 import './CartPage.css';
 
-// Importamos el logo que pusiste en assets
+// Importamos el logo que pusiste en assets (mp-logo.png)
 import mpLogo from '../../assets/mp-logo.png';
 
 export default function CartPage() {
@@ -55,6 +55,7 @@ export default function CartPage() {
             toast.success("Iniciando pago seguro...");
             setTimeout(() => {
                 clearCart();
+                // Aquí podés redirigir a una página de éxito o al inicio
                 navigate('/');
             }, 2000);
         }
@@ -139,8 +140,8 @@ export default function CartPage() {
                                         <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
                                         <p>📞 261 238-1448</p>
                                     </div>
-                                    {/* LINK ACTUALIZADO AQUÍ */}
-                                    <a href="https://share.google/c76gmYsh1bYwmbVUc" target="_blank" rel="noreferrer" className="btn-maps-dorado">
+                                    {/* LINK DE MAPS ACTUALIZADO */}
+                                    <a href="https://maps.app.goo.gl/mX1mQp3A6r966Dkz6" target="_blank" rel="noreferrer" className="btn-maps-dorado">
                                         <span className="material-symbols-outlined">location_on</span>
                                         VER EN GOOGLE MAPS
                                     </a>
