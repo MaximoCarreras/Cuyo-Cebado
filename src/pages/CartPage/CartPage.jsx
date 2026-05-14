@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
 import './CartPage.css';
 
-// Importamos el logo que pusiste en assets (mp-logo.png)
+// Asegurate de tener el logo en src/assets/mp-logo.png
 import mpLogo from '../../assets/mp-logo.png';
 
 export default function CartPage() {
@@ -52,10 +52,9 @@ export default function CartPage() {
             toast.error("Error al procesar el pedido.");
             setLoading(false);
         } else {
-            toast.success("Iniciando pago seguro...");
+            toast.success("Redirigiendo a Mercado Pago...");
             setTimeout(() => {
                 clearCart();
-                // Aquí podés redirigir a una página de éxito o al inicio
                 navigate('/');
             }, 2000);
         }
@@ -96,7 +95,7 @@ export default function CartPage() {
                                             <span>{item.quantity}</span>
                                             <button type="button" onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar del carrito?")) removeFromCart(item.id) }}>Eliminar</button>
+                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id) }}>Eliminar</button>
                                     </div>
                                 </div>
                                 <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
@@ -115,7 +114,7 @@ export default function CartPage() {
                         </div>
 
                         <div className="form-inputs-group">
-                            <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
+                            <input type="text" placeholder="Nombre y Apellido" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
                             {orderData.method === 'shipment' ? (
@@ -140,8 +139,14 @@ export default function CartPage() {
                                         <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
                                         <p>📞 261 238-1448</p>
                                     </div>
-                                    {/* LINK DE MAPS ACTUALIZADO */}
-                                    <a href="https://maps.app.goo.gl/mX1mQp3A6r966Dkz6" target="_blank" rel="noreferrer" className="btn-maps-dorado">
+
+                                    {/* LINK DE BÚSQUEDA DIRECTA: Infalible */}
+                                    <a
+                                        href="https://www.google.com/maps/search/?api=1&query=Codigo+Vinario+Av+Colón+701+Mendoza"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn-maps-dorado"
+                                    >
                                         <span className="material-symbols-outlined">location_on</span>
                                         VER EN GOOGLE MAPS
                                     </a>
