@@ -19,7 +19,8 @@ export default function AdminDashboard() {
     const initialFormState = {
         name: '', price: '', stock: 0, category: 'mates',
         material: '', type: '', specs: '', badge: '',
-        description: '', image_url: '', video_url: '', extra_images: []
+        description: '', image_url: '', video_url: '', extra_images: [],
+        is_featured: false
     };
     const [newProduct, setNewProduct] = useState(initialFormState);
     const [newCategory, setNewCategory] = useState({ label: '', icon: '🧉', image_url: '' });
@@ -41,7 +42,7 @@ export default function AdminDashboard() {
                 const { data: cData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
                 setCategoriesList(cData || []);
             }
-        } catch (err) { console.error("Error:", err); }
+        } catch (err) { console.error(err); }
         setLoading(false);
     };
 
@@ -62,7 +63,21 @@ export default function AdminDashboard() {
         const val = (field === 'stock' || field === 'price') ? Number(value) : value;
         setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: val } : p));
         await supabase.from('products').update({ [field]: val }).eq('id', id);
-        toast.success("Sincronizado");
+        toast.success("Actualizado");
+    };
+
+    const handleToggleFeatured = async (product) => {
+        const newValue = !product.is_featured;
+        setProducts(prev => prev.map(p => p.id === product.id ? { ...p, is_featured: newValue } : p));
+        await supabase.from('products').update({ is_featured: newValue }).eq('id', product.id);
+        toast.success(newValue ? "⭐ Destacado" : "Quitado de portada");
+    };
+
+    const handleDeleteProduct = async (id) => {
+        if (window.confirm("¿Borrar este producto?")) {
+            const { error } = await supabase.from('products').delete().eq('id', id);
+            if (!error) { toast.success("Producto eliminado"); fetchData(); }
+        }
     };
 
     const uploadImage = async (event, type) => {
@@ -71,57 +86,34 @@ export default function AdminDashboard() {
             const file = event.target.files[0];
             if (!file) return;
             const fileName = `${Date.now()}_${file.name}`;
-
-            // Subida a Supabase
-            const { error: uploadError } = await supabase.storage.from('productos').upload(fileName, file);
-            if (uploadError) throw uploadError;
-
-            // Obtener URL Pública
+            await supabase.storage.from('productos').upload(fileName, file);
             const { data } = supabase.storage.from('productos').getPublicUrl(fileName);
-            const publicUrl = data.publicUrl;
 
             if (type === 'main') {
-                setNewProduct(prev => ({ ...prev, image_url: publicUrl }));
-                toast.success("Imagen de portada lista");
-            } else {
-                setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), publicUrl] }));
-                toast.success("Imagen agregada a la galería");
+                setNewProduct(prev => ({ ...prev, image_url: data.publicUrl }));
+                toast.success("Portada cargada");
+            } else if (type === 'extra') {
+                setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), data.publicUrl] }));
+                toast.success("Imagen extra lista");
+            } else if (type === 'category') {
+                setNewCategory(prev => ({ ...prev, image_url: data.publicUrl }));
+                toast.success("Imagen de categoría lista");
             }
-        } catch (e) {
-            toast.error("Error al subir la imagen");
-            console.error(e);
-        } finally {
-            setUploading(false);
-        }
+        } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
     };
 
     const handleSaveProduct = async (e) => {
         e.preventDefault();
         const slug = newProduct.name.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-
-        // Aseguramos que los números sean números y la URL esté presente
-        const productData = {
-            ...newProduct,
-            slug,
-            price: Number(newProduct.price),
-            stock: Number(newProduct.stock),
-            image_url: newProduct.image_url // Esto asegura que la URL se guarde
-        };
-
-        if (isEditing) {
-            const { error } = await supabase.from('products').update(productData).eq('id', editingId);
-            if (error) throw error;
-        } else {
-            const { error } = await supabase.from('products').insert([productData]);
-            if (error) throw error;
-        }
-
-        toast.success("¡Cambios guardados con éxito!");
+        const data = { ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) };
+        if (isEditing) await supabase.from('products').update(data).eq('id', editingId);
+        else await supabase.from('products').insert([data]);
+        toast.success("¡Guardado!");
         closeModal();
         fetchData();
     };
 
-    if (loading) return <div className="admin-loading-screen">Cargando la estancia...</div>;
+    if (loading) return <div className="admin-loading-screen">Abriendo Cuyo Cebado...</div>;
 
     return (
         <div className="admin-page">
@@ -150,7 +142,9 @@ export default function AdminDashboard() {
                         </div>
                         <div className="table-container">
                             <table className="custom-table">
-                                <thead><tr><th>PRODUCTO</th><th>PRECIO</th><th>STOCK</th><th>ACCIONES</th></tr></thead>
+                                <thead>
+                                    <tr><th>PRODUCTO</th><th>PRECIO</th><th>STOCK</th><th>ESTRELLA</th><th>ACCIONES</th></tr>
+                                </thead>
                                 <tbody>
                                     {products.map(p => (
                                         <tr key={p.id}>
@@ -163,8 +157,17 @@ export default function AdminDashboard() {
                                                     <button className="stock-btn plus" onClick={() => handleUpdateField(p.id, 'stock', p.stock + 1)}>+</button>
                                                 </div>
                                             </td>
-                                            {/* BOTÓN EDITAR ARREGLADO (LOOK MODERNO) */}
-                                            <td><button onClick={() => { setIsEditing(true); setEditingId(p.id); setNewProduct(p); setIsModalOpen(true); }} className="btn-edit-modern">EDITAR</button></td>
+                                            <td>
+                                                <button className={`btn-star-featured ${p.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(p)}>
+                                                    <span className="material-symbols-outlined">star</span>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <div className="actions-flex">
+                                                    <button onClick={() => { setIsEditing(true); setEditingId(p.id); setNewProduct(p); setIsModalOpen(true); }} className="btn-edit-modern">EDITAR</button>
+                                                    <button onClick={() => handleDeleteProduct(p.id)} className="btn-delete-icon-only"><span className="material-symbols-outlined">delete</span></button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -209,7 +212,6 @@ export default function AdminDashboard() {
                                         <tr key={c.id}>
                                             <td>{c.image_url ? <img src={c.image_url} className="cat-mini-thumb" alt="" /> : <span className="cat-icon-large">{c.icon}</span>}</td>
                                             <td><strong>{c.label}</strong></td>
-                                            {/* BOTÓN ELIMINAR ARREGLADO (LOOK MODERNO) */}
                                             <td><button className="btn-delete-modern" onClick={async () => { if (window.confirm("¿Borrar categoría?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
                                         </tr>
                                     ))}
@@ -217,47 +219,49 @@ export default function AdminDashboard() {
                             </table>
                         </div>
 
+                        {/* SECCIÓN NUEVA CATEGORÍA SOFISTICADA */}
                         <div className="category-creator-card-modern">
-                            <h3>Nueva Categoría</h3>
+                            <div className="card-header-pro">
+                                <span className="material-symbols-outlined">category</span>
+                                <h3>Nueva Categoría</h3>
+                            </div>
                             <form onSubmit={async (e) => {
                                 e.preventDefault();
                                 const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
                                 await supabase.from('categories').insert([{ id, label: newCategory.label, icon: newCategory.icon, image_url: newCategory.image_url }]);
-                                toast.success("Creada");
+                                toast.success("¡Categoría creada!");
                                 setNewCategory({ label: '', icon: '🧉', image_url: '' });
                                 fetchData();
                             }} className="cat-modern-grid">
                                 <div className="upload-container-mini">
-                                    <input type="file" id="cat-img" className="hidden-input" onChange={async (e) => {
-                                        const file = e.target.files[0];
-                                        const name = `cat_${Date.now()}`;
-                                        await supabase.storage.from('productos').upload(name, file);
-                                        const { data } = supabase.storage.from('productos').getPublicUrl(name);
-                                        setNewCategory({ ...newCategory, image_url: data.publicUrl });
-                                    }} />
+                                    <input type="file" id="cat-img" className="hidden-input" onChange={(e) => uploadImage(e, 'category')} />
                                     <label htmlFor="cat-img" className="upload-box-mini">
                                         {newCategory.image_url ? <img src={newCategory.image_url} className="image-preview" alt="" /> : <span className="material-symbols-outlined">add_a_photo</span>}
                                     </label>
                                 </div>
-                                <input className="modern-admin-input" placeholder="Nombre" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required />
-                                <input className="modern-admin-input icon-input" placeholder="Icono" value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
-                                <button type="submit" className="btn-save-gold-small">CREAR</button>
+                                <div className="input-with-label">
+                                    <label>Nombre de Categoría</label>
+                                    <input className="modern-admin-input" placeholder="Ej: Mates Imperiales" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required />
+                                </div>
+                                <div className="input-with-label" style={{ width: '100px' }}>
+                                    <label>Icono</label>
+                                    <input className="modern-admin-input" style={{ textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
+                                </div>
+                                <button type="submit" className="btn-save-gold-full" style={{ marginTop: '22px', height: '54px' }}>CREAR CATEGORÍA</button>
                             </form>
                         </div>
                     </section>
                 )}
             </main>
 
-            {/* MODAL PRODUCTO (REPARADO VISUALIZACIÓN IMAGEN) */}
+            {/* MODAL PRODUCTO */}
             {(isModalOpen || selectedOrder) && (
                 <div className="modal-backdrop" onClick={closeModal}>
                     {isModalOpen && (
                         <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
                             <div className="modal-header-premium">
                                 <h2>{isEditing ? 'Editar Ficha' : 'Nueva Ficha'}</h2>
-                                <button type="button" onClick={closeModal} className="btn-close-modern-circle">
-                                    <span className="material-symbols-outlined">close</span>
-                                </button>
+                                <button type="button" onClick={closeModal} className="btn-close-modern-circle"><span className="material-symbols-outlined">close</span></button>
                             </div>
                             <form onSubmit={handleSaveProduct} className="modal-form-grid">
                                 <div className="form-column">
@@ -265,23 +269,15 @@ export default function AdminDashboard() {
                                     <div className="upload-container-main">
                                         <input type="file" id="main-img" className="hidden-input" onChange={(e) => uploadImage(e, 'main')} />
                                         <label htmlFor="main-img" className="image-upload-box-premium">
-                                            {/* AQUÍ SE VISUALIZA LA IMAGEN APENA SE CARGA */}
-                                            {newProduct.image_url ? (
-                                                <img src={newProduct.image_url} className="image-preview" alt="Preview" />
-                                            ) : (
-                                                <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir foto principal</p></div>
-                                            )}
+                                            {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" alt="" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir foto</p></div>}
                                         </label>
                                     </div>
-
                                     <label className="admin-label">Galería de Detalles</label>
                                     <div className="extra-images-grid-admin">
                                         {newProduct.extra_images?.map((img, i) => <img key={i} src={img} className="mini-gallery-thumb" alt="" />)}
                                         <div className="upload-container-extra">
                                             <input type="file" id="extra-img" className="hidden-input" onChange={(e) => uploadImage(e, 'extra')} />
-                                            <label htmlFor="extra-img" className="add-extra-box-modern">
-                                                <span className="material-symbols-outlined">add_photo_alternate</span>
-                                            </label>
+                                            <label htmlFor="extra-img" className="add-extra-box-modern"><span className="material-symbols-outlined">add_photo_alternate</span></label>
                                         </div>
                                     </div>
                                 </div>
@@ -295,12 +291,10 @@ export default function AdminDashboard() {
                                         {categoriesList.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                                     </select>
                                     <textarea className="modern-admin-input desc-box" placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
-
+                                    <input className="modern-admin-input" placeholder="URL Video (Instagram/YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
                                     <div className="modal-actions-footer">
                                         <button type="button" onClick={closeModal} className="btn-discard-modern">DESCARTAR</button>
-                                        <button type="submit" className="btn-save-gold-full" disabled={uploading}>
-                                            {uploading ? 'Cargando...' : 'GUARDAR CAMBIOS'}
-                                        </button>
+                                        <button type="submit" className="btn-save-gold-full" disabled={uploading}>GUARDAR CAMBIOS</button>
                                     </div>
                                 </div>
                             </form>
@@ -315,7 +309,7 @@ export default function AdminDashboard() {
                             </div>
                             <div className="order-details-pro">
                                 <p><strong>Cliente:</strong> {selectedOrder.customer_name}</p>
-                                <p><strong>WhatsApp:</strong> {selectedOrder.customer_phone}</p>
+                                <p><strong>Dirección:</strong> {selectedOrder.shipping_address}</p>
                                 <div className="order-items-summary">
                                     {selectedOrder.items.map((it, i) => <div key={i} className="item-row"><span>{it.quantity}x {it.name}</span><span>${(it.price * it.quantity).toLocaleString()}</span></div>)}
                                 </div>
