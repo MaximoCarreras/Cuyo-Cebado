@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@700&display=swap');
 
 .admin-refined-page {
-    padding: 120px 5% 60px;
+    padding: 120px 5% 80px;
     background-color: #fdfaf7;
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
@@ -146,7 +146,7 @@
     border: 1px solid #eee;
 }
 
-/* --- STOCK PILL (ARREGLADO) --- */
+/* --- STOCK PILL (RESTURADO) --- */
 .refined-stock-pill {
     display: flex;
     align-items: center;
@@ -264,6 +264,24 @@
     text-transform: uppercase;
 }
 
+/* BOTÓN ELIMINAR CATEGORÍA (REPARADO) */
+.btn-delete-pro {
+    background: #fff0f0;
+    border: 1.5px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-delete-pro:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
 /* MODAL */
 .refined-modal-backdrop {
     position: fixed;
@@ -370,11 +388,6 @@
     transition: 0.2s;
 }
 
-.btn-remove-photo-pro:hover {
-    transform: scale(1.1);
-    background: #ff0000;
-}
-
 .mini-thumb-container-pro {
     position: relative;
 }
@@ -455,7 +468,6 @@
     transition: 0.3s;
 }
 
-/* --- BOTÓN DORADO PREMIUM --- */
 .btn-save-gold-full {
     width: 100%;
     padding: 18px;
@@ -482,6 +494,12 @@
     opacity: 0;
     overflow: hidden;
     z-index: -1;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .mini-gallery-thumb {

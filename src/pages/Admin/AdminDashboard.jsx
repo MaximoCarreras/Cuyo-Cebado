@@ -63,7 +63,7 @@ export default function AdminDashboard() {
         const val = (field === 'stock' || field === 'price') ? Number(value) : value;
         setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: val } : p));
         await supabase.from('products').update({ [field]: val }).eq('id', id);
-        toast.success("Sincronizado");
+        toast.success("Actualizado");
     };
 
     const handleToggleFeatured = async (product) => {
@@ -192,7 +192,6 @@ export default function AdminDashboard() {
                                             </td>
                                             <td className="cell-price">${p.price.toLocaleString()}</td>
                                             <td className="cell-stock">
-                                                {/* CONTROLES DE STOCK REPARADOS */}
                                                 <div className="refined-stock-pill">
                                                     <button className="stock-btn minus" onClick={() => handleUpdateField(p.id, 'stock', p.stock - 1)}>−</button>
                                                     <span className="stock-qty">{p.stock}</span>
@@ -256,6 +255,7 @@ export default function AdminDashboard() {
                                         <tr key={c.id}>
                                             <td className="cell-icon">{c.image_url ? <img src={c.image_url} alt="" className="cat-mini-thumb" /> : c.icon}</td>
                                             <td className="cell-name"><strong>{c.label}</strong></td>
+                                            {/* BOTÓN ELIMINAR CATEGORÍA REPARADO */}
                                             <td><button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar categoría?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
                                         </tr>
                                     ))}
