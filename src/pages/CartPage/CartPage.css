@@ -124,7 +124,7 @@
     text-align: right;
 }
 
-/* CHECKOUT SIDEBAR */
+/* CHECKOUT SIDEBAR - FONDO OSCURO */
 .checkout-form-premium {
     background: #1a1614;
     color: #fff;
@@ -207,7 +207,7 @@
     margin-top: 5px;
 }
 
-/* PICKUP CARD */
+/* PICKUP CARD - DORADO */
 .pickup-info-card {
     background: rgba(165, 129, 58, 0.08);
     border: 1px solid #a5813a;
@@ -237,14 +237,16 @@
     line-height: 1.4;
 }
 
-.btn-maps-link {
+/* BOTÓN GOOGLE MAPS - DORADO/CREMA */
+.btn-maps-link-dorado {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: #009ee3;
-    /* Azul para resaltar */
-    color: #fff;
+    background: #a5813a;
+    /* Dorado */
+    color: #1a1614;
+    /* Texto negro para contraste */
     text-decoration: none;
     padding: 12px;
     border-radius: 10px;
@@ -253,11 +255,13 @@
     margin-top: 15px;
     transition: 0.3s;
     letter-spacing: 0.5px;
+    border: 1px solid #1a1614;
 }
 
-.btn-maps-link:hover {
-    transform: scale(1.02);
-    background: #008ad0;
+.btn-maps-link-dorado:hover {
+    transform: translateY(-2px);
+    background: #c29d54;
+    /* Un dorado más claro */
 }
 
 /* TOTAL */
@@ -275,8 +279,8 @@
     color: #a5813a;
 }
 
-/* BOTÓN MERCADO PAGO */
-.btn-mercadopago-final {
+/* BOTÓN MERCADO PAGO - AZUL */
+.btn-mercadopago-definitivo {
     width: 100%;
     padding: 18px;
     background-color: #009ee3;
@@ -295,18 +299,18 @@
     box-shadow: 0 10px 20px rgba(0, 158, 227, 0.2);
 }
 
-.btn-mercadopago-final:hover {
+.btn-mercadopago-definitivo:hover {
     background-color: #008ad0;
     transform: translateY(-2px);
     box-shadow: 0 15px 30px rgba(0, 158, 227, 0.4);
 }
 
-.mp-logo-svg {
-    height: 26px;
-    width: 26px;
+.mp-logo-btn {
+    height: 24px;
 }
 
-.secure-footer {
+/* FOOTER SEGURO - CORREGIDO */
+.secure-footer-pro {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -318,11 +322,14 @@
     font-weight: 700;
 }
 
-.secure-footer span {
+.secure-footer-pro span {
     font-size: 1.1rem;
     color: #4caf50;
 }
 
+/* El escudo ahora carga verde */
+
+/* Animaciones y Media Queries */
 .animate-fade {
     animation: fadeIn 0.4s ease-out;
 }
