@@ -126,7 +126,7 @@ export default function AdminDashboard() {
         fetchData();
     };
 
-    if (loading) return <div className="admin-loader">Cargando Cuyo Cebado...</div>;
+    if (loading) return <div className="admin-loader">Abriendo Cuyo Cebado...</div>;
 
     return (
         <div className="admin-refined-page">
@@ -146,20 +146,28 @@ export default function AdminDashboard() {
             <main className="admin-refined-content">
                 {activeTab === 'inventory' && (
                     <section className="fade-in">
+                        {/* STATS REFINADOS - ADIÓS WINDOWS XP */}
                         <div className="stats-refined-grid">
                             <div className="stat-card">
                                 <span className="material-symbols-outlined icon-stat">inventory_2</span>
-                                <div><span className="label">VARIEDAD TOTAL</span><span className="number">{products.length}</span></div>
+                                <div className="stat-data">
+                                    <span className="stat-label">Variedad Total</span>
+                                    <span className="stat-value">{products.length}</span>
+                                </div>
                             </div>
-                            <div className="stat-box warning">
-                                <span className="material-symbols-outlined icon-stat">warning</span>
-                                <div><span className="label">STOCK CRÍTICO</span><span className="number">{products.filter(p => p.stock < 5).length}</span></div>
+                            <div className="stat-card critical">
+                                <span className="material-symbols-outlined icon-stat">priority_high</span>
+                                <div className="stat-data">
+                                    <span className="stat-label">Stock Crítico</span>
+                                    <span className="stat-value">{products.filter(p => p.stock < 5).length}</span>
+                                </div>
                             </div>
                         </div>
+
                         <div className="table-container">
                             <table className="refined-table">
                                 <thead>
-                                    <tr><th>PRODUCTO</th><th>PRECIO</th><th>STOCK</th><th>ESTRELLA</th><th>ACCIONES</th></tr>
+                                    <tr><th>PRODUCTO</th><th>PRECIO</th><th>STOCK</th><th>ESTADO</th><th>ACCIONES</th></tr>
                                 </thead>
                                 <tbody>
                                     {products.map(p => (
@@ -176,9 +184,12 @@ export default function AdminDashboard() {
                                                     <button className="stock-btn plus" onClick={() => handleUpdateField(p.id, 'stock', p.stock + 1)}>+</button>
                                                 </div>
                                             </td>
+                                            {/* ESTRELLA REFINADA - ADIÓS WINDOWS XP */}
                                             <td>
-                                                <button className={`btn-star-featured ${p.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(p)}>
-                                                    <span className="material-symbols-outlined">star</span>
+                                                <button className={`star-refined-btn ${p.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(p)}>
+                                                    <span className="material-symbols-outlined">
+                                                        {p.is_featured ? 'star_rate' : 'star'}
+                                                    </span>
                                                 </button>
                                             </td>
                                             <td>
@@ -206,7 +217,7 @@ export default function AdminDashboard() {
                     <section className="fade-in">
                         <div className="table-container">
                             <table className="refined-table">
-                                <thead><tr><th>FECHA</th><th>CLIENTE</th><th>TOTAL</th><th>ESTADO</th><th>VER DETALLES</th></tr></thead>
+                                <thead><tr><th>FECHA</th><th>CLIENTE</th><th>TOTAL</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
                                 <tbody>
                                     {orders.map(o => (
                                         <tr key={o.id}>
@@ -231,26 +242,23 @@ export default function AdminDashboard() {
                                 <tbody>
                                     {categoriesList.map(c => (
                                         <tr key={c.id}>
-                                            <td className="cell-icon">{c.image_url ? <img src={c.image_url} alt="" /> : c.icon}</td>
-                                            <td className="cell-name">{c.label}</td>
-                                            <td><button className="btn-delete" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
+                                            <td className="cell-icon">{c.image_url ? <img src={c.image_url} className="cat-mini-thumb" alt="" /> : c.icon}</td>
+                                            <td className="cell-name"><strong>{c.label}</strong></td>
+                                            <td><button className="btn-delete" onClick={async () => { if (window.confirm("¿Borrar categoría?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
                         <div className="category-refined-add">
-                            <h3>Nueva Categoría</h3>
+                            <div className="card-header-pro"><span className="material-symbols-outlined">category</span><h3>Nueva Categoría</h3></div>
                             <div className="cat-inputs">
                                 <div className="cat-img-box">
                                     <input type="file" id="cat-img" className="hidden-input" onChange={(e) => uploadImage(e, 'category')} />
-                                    <label htmlFor="cat-img">
-                                        {newCategory.image_url ? <img src={newCategory.image_url} alt="" /> : <span className="material-symbols-outlined">add_a_photo</span>}
-                                    </label>
+                                    <label htmlFor="cat-img">{newCategory.image_url ? <img src={newCategory.image_url} className="image-preview" alt="" /> : <span className="material-symbols-outlined">add_a_photo</span>}</label>
                                 </div>
-                                {/* INPUTS DE CATEGORÍA REFINADOS (MODERNOS) */}
-                                <input type="text" className="refined-input cat-name-input" placeholder="Nombre (Ej: Mates Imperiales)" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required />
-                                <input type="text" className="refined-input cat-icon-input" placeholder="Icono (Ej: 🧉)" value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
+                                <input type="text" className="refined-input" placeholder="Nombre" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required />
+                                <input type="text" className="refined-input" style={{ width: '80px', textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
                                 <button className="btn-save" onClick={async () => {
                                     const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
                                     await supabase.from('categories').insert([{ id, label: newCategory.label, icon: newCategory.icon, image_url: newCategory.image_url }]);
@@ -264,36 +272,29 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODAL FICHA (INALTERADO) */}
             {isModalOpen && (
                 <div className="refined-modal-backdrop" onClick={closeModal}>
                     <div className="refined-modal-card" onClick={e => e.stopPropagation()}>
                         <header className="modal-refined-header">
                             <h2>{isEditing ? 'Editar Ficha' : 'Nueva Ficha'}</h2>
-                            <button className="btn-close" onClick={closeModal}>
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
+                            <button type="button" onClick={closeModal} className="btn-close-modern-circle"><span className="material-symbols-outlined">close</span></button>
                         </header>
                         <form className="modal-refined-form" onSubmit={handleSaveProduct}>
                             <div className="form-refined-grid">
                                 <div className="form-side">
-                                    <label>Foto de Portada</label>
-                                    <div className="upload-refined-main">
+                                    <label className="admin-label">Foto de Portada</label>
+                                    <div className="upload-container-main">
                                         <input type="file" id="main-img" className="hidden-input" onChange={(e) => uploadImage(e, 'main')} />
-                                        <label htmlFor="main-img">
-                                            {newProduct.image_url ? <img src={newProduct.image_url} alt="" /> : <div className="placeholder"><span className="material-symbols-outlined">cloud_upload</span><p>Subir portada</p></div>}
+                                        <label htmlFor="main-img" className="image-upload-box-premium">
+                                            {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" alt="" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir portada</p></div>}
                                         </label>
                                     </div>
-                                    <label>Galería (Otras vistas)</label>
-                                    <div className="extra-refined-grid">
-                                        {newProduct.extra_images?.map((img, i) => <img key={i} src={img} alt="" className="mini-thumb" />)}
-                                        {/* CUADRO GALERÍA REFINADO (MODERNO CON TEXTO) */}
+                                    <label className="admin-label">Galería de Detalles</label>
+                                    <div className="extra-images-grid-admin">
+                                        {newProduct.extra_images?.map((img, i) => <img key={i} src={img} className="mini-gallery-thumb" alt="" />)}
                                         <div className="upload-extra">
                                             <input type="file" id="extra-img" className="hidden-input" onChange={(e) => uploadImage(e, 'extra')} />
-                                            <label htmlFor="extra-img">
-                                                <span className="material-symbols-outlined">add_photo_alternate</span>
-                                                <p>Subir vistas</p>
-                                            </label>
+                                            <label htmlFor="extra-img"><span className="material-symbols-outlined">add_photo_alternate</span><p>Subir vistas</p></label>
                                         </div>
                                     </div>
                                 </div>
@@ -307,14 +308,14 @@ export default function AdminDashboard() {
                                         {categoriesList.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                                     </select>
                                     <textarea className="refined-input" placeholder="Descripción detallada..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
-                                    <input className="refined-input" placeholder="Link Video (Reel/YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
+                                    <input className="refined-input" placeholder="URL Video (Instagram/YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
+                                    <div className="modal-actions-footer">
+                                        <button type="button" onClick={closeModal} className="btn-modal-action discard">DESCARTAR</button>
+                                        <button type="submit" className="btn-modal-action save" disabled={uploading}>
+                                            {uploading ? 'CARGANDO...' : 'GUARDAR CAMBIOS'}
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="modal-refined-actions">
-                                <button type="button" className="btn-cancel" onClick={closeModal}>DESCARTAR</button>
-                                <button type="submit" className="btn-save" disabled={uploading}>
-                                    {uploading ? 'CARGANDO...' : 'GUARDAR CAMBIOS'}
-                                </button>
                             </div>
                         </form>
                     </div>
