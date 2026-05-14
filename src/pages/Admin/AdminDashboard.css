@@ -58,7 +58,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* --- STAT CARDS (ADIÓS WINDOWS XP) --- */
+/* STATS (REFINADOS) */
 .stats-refined-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -103,7 +103,6 @@
     display: block;
     font-size: 2.2rem;
     font-weight: 800;
-    color: #1a1614;
 }
 
 /* TABLES */
@@ -132,7 +131,7 @@
 }
 
 .refined-table td {
-    padding: 18px 20px;
+    padding: 15px 20px;
     border-bottom: 1px solid #f9f6f2;
     vertical-align: middle;
     color: #1a1614;
@@ -154,7 +153,6 @@
     border: 1px solid #eee;
 }
 
-/* STOCK PILL */
 .refined-stock-pill {
     display: flex;
     align-items: center;
@@ -165,36 +163,24 @@
     width: fit-content;
 }
 
-.stock-btn {
+.refined-stock-pill button {
     width: 28px;
     height: 28px;
     border: none;
     border-radius: 50%;
-    cursor: pointer;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.2s;
     background: #fff;
+    font-weight: 800;
+    cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-.stock-btn:hover {
-    transform: scale(1.1);
-}
-
-/* --- ESTRELLA REFINADA (ADIÓS WINDOWS XP) --- */
+/* ESTRELLA REFINADA */
 .star-refined-btn {
     background: none;
     border: none;
     cursor: pointer;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     color: #e2e8f0;
-}
-
-.star-refined-btn span {
-    font-size: 1.8rem;
+    transition: 0.3s;
 }
 
 .star-refined-btn.active {
@@ -202,9 +188,8 @@
     transform: scale(1.2);
 }
 
-.star-refined-btn:hover {
-    color: #c29d54;
-    transform: scale(1.1);
+.star-refined-btn span {
+    font-size: 1.8rem;
 }
 
 /* ACCIONES */
@@ -235,13 +220,60 @@
     background: #fff0f0;
     border: 1px solid #ff4d4d;
     color: #ff4d4d;
-    padding: 8px 12px;
+    padding: 8px;
     border-radius: 10px;
     cursor: pointer;
     display: flex;
 }
 
-/* MODALES */
+/* CATEGORÍAS (PREMIUM RESTAURADO) */
+.category-refined-add {
+    background: #fff;
+    padding: 35px;
+    border-radius: 24px;
+    border: 1px solid rgba(165, 129, 58, 0.1);
+    margin-top: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+.cat-modern-grid {
+    display: grid;
+    grid-template-columns: 80px 1fr 100px 200px;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.input-with-label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-with-label label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #8a837b;
+    text-transform: uppercase;
+}
+
+.btn-delete-pro {
+    background: #fff0f0;
+    border: 1.5px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-delete-pro:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+/* MODAL (RESTAURADO CON UPLOADS) */
 .refined-modal-backdrop {
     position: fixed;
     top: 0;
@@ -253,7 +285,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10000;
+    z-index: 9999;
     padding: 20px;
 }
 
@@ -264,8 +296,9 @@
     border-radius: 32px;
     padding: 40px;
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
-    max-height: 90vh;
+    max-height: 95vh;
     overflow-y: auto;
+    position: relative;
 }
 
 .btn-close-modern-circle {
@@ -294,14 +327,13 @@
 .refined-input {
     width: 100%;
     padding: 14px 18px;
-    border: 1px solid #eee;
+    border: 1.5px solid #e2e8f0;
     border-radius: 14px;
     background: #f8f8f8;
     margin-bottom: 15px;
     font-family: inherit;
-    font-size: 1rem;
+    font-weight: 600;
     outline: none;
-    transition: 0.3s;
     box-sizing: border-box;
 }
 
@@ -309,6 +341,68 @@
     border-color: #a5813a;
     background: #fff;
     box-shadow: 0 0 0 4px rgba(165, 129, 58, 0.1);
+}
+
+/* UPLOAD BOXES (RESTAURADOS) */
+.upload-refined-main {
+    height: 200px;
+    border: 2.5px dashed #cbd5e1;
+    border-radius: 18px;
+    background: #f8fafc;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.upload-refined-main label {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.upload-refined-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.upload-extra-pro {
+    width: 85px;
+    height: 85px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: #f8fafc;
+    transition: 0.3s;
+}
+
+.upload-extra-pro label {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #94a3b8;
+}
+
+.upload-extra-pro label p {
+    font-size: 0.55rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin: 0;
 }
 
 .modal-actions-footer {
@@ -341,55 +435,30 @@
     border: 1.5px solid #a5813a;
 }
 
-/* CATEGORÍAS */
-.category-refined-add {
-    background: #fff;
-    padding: 35px;
-    border-radius: 20px;
-    margin-top: 40px;
-    border: 1px solid #eee;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-}
-
-.cat-inputs {
-    display: grid;
-    grid-template-columns: 80px 1fr 100px auto;
-    gap: 15px;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.cat-img-box {
-    width: 80px;
-    height: 80px;
-    border: 2px dashed #ddd;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    overflow: hidden;
-    background: #f8fafc;
-}
-
 .btn-add-main {
     background: #a5813a;
     color: #1a1614;
     border: none;
-    padding: 20px 40px;
-    border-radius: 15px;
+    padding: 18px 45px;
+    border-radius: 14px;
     font-weight: 800;
+    cursor: pointer;
+    margin: 30px auto;
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 40px auto 0;
-    cursor: pointer;
+    gap: 12px;
+    transition: 0.3s;
 }
 
-.image-preview {
+.btn-save-gold-full {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    padding: 18px;
+    background: #1a1614;
+    color: #a5813a;
+    border: 1.5px solid #a5813a;
+    border-radius: 14px;
+    font-weight: 800;
+    cursor: pointer;
 }
 
 .hidden-input {
@@ -401,18 +470,8 @@
     z-index: -1;
 }
 
-.fade-in {
-    animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
