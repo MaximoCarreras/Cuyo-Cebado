@@ -34,7 +34,6 @@ export default function CartPage() {
             ? 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)'
             : `${orderData.address}, ${orderData.city} (CP: ${orderData.zip})`;
 
-        // 1. Guardamos la orden en Supabase para que tu socio la vea en el panel
         const { data, error } = await supabase.from('orders').insert([{
             customer_email: orderData.email || 'No proveído',
             customer_name: orderData.name,
@@ -50,13 +49,10 @@ export default function CartPage() {
             toast.error("Error al procesar el pedido.");
             setLoading(false);
         } else {
-            // 2. Aquí es donde iría la integración real de Mercado Pago.
-            // Por ahora, simulamos el éxito y redirigimos.
             toast.success("Redirigiendo a Mercado Pago...");
-
             setTimeout(() => {
                 clearCart();
-                navigate('/pago-exitoso'); // O a la URL que te devuelva el SDK de MP
+                navigate('/pago-exitoso');
             }, 2000);
         }
     };
@@ -76,7 +72,6 @@ export default function CartPage() {
             <Toaster position="top-center" />
             <div className="cart-container-pro">
 
-                {/* IZQUIERDA: PRODUCTOS */}
                 <div className="cart-main-content">
                     <div className="cart-header-actions">
                         <h2>Mi Carrito</h2>
@@ -97,7 +92,7 @@ export default function CartPage() {
                                             <span>{item.quantity}</span>
                                             <button type="button" onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button type="button" className="remove-link" onClick={() => removeFromCart(item.id)}>Eliminar</button>
+                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar del carrito?")) removeFromCart(item.id) }}>Eliminar</button>
                                     </div>
                                 </div>
                                 <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
@@ -106,7 +101,6 @@ export default function CartPage() {
                     </div>
                 </div>
 
-                {/* DERECHA: FORMULARIO Y PAGO */}
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Finalizar Compra</h3>
@@ -118,7 +112,6 @@ export default function CartPage() {
 
                         <div className="form-inputs-group">
                             <input type="text" placeholder="Nombre y Apellido" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
-                            <input type="email" placeholder="Correo electrónico (opcional)" value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
                             {orderData.method === 'shipment' ? (
@@ -141,10 +134,11 @@ export default function CartPage() {
                                     <div className="pickup-details">
                                         <p>📍 Av. Colón 701, Mendoza Capital</p>
                                         <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
-                                        <p>📞 0261 238-1448</p>
+                                        <p>📞 261 238-1448</p>
                                     </div>
-                                    <a href="https://maps.app.goo.gl/c76gmYsh1bYwmbVUc" target="_blank" rel="noreferrer" className="btn-maps">
-                                        <span className="material-symbols-outlined">map</span> Ver en Google Maps
+                                    <a href="https://maps.app.goo.gl/Fk9vFzLzNfWzL1fE9" target="_blank" rel="noreferrer" className="btn-maps-link">
+                                        <span className="material-symbols-outlined">distance</span>
+                                        VER EN GOOGLE MAPS
                                     </a>
                                 </div>
                             )}
@@ -164,20 +158,23 @@ export default function CartPage() {
                             </div>
                         </div>
 
-                        <button type="submit" className="btn-mercadopago" disabled={loading}>
-                            {loading ? (
-                                'Procesando...'
-                            ) : (
+                        {/* BOTÓN MERCADO PAGO CON LOGO SVG INCORPORADO */}
+                        <button type="submit" className="btn-mercadopago-final" disabled={loading}>
+                            {loading ? 'Procesando...' : (
                                 <>
-                                    <img src="https://img.icons8.com/color/48/mercadopago.png" alt="MP" className="mp-icon-btn" />
+                                    <svg className="mp-logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M37.3 14.7C34.7 12 30.3 12 27.8 14.7L18.4 24.1L12.5 18.2C9.9 15.3 5.4 15.3 2.9 18.2C0.4 21.1 0.4 25.6 2.9 28.4L13.7 39.2C15 40.5 16.6 41.1 18.4 41.1C20.2 41.1 21.8 40.4 23.1 39.2L37.3 25.3C39.9 22.4 39.9 17.6 37.3 14.7Z" fill="white" />
+                                        <path d="M43.7 14.7C41.1 12 36.7 12 34.2 14.7L24.8 24.1L23.1 22.4L32.5 13C33.8 11.7 35.5 11.1 37.3 11.1C39.1 11.1 40.7 11.8 42 13C44.6 15.9 44.6 20.4 42 23.2L27.8 37.1C26.5 38.4 24.9 39 23.1 39C21.3 39 19.7 38.3 18.4 37.1L16.7 35.4L31.2 21.2C33.8 18.3 38.2 18.3 40.8 21.2C43.4 24.1 43.4 28.6 40.8 31.4L43.7 34.3C46.3 31.4 46.3 26.9 43.7 24.1L43.7 14.7Z" fill="white" fillOpacity="0.6" />
+                                    </svg>
                                     PAGAR CON MERCADO PAGO
                                 </>
                             )}
                         </button>
-                        <p className="secure-payment-tag">
-                            <span className="material-symbols-outlined">verified_user</span>
-                            Pago procesado de forma segura
-                        </p>
+
+                        <div className="secure-footer">
+                            <span className="material-symbols-outlined">shield_check</span>
+                            Pago procesado por Mercado Pago
+                        </div>
                     </form>
                 </aside>
             </div>

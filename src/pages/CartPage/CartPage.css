@@ -15,6 +15,7 @@
     gap: 40px;
 }
 
+/* HEADER */
 .cart-header-actions {
     display: flex;
     justify-content: space-between;
@@ -36,6 +37,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    font-size: 0.9rem;
 }
 
 /* PRODUCTOS */
@@ -51,14 +53,14 @@
 }
 
 .item-img {
-    width: 80px;
-    height: 80px;
+    width: 85px;
+    height: 85px;
     background: #fdfaf7;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
+    font-size: 2.8rem;
 }
 
 .item-info {
@@ -77,6 +79,7 @@
     font-size: 0.7rem;
     font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .item-controls {
@@ -88,7 +91,7 @@
 
 .qty-box {
     background: #f4f4f4;
-    padding: 5px 15px;
+    padding: 6px 15px;
     border-radius: 10px;
     display: flex;
     gap: 15px;
@@ -110,21 +113,24 @@
     font-weight: 700;
     cursor: pointer;
     font-size: 0.8rem;
+    opacity: 0.8;
 }
 
 .item-price {
     font-weight: 800;
     font-size: 1.3rem;
     color: #1a1614;
+    min-width: 100px;
+    text-align: right;
 }
 
-/* SIDEBAR FORMULARIO */
+/* CHECKOUT SIDEBAR */
 .checkout-form-premium {
     background: #1a1614;
     color: #fff;
     padding: 35px;
     border-radius: 24px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
     position: sticky;
     top: 120px;
     box-sizing: border-box;
@@ -136,6 +142,7 @@
     margin-bottom: 25px;
     margin-top: 0;
     text-align: center;
+    font-size: 1.5rem;
 }
 
 .shipping-selector {
@@ -143,7 +150,7 @@
     background: #2a2522;
     padding: 5px;
     border-radius: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .shipping-selector button {
@@ -166,7 +173,7 @@
 .form-inputs-group {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
 }
 
 .form-inputs-group input,
@@ -175,80 +182,107 @@
     box-sizing: border-box;
     background: #2a2522;
     border: 1px solid #3d3530;
-    border-radius: 10px;
-    padding: 14px;
+    border-radius: 12px;
+    padding: 15px;
     color: #fff;
     outline: none;
     font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.form-inputs-group input:focus {
+    border-color: #a5813a;
 }
 
 .grid-cp {
     display: grid;
-    grid-template-columns: 1fr 100px;
+    grid-template-columns: 1fr 90px;
     gap: 10px;
     margin-top: 5px;
 }
 
 .notes-box {
-    height: 70px;
+    height: 80px;
     resize: none;
     margin-top: 5px;
 }
 
-/* TARJETA RETIRO */
+/* PICKUP CARD */
 .pickup-info-card {
     background: rgba(165, 129, 58, 0.08);
     border: 1px solid #a5813a;
-    padding: 18px;
-    border-radius: 15px;
+    padding: 20px;
+    border-radius: 16px;
+    margin: 10px 0;
 }
 
 .pickup-header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     color: #a5813a;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .pickup-header h4 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    font-family: 'Noto Serif', serif;
 }
 
 .pickup-details p {
-    margin: 4px 0;
-    font-size: 0.8rem;
+    margin: 5px 0;
+    font-size: 0.85rem;
     color: #d1d5db;
     line-height: 1.4;
 }
 
-.btn-maps {
+.btn-maps-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    background: rgba(165, 129, 58, 0.15);
-    color: #a5813a;
+    gap: 10px;
+    background: #009ee3;
+    /* Azul para resaltar */
+    color: #fff;
     text-decoration: none;
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 10px;
     font-size: 0.8rem;
-    font-weight: 700;
-    border: 1px solid #a5813a;
-    margin-top: 12px;
+    font-weight: 800;
+    margin-top: 15px;
     transition: 0.3s;
+    letter-spacing: 0.5px;
+}
+
+.btn-maps-link:hover {
+    transform: scale(1.02);
+    background: #008ad0;
+}
+
+/* TOTAL */
+.total-summary-card {
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    margin-top: 25px;
+}
+
+.main-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: #a5813a;
 }
 
 /* BOTÓN MERCADO PAGO */
-.btn-mercadopago {
+.btn-mercadopago-final {
     width: 100%;
     padding: 18px;
     background-color: #009ee3;
-    /* Azul oficial MP */
     color: #fff;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     font-weight: 800;
     font-size: 0.95rem;
     cursor: pointer;
@@ -256,26 +290,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     transition: 0.3s;
-    letter-spacing: 0.5px;
+    box-shadow: 0 10px 20px rgba(0, 158, 227, 0.2);
 }
 
-.btn-mercadopago:hover {
+.btn-mercadopago-final:hover {
     background-color: #008ad0;
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 158, 227, 0.3);
+    box-shadow: 0 15px 30px rgba(0, 158, 227, 0.4);
 }
 
-.mp-icon-btn {
-    height: 24px;
+.mp-logo-svg {
+    height: 26px;
+    width: 26px;
 }
 
-.secure-payment-tag {
+.secure-footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     font-size: 0.7rem;
     color: #64748b;
     margin-top: 15px;
@@ -283,23 +318,9 @@
     font-weight: 700;
 }
 
-.secure-payment-tag span {
-    font-size: 1rem;
+.secure-footer span {
+    font-size: 1.1rem;
     color: #4caf50;
-}
-
-.total-summary-card {
-    border-top: 1px solid #333;
-    padding-top: 20px;
-    margin-top: 20px;
-}
-
-.main-total {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #a5813a;
 }
 
 .animate-fade {
