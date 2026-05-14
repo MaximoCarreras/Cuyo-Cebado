@@ -95,7 +95,7 @@ export default function CartPage() {
                                             <span>{item.quantity}</span>
                                             <button type="button" onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id) }}>Eliminar</button>
+                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar del carrito?")) removeFromCart(item.id) }}>Eliminar</button>
                                     </div>
                                 </div>
                                 <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
@@ -139,7 +139,7 @@ export default function CartPage() {
                                         <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
                                         <p>📞 261 238-1448</p>
                                     </div>
-                                    {/* Botón de maps dorado */}
+                                    {/* LINK ACTUALIZADO AQUÍ */}
                                     <a href="https://share.google/c76gmYsh1bYwmbVUc" target="_blank" rel="noreferrer" className="btn-maps-dorado">
                                         <span className="material-symbols-outlined">location_on</span>
                                         VER EN GOOGLE MAPS
@@ -165,7 +165,7 @@ export default function CartPage() {
                         <button type="submit" className="btn-mercadopago-pro" disabled={loading}>
                             {loading ? 'Procesando...' : (
                                 <>
-                                    <img src={mpLogo} alt="" className="mp-icon-final" />
+                                    <img src={mpLogo} alt="MP" className="mp-icon-final" />
                                     PAGAR CON MERCADO PAGO
                                 </>
                             )}
