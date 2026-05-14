@@ -7,7 +7,7 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* CABECERA Y TABS */
+/* HEADER Y TABS */
 .admin-sidebar-header {
     display: flex;
     justify-content: space-between;
@@ -153,6 +153,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: 0.2s;
 }
 
 .stock-btn.minus {
@@ -165,27 +166,7 @@
     color: #1a1614;
 }
 
-.stock-qty {
-    color: #fff;
-    min-width: 20px;
-    text-align: center;
-}
-
-/* ESTRELLA */
-.btn-star-featured {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #ddd;
-    transition: 0.3s;
-}
-
-.btn-star-featured.active {
-    color: #a5813a;
-    transform: scale(1.2);
-}
-
-/* ACCIONES (UNO AL LADO DEL OTRO) */
+/* BOTONES ACCIÓN */
 .actions-flex-row {
     display: flex;
     align-items: center;
@@ -213,7 +194,18 @@
     display: flex;
 }
 
-/* --- MODAL (Z-INDEX SUPERIOR) --- */
+.btn-delete-modern {
+    background: #fff0f0;
+    color: #ff4d4d;
+    border: 1.5px solid #ff4d4d;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+
+/* MODALES */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -244,7 +236,6 @@
     max-width: 95%;
 }
 
-/* Botón cerrar circular moderno (ARREGLADO) */
 .btn-close-modern-circle {
     background: #f1f5f9;
     border: none;
@@ -266,30 +257,6 @@
     background: #1a1614;
     color: #a5813a;
     transform: rotate(90deg);
-}
-
-.modal-header-premium {
-    margin-bottom: 25px;
-    border-bottom: 1px solid #f0f0f0;
-    padding-bottom: 15px;
-}
-
-/* INPUTS MODAL */
-.modern-admin-input {
-    width: 100%;
-    padding: 14px 18px;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 12px;
-    background: #f8fafc;
-    font-family: inherit;
-    font-weight: 600;
-    outline: none;
-    box-sizing: border-box;
-}
-
-.modern-admin-input:focus {
-    border-color: #a5813a;
-    box-shadow: 0 0 0 4px rgba(165, 129, 58, 0.1);
 }
 
 /* UPLOADS */
@@ -321,7 +288,6 @@
     z-index: -1;
 }
 
-/* --- FOOTER DE BOTONES (SIMÉTRICOS) --- */
 .modal-actions-footer {
     display: flex;
     gap: 15px;
@@ -330,11 +296,9 @@
 
 .btn-modal-action {
     flex: 1;
-    /* Esto hace que ambos midan lo mismo */
     padding: 18px;
     font-weight: 800;
     border-radius: 12px;
-    /* Forma cuadrada moderna, no ovalada */
     cursor: pointer;
     transition: 0.3s;
     font-size: 0.9rem;
@@ -348,37 +312,13 @@
     color: #64748b;
 }
 
-.btn-modal-action.discard:hover {
-    background: #e2e8f0;
-    color: #1a1614;
-}
-
 .btn-modal-action.save {
     background: #1a1614;
     color: #a5813a;
     border: 1.5px solid #a5813a;
 }
 
-.btn-modal-action.save:hover {
-    background: #a5813a;
-    color: #1a1614;
-}
-
-/* OTROS */
-.btn-add-premium {
-    background: #a5813a;
-    color: #1a1614;
-    border: none;
-    padding: 18px 45px;
-    border-radius: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    margin: 30px auto;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
+/* CATEGORÍAS */
 .category-creator-card-modern {
     background: #fff;
     padding: 35px;
@@ -393,4 +333,18 @@
     gap: 15px;
     align-items: center;
     margin-top: 20px;
+}
+
+.btn-add-premium {
+    background: #a5813a;
+    color: #1a1614;
+    border: none;
+    padding: 18px 45px;
+    border-radius: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    margin: 30px auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
