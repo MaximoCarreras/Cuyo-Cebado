@@ -42,7 +42,7 @@ export default function AdminDashboard() {
                 const { data: cData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
                 setCategoriesList(cData || []);
             }
-        } catch (err) { console.error(err); }
+        } catch (err) { console.error("Error en fetchData:", err); }
         setLoading(false);
     };
 
@@ -63,20 +63,23 @@ export default function AdminDashboard() {
         const val = (field === 'stock' || field === 'price') ? Number(value) : value;
         setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: val } : p));
         await supabase.from('products').update({ [field]: val }).eq('id', id);
-        toast.success("Actualizado");
+        toast.success("Sincronizado");
     };
 
     const handleToggleFeatured = async (product) => {
         const newValue = !product.is_featured;
         setProducts(prev => prev.map(p => p.id === product.id ? { ...p, is_featured: newValue } : p));
         await supabase.from('products').update({ is_featured: newValue }).eq('id', product.id);
-        toast.success(newValue ? "⭐ Destacado" : "Quitado de portada");
+        toast.success(newValue ? "⭐ Destacado" : "Quitado");
     };
 
     const handleDeleteProduct = async (id) => {
-        if (window.confirm("¿Borrar este producto?")) {
+        if (window.confirm("¿Confirmás que querés eliminar este producto?")) {
             const { error } = await supabase.from('products').delete().eq('id', id);
-            if (!error) { toast.success("Producto eliminado"); fetchData(); }
+            if (!error) {
+                toast.success("Producto borrado");
+                fetchData();
+            }
         }
     };
 
@@ -86,28 +89,38 @@ export default function AdminDashboard() {
             const file = event.target.files[0];
             if (!file) return;
             const fileName = `${Date.now()}_${file.name}`;
-            await supabase.storage.from('productos').upload(fileName, file);
+
+            const { error: uploadError } = await supabase.storage.from('productos').upload(fileName, file);
+            if (uploadError) throw uploadError;
+
             const { data } = supabase.storage.from('productos').getPublicUrl(fileName);
+            const publicUrl = data.publicUrl;
 
             if (type === 'main') {
-                setNewProduct(prev => ({ ...prev, image_url: data.publicUrl }));
-                toast.success("Portada cargada");
-            } else if (type === 'extra') {
-                setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), data.publicUrl] }));
-                toast.success("Imagen extra lista");
+                setNewProduct(prev => ({ ...prev, image_url: publicUrl }));
+                toast.success("Portada lista");
             } else if (type === 'category') {
-                setNewCategory(prev => ({ ...prev, image_url: data.publicUrl }));
+                setNewCategory(prev => ({ ...prev, image_url: publicUrl }));
                 toast.success("Imagen de categoría lista");
+            } else {
+                setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), publicUrl] }));
+                toast.success("Agregada a galería");
             }
-        } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
+        } catch (e) {
+            toast.error("Error al subir");
+        } finally {
+            setUploading(false);
+        }
     };
 
     const handleSaveProduct = async (e) => {
         e.preventDefault();
         const slug = newProduct.name.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         const data = { ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) };
+
         if (isEditing) await supabase.from('products').update(data).eq('id', editingId);
         else await supabase.from('products').insert([data]);
+
         toast.success("¡Guardado!");
         closeModal();
         fetchData();
@@ -148,7 +161,10 @@ export default function AdminDashboard() {
                                 <tbody>
                                     {products.map(p => (
                                         <tr key={p.id}>
-                                            <td className="product-info"><img src={p.image_url || '/assets/placeholder.png'} className="mini-thumb" alt="" />{p.name}</td>
+                                            <td className="product-info">
+                                                <img src={p.image_url || '/assets/placeholder.png'} className="mini-thumb" alt="" />
+                                                {p.name}
+                                            </td>
                                             <td><span className="price-tag">${p.price.toLocaleString()}</span></td>
                                             <td className="stock-controls-cell">
                                                 <div className="stock-pill">
@@ -162,10 +178,13 @@ export default function AdminDashboard() {
                                                     <span className="material-symbols-outlined">star</span>
                                                 </button>
                                             </td>
+                                            {/* BOTONES AL COSTADO (EDITAR IZQ - ELIMINAR DER) */}
                                             <td>
-                                                <div className="actions-flex">
+                                                <div className="actions-flex-row">
                                                     <button onClick={() => { setIsEditing(true); setEditingId(p.id); setNewProduct(p); setIsModalOpen(true); }} className="btn-edit-modern">EDITAR</button>
-                                                    <button onClick={() => handleDeleteProduct(p.id)} className="btn-delete-icon-only"><span className="material-symbols-outlined">delete</span></button>
+                                                    <button onClick={() => handleDeleteProduct(p.id)} className="btn-delete-icon-only">
+                                                        <span className="material-symbols-outlined">delete</span>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -212,14 +231,14 @@ export default function AdminDashboard() {
                                         <tr key={c.id}>
                                             <td>{c.image_url ? <img src={c.image_url} className="cat-mini-thumb" alt="" /> : <span className="cat-icon-large">{c.icon}</span>}</td>
                                             <td><strong>{c.label}</strong></td>
-                                            <td><button className="btn-delete-modern" onClick={async () => { if (window.confirm("¿Borrar categoría?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
+                                            <td>
+                                                <button className="btn-delete-modern" onClick={async () => { if (window.confirm("¿Borrar categoría?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
-
-                        {/* SECCIÓN NUEVA CATEGORÍA SOFISTICADA */}
                         <div className="category-creator-card-modern">
                             <div className="card-header-pro">
                                 <span className="material-symbols-outlined">category</span>
@@ -229,7 +248,7 @@ export default function AdminDashboard() {
                                 e.preventDefault();
                                 const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
                                 await supabase.from('categories').insert([{ id, label: newCategory.label, icon: newCategory.icon, image_url: newCategory.image_url }]);
-                                toast.success("¡Categoría creada!");
+                                toast.success("Categoría creada");
                                 setNewCategory({ label: '', icon: '🧉', image_url: '' });
                                 fetchData();
                             }} className="cat-modern-grid">
@@ -240,21 +259,21 @@ export default function AdminDashboard() {
                                     </label>
                                 </div>
                                 <div className="input-with-label">
-                                    <label>Nombre de Categoría</label>
-                                    <input className="modern-admin-input" placeholder="Ej: Mates Imperiales" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required />
+                                    <label>Nombre</label>
+                                    <input className="modern-admin-input" placeholder="Nombre" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required />
                                 </div>
-                                <div className="input-with-label" style={{ width: '100px' }}>
+                                <div className="input-with-label" style={{ width: '80px' }}>
                                     <label>Icono</label>
                                     <input className="modern-admin-input" style={{ textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
                                 </div>
-                                <button type="submit" className="btn-save-gold-full" style={{ marginTop: '22px', height: '54px' }}>CREAR CATEGORÍA</button>
+                                <button type="submit" className="btn-save-gold-full" style={{ marginTop: '22px', height: '54px' }}>CREAR</button>
                             </form>
                         </div>
                     </section>
                 )}
             </main>
 
-            {/* MODAL PRODUCTO */}
+            {/* MODALES */}
             {(isModalOpen || selectedOrder) && (
                 <div className="modal-backdrop" onClick={closeModal}>
                     {isModalOpen && (
@@ -269,7 +288,7 @@ export default function AdminDashboard() {
                                     <div className="upload-container-main">
                                         <input type="file" id="main-img" className="hidden-input" onChange={(e) => uploadImage(e, 'main')} />
                                         <label htmlFor="main-img" className="image-upload-box-premium">
-                                            {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" alt="" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir foto</p></div>}
+                                            {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" alt="" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir portada</p></div>}
                                         </label>
                                     </div>
                                     <label className="admin-label">Galería de Detalles</label>
@@ -300,7 +319,6 @@ export default function AdminDashboard() {
                             </form>
                         </div>
                     )}
-
                     {selectedOrder && (
                         <div className="modal-card" onClick={e => e.stopPropagation()} style={{ width: '500px' }}>
                             <div className="modal-header-premium">
@@ -309,7 +327,6 @@ export default function AdminDashboard() {
                             </div>
                             <div className="order-details-pro">
                                 <p><strong>Cliente:</strong> {selectedOrder.customer_name}</p>
-                                <p><strong>Dirección:</strong> {selectedOrder.shipping_address}</p>
                                 <div className="order-items-summary">
                                     {selectedOrder.items.map((it, i) => <div key={i} className="item-row"><span>{it.quantity}x {it.name}</span><span>${(it.price * it.quantity).toLocaleString()}</span></div>)}
                                 </div>

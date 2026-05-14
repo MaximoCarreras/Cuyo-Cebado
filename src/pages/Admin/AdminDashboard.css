@@ -46,7 +46,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* STATS PREMIUM */
+/* STATS */
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -117,7 +117,7 @@
 }
 
 .custom-table td {
-    padding: 18px 20px;
+    padding: 15px 20px;
     border-bottom: 1px solid #f0f0f0;
     vertical-align: middle;
     color: #1a1614;
@@ -132,7 +132,7 @@
     margin-right: 15px;
 }
 
-/* BOTONES */
+/* STOCK PILL */
 .stock-pill {
     display: flex;
     align-items: center;
@@ -153,6 +153,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: 0.2s;
 }
 
 .stock-btn.minus {
@@ -165,12 +166,7 @@
     color: #1a1614;
 }
 
-.stock-qty {
-    color: #fff;
-    min-width: 20px;
-    text-align: center;
-}
-
+/* ESTRELLA */
 .btn-star-featured {
     background: none;
     border: none;
@@ -184,8 +180,15 @@
     transform: scale(1.2);
 }
 
-.btn-edit-modern,
-.btn-view-modern {
+/* --- ACCIONES EN FILA (REPARADO) --- */
+.actions-flex-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.btn-edit-modern {
     background: #fdfaf0;
     color: #a5813a;
     border: 1.5px solid #a5813a;
@@ -197,8 +200,7 @@
     transition: 0.3s;
 }
 
-.btn-edit-modern:hover,
-.btn-view-modern:hover {
+.btn-edit-modern:hover {
     background: #a5813a;
     color: #fff;
 }
@@ -211,6 +213,8 @@
     border-radius: 10px;
     cursor: pointer;
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-delete-icon-only:hover {
@@ -218,91 +222,30 @@
     color: #fff;
 }
 
-.btn-delete-modern {
-    background: #fff0f0;
-    color: #ff4d4d;
-    border: 1.5px solid #ff4d4d;
-    padding: 10px 18px;
-    border-radius: 10px;
-    font-weight: 800;
-    font-size: 0.7rem;
-    cursor: pointer;
-}
-
-/* CATEGORÍA CREADOR (CHAU WINDOWS XP) */
+/* CATEGORÍAS */
 .category-creator-card-modern {
     background: #fff;
     padding: 35px;
     border-radius: 20px;
     margin-top: 40px;
     border: 1px solid #eee;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-}
-
-.card-header-pro {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 25px;
-    border-bottom: 1px solid #f8f8f8;
-    padding-bottom: 15px;
-}
-
-.card-header-pro span {
-    color: #a5813a;
-    font-size: 1.8rem;
-}
-
-.card-header-pro h3 {
-    margin: 0;
-    font-family: 'Noto Serif', serif;
-    color: #1a1614;
 }
 
 .cat-modern-grid {
     display: grid;
-    grid-template-columns: 80px 1fr 120px 250px;
-    gap: 25px;
-    align-items: flex-start;
-}
-
-.input-with-label {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.input-with-label label {
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.upload-box-mini {
-    width: 80px;
-    height: 80px;
-    border: 2px dashed #cbd5e1;
-    border-radius: 16px;
-    display: flex;
+    grid-template-columns: 60px 1fr 100px 150px;
+    gap: 15px;
     align-items: center;
-    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn-save-gold-full {
+    background: #1a1614;
+    color: #a5813a;
+    border: 1.5px solid #a5813a;
+    border-radius: 12px;
+    font-weight: 800;
     cursor: pointer;
-    overflow: hidden;
-    position: relative;
-    background: #f8fafc;
-    transition: 0.3s;
-}
-
-.upload-box-mini:hover {
-    border-color: #a5813a;
-    background: #fff;
-}
-
-.upload-box-mini span {
-    color: #cbd5e1;
-    font-size: 1.8rem;
 }
 
 /* MODALES */
@@ -336,51 +279,20 @@
     max-width: 95%;
 }
 
-.btn-close-modern-circle {
-    background: #f1f5f9;
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #64748b;
-    transition: 0.2s;
-}
-
-.btn-close-modern-circle:hover {
-    background: #1a1614;
-    color: #a5813a;
-    transform: rotate(90deg);
-}
-
-.hidden-input {
-    position: absolute;
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    z-index: -1;
-}
-
 .modern-admin-input {
     width: 100%;
-    padding: 15px 20px;
+    padding: 14px 18px;
     border: 1.5px solid #e2e8f0;
-    border-radius: 14px;
+    border-radius: 12px;
     background: #f8fafc;
     font-family: inherit;
     font-weight: 600;
     outline: none;
-    transition: 0.3s;
 }
 
 .modern-admin-input:focus {
     border-color: #a5813a;
     box-shadow: 0 0 0 4px rgba(165, 129, 58, 0.1);
-    background: #fff;
 }
 
 .image-upload-box-premium {
@@ -396,9 +308,19 @@
     overflow: hidden;
 }
 
-.image-upload-box-premium:hover {
-    border-color: #a5813a;
-    background: #fff;
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hidden-input {
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
 }
 
 .modal-actions-footer {
@@ -417,24 +339,6 @@
     color: #64748b;
     font-weight: 800;
     cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-discard-modern:hover {
-    background: #e2e8f0;
-    color: #1a1614;
-}
-
-.btn-save-gold-full {
-    flex: 2;
-    padding: 16px;
-    background: #1a1614;
-    color: #a5813a;
-    border: 1.5px solid #a5813a;
-    border-radius: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: 0.3s;
 }
 
 .btn-add-premium {
