@@ -45,11 +45,25 @@ export default function AdminDashboard() {
         setLoading(false);
     };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setIsEditing(false);
+        setEditingId(null);
+        setNewProduct(initialFormState);
+    };
+
+    // Función para cambiar de pestaña cerrando todo lo abierto
+    const handleTabChange = (tab) => {
+        closeModal();
+        setSelectedOrder(null);
+        setActiveTab(tab);
+    };
+
     const handleUpdateField = async (id, field, value) => {
         const val = (field === 'stock' || field === 'price') ? Number(value) : value;
         setProducts(prev => prev.map(p => p.id === id ? { ...p, [field]: val } : p));
         await supabase.from('products').update({ [field]: val }).eq('id', id);
-        toast.success("Actualizado");
+        toast.success("Sincronizado");
     };
 
     const uploadImage = async (event, isExtra = false) => {
@@ -65,7 +79,7 @@ export default function AdminDashboard() {
             } else {
                 setNewProduct(prev => ({ ...prev, image_url: data.publicUrl }));
             }
-            toast.success("Cargada con éxito");
+            toast.success("Imagen lista");
         } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
     };
 
@@ -80,8 +94,6 @@ export default function AdminDashboard() {
         fetchData();
     };
 
-    const closeModal = () => { setIsModalOpen(false); setIsEditing(false); setEditingId(null); setNewProduct(initialFormState); };
-
     if (loading) return <div className="admin-loading-screen">Abriendo la estancia...</div>;
 
     return (
@@ -90,9 +102,9 @@ export default function AdminDashboard() {
             <header className="admin-sidebar-header">
                 <h1>Gestión Cuyo Cebado</h1>
                 <div className="tab-switcher">
-                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => setActiveTab('inventory')}>Stock</button>
-                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => setActiveTab('orders')}>Ventas</button>
-                    <button className={activeTab === 'categories' ? 'active' : ''} onClick={() => setActiveTab('categories')}>Categorías</button>
+                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => handleTabChange('inventory')}>Stock</button>
+                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => handleTabChange('orders')}>Ventas</button>
+                    <button className={activeTab === 'categories' ? 'active' : ''} onClick={() => handleTabChange('categories')}>Categorías</button>
                 </div>
             </header>
 
@@ -157,9 +169,9 @@ export default function AdminDashboard() {
                                 <tbody>
                                     {categoriesList.map(c => (
                                         <tr key={c.id}>
-                                            <td>{c.image_url ? <img src={c.image_url} className="cat-mini-thumb" /> : <span>{c.icon}</span>}</td>
+                                            <td>{c.image_url ? <img src={c.image_url} className="cat-mini-thumb" /> : <span className="cat-icon-large">{c.icon}</span>}</td>
                                             <td><strong>{c.label}</strong></td>
-                                            <td><button className="btn-delete-modern" onClick={async () => { if (window.confirm("¿Borrar categoría?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
+                                            <td><button className="btn-delete-modern" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -172,7 +184,7 @@ export default function AdminDashboard() {
                                 e.preventDefault();
                                 const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
                                 await supabase.from('categories').insert([{ id, label: newCategory.label, icon: newCategory.icon, image_url: newCategory.image_url }]);
-                                toast.success("Categoría creada");
+                                toast.success("Creada");
                                 setNewCategory({ label: '', icon: '🧉', image_url: '' });
                                 fetchData();
                             }} className="cat-modern-grid">
@@ -187,60 +199,76 @@ export default function AdminDashboard() {
                                     {newCategory.image_url ? <img src={newCategory.image_url} className="image-preview" /> : <span className="material-symbols-outlined">add_a_photo</span>}
                                 </label>
                                 <input className="modern-admin-input" placeholder="Nombre" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required />
-                                <input className="modern-admin-input" style={{ width: '80px', textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
-                                <button type="submit" className="btn-save-gold">CREAR</button>
+                                <input className="modern-admin-input icon-input" placeholder="Icono" value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
+                                <button type="submit" className="btn-save-gold-small">CREAR</button>
                             </form>
                         </div>
                     </section>
                 )}
             </main>
 
-            {isModalOpen && (
-                <div className="modal-backdrop">
-                    <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
-                        <div className="modal-header-premium">
-                            <h2>{isEditing ? 'Editar Ficha' : 'Nueva Ficha'}</h2>
-                            <button onClick={closeModal} className="btn-close-modern">
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
-                        <form onSubmit={handleSaveProduct} className="modal-form-grid">
-                            <div className="form-column">
-                                <label className="admin-label">Foto de Portada</label>
-                                <label className="image-upload-box-premium">
-                                    <input type="file" onChange={(e) => uploadImage(e)} />
-                                    {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir foto principal</p></div>}
-                                </label>
-
-                                <label className="admin-label">Galería de Detalles (Otras vistas)</label>
-                                <div className="extra-images-grid-admin">
-                                    {newProduct.extra_images?.map((img, i) => <img key={i} src={img} className="mini-gallery-thumb" />)}
-                                    <label className="add-extra-box-modern">
-                                        <input type="file" onChange={(e) => uploadImage(e, true)} />
-                                        <span>+</span>
+            {/* MODALES - AHORA SON CAPAS SUPERIORES (REAL MODALS) */}
+            {(isModalOpen || selectedOrder) && (
+                <div className="modal-backdrop" onClick={closeModal}>
+                    {/* MODAL PRODUCTO */}
+                    {isModalOpen && (
+                        <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
+                            <div className="modal-header-premium">
+                                <h2>{isEditing ? 'Editar Ficha' : 'Nueva Ficha'}</h2>
+                                <button onClick={closeModal} className="btn-close-modern"><span className="material-symbols-outlined">close</span></button>
+                            </div>
+                            <form onSubmit={handleSaveProduct} className="modal-form-grid">
+                                <div className="form-column">
+                                    <label className="admin-label">Foto de Portada</label>
+                                    <label className="image-upload-box-premium">
+                                        <input type="file" onChange={(e) => uploadImage(e)} />
+                                        {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir foto principal</p></div>}
                                     </label>
+                                    <label className="admin-label">Galería de Detalles (Otras vistas)</label>
+                                    <div className="extra-images-grid-admin">
+                                        {newProduct.extra_images?.map((img, i) => <img key={i} src={img} className="mini-gallery-thumb" />)}
+                                        <label className="add-extra-box-modern"><input type="file" onChange={(e) => uploadImage(e, true)} /><span>+</span></label>
+                                    </div>
                                 </div>
+                                <div className="form-column">
+                                    <input className="modern-admin-input" placeholder="Nombre del producto" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                                    <div className="form-split-modern">
+                                        <input type="number" className="modern-admin-input" placeholder="Precio ($)" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
+                                        <input type="number" className="modern-admin-input" placeholder="Stock" value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
+                                    </div>
+                                    <select className="modern-admin-input selector-premium" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                                        {categoriesList.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                                    </select>
+                                    <textarea className="modern-admin-input desc-box" placeholder="Descripción detallada..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                                    <input className="modern-admin-input" placeholder="URL Video (Reel/YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
+                                    <div className="modal-btns-group">
+                                        <button type="button" onClick={closeModal} className="btn-cancel-flat">DESCARTAR</button>
+                                        <button type="submit" className="btn-save-gold-full" disabled={uploading}>GUARDAR CAMBIOS</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    )}
 
-                                <label className="admin-label">Link del Video (Reel/YouTube)</label>
-                                <input className="modern-admin-input" placeholder="Pegar URL del video aquí..." value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
+                    {/* MODAL ORDEN */}
+                    {selectedOrder && (
+                        <div className="modal-card" onClick={e => e.stopPropagation()} style={{ width: '500px' }}>
+                            <div className="modal-header-premium">
+                                <h2>Pedido #{selectedOrder.id.slice(0, 5).toUpperCase()}</h2>
+                                <button onClick={() => setSelectedOrder(null)} className="btn-close-modern"><span className="material-symbols-outlined">close</span></button>
                             </div>
-                            <div className="form-column">
-                                <input className="modern-admin-input" placeholder="Nombre del mate" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
-                                <div className="form-split-modern">
-                                    <input type="number" className="modern-admin-input" placeholder="Precio ($)" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
-                                    <input type="number" className="modern-admin-input" placeholder="Stock" value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
+                            <div className="order-details-pro">
+                                <p><strong>Cliente:</strong> {selectedOrder.customer_name}</p>
+                                <p><strong>WhatsApp:</strong> {selectedOrder.customer_phone}</p>
+                                <p><strong>Dirección:</strong> {selectedOrder.shipping_address}</p>
+                                <div className="order-items-summary">
+                                    {selectedOrder.items.map((it, i) => <div key={i} className="item-row"><span>{it.quantity}x {it.name}</span><span>${(it.price * it.quantity).toLocaleString()}</span></div>)}
                                 </div>
-                                <select className="modern-admin-input selector-premium" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
-                                    {categoriesList.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
-                                </select>
-                                <textarea className="modern-admin-input desc-box" placeholder="Descripción del producto..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
-                                <div className="modal-btns-group">
-                                    <button type="button" onClick={closeModal} className="btn-cancel-flat">DESCARTAR</button>
-                                    <button type="submit" className="btn-save-gold-full" disabled={uploading}>GUARDAR CAMBIOS</button>
-                                </div>
+                                <div className="order-total-row"><span>TOTAL</span><span>${selectedOrder.total.toLocaleString()}</span></div>
                             </div>
-                        </form>
-                    </div>
+                            <button className="btn-save-gold-full" style={{ marginTop: '20px' }} onClick={() => setSelectedOrder(null)}>CERRAR FICHA</button>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
