@@ -41,7 +41,7 @@ export default function AdminDashboard() {
                 const { data: cData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
                 setCategoriesList(cData || []);
             }
-        } catch (err) { console.error(err); }
+        } catch (err) { console.error("Error en fetchData:", err); }
         setLoading(false);
     };
 
@@ -65,35 +65,44 @@ export default function AdminDashboard() {
         toast.success("Sincronizado");
     };
 
-    const uploadImage = async (event, isExtra = false) => {
+    const uploadImage = async (event, type) => {
         try {
             setUploading(true);
             const file = event.target.files[0];
             if (!file) return;
-            const fileName = `${Math.random()}.${file.name.split('.').pop()}`;
+            const fileName = `${Date.now()}_${file.name}`;
+
             await supabase.storage.from('productos').upload(fileName, file);
             const { data } = supabase.storage.from('productos').getPublicUrl(fileName);
-            if (isExtra) {
-                setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), data.publicUrl] }));
-            } else {
+
+            if (type === 'main') {
                 setNewProduct(prev => ({ ...prev, image_url: data.publicUrl }));
+                toast.success("Foto de portada lista");
+            } else {
+                setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), data.publicUrl] }));
+                toast.success("Imagen extra agregada");
             }
-            toast.success("Imagen cargada");
-        } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
+        } catch (e) {
+            toast.error("Error al subir imagen");
+        } finally {
+            setUploading(false);
+        }
     };
 
     const handleSaveProduct = async (e) => {
         e.preventDefault();
         const slug = newProduct.name.toLowerCase().trim().replace(/ /g, '-').replace(/[^\w-]+/g, '');
         const data = { ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) };
+
         if (isEditing) await supabase.from('products').update(data).eq('id', editingId);
         else await supabase.from('products').insert([data]);
-        toast.success("¡Guardado!");
+
+        toast.success("¡Guardado correctamente!");
         closeModal();
         fetchData();
     };
 
-    if (loading) return <div className="admin-loading-screen">Abriendo la estancia...</div>;
+    if (loading) return <div className="admin-loading-screen">Cargando Cuyo Cebado...</div>;
 
     return (
         <div className="admin-page">
@@ -137,8 +146,7 @@ export default function AdminDashboard() {
                         </div>
                         <div className="footer-action-panel">
                             <button className="btn-add-premium" onClick={() => setIsModalOpen(true)}>
-                                <span className="material-symbols-outlined">add_circle</span>
-                                NUEVO PRODUCTO
+                                <span className="material-symbols-outlined">add_circle</span> NUEVO PRODUCTO
                             </button>
                         </div>
                     </section>
@@ -175,32 +183,35 @@ export default function AdminDashboard() {
                                         <tr key={c.id}>
                                             <td>{c.image_url ? <img src={c.image_url} className="cat-mini-thumb" /> : <span className="cat-icon-large">{c.icon}</span>}</td>
                                             <td><strong>{c.label}</strong></td>
-                                            <td><button className="btn-delete-modern" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
+                                            <td><button className="btn-delete-modern" onClick={async () => { if (window.confirm("¿Borrar categoría?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
+
                         <div className="category-creator-card-modern">
                             <h3>Nueva Categoría</h3>
                             <form onSubmit={async (e) => {
                                 e.preventDefault();
                                 const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
                                 await supabase.from('categories').insert([{ id, label: newCategory.label, icon: newCategory.icon, image_url: newCategory.image_url }]);
-                                toast.success("Creada");
+                                toast.success("Categoría creada");
                                 setNewCategory({ label: '', icon: '🧉', image_url: '' });
                                 fetchData();
                             }} className="cat-modern-grid">
-                                <label className="upload-box-mini">
-                                    <input type="file" onChange={async (e) => {
+                                <div className="upload-container-mini">
+                                    <input type="file" id="cat-img" className="hidden-input" onChange={async (e) => {
                                         const file = e.target.files[0];
-                                        const name = `cat_${Math.random()}`;
+                                        const name = `cat_${Date.now()}`;
                                         await supabase.storage.from('productos').upload(name, file);
                                         const { data } = supabase.storage.from('productos').getPublicUrl(name);
                                         setNewCategory({ ...newCategory, image_url: data.publicUrl });
                                     }} />
-                                    {newCategory.image_url ? <img src={newCategory.image_url} className="image-preview" /> : <span className="material-symbols-outlined">add_a_photo</span>}
-                                </label>
+                                    <label htmlFor="cat-img" className="upload-box-mini">
+                                        {newCategory.image_url ? <img src={newCategory.image_url} className="image-preview" /> : <span className="material-symbols-outlined">add_a_photo</span>}
+                                    </label>
+                                </div>
                                 <input className="modern-admin-input" placeholder="Nombre" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required />
                                 <input className="modern-admin-input icon-input" placeholder="Icono" value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} />
                                 <button type="submit" className="btn-save-gold-small">CREAR</button>
@@ -210,31 +221,36 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODALES DE EDICIÓN / DETALLES */}
+            {/* MODALES */}
             {(isModalOpen || selectedOrder) && (
                 <div className="modal-backdrop" onClick={closeModal}>
                     {isModalOpen && (
                         <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
                             <div className="modal-header-premium">
                                 <h2>{isEditing ? 'Editar Ficha' : 'Nueva Ficha'}</h2>
-                                <button onClick={closeModal} className="btn-close-modern-circle">
+                                <button type="button" onClick={closeModal} className="btn-close-modern-circle">
                                     <span className="material-symbols-outlined">close</span>
                                 </button>
                             </div>
                             <form onSubmit={handleSaveProduct} className="modal-form-grid">
                                 <div className="form-column">
                                     <label className="admin-label">Foto de Portada</label>
-                                    <label className="image-upload-box-premium">
-                                        <input type="file" onChange={(e) => uploadImage(e)} />
-                                        {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir foto principal</p></div>}
-                                    </label>
+                                    <div className="upload-container-main">
+                                        <input type="file" id="main-img" className="hidden-input" onChange={(e) => uploadImage(e, 'main')} />
+                                        <label htmlFor="main-img" className="image-upload-box-premium">
+                                            {newProduct.image_url ? <img src={newProduct.image_url} className="image-preview" /> : <div className="upload-placeholder"><span className="material-symbols-outlined">image</span><p>Subir foto</p></div>}
+                                        </label>
+                                    </div>
+
                                     <label className="admin-label">Galería de Detalles (Extras)</label>
                                     <div className="extra-images-grid-admin">
                                         {newProduct.extra_images?.map((img, i) => <img key={i} src={img} className="mini-gallery-thumb" />)}
-                                        <label className="add-extra-box-modern">
-                                            <input type="file" onChange={(e) => uploadImage(e, true)} />
-                                            <span className="material-symbols-outlined">add_photo_alternate</span>
-                                        </label>
+                                        <div className="upload-container-extra">
+                                            <input type="file" id="extra-img" className="hidden-input" onChange={(e) => uploadImage(e, 'extra')} />
+                                            <label htmlFor="extra-img" className="add-extra-box-modern">
+                                                <span className="material-symbols-outlined">add_photo_alternate</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="form-column">
@@ -246,10 +262,9 @@ export default function AdminDashboard() {
                                     <select className="modern-admin-input selector-premium" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                                         {categoriesList.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                                     </select>
-                                    <textarea className="modern-admin-input desc-box" placeholder="Descripción detallada..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                                    <textarea className="modern-admin-input desc-box" placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
                                     <input className="modern-admin-input" placeholder="URL Video (Instagram/YouTube)" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
 
-                                    {/* BOTONES DE ACCIÓN MEJORADOS */}
                                     <div className="modal-actions-footer">
                                         <button type="button" onClick={closeModal} className="btn-discard-modern">DESCARTAR</button>
                                         <button type="submit" className="btn-save-gold-full" disabled={uploading}>GUARDAR CAMBIOS</button>
@@ -263,7 +278,7 @@ export default function AdminDashboard() {
                         <div className="modal-card" onClick={e => e.stopPropagation()} style={{ width: '500px' }}>
                             <div className="modal-header-premium">
                                 <h2>Pedido #{selectedOrder.id.slice(0, 5).toUpperCase()}</h2>
-                                <button onClick={() => setSelectedOrder(null)} className="btn-close-modern-circle"><span className="material-symbols-outlined">close</span></button>
+                                <button type="button" onClick={() => setSelectedOrder(null)} className="btn-close-modern-circle"><span className="material-symbols-outlined">close</span></button>
                             </div>
                             <div className="order-details-pro">
                                 <p><strong>Cliente:</strong> {selectedOrder.customer_name}</p>
@@ -273,7 +288,7 @@ export default function AdminDashboard() {
                                 </div>
                                 <div className="order-total-row"><span>TOTAL</span><span>${selectedOrder.total.toLocaleString()}</span></div>
                             </div>
-                            <button className="btn-save-gold-full" style={{ marginTop: '20px' }} onClick={() => setSelectedOrder(null)}>CERRAR</button>
+                            <button type="button" className="btn-save-gold-full" style={{ marginTop: '20px' }} onClick={() => setSelectedOrder(null)}>CERRAR</button>
                         </div>
                     )}
                 </div>
