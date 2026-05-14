@@ -113,12 +113,11 @@ export default function AdminDashboard() {
         }
     };
 
-    // FUNCIONES PARA ELIMINAR IMÁGENES (NUEVO)
     const removeMainImage = (e) => {
         e.preventDefault();
         e.stopPropagation();
         setNewProduct(prev => ({ ...prev, image_url: '' }));
-        toast.success("Portada eliminada");
+        toast.success("Portada quitada");
     };
 
     const removeExtraImage = (e, index) => {
@@ -297,25 +296,26 @@ export default function AdminDashboard() {
                                     <label className="admin-label">Foto de Portada</label>
                                     <div className="upload-refined-main">
                                         <input type="file" id="main-img" className="hidden-input" onChange={(e) => uploadImage(e, 'main')} />
-                                        <label htmlFor="main-img">
-                                            {newProduct.image_url ? (
-                                                <div className="preview-container">
-                                                    <img src={newProduct.image_url} className="image-preview" alt="" />
-                                                    <button className="btn-remove-photo" onClick={removeMainImage}>
-                                                        <span className="material-symbols-outlined">delete</span>
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <div className="placeholder"><span className="material-symbols-outlined">image</span><p>Subir portada</p></div>
-                                            )}
-                                        </label>
+                                        {newProduct.image_url ? (
+                                            <div className="preview-container-main">
+                                                <img src={newProduct.image_url} className="image-preview" alt="" />
+                                                <button className="btn-remove-photo-pro" onClick={removeMainImage}>
+                                                    <span className="material-symbols-outlined">delete</span>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <label htmlFor="main-img" className="placeholder-main-label">
+                                                <span className="material-symbols-outlined">image</span>
+                                                <p>Subir portada</p>
+                                            </label>
+                                        )}
                                     </div>
                                     <label className="admin-label">Galería de Detalles</label>
                                     <div className="extra-images-grid-admin">
                                         {newProduct.extra_images?.map((img, i) => (
-                                            <div key={i} className="mini-thumb-container">
+                                            <div key={i} className="mini-thumb-container-pro">
                                                 <img src={img} alt="" className="mini-gallery-thumb" />
-                                                <button className="btn-remove-mini" onClick={(e) => removeExtraImage(e, i)}>×</button>
+                                                <button className="btn-remove-extra-pro" onClick={(e) => removeExtraImage(e, i)}>×</button>
                                             </div>
                                         ))}
                                         <div className="upload-extra-pro">
@@ -326,11 +326,11 @@ export default function AdminDashboard() {
                                 </div>
                                 <div className="form-side inputs-side">
                                     <input className="refined-input" placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
-                                    <div className="input-row">
+                                    <div className="form-split-modern">
                                         <input type="number" className="refined-input" placeholder="Precio ($)" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
                                         <input type="number" className="refined-input" placeholder="Stock" value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
                                     </div>
-                                    <select className="refined-input" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                                    <select className="refined-input selector-premium" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                                         {categoriesList.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                                     </select>
                                     <textarea className="refined-input desc-box" placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
