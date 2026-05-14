@@ -7,7 +7,7 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* CABECERA */
+/* HEADER */
 .admin-sidebar-header {
     display: flex;
     justify-content: space-between;
@@ -74,190 +74,207 @@
     padding: 18px 20px;
     border-bottom: 1px solid #f0f0f0;
     vertical-align: middle;
-}
-
-.mini-thumb {
-    width: 50px;
-    height: 50px;
-    border-radius: 10px;
-    object-fit: cover;
-    margin-right: 15px;
-    border: 1px solid #eee;
-}
-
-.product-info {
-    display: flex;
-    align-items: center;
-    font-weight: 700;
     color: #1a1614;
 }
 
-/* --- NUEVAS CAJAS DE CARGA (ADIÓS WINDOWS XP) --- */
-.image-upload-box-premium,
-.upload-box-mini,
-.add-extra-box-modern {
+/* --- STOCK PILL (ADIÓS WINDOWS XP) --- */
+.stock-pill {
+    display: flex;
+    align-items: center;
+    background: #1a1614;
+    padding: 4px;
+    border-radius: 50px;
+    width: fit-content;
+    gap: 10px;
+}
+
+.stock-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
     cursor: pointer;
-    position: relative;
+    font-weight: 800;
+    font-size: 1.1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px dashed #cbd5e1;
-    background: #f8fafc;
-    transition: 0.3s;
-    overflow: hidden;
+    transition: 0.2s;
 }
 
-/* Escondemos el input real por completo */
-.image-upload-box-premium input,
-.upload-box-mini input,
-.add-extra-box-modern input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
+.stock-btn.minus {
+    background: #fdfaf0;
+    color: #1a1614;
 }
 
-.image-upload-box-premium {
-    height: 180px;
-    border-radius: 18px;
+.stock-btn.plus {
+    background: #a5813a;
+    color: #1a1614;
 }
 
-.image-upload-box-premium:hover {
-    border-color: #a5813a;
-    background: #fff;
-    color: #a5813a;
+.stock-btn:hover {
+    transform: scale(1.1);
 }
 
-.upload-box-mini {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-}
-
-.upload-box-mini:hover {
-    border-color: #a5813a;
-}
-
-.upload-placeholder {
+.stock-qty {
+    color: #fff;
+    font-weight: 800;
+    min-width: 20px;
     text-align: center;
-    color: #94a3b8;
 }
 
-.upload-placeholder span {
-    font-size: 2.5rem;
-    margin-bottom: 5px;
+/* --- BOTONES DE ACCIÓN --- */
+.btn-edit-modern {
+    background: #fdfaf0;
+    color: #a5813a;
+    border: 1.5px solid #a5813a;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.image-preview {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.btn-edit-modern:hover {
+    background: #a5813a;
+    color: #fff;
 }
 
-/* CATEGORÍAS MODERNIZADO */
+.btn-delete-modern {
+    background: #fff0f0;
+    color: #ff4d4d;
+    border: 1.5px solid #ff4d4d;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-delete-modern:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+/* --- CATEGORÍAS --- */
 .category-creator-card-modern {
     background: #fff;
     padding: 35px;
     border-radius: 20px;
     margin-top: 40px;
     border: 1px solid #eee;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
 .cat-modern-grid {
     display: grid;
-    grid-template-columns: 60px 1fr 100px 180px;
+    grid-template-columns: 60px 1fr 100px 150px;
     gap: 15px;
     align-items: center;
     margin-top: 20px;
 }
 
-/* MODAL MODERNO */
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85);
+.btn-save-gold {
+    background: #a5813a;
+    color: #1a1614;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* --- MODAL (NUEVO BOTÓN CERRAR) --- */
+.modal-header-premium {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.btn-close-modern {
+    background: #f8f8f8;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10000;
-    backdrop-filter: blur(10px);
+    cursor: pointer;
+    color: #666;
+    transition: 0.3s;
 }
 
-.modal-card {
-    background: #fff;
-    padding: 45px;
-    border-radius: 28px;
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-    border: 1px solid #eee;
+.btn-close-modern:hover {
+    background: #1a1614;
+    color: #a5813a;
+    transform: rotate(90deg);
 }
 
-.modal-large {
-    width: 900px;
-    max-width: 95%;
-}
-
-.premium-modal-input {
+.modern-admin-input {
     width: 100%;
-    padding: 14px 20px;
+    padding: 15px 20px;
     border: 1.5px solid #e2e8f0;
     border-radius: 14px;
     background: #f8fafc;
     font-family: inherit;
     font-weight: 600;
     outline: none;
-    transition: 0.3s;
-    color: #1a1614;
 }
 
-.premium-modal-input:focus {
+.modern-admin-input:focus {
     border-color: #a5813a;
-    background: #fff;
     box-shadow: 0 0 0 4px rgba(165, 129, 58, 0.1);
 }
 
-/* BOTONES */
-.btn-save-modern {
+/* CARGA DE ARCHIVOS */
+.image-upload-box-premium {
+    height: 180px;
+    border: 2.5px dashed #cbd5e1;
+    border-radius: 18px;
+    background: #f8fafc;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.image-upload-box-premium input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.btn-save-gold-full {
     flex: 2;
     padding: 18px;
     background: #1a1614;
     color: #a5813a;
-    border: 1px solid #a5813a;
+    border: 1.5px solid #a5813a;
     border-radius: 14px;
     font-weight: 800;
     cursor: pointer;
     transition: 0.3s;
 }
 
-.btn-save-modern-small {
-    background: #1a1614;
-    color: #a5813a;
-    border: 1px solid #a5813a;
-    padding: 12px;
-    border-radius: 12px;
-    font-weight: 800;
-    cursor: pointer;
+.btn-save-gold-full:hover {
+    background: #a5813a;
+    color: #1a1614;
 }
 
-.btn-cancel-modern {
+.btn-cancel-flat {
     flex: 1;
-    padding: 18px;
-    background: #f1f5f9;
     border: none;
-    border-radius: 14px;
-    color: #64748b;
+    background: transparent;
     font-weight: 700;
+    color: #94a3b8;
     cursor: pointer;
 }
 
-/* OTROS */
 .extra-images-grid-admin {
     display: flex;
     gap: 10px;
@@ -266,18 +283,22 @@
 }
 
 .mini-gallery-thumb {
-    width: 60px;
-    height: 60px;
+    width: 65px;
+    height: 65px;
     object-fit: cover;
     border-radius: 10px;
     border: 1px solid #eee;
 }
 
 .add-extra-box-modern {
-    width: 60px;
-    height: 60px;
+    width: 65px;
+    height: 65px;
+    border: 1.5px dashed #aaa;
     border-radius: 10px;
-    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
     color: #94a3b8;
-    font-weight: 800;
+    font-size: 1.5rem;
 }
