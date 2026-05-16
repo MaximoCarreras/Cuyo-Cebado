@@ -36,7 +36,13 @@ export default function AdminDashboard() {
     const [newCategory, setNewCategory] = useState({ label: '', icon: '🧉', image_url: '' });
 
     useEffect(() => { checkAdmin(); }, []);
-    useEffect(() => { if (isAdmin) fetchData(); }, [activeTab, isAdmin]);
+
+    // Ejecuta la carga inicial solo cuando confirmamos que sos admin
+    useEffect(() => {
+        if (isAdmin) {
+            fetchData(activeTab);
+        }
+    }, [isAdmin]);
 
     const checkAdmin = async () => {
         const { data: { user } } = await supabase.auth.getUser();
@@ -46,29 +52,38 @@ export default function AdminDashboard() {
         setLoading(false);
     };
 
-    const fetchData = async () => {
+    // FUNCIÓN DE CARGA OPTIMIZADA CON PARÁMETRO DIRECTO (EVITA CONGELAMIENTOS)
+    const fetchData = async (targetTab) => {
         setLoading(true);
         try {
-            if (activeTab === 'inventory') {
+            if (targetTab === 'inventory') {
                 const { data: pData } = await supabase.from('products').select('*').order('name');
                 setProducts(pData || []);
                 const { data: catData } = await supabase.from('categories').select('*').order('label');
                 setCategoriesList(catData || []);
-            } else if (activeTab === 'orders') {
+            } else if (targetTab === 'orders') {
                 const { data: oData } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
                 setOrders(oData || []);
-            } else if (activeTab === 'categories') {
+            } else if (targetTab === 'categories') {
                 const { data: cData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
                 setCategoriesList(cData || []);
-            } else if (activeTab === 'settings') {
+            } else if (targetTab === 'settings') {
                 const { data: sData } = await supabase.from('site_settings').select('*').eq('id', 'global').single();
                 if (sData) setSiteSettings(sData);
-            } else if (activeTab === 'faq') {
+            } else if (targetTab === 'faq') {
                 const { data: fData } = await supabase.from('faqs').select('*').order('created_at', { ascending: true });
                 setFaqs(fData || []);
             }
         } catch (err) { console.error(err); }
         setLoading(false);
+    };
+
+    // CONTROLADOR DE NAVEGACIÓN BLINDADO
+    const handleTabChange = (tab) => {
+        closeModal();
+        setSelectedOrder(null);
+        setActiveTab(tab);
+        fetchData(tab); // Carga la data pasándole la pestaña en tiempo real
     };
 
     const handleUpdateOrderStatus = async (orderId, newStatus) => {
@@ -91,7 +106,7 @@ export default function AdminDashboard() {
         setFaqForm({ question: '', answer: '' });
         setIsEditingFAQ(false);
         setEditingFAQId(null);
-        fetchData();
+        fetchData('faq');
     };
 
     const handleEditFAQ = (faq) => {
@@ -112,7 +127,7 @@ export default function AdminDashboard() {
             else if (type === 'category') setNewCategory(prev => ({ ...prev, image_url: data.publicUrl }));
             else setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), data.publicUrl] }));
             toast.success("Imagen lista");
-        } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
+        } catch (e) { toast.error("Error al subir"); } finally { [setUploading(false)]; }
     };
 
     const handleSaveProduct = async (e) => {
@@ -123,7 +138,7 @@ export default function AdminDashboard() {
         else await supabase.from('products').insert([data]);
         toast.success("Guardado");
         closeModal();
-        fetchData();
+        fetchData('inventory');
     };
 
     const handleUpdateSettings = async () => {
@@ -148,7 +163,7 @@ export default function AdminDashboard() {
     const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     if (loading) return <div className="admin-loader">Abriendo la estancia...</div>;
-    if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Restringido</h1><p>Solo el administrador puede entrar aquí.</p><button onClick={() => window.location.href = '/'}>Volver al Inicio</button></div>;
+    if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Restringido</h1><p>Solo el administrador de Cuyo Cebado puede entrar.</p><button onClick={() => window.location.href = '/'}>Volver al Inicio</button></div>;
 
     return (
         <div className="admin-refined-page">
@@ -199,7 +214,7 @@ export default function AdminDashboard() {
                                             <td><button className={`star-refined-btn ${p.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(p)}><span className="material-symbols-outlined">{p.is_featured ? 'star_rate' : 'star'}</span></button></td>
                                             <td><div className="actions-flex-row">
                                                 <button onClick={() => { setIsEditing(true); setEditingId(p.id); setNewProduct(p); setIsModalOpen(true); }} className="btn-edit-modern">EDITAR</button>
-                                                <button onClick={() => { if (window.confirm("¿Borrar?")) supabase.from('products').delete().eq('id', p.id).then(fetchData); }} className="btn-delete-icon-only"><span className="material-symbols-outlined">delete</span></button>
+                                                <button onClick={() => { if (window.confirm("¿Borrar?")) supabase.from('products').delete().eq('id', p.id).then(() => fetchData('inventory')); }} className="btn-delete-icon-only"><span className="material-symbols-outlined">delete</span></button>
                                             </div></td>
                                         </tr>
                                     ))}
@@ -220,7 +235,7 @@ export default function AdminDashboard() {
                                         <tr key={o.id}>
                                             <td>{new Date(o.created_at).toLocaleDateString()}</td>
                                             <td>{o.customer_name || 'Sin especificar'}</td>
-                                            <td>${o.total?.toLocaleString()}</td>
+                                            <td>${o.total?.toLocaleString() || '0'}</td>
                                             <td>
                                                 <select className="status-selector" value={o.status || 'pending'} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}>
                                                     <option value="pending">Pendiente</option>
@@ -246,11 +261,11 @@ export default function AdminDashboard() {
                                     {faqs.map(f => (
                                         <tr key={f.id}>
                                             <td style={{ width: '30%' }}><strong>{f.question}</strong></td>
-                                            <td>{f.answer.substring(0, 100)}...</td>
+                                            <td>{f.answer?.substring(0, 100) || ''}...</td>
                                             <td>
                                                 <div className="actions-flex-row">
                                                     <button className="btn-edit-modern" onClick={() => handleEditFAQ(f)}>EDITAR</button>
-                                                    <button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('faqs').delete().eq('id', f.id); fetchData(); } }}>ELIMINAR</button>
+                                                    <button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('faqs').delete().eq('id', f.id); fetchData('faq'); } }}>ELIMINAR</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -261,8 +276,8 @@ export default function AdminDashboard() {
                         <div className="category-refined-add">
                             <h3>{isEditingFAQ ? 'Modificar Pregunta' : 'Nueva Pregunta Frecuente'}</h3>
                             <form onSubmit={handleSaveFAQ} className="faq-form-pro">
-                                <input className="refined-input" placeholder="Escribí la pregunta..." value={faqForm.question} onChange={e => setFaqForm({ ...faqForm, question: e.target.value })} required />
-                                <textarea className="refined-input" style={{ height: '100px' }} placeholder="Escribí la respuesta..." value={faqForm.answer} onChange={e => setFaqForm({ ...faqForm, answer: e.target.value })} required />
+                                <input className="refined-input" placeholder="Pregunta" value={faqForm.question || ''} onChange={e => setFaqForm({ ...faqForm, question: e.target.value })} required />
+                                <textarea className="refined-input" style={{ height: '100px' }} placeholder="Respuesta..." value={faqForm.answer || ''} onChange={e => setFaqForm({ ...faqForm, answer: e.target.value })} required />
                                 <div className="actions-flex-row">
                                     <button type="submit" className="btn-save-gold-full">{isEditingFAQ ? 'ACTUALIZAR PREGUNTA' : 'AÑADIR PREGUNTA'}</button>
                                     {isEditingFAQ && <button type="button" className="btn-delete-pro" onClick={() => { setIsEditingFAQ(false); setFaqForm({ question: '', answer: '' }); }}>CANCELAR</button>}
@@ -275,9 +290,9 @@ export default function AdminDashboard() {
                 {activeTab === 'settings' && (
                     <section className="fade-in">
                         <div className="category-refined-add">
-                            <div className="card-header-pro"><span className="material-symbols-outlined">campaign</span>...<h3>Configuración Barra Dorada</h3></div>
+                            <div className="card-header-pro"><span className="material-symbols-outlined">campaign</span><h3>Configuración Barra Dorada</h3></div>
                             <div className="settings-grid-pro">
-                                <input className="refined-input" placeholder="Texto del anuncio..." value={siteSettings.banner_text} onChange={e => setSiteSettings({ ...siteSettings, banner_text: e.target.value })} />
+                                <input className="refined-input" placeholder="Texto del anuncio..." value={siteSettings.banner_text || ''} onChange={e => setSiteSettings({ ...siteSettings, banner_text: e.target.value })} />
                                 <div className="banner-status-control">
                                     <label>Mostrar barra en la web:</label>
                                     <input type="checkbox" className="premium-checkbox" checked={siteSettings.banner_active} onChange={e => setSiteSettings({ ...siteSettings, banner_active: e.target.checked })} />
@@ -298,7 +313,7 @@ export default function AdminDashboard() {
                                         <tr key={c.id}>
                                             <td className="cell-icon">{c.image_url ? <img src={c.image_url} alt="" className="cat-mini-thumb" /> : c.icon}</td>
                                             <td className="cell-name"><strong>{c.label}</strong></td>
-                                            <td><button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
+                                            <td><button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData('categories'); } }}>ELIMINAR</button></td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -317,7 +332,7 @@ export default function AdminDashboard() {
                                     const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
                                     await supabase.from('categories').insert([{ id, label: newCategory.label, icon: newCategory.icon, image_url: newCategory.image_url }]);
                                     setNewCategory({ label: '', icon: '🧉', image_url: '' });
-                                    fetchData();
+                                    fetchData('categories');
                                     toast.success("Categoría creada");
                                 }}>CREAR CATEGORÍA</button>
                             </div>
@@ -326,7 +341,39 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODAL FICHA (PROTEGIDO) */}
+            {/* MODAL DETALLES PEDIDO */}
+            {selectedOrder && (
+                <div className="refined-modal-backdrop" onClick={() => setSelectedOrder(null)}>
+                    <div className="refined-modal-card order-modal" onClick={e => e.stopPropagation()}>
+                        <header className="modal-refined-header">
+                            <h2>Pedido #{selectedOrder.id?.slice(0, 5).toUpperCase()}</h2>
+                            <button className="btn-close-modern-circle" onClick={() => setSelectedOrder(null)}><span className="material-symbols-outlined">close</span></button>
+                        </header>
+                        <div className="order-details-grid">
+                            <div className="client-box">
+                                <h3>Información del Cliente</h3>
+                                <p><strong>Nombre:</strong> {selectedOrder.customer_name}</p>
+                                <p><strong>WhatsApp:</strong> {selectedOrder.customer_phone}</p>
+                                <p><strong>Fecha:</strong> {new Date(selectedOrder.created_at).toLocaleString()}</p>
+                                <p><strong>Método:</strong> {selectedOrder.shipping_method === 'pickup' ? 'Retiro en Local' : 'Envío a Domicilio'}</p>
+                                <p><strong>Dirección:</strong> {selectedOrder.shipping_address}</p>
+                            </div>
+                            <div className="items-box">
+                                <h3>Productos</h3>
+                                {selectedOrder.items?.map((it, i) => (
+                                    <div key={i} className="it-row">
+                                        <span>{it.quantity}x {it.name}</span>
+                                        <span>${(it.price * it.quantity).toLocaleString()}</span>
+                                    </div>
+                                ))}
+                                <div className="total-row-pro"><span>TOTAL</span><span>${selectedOrder.total?.toLocaleString()}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* MODAL FICHA PRODUCTO */}
             {isModalOpen && (
                 <div className="refined-modal-backdrop" onClick={closeModal}>
                     <div className="refined-modal-card" onClick={e => e.stopPropagation()}>
@@ -364,24 +411,24 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
                                 <div className="form-side inputs-side">
-                                    <input className="refined-input" placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                                    <input className="refined-input" placeholder="Nombre" required value={newProduct.name || ''} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
                                     <div className="form-split-modern">
-                                        <input type="number" className="refined-input" placeholder="Precio ($)" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
-                                        <input type="number" className="refined-input" placeholder="Stock" value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
+                                        <input type="number" className="refined-input" placeholder="Precio ($)" value={newProduct.price || ''} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
+                                        <input type="number" className="refined-input" placeholder="Stock" value={newProduct.stock || 0} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
                                     </div>
                                     <div className="form-split-modern">
-                                        <input className="refined-input" placeholder="Material" value={newProduct.material} onChange={e => setNewProduct({ ...newProduct, material: e.target.value })} />
-                                        <input className="refined-input" placeholder="Tipo" value={newProduct.type} onChange={e => setNewProduct({ ...newProduct, type: e.target.value })} />
+                                        <input className="refined-input" placeholder="Material Vacuno/Alpaca" value={newProduct.material || ''} onChange={e => setNewProduct({ ...newProduct, material: e.target.value })} />
+                                        <input className="refined-input" placeholder="Tipo Imperial/Camionero" value={newProduct.type || ''} onChange={e => setNewProduct({ ...newProduct, type: e.target.value })} />
                                     </div>
                                     <div className="form-split-modern">
-                                        <select className="refined-input selector-premium" value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                                        <select className="refined-input selector-premium" value={newProduct.category || 'mates'} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                                             {categoriesList.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                                         </select>
-                                        <input className="refined-input" placeholder="Badge" value={newProduct.badge} onChange={e => setNewProduct({ ...newProduct, badge: e.target.value })} />
+                                        <input className="refined-input" placeholder="Badge/Etiqueta" value={newProduct.badge || ''} onChange={e => setNewProduct({ ...newProduct, badge: e.target.value })} />
                                     </div>
-                                    <textarea className="refined-input desc-box" placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
-                                    <textarea className="refined-input desc-box" style={{ height: '80px' }} placeholder="Especificaciones Técnicas..." value={newProduct.specs} onChange={e => setNewProduct({ ...newProduct, specs: e.target.value })} />
-                                    <input className="refined-input" placeholder="URL Reel Instagram" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
+                                    <textarea className="refined-input desc-box" placeholder="Descripción principal..." value={newProduct.description || ''} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                                    <textarea className="refined-input desc-box" style={{ height: '80px' }} placeholder="Especificaciones Técnicas (Specs)..." value={newProduct.specs || ''} onChange={e => setNewProduct({ ...newProduct, specs: e.target.value })} />
+                                    <input className="refined-input" placeholder="URL Reel Instagram" value={newProduct.video_url || ''} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
                                     <div className="modal-actions-footer">
                                         <button type="button" onClick={closeModal} className="btn-modal-action discard">DESCARTAR</button>
                                         <button type="submit" className="btn-modal-action save" disabled={uploading}>GUARDAR CAMBIOS</button>
