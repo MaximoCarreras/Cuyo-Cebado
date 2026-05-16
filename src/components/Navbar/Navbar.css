@@ -1,41 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@700&display=swap');
 
-.main-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 5000;
-  display: flex;
-  flex-direction: column;
-}
-
-/* BARRA DORADA */
+/* --- BARRA DORADA NATIVA (SCROLLEA NATURALMENTE) --- */
 .announcement-banner {
   background: #a5813a;
   color: #1a1614;
   text-align: center;
-  padding: 8px 0;
-  font-size: 0.8rem;
+  padding: 10px 0;
+  font-size: 0.85rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.5px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  z-index: 1999;
 }
 
-/* NAVBAR */
+/* --- NAVBAR STICKY PREMIUM --- */
 .navbar {
+  position: sticky;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 85px;
+  height: 90px;
   background-color: #1a1614;
   border-bottom: 1px solid rgba(165, 129, 58, 0.2);
+  z-index: 4000;
+  /* Asegura estar arriba de todo */
   display: flex;
   align-items: center;
 }
-
-/* AJUSTE DE CONTENIDO PARA NO SER TAPADO */
-/* En el archivo App.css o similar, asegurate que el main tenga un margin-top grande */
-/* Ejemplo: main { margin-top: 130px; } */
 
 .navbar__container {
   width: 100%;
@@ -45,6 +41,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
+}
+
+/* LOGO */
+.navbar__left {
+  flex-shrink: 0;
 }
 
 .navbar__brand {
@@ -55,7 +57,7 @@
 }
 
 .navbar__logo {
-  height: 40px;
+  height: 42px;
   width: auto;
 }
 
@@ -63,7 +65,8 @@
   color: #fdfaf7;
   font-family: 'Noto Serif', serif;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
@@ -71,9 +74,12 @@
   color: #a5813a;
 }
 
+/* BUSCADOR BLINDADO CONTRA COLAPSOS */
 .navbar__center {
-  flex: 0 1 400px;
-  margin: 0 15px;
+  flex: 1;
+  max-width: 400px;
+  /* Evita que crezca infinitamente y choque los botones */
+  margin: 0 20px;
 }
 
 .navbar__search {
@@ -82,6 +88,12 @@
   border: 1px solid rgba(165, 129, 58, 0.2);
   border-radius: 50px;
   padding: 2px 12px;
+  transition: 0.3s;
+}
+
+.navbar__search:focus-within {
+  border-color: #a5813a;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .navbar__search input {
@@ -101,25 +113,39 @@
   cursor: pointer;
 }
 
+/* LINKS DE ESCRITORIO BLINDADOS */
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  /* Impide que el carrito caiga abajo */
+}
+
 .navbar__desktop-links {
   display: flex;
   gap: 20px;
+  flex-shrink: 0;
 }
 
 .nav-item {
   color: #fdfaf7 !important;
   text-decoration: none;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   transition: 0.3s;
+  white-space: nowrap;
+  /* Evita roturas de renglón */
 }
 
 .nav-item:hover {
   color: #a5813a !important;
 }
 
+/* CARRITO AJUSTADO */
 .navbar__cart-link {
   position: relative;
   color: #fdfaf7;
@@ -127,10 +153,11 @@
   display: flex;
   align-items: center;
   padding: 10px;
+  flex-shrink: 0;
 }
 
 .cart-icon-nav {
-  font-size: 26px !important;
+  font-size: 28px !important;
 }
 
 .cart-count-premium {
@@ -141,8 +168,8 @@
   color: #1a1614;
   font-size: 9px;
   font-weight: 900;
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -150,12 +177,14 @@
   border: 1px solid #1a1614;
 }
 
+/* RESPONSIVE */
 .navbar__hamburger-btn {
   display: none;
   background: none;
   border: none;
   color: #fff;
   cursor: pointer;
+  padding: 10px;
 }
 
 @media (max-width: 1000px) {
@@ -170,5 +199,58 @@
 
   .navbar__hamburger-btn {
     display: block;
+  }
+
+  .navbar__container {
+    padding: 0 10px;
+  }
+
+  .navbar__logo {
+    height: 32px;
+  }
+
+  .navbar__center {
+    flex: 1;
+    margin: 0 8px;
+  }
+
+  .navbar__mobile-menu {
+    display: flex;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: #1a1614;
+    flex-direction: column;
+    padding: 100px 30px;
+    gap: 25px;
+    transition: 0.4s ease;
+    z-index: 2500;
+  }
+
+  .navbar__mobile-menu.active {
+    right: 0;
+  }
+
+  .navbar__mobile-menu a {
+    color: #fdfaf7 !important;
+    text-decoration: none;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(165, 129, 58, 0.1);
+    padding-bottom: 10px;
+  }
+
+  .navbar__blur-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 2400;
   }
 }

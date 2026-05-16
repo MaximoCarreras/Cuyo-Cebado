@@ -15,13 +15,13 @@ export default function AdminDashboard() {
     const [searchTerm, setSearchTerm] = useState('');
     const [isAdmin, setIsAdmin] = useState(false);
 
-    // Estados para Modales y Edición
+    // Modales de Productos
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [selectedOrder, setSelectedOrder] = useState(null);
 
-    // Estado para FAQs
+    // Edición de FAQs
     const [isEditingFAQ, setIsEditingFAQ] = useState(false);
     const [editingFAQId, setEditingFAQId] = useState(null);
     const [faqForm, setFaqForm] = useState({ question: '', answer: '' });
@@ -71,16 +71,14 @@ export default function AdminDashboard() {
         setLoading(false);
     };
 
-    // --- LOGICA DE VENTAS ---
     const handleUpdateOrderStatus = async (orderId, newStatus) => {
         const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
         if (!error) {
             setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-            toast.success("Estado actualizado");
+            toast.success("Venta actualizada");
         }
     };
 
-    // --- LOGICA DE FAQS ---
     const handleSaveFAQ = async (e) => {
         e.preventDefault();
         if (isEditingFAQ) {
@@ -100,10 +98,8 @@ export default function AdminDashboard() {
         setFaqForm({ question: faq.question, answer: faq.answer });
         setIsEditingFAQ(true);
         setEditingFAQId(faq.id);
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     };
 
-    // --- RESTO DE FUNCIONES (IMÁGENES, PRODUCTOS) ---
     const uploadImage = async (event, type) => {
         try {
             setUploading(true);
@@ -115,7 +111,7 @@ export default function AdminDashboard() {
             if (type === 'main') setNewProduct(prev => ({ ...prev, image_url: data.publicUrl }));
             else if (type === 'category') setNewCategory(prev => ({ ...prev, image_url: data.publicUrl }));
             else setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), data.publicUrl] }));
-            toast.success("Cargada con éxito");
+            toast.success("Imagen lista");
         } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
     };
 
@@ -125,7 +121,7 @@ export default function AdminDashboard() {
         const data = { ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) };
         if (isEditing) await supabase.from('products').update(data).eq('id', editingId);
         else await supabase.from('products').insert([data]);
-        toast.success("¡Guardado!");
+        toast.success("Guardado");
         closeModal();
         fetchData();
     };
@@ -152,7 +148,7 @@ export default function AdminDashboard() {
     const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     if (loading) return <div className="admin-loader">Abriendo la estancia...</div>;
-    if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Denegado</h1><p>Solo el administrador puede entrar aquí.</p><button onClick={() => window.location.href = '/'}>Volver al Inicio</button></div>;
+    if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Restringido</h1><p>Solo el administrador puede entrar aquí.</p><button onClick={() => window.location.href = '/'}>Volver al Inicio</button></div>;
 
     return (
         <div className="admin-refined-page">
@@ -160,16 +156,15 @@ export default function AdminDashboard() {
             <header className="admin-refined-header">
                 <div className="header-info"><h1>Gestión Cuyo Cebado</h1><p>Boutique Digital Admin</p></div>
                 <div className="tab-refined-switcher">
-                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => setActiveTab('inventory')}>Stock</button>
-                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => setActiveTab('orders')}>Ventas</button>
-                    <button className={activeTab === 'categories' ? 'active' : ''} onClick={() => setActiveTab('categories')}>Categorías</button>
-                    <button className={activeTab === 'settings' ? 'active' : ''} onClick={() => setActiveTab('settings')}>Web</button>
-                    <button className={activeTab === 'faq' ? 'active' : ''} onClick={() => setActiveTab('faq')}>FAQ</button>
+                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => handleTabChange('inventory')}>Stock</button>
+                    <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => handleTabChange('orders')}>Ventas</button>
+                    <button className={activeTab === 'categories' ? 'active' : ''} onClick={() => handleTabChange('categories')}>Categorías</button>
+                    <button className={activeTab === 'settings' ? 'active' : ''} onClick={() => handleTabChange('settings')}>Web</button>
+                    <button className={activeTab === 'faq' ? 'active' : ''} onClick={() => handleTabChange('faq')}>FAQ</button>
                 </div>
             </header>
 
             <main className="admin-refined-content">
-                {/* VISTA STOCK (INVENTORY) */}
                 {activeTab === 'inventory' && (
                     <section className="fade-in">
                         <div className="stats-refined-grid">
@@ -215,20 +210,19 @@ export default function AdminDashboard() {
                     </section>
                 )}
 
-                {/* VISTA VENTAS (ARREGLADA) */}
                 {activeTab === 'orders' && (
                     <section className="fade-in">
                         <div className="table-container">
                             <table className="refined-table">
                                 <thead><tr><th>FECHA</th><th>CLIENTE</th><th>TOTAL</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
                                 <tbody>
-                                    {orders.length > 0 ? orders.map(o => (
+                                    {orders && orders.length > 0 ? orders.map(o => (
                                         <tr key={o.id}>
                                             <td>{new Date(o.created_at).toLocaleDateString()}</td>
-                                            <td>{o.customer_name}</td>
-                                            <td>${o.total.toLocaleString()}</td>
+                                            <td>{o.customer_name || 'Sin especificar'}</td>
+                                            <td>${o.total?.toLocaleString()}</td>
                                             <td>
-                                                <select className="status-selector" value={o.status} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}>
+                                                <select className="status-selector" value={o.status || 'pending'} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}>
                                                     <option value="pending">Pendiente</option>
                                                     <option value="shipped">Enviado</option>
                                                     <option value="completed">Completado</option>
@@ -243,7 +237,6 @@ export default function AdminDashboard() {
                     </section>
                 )}
 
-                {/* VISTA FAQ (CON EDICIÓN) */}
                 {activeTab === 'faq' && (
                     <section className="fade-in">
                         <div className="table-container">
@@ -257,7 +250,7 @@ export default function AdminDashboard() {
                                             <td>
                                                 <div className="actions-flex-row">
                                                     <button className="btn-edit-modern" onClick={() => handleEditFAQ(f)}>EDITAR</button>
-                                                    <button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('faqs').delete().eq('id', f.id); fetchData(); } }}>X</button>
+                                                    <button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('faqs').delete().eq('id', f.id); fetchData(); } }}>ELIMINAR</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -266,12 +259,12 @@ export default function AdminDashboard() {
                             </table>
                         </div>
                         <div className="category-refined-add">
-                            <h3>{isEditingFAQ ? 'Editar Pregunta' : 'Nueva Pregunta Frecuente'}</h3>
+                            <h3>{isEditingFAQ ? 'Modificar Pregunta' : 'Nueva Pregunta Frecuente'}</h3>
                             <form onSubmit={handleSaveFAQ} className="faq-form-pro">
-                                <input className="refined-input" placeholder="Pregunta" value={faqForm.question} onChange={e => setFaqForm({ ...faqForm, question: e.target.value })} required />
-                                <textarea className="refined-input" style={{ height: '100px' }} placeholder="Respuesta..." value={faqForm.answer} onChange={e => setFaqForm({ ...faqForm, answer: e.target.value })} required />
+                                <input className="refined-input" placeholder="Escribí la pregunta..." value={faqForm.question} onChange={e => setFaqForm({ ...faqForm, question: e.target.value })} required />
+                                <textarea className="refined-input" style={{ height: '100px' }} placeholder="Escribí la respuesta..." value={faqForm.answer} onChange={e => setFaqForm({ ...faqForm, answer: e.target.value })} required />
                                 <div className="actions-flex-row">
-                                    <button type="submit" className="btn-save-gold-full">{isEditingFAQ ? 'GUARDAR CAMBIOS' : 'AÑADIR PREGUNTA'}</button>
+                                    <button type="submit" className="btn-save-gold-full">{isEditingFAQ ? 'ACTUALIZAR PREGUNTA' : 'AÑADIR PREGUNTA'}</button>
                                     {isEditingFAQ && <button type="button" className="btn-delete-pro" onClick={() => { setIsEditingFAQ(false); setFaqForm({ question: '', answer: '' }); }}>CANCELAR</button>}
                                 </div>
                             </form>
@@ -279,14 +272,12 @@ export default function AdminDashboard() {
                     </section>
                 )}
 
-                {/* VISTA WEB (SETTINGS) */}
                 {activeTab === 'settings' && (
                     <section className="fade-in">
                         <div className="category-refined-add">
-                            <div className="card-header-pro"><span className="material-symbols-outlined">campaign</span><h3>Configuración Barra Dorada</h3></div>
+                            <div className="card-header-pro"><span className="material-symbols-outlined">campaign</span>...<h3>Configuración Barra Dorada</h3></div>
                             <div className="settings-grid-pro">
-                                <label className="admin-label">Texto del Anuncio</label>
-                                <input className="refined-input" placeholder="Ej: ¡3 cuotas sin interés en toda la web!" value={siteSettings.banner_text} onChange={e => setSiteSettings({ ...siteSettings, banner_text: e.target.value })} />
+                                <input className="refined-input" placeholder="Texto del anuncio..." value={siteSettings.banner_text} onChange={e => setSiteSettings({ ...siteSettings, banner_text: e.target.value })} />
                                 <div className="banner-status-control">
                                     <label>Mostrar barra en la web:</label>
                                     <input type="checkbox" className="premium-checkbox" checked={siteSettings.banner_active} onChange={e => setSiteSettings({ ...siteSettings, banner_active: e.target.checked })} />
@@ -297,7 +288,6 @@ export default function AdminDashboard() {
                     </section>
                 )}
 
-                {/* VISTA CATEGORÍAS */}
                 {activeTab === 'categories' && (
                     <section className="fade-in">
                         <div className="table-container">
@@ -306,7 +296,7 @@ export default function AdminDashboard() {
                                 <tbody>
                                     {categoriesList.map(c => (
                                         <tr key={c.id}>
-                                            <td className="cell-icon">{c.image_url ? <img src={c.image_url} className="cat-mini-thumb" /> : c.icon}</td>
+                                            <td className="cell-icon">{c.image_url ? <img src={c.image_url} alt="" className="cat-mini-thumb" /> : c.icon}</td>
                                             <td className="cell-name"><strong>{c.label}</strong></td>
                                             <td><button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData(); } }}>ELIMINAR</button></td>
                                         </tr>
@@ -336,7 +326,7 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODAL PRODUCTO (INALTERADO) */}
+            {/* MODAL FICHA (PROTEGIDO) */}
             {isModalOpen && (
                 <div className="refined-modal-backdrop" onClick={closeModal}>
                     <div className="refined-modal-card" onClick={e => e.stopPropagation()}>
@@ -363,7 +353,7 @@ export default function AdminDashboard() {
                                     <div className="extra-images-grid-admin">
                                         {newProduct.extra_images?.map((img, i) => (
                                             <div key={i} className="mini-thumb-container-pro">
-                                                <img src={img} alt="" className="mini-gallery-thumb" />
+                                                <img src={img} className="mini-gallery-thumb" />
                                                 <button type="button" className="btn-remove-extra-pro" onClick={(e) => removeExtraImage(e, i)}>×</button>
                                             </div>
                                         ))}
@@ -374,7 +364,7 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
                                 <div className="form-side inputs-side">
-                                    <input className="refined-input" placeholder="Nombre del Mate" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                                    <input className="refined-input" placeholder="Nombre" required value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
                                     <div className="form-split-modern">
                                         <input type="number" className="refined-input" placeholder="Precio ($)" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
                                         <input type="number" className="refined-input" placeholder="Stock" value={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.value })} />
@@ -389,7 +379,7 @@ export default function AdminDashboard() {
                                         </select>
                                         <input className="refined-input" placeholder="Badge" value={newProduct.badge} onChange={e => setNewProduct({ ...newProduct, badge: e.target.value })} />
                                     </div>
-                                    <textarea className="refined-input desc-box" placeholder="Descripción principal..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                                    <textarea className="refined-input desc-box" placeholder="Descripción..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
                                     <textarea className="refined-input desc-box" style={{ height: '80px' }} placeholder="Especificaciones Técnicas..." value={newProduct.specs} onChange={e => setNewProduct({ ...newProduct, specs: e.target.value })} />
                                     <input className="refined-input" placeholder="URL Reel Instagram" value={newProduct.video_url} onChange={e => setNewProduct({ ...newProduct, video_url: e.target.value })} />
                                     <div className="modal-actions-footer">

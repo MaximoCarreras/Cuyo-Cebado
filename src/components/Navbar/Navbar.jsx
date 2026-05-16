@@ -46,7 +46,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="main-header">
+    <>
       {banner.active && (
         <div className="announcement-banner">
           <p>{banner.text}</p>
@@ -86,7 +86,7 @@ export default function Navbar() {
               </Link>
             </div>
 
-            <Link to="/carrito" className="navbar__cart-link">
+            <Link to="/carrito" className="navbar__cart-link" onClick={() => setIsMenuOpen(false)}>
               <span className="material-symbols-outlined cart-icon-nav">shopping_cart</span>
               {totalItems > 0 && <span className="cart-count-premium">{totalItems}</span>}
             </Link>
@@ -96,6 +96,6 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-    </header>
+    </>
   );
 }
