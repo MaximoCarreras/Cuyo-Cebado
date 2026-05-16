@@ -360,6 +360,36 @@
     background: #f8fafc;
 }
 
+/* ACCIONES COMPARTIDAS (REPARADO) */
+.btn-delete-icon-only {
+    background: #fff0f0;
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.btn-delete-icon-only:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+.btn-delete-pro {
+    background: #fff0f0;
+    border: 1.5px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
 /* CATEGORÍAS */
 .category-refined-add {
     background: #fff;

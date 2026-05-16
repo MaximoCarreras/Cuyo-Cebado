@@ -11,7 +11,6 @@ export default function AdminDashboard() {
     const [faqs, setFaqs] = useState([]);
     const [siteSettings, setSiteSettings] = useState({ banner_text: '', banner_active: true });
 
-    // Separamos la carga inicial (Auth) de la carga de pestañas
     const [initialLoading, setInitialLoading] = useState(true);
     const [tabLoading, setTabLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -54,7 +53,6 @@ export default function AdminDashboard() {
         setInitialLoading(false);
     };
 
-    // CARGA DE DATOS OPTIMIZADA (SIN DESMONTAR EL PANEL)
     const fetchData = async (targetTab) => {
         setTabLoading(true);
         try {
@@ -87,22 +85,27 @@ export default function AdminDashboard() {
         fetchData(tab);
     };
 
-    // SEMILLERO DE PREGUNTAS BASE (MIGRADOR DE GUÍA)
+    // SEMILLERO SINCRONIZADO CON TUS PREGUNTAS REALES DE LA GUÍA
     const handleSeedFAQs = async () => {
         setTabLoading(true);
+
+        // Primero vaciamos para evitar duplicados
+        await supabase.from('faqs').delete().neq('question', '');
+
         const baseFAQs = [
-            { question: '¿Cómo curar un mate de calabaza?', answer: 'Llenar el mate con yerba usada húmeda, agregar agua tibia y dejar reposar 24 horas. Luego, raspar bien las paredes internas con una cuchara para quitar el hollejo. Repetir el proceso si es necesario.' },
-            { question: '¿Cómo curar un mate de madera (Algarrobo/Caldén)?', answer: 'Untar el interior del mate con un poco de aceite de cocina o manteca para sellar los poros de la madera. Después, llenarlo con yerba usada húmeda y dejarlo reposar por 24 horas antes de usar.' },
-            { question: '¿Cómo evitar que aparezcan hongos en el mate?', answer: 'Luego de lavarlo, dejarlo secar siempre boca arriba en un lugar ventilado y templado. Nunca lo dejes húmedo dentro de una mochila o boca abajo sobre un trapo húmedo.' },
-            { question: '¿Qué bombilla recomiendan para mates Imperiales?', answer: 'Recomendamos bombillas de Alpaca de tipo Pico de Loro. Tienen un excelente flujo de agua, filtran perfecto la yerba y no transmiten el calor a los labios.' }
+            { question: '¿Cómo es el proceso de compra si quiero un mate?', answer: 'Elegís tu pieza premium en el catálogo, la agregás al carrito y completás los datos de facturación. El pago se procesa de forma segura y nos contactamos de inmediato por WhatsApp para coordinar detalles finales.' },
+            { question: '¿Hacen envíos a todo el país y cómo entregan en Mendoza?', answer: 'Hacemos envíos blindados a toda la Argentina. Si estás en Mendoza, podés retirar sin cargo en nuestro punto oficial de Código Vinario (Av. Colón 701) o seleccionar envío express por cadetería.' },
+            { question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos todas las tarjetas de débito y crédito en hasta 3 cuotas sin interés a través de Mercado Pago. También contás con la opción de transferencia bancaria directa.' },
+            { question: '¿De qué materiales están hechos los mates y qué garantía tienen?', answer: 'Nuestras piezas están seleccionadas rigurosamente: calabazas brasileñas de paredes gruesas, madera noble de algarrobo y cueros vacunos legítimos de 4mm con virolas de alpaca. Poseen garantía total por fallas de fabricación.' },
+            { question: '¿El mate viene listo para usar o debo curarlo?', answer: 'Los mates de calabaza y madera necesitan un proceso de curado previo para sellar sus poros. En nuestra pestaña "Guía de Curado" te dejamos el paso a paso interactivo para hacerlo como un profesional.' }
         ];
 
         const { error } = await supabase.from('faqs').insert(baseFAQs);
         if (!error) {
-            toast.success("Preguntas base cargadas con éxito 🧉");
+            toast.success("Preguntas reales sincronizadas 🧉");
             fetchData('faq');
         } else {
-            toast.error("Error al sembrar preguntas.");
+            toast.error("Error al sincronizar base de datos.");
         }
         setTabLoading(false);
     };
@@ -147,7 +150,7 @@ export default function AdminDashboard() {
             if (type === 'main') setNewProduct(prev => ({ ...prev, image_url: data.publicUrl }));
             else if (type === 'category') setNewCategory(prev => ({ ...prev, image_url: data.publicUrl }));
             else setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), data.publicUrl] }));
-            toast.success("Imagen lista");
+            toast.success("Imagen guardada");
         } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
     };
 
@@ -201,12 +204,11 @@ export default function AdminDashboard() {
             </header>
 
             <main className="admin-refined-content">
-                {/* LOADER INTERNO PARA EVITAR CONGELAMIENTO */}
                 {tabLoading ? (
                     <div className="tab-internal-loader"><p>Sincronizando con la estancia...</p></div>
                 ) : (
                     <>
-                        {/* VISTA INVENTARIO */}
+                        {/* INVENTARIO */}
                         {activeTab === 'inventory' && (
                             <section className="fade-in">
                                 <div className="stats-refined-grid">
@@ -252,7 +254,7 @@ export default function AdminDashboard() {
                             </section>
                         )}
 
-                        {/* VISTA VENTAS */}
+                        {/* VENTAS */}
                         {activeTab === 'orders' && (
                             <section className="fade-in">
                                 <div className="table-container">
@@ -280,12 +282,12 @@ export default function AdminDashboard() {
                             </section>
                         )}
 
-                        {/* VISTA FAQ CON CONTROLADORES DE MODIFICACIÓN */}
+                        {/* FAQ CON BOTÓN DE INTEGRACIÓN REAL Y CORRECCIÓN DE DISEÑO */}
                         {activeTab === 'faq' && (
                             <section className="fade-in">
                                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
-                                    <button className="btn-edit-modern" style={{ background: '#1a1614', color: '#a5813a' }} onClick={handleSeedFAQs}>
-                                        ✨ CARGAR PREGUNTAS BASE DE LA GUÍA
+                                    <button className="btn-edit-modern" style={{ background: '#1a1614', color: '#a5813a', borderColor: '#a5813a' }} onClick={handleSeedFAQs}>
+                                        ✨ CARGAR PREGUNTAS REALES DE LA WEB
                                     </button>
                                 </div>
                                 <div className="table-container">
@@ -299,19 +301,21 @@ export default function AdminDashboard() {
                                                     <td>
                                                         <div className="actions-flex-row">
                                                             <button className="btn-edit-modern" onClick={() => handleEditFAQ(f)}>EDITAR</button>
-                                                            <button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('faqs').delete().eq('id', f.id).then(() => fetchData('faq')); } }}>ELIMINAR</button>
+                                                            <button className="btn-delete-icon-only" onClick={async () => { if (window.confirm("¿Borrar esta pregunta?")) { await supabase.from('faqs').delete().eq('id', f.id).then(() => fetchData('faq')); } }}>
+                                                                <span className="material-symbols-outlined">delete</span>
+                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>
-                                            )) : <tr><td colSpan="3" style={{ textAlign: 'center', padding: '40px' }}>No hay preguntas frecuentes cargadas. Tocá el botón de arriba para sembrar las iniciales.</td></tr>}
+                                            )) : <tr><td colSpan="3" style={{ textAlign: 'center', padding: '40px' }}>No hay preguntas cargadas. Tocá el botón superior dorado para sincronizar las reales de tu web.</td></tr>}
                                         </tbody>
                                     </table>
                                 </div>
                                 <div className="category-refined-add">
                                     <h3>{isEditingFAQ ? 'Modificar Pregunta Frecuente' : 'Nueva Pregunta Frecuente'}</h3>
                                     <form onSubmit={handleSaveFAQ} className="faq-form-pro">
-                                        <input className="refined-input" placeholder="Pregunta (Ej: ¿Cómo curar el mate?)" value={faqForm.question || ''} onChange={e => setFaqForm({ ...faqForm, question: e.target.value })} required />
-                                        <textarea className="refined-input" style={{ height: '100px' }} placeholder="Respuesta detallada..." value={faqForm.answer || ''} onChange={e => setFaqForm({ ...faqForm, answer: e.target.value })} required />
+                                        <input className="refined-input" placeholder="Pregunta" value={faqForm.question || ''} onChange={e => setFaqForm({ ...faqForm, question: e.target.value })} required />
+                                        <textarea className="refined-input" style={{ height: '100px' }} placeholder="Respuesta..." value={faqForm.answer || ''} onChange={e => setFaqForm({ ...faqForm, answer: e.target.value })} required />
                                         <div className="actions-flex-row">
                                             <button type="submit" className="btn-save-gold-full">{isEditingFAQ ? 'ACTUALIZAR PREGUNTA' : 'AÑADIR PREGUNTA'}</button>
                                             {isEditingFAQ && <button type="button" className="btn-delete-pro" style={{ padding: '18px' }} onClick={() => { setIsEditingFAQ(false); setFaqForm({ question: '', answer: '' }); }}>CANCELAR</button>}
@@ -321,7 +325,7 @@ export default function AdminDashboard() {
                             </section>
                         )}
 
-                        {/* VISTA CONFIGURACIÓN WEB */}
+                        {/* CONFIGURACIÓN WEB */}
                         {activeTab === 'settings' && (
                             <section className="fade-in">
                                 <div className="category-refined-add">
@@ -338,7 +342,7 @@ export default function AdminDashboard() {
                             </section>
                         )}
 
-                        {/* VISTA CATEGORÍAS */}
+                        {/* CATEGORÍAS */}
                         {activeTab === 'categories' && (
                             <section className="fade-in">
                                 <div className="table-container">
