@@ -58,6 +58,19 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* INTERNAL TAB LOADER */
+.tab-internal-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 0;
+    color: #a5813a;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 /* STATS & SEARCH */
 .stats-refined-grid {
     display: grid;

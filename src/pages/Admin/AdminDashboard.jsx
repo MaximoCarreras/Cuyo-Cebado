@@ -10,7 +10,10 @@ export default function AdminDashboard() {
     const [categoriesList, setCategoriesList] = useState([]);
     const [faqs, setFaqs] = useState([]);
     const [siteSettings, setSiteSettings] = useState({ banner_text: '', banner_active: true });
-    const [loading, setLoading] = useState(true);
+
+    // Separamos la carga inicial (Auth) de la carga de pestañas
+    const [initialLoading, setInitialLoading] = useState(true);
+    const [tabLoading, setTabLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [isAdmin, setIsAdmin] = useState(false);
@@ -37,7 +40,6 @@ export default function AdminDashboard() {
 
     useEffect(() => { checkAdmin(); }, []);
 
-    // Ejecuta la carga inicial solo cuando confirmamos que sos admin
     useEffect(() => {
         if (isAdmin) {
             fetchData(activeTab);
@@ -46,15 +48,15 @@ export default function AdminDashboard() {
 
     const checkAdmin = async () => {
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user) { setLoading(false); return; }
+        if (!user) { setInitialLoading(false); return; }
         const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
         if (profile?.role === 'admin') setIsAdmin(true);
-        setLoading(false);
+        setInitialLoading(false);
     };
 
-    // FUNCIÓN DE CARGA OPTIMIZADA CON PARÁMETRO DIRECTO (EVITA CONGELAMIENTOS)
+    // CARGA DE DATOS OPTIMIZADA (SIN DESMONTAR EL PANEL)
     const fetchData = async (targetTab) => {
-        setLoading(true);
+        setTabLoading(true);
         try {
             if (targetTab === 'inventory') {
                 const { data: pData } = await supabase.from('products').select('*').order('name');
@@ -75,15 +77,34 @@ export default function AdminDashboard() {
                 setFaqs(fData || []);
             }
         } catch (err) { console.error(err); }
-        setLoading(false);
+        setTabLoading(false);
     };
 
-    // CONTROLADOR DE NAVEGACIÓN BLINDADO
     const handleTabChange = (tab) => {
         closeModal();
         setSelectedOrder(null);
         setActiveTab(tab);
-        fetchData(tab); // Carga la data pasándole la pestaña en tiempo real
+        fetchData(tab);
+    };
+
+    // SEMILLERO DE PREGUNTAS BASE (MIGRADOR DE GUÍA)
+    const handleSeedFAQs = async () => {
+        setTabLoading(true);
+        const baseFAQs = [
+            { question: '¿Cómo curar un mate de calabaza?', answer: 'Llenar el mate con yerba usada húmeda, agregar agua tibia y dejar reposar 24 horas. Luego, raspar bien las paredes internas con una cuchara para quitar el hollejo. Repetir el proceso si es necesario.' },
+            { question: '¿Cómo curar un mate de madera (Algarrobo/Caldén)?', answer: 'Untar el interior del mate con un poco de aceite de cocina o manteca para sellar los poros de la madera. Después, llenarlo con yerba usada húmeda y dejarlo reposar por 24 horas antes de usar.' },
+            { question: '¿Cómo evitar que aparezcan hongos en el mate?', answer: 'Luego de lavarlo, dejarlo secar siempre boca arriba en un lugar ventilado y templado. Nunca lo dejes húmedo dentro de una mochila o boca abajo sobre un trapo húmedo.' },
+            { question: '¿Qué bombilla recomiendan para mates Imperiales?', answer: 'Recomendamos bombillas de Alpaca de tipo Pico de Loro. Tienen un excelente flujo de agua, filtran perfecto la yerba y no transmiten el calor a los labios.' }
+        ];
+
+        const { error } = await supabase.from('faqs').insert(baseFAQs);
+        if (!error) {
+            toast.success("Preguntas base cargadas con éxito 🧉");
+            fetchData('faq');
+        } else {
+            toast.error("Error al sembrar preguntas.");
+        }
+        setTabLoading(false);
     };
 
     const handleUpdateOrderStatus = async (orderId, newStatus) => {
@@ -98,10 +119,10 @@ export default function AdminDashboard() {
         e.preventDefault();
         if (isEditingFAQ) {
             await supabase.from('faqs').update(faqForm).eq('id', editingFAQId);
-            toast.success("Pregunta actualizada");
+            toast.success("Pregunta modificada con éxito");
         } else {
             await supabase.from('faqs').insert([faqForm]);
-            toast.success("Pregunta creada");
+            toast.success("Pregunta guardada");
         }
         setFaqForm({ question: '', answer: '' });
         setIsEditingFAQ(false);
@@ -127,7 +148,7 @@ export default function AdminDashboard() {
             else if (type === 'category') setNewCategory(prev => ({ ...prev, image_url: data.publicUrl }));
             else setNewProduct(prev => ({ ...prev, extra_images: [...(prev.extra_images || []), data.publicUrl] }));
             toast.success("Imagen lista");
-        } catch (e) { toast.error("Error al subir"); } finally { [setUploading(false)]; }
+        } catch (e) { toast.error("Error al subir"); } finally { setUploading(false); }
     };
 
     const handleSaveProduct = async (e) => {
@@ -136,14 +157,14 @@ export default function AdminDashboard() {
         const data = { ...newProduct, slug, price: Number(newProduct.price), stock: Number(newProduct.stock) };
         if (isEditing) await supabase.from('products').update(data).eq('id', editingId);
         else await supabase.from('products').insert([data]);
-        toast.success("Guardado");
+        toast.success("Ficha guardada");
         closeModal();
         fetchData('inventory');
     };
 
     const handleUpdateSettings = async () => {
         await supabase.from('site_settings').update(siteSettings).eq('id', 'global');
-        toast.success("Banner actualizado 🧉");
+        toast.success("Barra Dorada actualizada 🧉");
     };
 
     const closeModal = () => { setIsModalOpen(false); setIsEditing(false); setEditingId(null); setNewProduct(initialFormState); };
@@ -162,7 +183,7 @@ export default function AdminDashboard() {
 
     const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    if (loading) return <div className="admin-loader">Abriendo la estancia...</div>;
+    if (initialLoading) return <div className="admin-loader">Abriendo la estancia...</div>;
     if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Restringido</h1><p>Solo el administrador de Cuyo Cebado puede entrar.</p><button onClick={() => window.location.href = '/'}>Volver al Inicio</button></div>;
 
     return (
@@ -180,164 +201,181 @@ export default function AdminDashboard() {
             </header>
 
             <main className="admin-refined-content">
-                {activeTab === 'inventory' && (
-                    <section className="fade-in">
-                        <div className="stats-refined-grid">
-                            <div className="stat-card">
-                                <span className="material-symbols-outlined icon-stat">inventory_2</span>
-                                <div className="stat-data"><span className="stat-label">Variedad</span><span className="stat-value">{products.length}</span></div>
-                            </div>
-                            <div className="stat-card critical">
-                                <span className="material-symbols-outlined icon-stat">priority_high</span>
-                                <div className="stat-data"><span className="stat-label">Stock Crítico</span><span className="stat-value">{products.filter(p => p.stock < 5).length}</span></div>
-                            </div>
-                        </div>
-                        <div className="search-bar-container">
-                            <span className="material-symbols-outlined">search</span>
-                            <input type="text" placeholder="Buscar mate..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                        </div>
-                        <div className="table-container">
-                            <table className="refined-table">
-                                <thead><tr><th>PRODUCTO</th><th>PRECIO</th><th>STOCK</th><th>ESTRELLA</th><th>ACCIONES</th></tr></thead>
-                                <tbody>
-                                    {filteredProducts.map(p => (
-                                        <tr key={p.id}>
-                                            <td className="cell-product"><img src={p.image_url || '/assets/placeholder.png'} className="mini-thumb" />{p.name}</td>
-                                            <td>${p.price.toLocaleString()}</td>
-                                            <td>
-                                                <div className="refined-stock-pill">
-                                                    <button className="stock-btn minus" onClick={() => handleUpdateField(p.id, 'stock', p.stock - 1)}>−</button>
-                                                    <span className="stock-qty">{p.stock}</span>
-                                                    <button className="stock-btn plus" onClick={() => handleUpdateField(p.id, 'stock', p.stock + 1)}>+</button>
-                                                </div>
-                                            </td>
-                                            <td><button className={`star-refined-btn ${p.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(p)}><span className="material-symbols-outlined">{p.is_featured ? 'star_rate' : 'star'}</span></button></td>
-                                            <td><div className="actions-flex-row">
-                                                <button onClick={() => { setIsEditing(true); setEditingId(p.id); setNewProduct(p); setIsModalOpen(true); }} className="btn-edit-modern">EDITAR</button>
-                                                <button onClick={() => { if (window.confirm("¿Borrar?")) supabase.from('products').delete().eq('id', p.id).then(() => fetchData('inventory')); }} className="btn-delete-icon-only"><span className="material-symbols-outlined">delete</span></button>
-                                            </div></td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <button className="btn-add-main" onClick={() => setIsModalOpen(true)}><span className="material-symbols-outlined">add</span> NUEVO PRODUCTO</button>
-                    </section>
-                )}
-
-                {activeTab === 'orders' && (
-                    <section className="fade-in">
-                        <div className="table-container">
-                            <table className="refined-table">
-                                <thead><tr><th>FECHA</th><th>CLIENTE</th><th>TOTAL</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
-                                <tbody>
-                                    {orders && orders.length > 0 ? orders.map(o => (
-                                        <tr key={o.id}>
-                                            <td>{new Date(o.created_at).toLocaleDateString()}</td>
-                                            <td>{o.customer_name || 'Sin especificar'}</td>
-                                            <td>${o.total?.toLocaleString() || '0'}</td>
-                                            <td>
-                                                <select className="status-selector" value={o.status || 'pending'} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}>
-                                                    <option value="pending">Pendiente</option>
-                                                    <option value="shipped">Enviado</option>
-                                                    <option value="completed">Completado</option>
-                                                </select>
-                                            </td>
-                                            <td><button className="btn-edit-modern" onClick={() => setSelectedOrder(o)}>DETALLES</button></td>
-                                        </tr>
-                                    )) : <tr><td colSpan="5" style={{ textAlign: 'center', padding: '40px' }}>No hay ventas registradas aún.</td></tr>}
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                )}
-
-                {activeTab === 'faq' && (
-                    <section className="fade-in">
-                        <div className="table-container">
-                            <table className="refined-table">
-                                <thead><tr><th>PREGUNTA</th><th>RESPUESTA</th><th>ACCIONES</th></tr></thead>
-                                <tbody>
-                                    {faqs.map(f => (
-                                        <tr key={f.id}>
-                                            <td style={{ width: '30%' }}><strong>{f.question}</strong></td>
-                                            <td>{f.answer?.substring(0, 100) || ''}...</td>
-                                            <td>
-                                                <div className="actions-flex-row">
-                                                    <button className="btn-edit-modern" onClick={() => handleEditFAQ(f)}>EDITAR</button>
-                                                    <button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('faqs').delete().eq('id', f.id); fetchData('faq'); } }}>ELIMINAR</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="category-refined-add">
-                            <h3>{isEditingFAQ ? 'Modificar Pregunta' : 'Nueva Pregunta Frecuente'}</h3>
-                            <form onSubmit={handleSaveFAQ} className="faq-form-pro">
-                                <input className="refined-input" placeholder="Pregunta" value={faqForm.question || ''} onChange={e => setFaqForm({ ...faqForm, question: e.target.value })} required />
-                                <textarea className="refined-input" style={{ height: '100px' }} placeholder="Respuesta..." value={faqForm.answer || ''} onChange={e => setFaqForm({ ...faqForm, answer: e.target.value })} required />
-                                <div className="actions-flex-row">
-                                    <button type="submit" className="btn-save-gold-full">{isEditingFAQ ? 'ACTUALIZAR PREGUNTA' : 'AÑADIR PREGUNTA'}</button>
-                                    {isEditingFAQ && <button type="button" className="btn-delete-pro" onClick={() => { setIsEditingFAQ(false); setFaqForm({ question: '', answer: '' }); }}>CANCELAR</button>}
+                {/* LOADER INTERNO PARA EVITAR CONGELAMIENTO */}
+                {tabLoading ? (
+                    <div className="tab-internal-loader"><p>Sincronizando con la estancia...</p></div>
+                ) : (
+                    <>
+                        {/* VISTA INVENTARIO */}
+                        {activeTab === 'inventory' && (
+                            <section className="fade-in">
+                                <div className="stats-refined-grid">
+                                    <div className="stat-card">
+                                        <span className="material-symbols-outlined icon-stat">inventory_2</span>
+                                        <div className="stat-data"><span className="stat-label">Variedad</span><span className="stat-value">{products.length}</span></div>
+                                    </div>
+                                    <div className="stat-card critical">
+                                        <span className="material-symbols-outlined icon-stat">priority_high</span>
+                                        <div className="stat-data"><span className="stat-label">Stock Crítico</span><span className="stat-value">{products.filter(p => p.stock < 5).length}</span></div>
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
-                    </section>
-                )}
-
-                {activeTab === 'settings' && (
-                    <section className="fade-in">
-                        <div className="category-refined-add">
-                            <div className="card-header-pro"><span className="material-symbols-outlined">campaign</span><h3>Configuración Barra Dorada</h3></div>
-                            <div className="settings-grid-pro">
-                                <input className="refined-input" placeholder="Texto del anuncio..." value={siteSettings.banner_text || ''} onChange={e => setSiteSettings({ ...siteSettings, banner_text: e.target.value })} />
-                                <div className="banner-status-control">
-                                    <label>Mostrar barra en la web:</label>
-                                    <input type="checkbox" className="premium-checkbox" checked={siteSettings.banner_active} onChange={e => setSiteSettings({ ...siteSettings, banner_active: e.target.checked })} />
+                                <div className="search-bar-container">
+                                    <span className="material-symbols-outlined">search</span>
+                                    <input type="text" placeholder="Buscar mate..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                                 </div>
-                                <button className="btn-save-gold-full" onClick={handleUpdateSettings}>GUARDAR AJUSTES</button>
-                            </div>
-                        </div>
-                    </section>
-                )}
-
-                {activeTab === 'categories' && (
-                    <section className="fade-in">
-                        <div className="table-container">
-                            <table className="refined-table">
-                                <thead><tr><th>ICONO</th><th>NOMBRE</th><th>ACCIONES</th></tr></thead>
-                                <tbody>
-                                    {categoriesList.map(c => (
-                                        <tr key={c.id}>
-                                            <td className="cell-icon">{c.image_url ? <img src={c.image_url} alt="" className="cat-mini-thumb" /> : c.icon}</td>
-                                            <td className="cell-name"><strong>{c.label}</strong></td>
-                                            <td><button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('categories').delete().eq('id', c.id); fetchData('categories'); } }}>ELIMINAR</button></td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="category-refined-add">
-                            <div className="card-header-pro"><span className="material-symbols-outlined">category</span><h3>Nueva Categoría</h3></div>
-                            <div className="cat-inputs">
-                                <div className="cat-img-box">
-                                    <input type="file" id="cat-img" className="hidden-input" onChange={(e) => uploadImage(e, 'category')} />
-                                    <label htmlFor="cat-img">{newCategory.image_url ? <img src={newCategory.image_url} className="image-preview" /> : <span className="material-symbols-outlined">add_a_photo</span>}</label>
+                                <div className="table-container">
+                                    <table className="refined-table">
+                                        <thead><tr><th>PRODUCTO</th><th>PRECIO</th><th>STOCK</th><th>ESTRELLA</th><th>ACCIONES</th></tr></thead>
+                                        <tbody>
+                                            {filteredProducts.map(p => (
+                                                <tr key={p.id}>
+                                                    <td className="cell-product"><img src={p.image_url || '/assets/placeholder.png'} className="mini-thumb" />{p.name}</td>
+                                                    <td>${p.price.toLocaleString()}</td>
+                                                    <td>
+                                                        <div className="refined-stock-pill">
+                                                            <button className="stock-btn minus" onClick={() => handleUpdateField(p.id, 'stock', p.stock - 1)}>−</button>
+                                                            <span className="stock-qty">{p.stock}</span>
+                                                            <button className="stock-btn plus" onClick={() => handleUpdateField(p.id, 'stock', p.stock + 1)}>+</button>
+                                                        </div>
+                                                    </td>
+                                                    <td><button className={`star-refined-btn ${p.is_featured ? 'active' : ''}`} onClick={() => handleToggleFeatured(p)}><span className="material-symbols-outlined">{p.is_featured ? 'star_rate' : 'star'}</span></button></td>
+                                                    <td><div className="actions-flex-row">
+                                                        <button onClick={() => { setIsEditing(true); setEditingId(p.id); setNewProduct(p); setIsModalOpen(true); }} className="btn-edit-modern">EDITAR</button>
+                                                        <button onClick={() => { if (window.confirm("¿Borrar?")) supabase.from('products').delete().eq('id', p.id).then(() => fetchData('inventory')); }} className="btn-delete-icon-only"><span className="material-symbols-outlined">delete</span></button>
+                                                    </div></td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div className="input-with-label"><label>Nombre</label><input className="refined-input" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required /></div>
-                                <div className="input-with-label" style={{ width: '100px' }}><label>Icono</label><input className="refined-input" style={{ textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} /></div>
-                                <button className="btn-save-gold-full" style={{ marginTop: '22px', height: '54px' }} onClick={async () => {
-                                    const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
-                                    await supabase.from('categories').insert([{ id, label: newCategory.label, icon: newCategory.icon, image_url: newCategory.image_url }]);
-                                    setNewCategory({ label: '', icon: '🧉', image_url: '' });
-                                    fetchData('categories');
-                                    toast.success("Categoría creada");
-                                }}>CREAR CATEGORÍA</button>
-                            </div>
-                        </div>
-                    </section>
+                                <button className="btn-add-main" onClick={() => setIsModalOpen(true)}><span className="material-symbols-outlined">add</span> NUEVO PRODUCTO</button>
+                            </section>
+                        )}
+
+                        {/* VISTA VENTAS */}
+                        {activeTab === 'orders' && (
+                            <section className="fade-in">
+                                <div className="table-container">
+                                    <table className="refined-table">
+                                        <thead><tr><th>FECHA</th><th>CLIENTE</th><th>TOTAL</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
+                                        <tbody>
+                                            {orders && orders.length > 0 ? orders.map(o => (
+                                                <tr key={o.id}>
+                                                    <td>{new Date(o.created_at).toLocaleDateString()}</td>
+                                                    <td>{o.customer_name || 'Sin especificar'}</td>
+                                                    <td>${o.total?.toLocaleString() || '0'}</td>
+                                                    <td>
+                                                        <select className="status-selector" value={o.status || 'pending'} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}>
+                                                            <option value="pending">Pendiente</option>
+                                                            <option value="shipped">Enviado</option>
+                                                            <option value="completed">Completado</option>
+                                                        </select>
+                                                    </td>
+                                                    <td><button className="btn-edit-modern" onClick={() => setSelectedOrder(o)}>DETALLES</button></td>
+                                                </tr>
+                                            )) : <tr><td colSpan="5" style={{ textAlign: 'center', padding: '40px' }}>No hay ventas registradas aún.</td></tr>}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+                        )}
+
+                        {/* VISTA FAQ CON CONTROLADORES DE MODIFICACIÓN */}
+                        {activeTab === 'faq' && (
+                            <section className="fade-in">
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
+                                    <button className="btn-edit-modern" style={{ background: '#1a1614', color: '#a5813a' }} onClick={handleSeedFAQs}>
+                                        ✨ CARGAR PREGUNTAS BASE DE LA GUÍA
+                                    </button>
+                                </div>
+                                <div className="table-container">
+                                    <table className="refined-table">
+                                        <thead><tr><th>PREGUNTA</th><th>RESPUESTA</th><th>ACCIONES</th></tr></thead>
+                                        <tbody>
+                                            {faqs.length > 0 ? faqs.map(f => (
+                                                <tr key={f.id}>
+                                                    <td style={{ width: '30%' }}><strong>{f.question}</strong></td>
+                                                    <td>{f.answer?.substring(0, 100) || ''}...</td>
+                                                    <td>
+                                                        <div className="actions-flex-row">
+                                                            <button className="btn-edit-modern" onClick={() => handleEditFAQ(f)}>EDITAR</button>
+                                                            <button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('faqs').delete().eq('id', f.id).then(() => fetchData('faq')); } }}>ELIMINAR</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            )) : <tr><td colSpan="3" style={{ textAlign: 'center', padding: '40px' }}>No hay preguntas frecuentes cargadas. Tocá el botón de arriba para sembrar las iniciales.</td></tr>}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="category-refined-add">
+                                    <h3>{isEditingFAQ ? 'Modificar Pregunta Frecuente' : 'Nueva Pregunta Frecuente'}</h3>
+                                    <form onSubmit={handleSaveFAQ} className="faq-form-pro">
+                                        <input className="refined-input" placeholder="Pregunta (Ej: ¿Cómo curar el mate?)" value={faqForm.question || ''} onChange={e => setFaqForm({ ...faqForm, question: e.target.value })} required />
+                                        <textarea className="refined-input" style={{ height: '100px' }} placeholder="Respuesta detallada..." value={faqForm.answer || ''} onChange={e => setFaqForm({ ...faqForm, answer: e.target.value })} required />
+                                        <div className="actions-flex-row">
+                                            <button type="submit" className="btn-save-gold-full">{isEditingFAQ ? 'ACTUALIZAR PREGUNTA' : 'AÑADIR PREGUNTA'}</button>
+                                            {isEditingFAQ && <button type="button" className="btn-delete-pro" style={{ padding: '18px' }} onClick={() => { setIsEditingFAQ(false); setFaqForm({ question: '', answer: '' }); }}>CANCELAR</button>}
+                                        </div>
+                                    </form>
+                                </div>
+                            </section>
+                        )}
+
+                        {/* VISTA CONFIGURACIÓN WEB */}
+                        {activeTab === 'settings' && (
+                            <section className="fade-in">
+                                <div className="category-refined-add">
+                                    <div className="card-header-pro"><span className="material-symbols-outlined">campaign</span><h3>Configuración Barra Dorada</h3></div>
+                                    <div className="settings-grid-pro">
+                                        <input className="refined-input" placeholder="Texto del anuncio..." value={siteSettings.banner_text || ''} onChange={e => setSiteSettings({ ...siteSettings, banner_text: e.target.value })} />
+                                        <div className="banner-status-control">
+                                            <label>Mostrar barra en la web:</label>
+                                            <input type="checkbox" className="premium-checkbox" checked={siteSettings.banner_active} onChange={e => setSiteSettings({ ...siteSettings, banner_active: e.target.checked })} />
+                                        </div>
+                                        <button className="btn-save-gold-full" onClick={handleUpdateSettings}>GUARDAR AJUSTES</button>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {/* VISTA CATEGORÍAS */}
+                        {activeTab === 'categories' && (
+                            <section className="fade-in">
+                                <div className="table-container">
+                                    <table className="refined-table">
+                                        <thead><tr><th>ICONO</th><th>NOMBRE</th><th>ACCIONES</th></tr></thead>
+                                        <tbody>
+                                            {categoriesList.map(c => (
+                                                <tr key={c.id}>
+                                                    <td className="cell-icon">{c.image_url ? <img src={c.image_url} alt="" className="cat-mini-thumb" /> : c.icon}</td>
+                                                    <td className="cell-name"><strong>{c.label}</strong></td>
+                                                    <td><button className="btn-delete-pro" onClick={async () => { if (window.confirm("¿Borrar?")) { await supabase.from('categories').delete().eq('id', c.id).then(() => fetchData('categories')); } }}>ELIMINAR</button></td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="category-refined-add">
+                                    <div className="card-header-pro"><span className="material-symbols-outlined">category</span><h3>Nueva Categoría</h3></div>
+                                    <div className="cat-inputs">
+                                        <div className="cat-img-box">
+                                            <input type="file" id="cat-img" className="hidden-input" onChange={(e) => uploadImage(e, 'category')} />
+                                            <label htmlFor="cat-img">{newCategory.image_url ? <img src={newCategory.image_url} className="image-preview" /> : <span className="material-symbols-outlined">add_a_photo</span>}</label>
+                                        </div>
+                                        <div className="input-with-label"><label>Nombre</label><input className="refined-input" value={newCategory.label} onChange={e => setNewCategory({ ...newCategory, label: e.target.value })} required /></div>
+                                        <div className="input-with-label" style={{ width: '100px' }}><label>Icono</label><input className="refined-input" style={{ textAlign: 'center' }} value={newCategory.icon} onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })} /></div>
+                                        <button className="btn-save-gold-full" style={{ marginTop: '22px', height: '54px' }} onClick={async () => {
+                                            const id = newCategory.label.toLowerCase().trim().replace(/ /g, '-');
+                                            await supabase.from('categories').insert([{ id, label: newCategory.label, icon: newCategory.icon, image_url: newCategory.image_url }]);
+                                            setNewCategory({ label: '', icon: '🧉', image_url: '' });
+                                            fetchData('categories');
+                                            toast.success("Categoría creada");
+                                        }}>CREAR CATEGORÍA</button>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+                    </>
                 )}
             </main>
 
