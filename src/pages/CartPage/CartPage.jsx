@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
 import './CartPage.css';
 
-// Asegurate de que el logo esté en src/assets/mp-logo.png
+// Logo de Mercado Pago
 import mpLogo from '../../assets/mp-logo.png';
 
 export default function CartPage() {
@@ -13,6 +13,11 @@ export default function CartPage() {
     const navigate = useNavigate();
     const [dbCategories, setDbCategories] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    // Estados nuevos para Mercado Envíos
+    const [shippingCost, setShippingCost] = useState(0);
+    const [shippingType, setShippingType] = useState('standard'); // 'standard' o 'express'
+    const [calculated, setCalculated] = useState(false);
 
     const [orderData, setOrderData] = useState({
         name: '', email: '', phone: '', method: 'shipment', address: '', city: '', zip: '', notes: ''
@@ -26,6 +31,45 @@ export default function CartPage() {
         fetchCategories();
     }, []);
 
+    // Simulador de costos de Mercado Envíos según Código Postal
+    const handleCalculateShipping = () => {
+        if (!orderData.zip || orderData.zip.trim() === '') {
+            toast.error("Por favor, ingresá un Código Postal válido.");
+            return;
+        }
+
+        const cp = parseInt(orderData.zip);
+
+        // Lógica de tarifas premium (Mendoza vs Resto del País)
+        if (cp >= 5500 && cp <= 5613) {
+            // Tarifas dentro de Mendoza
+            if (shippingType === 'standard') setShippingCost(3500);
+            else setShippingCost(5200);
+        } else {
+            // Tarifas resto de Argentina
+            if (shippingType === 'standard') setShippingCost(5900);
+            else setShippingCost(8400);
+        }
+
+        setCalculated(true);
+        toast.success("Envío de Mercado Envíos calculado");
+    };
+
+    // Recalcular si cambia el tipo de Mercado Envíos
+    useEffect(() => {
+        if (calculated) {
+            handleCalculateShipping();
+        }
+    }, [shippingType]);
+
+    // Si cambia de envío a retiro, el costo de envío vuelve a 0
+    useEffect(() => {
+        if (orderData.method === 'pickup') {
+            setShippingCost(0);
+            setCalculated(false);
+        }
+    }, [orderData.method]);
+
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
     const getCategoryIcon = (slug) => dbCategories.find(c => c.id === slug)?.icon || '🧉';
 
@@ -33,17 +77,30 @@ export default function CartPage() {
         e.preventDefault();
         setLoading(true);
 
+        if (orderData.method === 'shipment' && !calculated) {
+            toast.error("Por favor, calculá el costo de Mercado Envíos antes de continuar.");
+            setLoading(false);
+            return;
+        }
+
+        // Armamos el texto final de entrega blindado para tu Supabase actual
+        const shipmentLabel = shippingType === 'standard'
+            ? 'Mercado Envíos Estándar a Domicilio'
+            : 'Mercado Envíos Express Prioritario';
+
         const shippingAddress = orderData.method === 'pickup'
             ? 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)'
-            : `${orderData.address}, ${orderData.city} (CP: ${orderData.zip})`;
+            : `${orderData.address}, ${orderData.city} (CP: ${orderData.zip}) - [${shipmentLabel}]`;
+
+        const finalTotal = cartTotal + shippingCost;
 
         const { data, error } = await supabase.from('orders').insert([{
             customer_email: orderData.email || 'No proveído',
             customer_name: orderData.name,
             customer_phone: orderData.phone,
-            shipping_method: orderData.method,
+            shipping_method: orderData.method === 'pickup' ? 'pickup' : `mercado_envios_${shippingType}`,
             shipping_address: shippingAddress,
-            total: cartTotal,
+            total: finalTotal,
             items: cart,
             status: 'pending'
         }]).select();
@@ -60,7 +117,6 @@ export default function CartPage() {
         }
     };
 
-    // --- VISTA CARRITO VACÍO (REPARADA Y CENTRADA) ---
     if (!cart || cart.length === 0) {
         return (
             <section className="cart-page-empty-container">
@@ -109,7 +165,7 @@ export default function CartPage() {
                     </div>
                 </div>
 
-                {/* DERECHA: SIDEBAR DE PAGO */}
+                {/* DERECHA: SIDEBAR DE PAGO CON MERCADO ENVÍOS INTEGRADO */}
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Finalizar Compra</h3>
@@ -125,11 +181,40 @@ export default function CartPage() {
 
                             {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
-                                    <input type="text" placeholder="Dirección (Calle y N°)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
-                                    <div className="grid-cp">
-                                        <input type="text" placeholder="Ciudad" required value={orderData.city} onChange={e => setOrderData({ ...orderData, city: e.target.value })} />
-                                        <input type="text" placeholder="CP" required value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
+                                    {/* SECCIÓN INTERACTIVA DE MERCADO ENVÍOS */}
+                                    <div className="mercado-envios-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#eef2ff', padding: '10px 15px', borderRadius: '10px', marginBottom: '15px', border: '1px solid #cbd5e1' }}>
+                                        <span className="material-symbols-outlined" style={{ color: '#2563eb' }}>local_shipping</span>
+                                        <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#1e3a8a' }}>SERVICIO OFICIAL MERCADO ENVÍOS</span>
                                     </div>
+
+                                    <div className="grid-cp" style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+                                        <input type="text" placeholder="Código Postal (CP)" required style={{ marginBottom: '0', flex: '1' }} value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
+                                        <button type="button" className="btn-edit-modern" style={{ height: '48px', whiteSpace: 'nowrap' }} onClick={handleCalculateShipping}>CALCULAR</button>
+                                    </div>
+
+                                    {calculated && (
+                                        <div className="mercado-envios-options" style={{ background: '#f8fafc', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '15px' }}>
+                                            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '700' }}>
+                                                <input type="radio" name="me_type" checked={shippingType === 'standard'} onChange={() => setShippingType('standard')} style={{ accentColor: '#a5813a' }} />
+                                                <div style={{ flex: '1' }}>
+                                                    <div>Estándar a domicilio</div>
+                                                    <small style={{ color: '#64748b', fontWeight: '500' }}>Llega de 3 a 5 días hábiles</small>
+                                                </div>
+                                                <span style={{ color: '#a5813a', fontWeight: '800' }}>{formatCurrency(orderData.zip >= 5500 && orderData.zip <= 5613 ? 3500 : 5900)}</span>
+                                            </label>
+                                            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '700' }}>
+                                                <input type="radio" name="me_type" checked={shippingType === 'express'} onChange={() => setShippingType('express')} style={{ accentColor: '#a5813a' }} />
+                                                <div style={{ flex: '1' }}>
+                                                    <div>Express prioritario</div>
+                                                    <small style={{ color: '#64748b', fontWeight: '500' }}>Llega de 1 a 2 días hábiles</small>
+                                                </div>
+                                                <span style={{ color: '#a5813a', fontWeight: '800' }}>{orderData.zip >= 5500 && orderData.zip <= 5613 ? formatCurrency(5200) : formatCurrency(8400)}</span>
+                                            </label>
+                                        </div>
+                                    )}
+
+                                    <input type="text" placeholder="Dirección (Calle y N°)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
+                                    <input type="text" placeholder="Ciudad" required value={orderData.city} onChange={e => setOrderData({ ...orderData, city: e.target.value })} />
                                 </div>
                             ) : (
                                 <div className="pickup-info-card animate-fade">
@@ -161,9 +246,21 @@ export default function CartPage() {
                         </div>
 
                         <div className="total-summary-card">
+                            {orderData.method === 'shipment' && (
+                                <div className="t-row" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', marginBottom: '10px', fontWeight: '600', color: '#64748b' }}>
+                                    <span>Subtotal</span>
+                                    <span>{formatCurrency(cartTotal)}</span>
+                                </div>
+                            )}
+                            {orderData.method === 'shipment' && (
+                                <div className="t-row" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', marginBottom: '15px', fontWeight: '600', color: '#64748b' }}>
+                                    <span>Costo de Envío</span>
+                                    <span>{shippingCost > 0 ? formatCurrency(shippingCost) : 'Calcular'}</span>
+                                </div>
+                            )}
                             <div className="t-row main-total">
                                 <span>TOTAL</span>
-                                <span>{formatCurrency(cartTotal)}</span>
+                                <span>{formatCurrency(cartTotal + shippingCost)}</span>
                             </div>
                         </div>
 
@@ -178,7 +275,7 @@ export default function CartPage() {
 
                         <div className="secure-footer-real">
                             <span className="material-symbols-outlined">verified_user</span>
-                            Pago procesado por Mercado Pago
+                            Logística y Pago protegidos oficialmente
                         </div>
                     </form>
                 </aside>
