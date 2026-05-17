@@ -7,7 +7,7 @@ import './CartPage.css';
 
 // Importación de los Logos Oficiales
 import mpLogo from '../../assets/mp-logo.png';
-import meLogo from '../../assets/me-logo.png'; // <--- El nuevo logo que guardaste
+import meLogo from '../../assets/me-logo.png'; // <--- Vercel busca este archivo exacto
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
@@ -17,7 +17,7 @@ export default function CartPage() {
 
     // Estados para Mercado Envíos
     const [shippingCost, setShippingCost] = useState(0);
-    const [shippingType, setShippingType] = useState('standard'); // 'standard' o 'express'
+    const [shippingType, setShippingType] = useState('standard');
     const [calculated, setCalculated] = useState(false);
 
     const [orderData, setOrderData] = useState({
@@ -32,7 +32,6 @@ export default function CartPage() {
         fetchCategories();
     }, []);
 
-    // Simulador inteligente de Mercado Envíos
     const handleCalculateShipping = () => {
         if (!orderData.zip || orderData.zip.trim() === '') {
             toast.error("Por favor, ingresá un Código Postal.");
@@ -41,7 +40,6 @@ export default function CartPage() {
 
         const cp = parseInt(orderData.zip);
 
-        // Tarifas dinámicas (Mendoza vs resto del país)
         if (cp >= 5500 && cp <= 5613) {
             if (shippingType === 'standard') setShippingCost(3500);
             else setShippingCost(5200);
@@ -131,7 +129,6 @@ export default function CartPage() {
             <Toaster position="top-center" />
             <div className="cart-container-pro">
 
-                {/* DETALLE DEL CARRITO */}
                 <div className="cart-main-content">
                     <div className="cart-header-actions">
                         <h2>Mi Carrito</h2>
@@ -161,7 +158,6 @@ export default function CartPage() {
                     </div>
                 </div>
 
-                {/* ASIDE DE LIQUIDACIÓN Y PAGO */}
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Finalizar Compra</h3>
@@ -178,17 +174,10 @@ export default function CartPage() {
                             {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
 
-                                    {/* PANEL PREMIUM MERCADO ENVÍOS */}
                                     <div className="mercado-envios-header-badge" style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '12px',
-                                        background: '#fff',
-                                        padding: '12px 16px',
-                                        borderRadius: '14px',
-                                        marginBottom: '15px',
-                                        border: '1.5px solid #fff159',
-                                        boxShadow: '0 4px 12px rgba(255, 241, 89, 0.15)'
+                                        display: 'flex', alignItems: 'center', gap: '12px', background: '#fff',
+                                        padding: '12px 16px', borderRadius: '14px', marginBottom: '15px',
+                                        border: '1.5px solid #fff159', boxShadow: '0 4px 12px rgba(255, 241, 89, 0.15)'
                                     }}>
                                         <img src={meLogo} alt="Mercado Envíos" style={{ height: '24px', width: 'auto' }} />
                                         <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#1a1614', letterSpacing: '0.5px' }}>
@@ -196,23 +185,14 @@ export default function CartPage() {
                                         </span>
                                     </div>
 
-                                    {/* CAMPO CP + BOTÓN AMARILLO OFICIAL */}
                                     <div className="grid-cp" style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
                                         <input type="text" placeholder="Código Postal (CP)" required style={{ marginBottom: '0', flex: '1' }} value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
                                         <button
                                             type="button"
                                             style={{
-                                                height: '52px',
-                                                padding: '0 24px',
-                                                backgroundColor: '#fff159',
-                                                color: '#1a1614',
-                                                border: 'none',
-                                                borderRadius: '14px',
-                                                fontWeight: '800',
-                                                fontSize: '0.75rem',
-                                                cursor: 'pointer',
-                                                transition: '0.2s ease',
-                                                boxShadow: '0 2px 6px rgba(255, 241, 89, 0.3)'
+                                                height: '52px', padding: '0 24px', backgroundColor: '#fff159', color: '#1a1614',
+                                                border: 'none', borderRadius: '14px', fontWeight: '800', fontSize: '0.75rem',
+                                                cursor: 'pointer', transition: '0.2s ease', boxShadow: '0 2px 6px rgba(255, 241, 89, 0.3)'
                                             }}
                                             onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#ebd432'}
                                             onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fff159'}
@@ -222,27 +202,15 @@ export default function CartPage() {
                                         </button>
                                     </div>
 
-                                    {/* OPCIONES DE ENVÍO TIPO MERCADO LIBRE */}
                                     {calculated && (
                                         <div className="mercado-envios-options" style={{
-                                            background: '#f8fafc',
-                                            padding: '15px',
-                                            borderRadius: '14px',
-                                            border: '1.5px solid #e2e8f0',
-                                            marginBottom: '15px',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: '12px'
+                                            background: '#f8fafc', padding: '15px', borderRadius: '14px',
+                                            border: '1.5px solid #e2e8f0', marginBottom: '15px', display: 'flex',
+                                            flexDirection: 'column', gap: '12px'
                                         }}>
                                             <label style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '12px',
-                                                cursor: 'pointer',
-                                                fontSize: '0.85rem',
-                                                fontWeight: '700',
-                                                padding: '10px',
-                                                borderRadius: '10px',
+                                                display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer',
+                                                fontSize: '0.85rem', fontWeight: '700', padding: '10px', borderRadius: '10px',
                                                 border: shippingType === 'standard' ? '1.5px solid #fff159' : '1.5px solid transparent',
                                                 background: shippingType === 'standard' ? '#ffffea' : 'transparent'
                                             }}>
@@ -255,14 +223,8 @@ export default function CartPage() {
                                             </label>
 
                                             <label style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '12px',
-                                                cursor: 'pointer',
-                                                fontSize: '0.85rem',
-                                                fontWeight: '700',
-                                                padding: '10px',
-                                                borderRadius: '10px',
+                                                display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer',
+                                                fontSize: '0.85rem', fontWeight: '700', padding: '10px', borderRadius: '10px',
                                                 border: shippingType === 'express' ? '1.5px solid #fff159' : '1.5px solid transparent',
                                                 background: shippingType === 'express' ? '#ffffea' : 'transparent'
                                             }}>
