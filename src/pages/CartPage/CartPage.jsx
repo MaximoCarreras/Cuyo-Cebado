@@ -68,7 +68,7 @@ export default function CartPage() {
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
     const getCategoryIcon = (slug) => dbCategories.find(c => c.id === slug)?.icon || '🧉';
 
-    // 💥 FUNCIÓN DE PAGO CONECTADA CON TU API DE RENDER 💥
+    // 💥 PROCESO DE CHECKOUT AUTOMATIZADO CON RENDER 💥
     const handleCheckout = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -80,17 +80,18 @@ export default function CartPage() {
         }
 
         try {
-            // Lee la variable que cargamos en Vercel, o cae en localhost de respaldo
+            // Conecta a Render usando la variable de entorno de Vercel
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
-            // Le pegamos directo al endpoint de tu checkout.js del servidor
+            // Petición al backend mandando productos, datos del cliente y costo de envío
             const response = await fetch(`${baseUrl}/api/checkout`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     items: cart,
                     name: orderData.name,
-                    email: orderData.email
+                    email: orderData.email,
+                    shippingCost: shippingCost
                 })
             });
 
@@ -102,7 +103,7 @@ export default function CartPage() {
 
             toast.success("Redirigiendo a Mercado Pago...");
 
-            // Esperamos un segundo y mandamos al cliente al portal oficial de cobros
+            // Limpiamos el carrito y saltamos directo a la pasarela de Mercado Pago
             setTimeout(() => {
                 clearCart();
                 window.location.href = data.init_point;
@@ -174,7 +175,7 @@ export default function CartPage() {
                         <div className="form-inputs-group">
                             <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
 
-                            {/* 💥 CASILLERO AGREGADO: Email para sincronizar con Mercado Pago 💥 */}
+                            {/* Correo obligatorio para Checkout Pro */}
                             <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
 
                             <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
@@ -182,7 +183,7 @@ export default function CartPage() {
                             {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
 
-                                    {/* BANNER LOGÍSTICA EN AMARILLO MERCADO LIBRE */}
+                                    {/* BANNER LOGÍSTICA OFICIAL */}
                                     <div className="mercado-envios-header-badge" style={{
                                         display: 'flex', alignItems: 'center', gap: '12px',
                                         backgroundColor: '#fff159',
@@ -300,7 +301,6 @@ export default function CartPage() {
                             </div>
                         </div>
 
-                        {/* 🟦 BOTÓN PRINCIPAL EN CELESTE MERCADO PAGO - REDIRECCIÓN CONECTADA 🟦 */}
                         <button
                             type="submit"
                             className="btn-mercadopago-pro"
@@ -354,4 +354,4 @@ export default function CartPage() {
             </div>
         </section>
     );
-}   
+}
