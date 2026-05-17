@@ -47,11 +47,20 @@ export default function Navbar() {
 
   return (
     <>
+      {/* 💥 BARRA DORADA CON ANIMACIÓN INFINITA HACIA LA DERECHA 💥 */}
       {banner.active && (
         <div className="announcement-banner">
-          <p>{banner.text}</p>
+          <div className="announcement-banner__track">
+            <div className="announcement-banner__content">
+              <span>{banner.text}</span> • <span>{banner.text}</span> • <span>{banner.text}</span> • <span>{banner.text}</span> •
+            </div>
+            <div className="announcement-banner__content">
+              <span>{banner.text}</span> • <span>{banner.text}</span> • <span>{banner.text}</span> • <span>{banner.text}</span> •
+            </div>
+          </div>
         </div>
       )}
+
       <nav className="navbar">
         <div className="navbar__container">
           <div className="navbar__left">
