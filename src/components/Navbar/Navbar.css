@@ -1,62 +1,73 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@700&display=swap');
 
-/* --- BARRA DORADA EN MOVIMIENTO LINEAL RECTO (HACIA LA DERECHA) --- */
+/* --- CONTENEDOR MAESTRO DE LA MARQUESINA --- */
 .announcement-banner {
-  background: #a5813a;
+  background-color: #a5813a;
   color: #1a1614;
   width: 100% !important;
-  height: 40px !important;
+  height: 38px !important;
+  /* Altura estilizada, más delgada y elegante */
   overflow: hidden !important;
-  /* Impide que se vea una segunda línea abajo */
   display: flex !important;
   align-items: center !important;
-  justify-content: flex-start !important;
-  z-index: 1999;
   position: relative;
-  padding: 0 !important;
-  /* Eliminamos paddings viejos que deforman la barra */
+  border-bottom: 1px solid rgba(26, 22, 20, 0.1);
 }
 
+/* CARRETERA DE ANIMACIÓN */
 .announcement-banner__track {
   display: flex !important;
-  flex-direction: row !important;
-  /* Fuerza a los bloques a ponerse uno al lado del otro */
-  flex-wrap: nowrap !important;
-  /* Prohíbe terminantemente que caigan abajo */
-  width: max-content !important;
-  animation: scroll-right-infinite 30s linear infinite !important;
+  width: max-content;
+  animation: marquee-to-right 28s linear infinite !important;
+  /* Movimiento constante y ultra-fluido */
+  will-change: transform;
 }
 
+/* BLOQUES DE TEXTO HILADOS */
 .announcement-banner__content {
   display: flex !important;
-  flex-direction: row !important;
   align-items: center !important;
-  gap: 20px !important;
-  padding-right: 20px !important;
-  /* Espacio justo para que empalme el bucle */
-  font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
   white-space: nowrap !important;
-  /* Blindaje para que el texto jamás se corte */
+  flex-shrink: 0;
 }
 
-/* KEYFRAMES REPARADOS PARA RECORRIDO HORIZONTAL LIMPIO */
-@keyframes scroll-right-infinite {
+/* ESTILO BOUTIQUE DE LAS FRASES */
+.banner-phrase {
+  display: inline-flex !important;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem !important;
+  /* Tipografía más chica = Más categoría */
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 2px !important;
+  /* Separación de letras estilo premium */
+  padding: 0 25px !important;
+  /* Espaciado perfecto entre repeticiones */
+}
+
+/* SEPARADOR EXCLUSIVO (ROMBO) */
+.banner-diamond {
+  color: #1a1614;
+  opacity: 0.4;
+  /* Sutil, fino, no molesta a la lectura */
+  margin-left: 50px;
+  /* Distancia perfecta hacia la siguiente oración */
+  font-size: 0.7rem;
+}
+
+/* ANIMACIÓN DIRECCIÓN DERECHA SIN TRABAS VISUALES */
+@keyframes marquee-to-right {
   0% {
-    transform: translateX(-50%);
-    /* Comienza desplazado a la mitad */
+    transform: translate3d(-50%, 0, 0);
   }
 
   100% {
-    transform: translateX(0%);
-    /* Se desliza hacia la derecha y resetea invisible */
+    transform: translate3d(0%, 0, 0);
   }
 }
 
-/* --- NAVBAR STICKY --- */
+/* --- NAVBAR STICKY PREMIUM --- */
 .navbar {
   position: sticky;
   top: 0;
@@ -149,7 +160,7 @@
   cursor: pointer;
 }
 
-/* LINKS ESCRITORIO */
+/* BOTONES NAVEGACIÓN */
 .navbar__right {
   display: flex;
   align-items: center;

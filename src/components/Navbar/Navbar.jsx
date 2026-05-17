@@ -47,15 +47,25 @@ export default function Navbar() {
 
   return (
     <>
-      {/* 💥 BARRA DORADA CON ANIMACIÓN INFINITA HACIA LA DERECHA 💥 */}
-      {banner.active && (
+      {/* ✦ BARRA DORADA ULTRA-PREMIUM CON MULTIPLIER DINÁMICO ✦ */}
+      {banner.active && banner.text && (
         <div className="announcement-banner">
           <div className="announcement-banner__track">
+            {/* Carril 1 */}
             <div className="announcement-banner__content">
-              <span>{banner.text}</span> • <span>{banner.text}</span> • <span>{banner.text}</span> • <span>{banner.text}</span> •
+              {Array(8).fill(banner.text).map((text, idx) => (
+                <span key={`c1-${idx}`} className="banner-phrase">
+                  {text} <span className="banner-diamond">✦</span>
+                </span>
+              ))}
             </div>
-            <div className="announcement-banner__content">
-              <span>{banner.text}</span> • <span>{banner.text}</span> • <span>{banner.text}</span> • <span>{banner.text}</span> •
+            {/* Carril 2 (Espejo idéntico para loop infinito) */}
+            <div className="announcement-banner__content" aria-hidden="true">
+              {Array(8).fill(banner.text).map((text, idx) => (
+                <span key={`c2-${idx}`} className="banner-phrase">
+                  {text} <span className="banner-diamond">✦</span>
+                </span>
+              ))}
             </div>
           </div>
         </div>
