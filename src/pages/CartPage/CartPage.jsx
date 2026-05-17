@@ -5,8 +5,9 @@ import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
 import './CartPage.css';
 
-// Logo de Mercado Pago
+// Importación de los Logos Oficiales
 import mpLogo from '../../assets/mp-logo.png';
+import meLogo from '../../assets/me-logo.png'; // <--- El nuevo logo que guardaste
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
@@ -14,7 +15,7 @@ export default function CartPage() {
     const [dbCategories, setDbCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Estados nuevos para Mercado Envíos
+    // Estados para Mercado Envíos
     const [shippingCost, setShippingCost] = useState(0);
     const [shippingType, setShippingType] = useState('standard'); // 'standard' o 'express'
     const [calculated, setCalculated] = useState(false);
@@ -31,38 +32,34 @@ export default function CartPage() {
         fetchCategories();
     }, []);
 
-    // Simulador de costos de Mercado Envíos según Código Postal
+    // Simulador inteligente de Mercado Envíos
     const handleCalculateShipping = () => {
         if (!orderData.zip || orderData.zip.trim() === '') {
-            toast.error("Por favor, ingresá un Código Postal válido.");
+            toast.error("Por favor, ingresá un Código Postal.");
             return;
         }
 
         const cp = parseInt(orderData.zip);
 
-        // Lógica de tarifas premium (Mendoza vs Resto del País)
+        // Tarifas dinámicas (Mendoza vs resto del país)
         if (cp >= 5500 && cp <= 5613) {
-            // Tarifas dentro de Mendoza
             if (shippingType === 'standard') setShippingCost(3500);
             else setShippingCost(5200);
         } else {
-            // Tarifas resto de Argentina
             if (shippingType === 'standard') setShippingCost(5900);
             else setShippingCost(8400);
         }
 
         setCalculated(true);
-        toast.success("Envío de Mercado Envíos calculado");
+        toast.success("Envío calculado correctamente");
     };
 
-    // Recalcular si cambia el tipo de Mercado Envíos
     useEffect(() => {
         if (calculated) {
             handleCalculateShipping();
         }
     }, [shippingType]);
 
-    // Si cambia de envío a retiro, el costo de envío vuelve a 0
     useEffect(() => {
         if (orderData.method === 'pickup') {
             setShippingCost(0);
@@ -78,15 +75,14 @@ export default function CartPage() {
         setLoading(true);
 
         if (orderData.method === 'shipment' && !calculated) {
-            toast.error("Por favor, calculá el costo de Mercado Envíos antes de continuar.");
+            toast.error("Calculá el costo de Mercado Envíos antes de pagar.");
             setLoading(false);
             return;
         }
 
-        // Armamos el texto final de entrega blindado para tu Supabase actual
         const shipmentLabel = shippingType === 'standard'
-            ? 'Mercado Envíos Estándar a Domicilio'
-            : 'Mercado Envíos Express Prioritario';
+            ? 'Mercado Envíos Estándar'
+            : 'Mercado Envíos Express';
 
         const shippingAddress = orderData.method === 'pickup'
             ? 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)'
@@ -109,7 +105,7 @@ export default function CartPage() {
             toast.error("Error al procesar el pedido.");
             setLoading(false);
         } else {
-            toast.success("Redirigiendo a Mercado Pago...");
+            toast.success("Redirigiendo a la pasarela...");
             setTimeout(() => {
                 clearCart();
                 navigate('/');
@@ -135,7 +131,7 @@ export default function CartPage() {
             <Toaster position="top-center" />
             <div className="cart-container-pro">
 
-                {/* IZQUIERDA: LISTA DE PRODUCTOS */}
+                {/* DETALLE DEL CARRITO */}
                 <div className="cart-main-content">
                     <div className="cart-header-actions">
                         <h2>Mi Carrito</h2>
@@ -156,7 +152,7 @@ export default function CartPage() {
                                             <span>{item.quantity}</span>
                                             <button type="button" onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar del carrito?")) removeFromCart(item.id) }}>Eliminar</button>
+                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id) }}>Eliminar</button>
                                     </div>
                                 </div>
                                 <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
@@ -165,7 +161,7 @@ export default function CartPage() {
                     </div>
                 </div>
 
-                {/* DERECHA: SIDEBAR DE PAGO CON MERCADO ENVÍOS INTEGRADO */}
+                {/* ASIDE DE LIQUIDACIÓN Y PAGO */}
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Finalizar Compra</h3>
@@ -181,34 +177,101 @@ export default function CartPage() {
 
                             {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
-                                    {/* SECCIÓN INTERACTIVA DE MERCADO ENVÍOS */}
-                                    <div className="mercado-envios-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#eef2ff', padding: '10px 15px', borderRadius: '10px', marginBottom: '15px', border: '1px solid #cbd5e1' }}>
-                                        <span className="material-symbols-outlined" style={{ color: '#2563eb' }}>local_shipping</span>
-                                        <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#1e3a8a' }}>SERVICIO OFICIAL MERCADO ENVÍOS</span>
+
+                                    {/* PANEL PREMIUM MERCADO ENVÍOS */}
+                                    <div className="mercado-envios-header-badge" style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '12px',
+                                        background: '#fff',
+                                        padding: '12px 16px',
+                                        borderRadius: '14px',
+                                        marginBottom: '15px',
+                                        border: '1.5px solid #fff159',
+                                        boxShadow: '0 4px 12px rgba(255, 241, 89, 0.15)'
+                                    }}>
+                                        <img src={meLogo} alt="Mercado Envíos" style={{ height: '24px', width: 'auto' }} />
+                                        <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#1a1614', letterSpacing: '0.5px' }}>
+                                            LOGÍSTICA OFICIAL INTEGRADA
+                                        </span>
                                     </div>
 
+                                    {/* CAMPO CP + BOTÓN AMARILLO OFICIAL */}
                                     <div className="grid-cp" style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
                                         <input type="text" placeholder="Código Postal (CP)" required style={{ marginBottom: '0', flex: '1' }} value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
-                                        <button type="button" className="btn-edit-modern" style={{ height: '48px', whiteSpace: 'nowrap' }} onClick={handleCalculateShipping}>CALCULAR</button>
+                                        <button
+                                            type="button"
+                                            style={{
+                                                height: '52px',
+                                                padding: '0 24px',
+                                                backgroundColor: '#fff159',
+                                                color: '#1a1614',
+                                                border: 'none',
+                                                borderRadius: '14px',
+                                                fontWeight: '800',
+                                                fontSize: '0.75rem',
+                                                cursor: 'pointer',
+                                                transition: '0.2s ease',
+                                                boxShadow: '0 2px 6px rgba(255, 241, 89, 0.3)'
+                                            }}
+                                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#ebd432'}
+                                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fff159'}
+                                            onClick={handleCalculateShipping}
+                                        >
+                                            CALCULAR
+                                        </button>
                                     </div>
 
+                                    {/* OPCIONES DE ENVÍO TIPO MERCADO LIBRE */}
                                     {calculated && (
-                                        <div className="mercado-envios-options" style={{ background: '#f8fafc', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '15px' }}>
-                                            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '700' }}>
-                                                <input type="radio" name="me_type" checked={shippingType === 'standard'} onChange={() => setShippingType('standard')} style={{ accentColor: '#a5813a' }} />
+                                        <div className="mercado-envios-options" style={{
+                                            background: '#f8fafc',
+                                            padding: '15px',
+                                            borderRadius: '14px',
+                                            border: '1.5px solid #e2e8f0',
+                                            marginBottom: '15px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: '12px'
+                                        }}>
+                                            <label style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '12px',
+                                                cursor: 'pointer',
+                                                fontSize: '0.85rem',
+                                                fontWeight: '700',
+                                                padding: '10px',
+                                                borderRadius: '10px',
+                                                border: shippingType === 'standard' ? '1.5px solid #fff159' : '1.5px solid transparent',
+                                                background: shippingType === 'standard' ? '#ffffea' : 'transparent'
+                                            }}>
+                                                <input type="radio" name="me_type" checked={shippingType === 'standard'} onChange={() => setShippingType('standard')} style={{ accentColor: '#a5813a', width: '16px', height: '16px' }} />
                                                 <div style={{ flex: '1' }}>
-                                                    <div>Estándar a domicilio</div>
-                                                    <small style={{ color: '#64748b', fontWeight: '500' }}>Llega de 3 a 5 días hábiles</small>
+                                                    <div style={{ color: '#1a1614' }}>Estándar a domicilio</div>
+                                                    <small style={{ color: '#00a650', fontWeight: '700' }}>Llega de 3 a 5 días hábiles</small>
                                                 </div>
-                                                <span style={{ color: '#a5813a', fontWeight: '800' }}>{formatCurrency(orderData.zip >= 5500 && orderData.zip <= 5613 ? 3500 : 5900)}</span>
+                                                <span style={{ color: '#1a1614', fontWeight: '800' }}>{formatCurrency(orderData.zip >= 5500 && orderData.zip <= 5613 ? 3500 : 5900)}</span>
                                             </label>
-                                            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '700' }}>
-                                                <input type="radio" name="me_type" checked={shippingType === 'express'} onChange={() => setShippingType('express')} style={{ accentColor: '#a5813a' }} />
+
+                                            <label style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '12px',
+                                                cursor: 'pointer',
+                                                fontSize: '0.85rem',
+                                                fontWeight: '700',
+                                                padding: '10px',
+                                                borderRadius: '10px',
+                                                border: shippingType === 'express' ? '1.5px solid #fff159' : '1.5px solid transparent',
+                                                background: shippingType === 'express' ? '#ffffea' : 'transparent'
+                                            }}>
+                                                <input type="radio" name="me_type" checked={shippingType === 'express'} onChange={() => setShippingType('express')} style={{ accentColor: '#a5813a', width: '16px', height: '16px' }} />
                                                 <div style={{ flex: '1' }}>
-                                                    <div>Express prioritario</div>
-                                                    <small style={{ color: '#64748b', fontWeight: '500' }}>Llega de 1 a 2 días hábiles</small>
+                                                    <div style={{ color: '#1a1614' }}>Express prioritario</div>
+                                                    <small style={{ color: '#00a650', fontWeight: '700' }}>Llega de 1 a 2 días hábiles</small>
                                                 </div>
-                                                <span style={{ color: '#a5813a', fontWeight: '800' }}>{orderData.zip >= 5500 && orderData.zip <= 5613 ? formatCurrency(5200) : formatCurrency(8400)}</span>
+                                                <span style={{ color: '#1a1614', fontWeight: '800' }}>{orderData.zip >= 5500 && orderData.zip <= 5613 ? formatCurrency(5200) : formatCurrency(8400)}</span>
                                             </label>
                                         </div>
                                     )}
