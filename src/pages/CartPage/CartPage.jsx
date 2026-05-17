@@ -103,9 +103,17 @@ export default function CartPage() {
 
             toast.success("Redirigiendo a Mercado Pago...");
 
-            // Limpiamos el carrito y saltamos directo a la pasarela de Mercado Pago
+            // 🛡️ REDIRECCIÓN BLINDADA CONTRA ERRORES DE MINIFICACIÓN 🛡️
             setTimeout(() => {
-                clearCart();
+                try {
+                    if (typeof clearCart === 'function') {
+                        clearCart();
+                    }
+                } catch (contextError) {
+                    console.warn("Aviso: No se pudo vaciar el carrito automáticamente, pero redirigiendo igual.", contextError);
+                }
+
+                // Redirección directa pase lo que pase
                 window.location.href = data.init_point;
             }, 1500);
 
