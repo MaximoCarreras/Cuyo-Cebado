@@ -1,7 +1,3 @@
-/**
- * Webhook Routes — Handles Mercado Pago IPN notifications.
- * POST /api/webhooks/mercadopago — Processes payment notifications.
- */
 import { Router } from 'express';
 import { Payment } from 'mercadopago';
 import { supabaseAdmin } from '../lib/supabase.js';
@@ -9,117 +5,84 @@ import { mpClient } from '../lib/mercadopago.js';
 
 const router = Router();
 
-/**
- * POST /api/webhooks/mercadopago
- * Mercado Pago sends IPN notifications here when payment status changes.
- */
-router.post('/mercadopago', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    /* Acknowledge receipt immediately to avoid MP retries [RM] */
-    res.status(200).send('OK');
+    const { query } = req;
+    // Mercado Pago envía el tipo de evento en 'type' o 'topic'
+    const topic = query.type || query.topic;
 
-    if (!supabaseAdmin || !mpClient) {
-      console.warn('Webhook received but services not configured');
-      return;
-    }
+    if (topic === 'payment') {
+      // El ID único del pago de Mercado Pago
+      const paymentId = query['data.id'] || query.id;
 
-    const { type, data } = req.body;
+      if (!paymentId) {
+        return res.status(400).send('ID de pago no encontrado');
+      }
 
-    /* Only process payment notifications */
-    if (type !== 'payment') return;
+      // 1. Consultamos a Mercado Pago el estado real y oficial de ese pago
+      const payment = new Payment(mpClient);
+      const paymentData = await payment.get({ id: paymentId });
 
-    const paymentId = data?.id;
-    if (!paymentId) return;
+      // 2. Si el pago está aprobado e impactado, procesamos los cambios
+      if (paymentData.status === 'approved') {
+        const orderId = paymentData.external_reference; // El ID de la orden de Supabase
 
-    /* Fetch payment details from Mercado Pago API */
-    const payment = new Payment(mpClient);
-    const paymentData = await payment.get({ id: paymentId });
+        // Buscamos la orden asociada en nuestra base de datos
+        const { data: order, error: orderErr } = await supabaseAdmin
+          .from('orders')
+          .select('*')
+          .eq('id', orderId)
+          .single();
 
-    const orderId = paymentData.external_reference;
-    const mpStatus = paymentData.status; // approved, rejected, pending, etc.
+        if (orderErr || !order) {
+          console.error('Orden no encontrada en Supabase:', orderErr);
+          return res.status(404).send('Orden no encontrada');
+        }
 
-    if (!orderId) {
-      console.warn('Payment without external_reference:', paymentId);
-      return;
-    }
+        // 🛡️ Si la orden ya figura como 'approved', salimos (evita restar stock doble si MP manda el aviso dos veces)
+        if (order.status === 'approved') {
+          return res.status(200).send('La orden ya fue procesada previamente.');
+        }
 
-    // 💥 SINCRONIZACIÓN DE COLOR: Mapeamos los estados oficiales para tu AdminDashboard 💥
-    let finalStatus = 'pending';
-    if (mpStatus === 'approved') finalStatus = 'paid';
-    if (mpStatus === 'rejected' || mpStatus === 'cancelled') finalStatus = 'cancelled';
+        // 3. Modificamos el estado de la orden a APROBADO en tu Panel de Admin
+        const { error: updateOrderErr } = await supabaseAdmin
+          .from('orders')
+          .update({ status: 'approved' })
+          .eq('id', orderId);
 
-    /* Update order status in Supabase */
-    const { error: updateErr } = await supabaseAdmin
-      .from('orders')
-      .update({
-        status: finalStatus,
-        mp_payment_id: String(paymentId),
-      })
-      .eq('id', orderId);
+        if (updateOrderErr) throw updateOrderErr;
 
-    if (updateErr) {
-      console.error('Order update error:', updateErr.message);
-      return;
-    }
-
-    /* If payment approved, decrement stock for each item [IV] */
-    if (mpStatus === 'approved') {
-      const { data: order } = await supabaseAdmin
-        .from('orders')
-        .select('items')
-        .eq('id', orderId)
-        .single();
-
-      if (order?.items) {
+        // 4. Bajamos de forma automática el stock de cada producto comprado
         for (const item of order.items) {
+          // Buscamos el producto en tu tabla por el nombre (title)
+          const { data: product } = await supabaseAdmin
+            .from('products')
+            .select('stock')
+            .eq('name', item.title)
+            .single();
 
-          // 🚚 BLINDAJE DE STOCK: Si no viene product_id, lo buscamos por su nombre/title
-          let targetProductId = item.product_id;
+          if (product) {
+            // Restamos la cantidad comprada asegurándonos de no irnos a números negativos
+            const nuevoStock = Math.max(0, product.stock - item.quantity);
 
-          if (!targetProductId && item.title) {
-            const { data: prod } = await supabaseAdmin
+            // Actualizamos la tabla de stock real
+            await supabaseAdmin
               .from('products')
-              .select('id')
-              .eq('name', item.title)
-              .single();
-            if (prod) targetProductId = prod.id;
-          }
-
-          // Si logramos resolver el ID del mate, procedemos a bajar el stock
-          if (targetProductId) {
-            /* Use RPC or direct update to decrement stock atomically */
-            const { error: stockErr } = await supabaseAdmin
-              .rpc('decrement_stock', {
-                product_id: targetProductId,
-                quantity: Number(item.quantity),
-              });
-
-            /* Fallback if RPC not available: direct decrement */
-            if (stockErr) {
-              const { data: product } = await supabaseAdmin
-                .from('products')
-                .select('stock')
-                .eq('id', targetProductId)
-                .single();
-
-              if (product) {
-                await supabaseAdmin
-                  .from('products')
-                  .update({ stock: Math.max(0, product.stock - Number(item.quantity)) })
-                  .eq('id', targetProductId);
-              }
-            }
+              .update({ stock: nuevoStock })
+              .eq('name', item.title);
           }
         }
-        console.log(`✅ Order ${orderId} successfully marked as PAID. Stock updated in storage.`);
+
+        console.log(`🎉 ¡Éxito total! Orden ${orderId} actualizada y stock descontado.`);
       }
-    } else {
-      console.log(`ℹ️ Order ${orderId} synced with MP status: ${mpStatus} -> Dashboard: ${finalStatus}`);
     }
 
-  } catch (err) {
-    console.error('Webhook processing error:', err);
-    /* Don't re-throw — we already sent 200 */
+    // ⚠️ CRÍTICO: Mercado Pago exige que le respondas un 200 OK rápido para saber que abriste la puerta
+    return res.status(200).send('OK');
+
+  } catch (error) {
+    console.error('Error en el Webhook de Mercado Pago:', error);
+    return res.status(500).send('Internal Server Error');
   }
 });
 
