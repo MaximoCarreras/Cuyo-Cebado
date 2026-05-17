@@ -85,11 +85,8 @@ export default function AdminDashboard() {
         fetchData(tab);
     };
 
-    // SEMILLERO SINCRONIZADO CON TUS PREGUNTAS REALES DE LA GUÍA
     const handleSeedFAQs = async () => {
         setTabLoading(true);
-
-        // Primero vaciamos para evitar duplicados
         await supabase.from('faqs').delete().neq('question', '');
 
         const baseFAQs = [
@@ -282,7 +279,7 @@ export default function AdminDashboard() {
                             </section>
                         )}
 
-                        {/* FAQ CON BOTÓN DE INTEGRACIÓN REAL Y CORRECCIÓN DE DISEÑO */}
+                        {/* FAQ */}
                         {activeTab === 'faq' && (
                             <section className="fade-in">
                                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
@@ -307,7 +304,7 @@ export default function AdminDashboard() {
                                                         </div>
                                                     </td>
                                                 </tr>
-                                            )) : <tr><td colSpan="3" style={{ textAlign: 'center', padding: '40px' }}>No hay preguntas cargadas. Tocá el botón superior dorado para sincronizar las reales de tu web.</td></tr>}
+                                            )) : <tr><td colSpan="3" style={{ textAlign: 'center', padding: '40px' }}>No hay preguntas cargadas.</td></tr>}
                                         </tbody>
                                     </table>
                                 </div>
@@ -325,13 +322,21 @@ export default function AdminDashboard() {
                             </section>
                         )}
 
-                        {/* CONFIGURACIÓN WEB */}
+                        {/* CONFIGURACIÓN WEB (CON EXPLICACIÓN PREMIUM DE LAS COMAS) */}
                         {activeTab === 'settings' && (
                             <section className="fade-in">
                                 <div className="category-refined-add">
                                     <div className="card-header-pro"><span className="material-symbols-outlined">campaign</span><h3>Configuración Barra Dorada</h3></div>
                                     <div className="settings-grid-pro">
-                                        <input className="refined-input" placeholder="Texto del anuncio..." value={siteSettings.banner_text || ''} onChange={e => setSiteSettings({ ...siteSettings, banner_text: e.target.value })} />
+                                        <input
+                                            className="refined-input"
+                                            placeholder="Ej: ENVÍOS A TODO EL PAÍS, CALIDAD PREMIUM, 3 CUOTAS SIN INTERÉS"
+                                            value={siteSettings.banner_text || ''}
+                                            onChange={e => setSiteSettings({ ...siteSettings, banner_text: e.target.value })}
+                                        />
+                                        <p className="field-helper-text" style={{ color: '#a5813a', fontSize: '0.8rem', marginTop: '-10px', marginBottom: '15px', fontWeight: '700' }}>
+                                            💡 ¡Truco Premium! Separá cada una de tus oraciones con una coma ( , ) y el sistema les inyectará el destello de la estrella automáticamente a cada una sin dejar baches.
+                                        </p>
                                         <div className="banner-status-control">
                                             <label>Mostrar barra en la web:</label>
                                             <input type="checkbox" className="premium-checkbox" checked={siteSettings.banner_active} onChange={e => setSiteSettings({ ...siteSettings, banner_active: e.target.checked })} />
@@ -383,7 +388,7 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODAL DETALLES PEDIDO */}
+            {/* MODAL PEDIDO */}
             {selectedOrder && (
                 <div className="refined-modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="refined-modal-card order-modal" onClick={e => e.stopPropagation()}>

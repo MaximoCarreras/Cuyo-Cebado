@@ -45,25 +45,30 @@ export default function Navbar() {
     }
   };
 
+  // 💥 PARSEO DINÁMICO DE ORACIONES SEPARADAS POR COMAS 💥
+  const phrases = banner.text
+    ? banner.text.split(',').map(p => p.trim()).filter(Boolean)
+    : [];
+
   return (
     <>
-      {/* ✦ BARRA DORADA ULTRA-PREMIUM CON MULTIPLIER DINÁMICO ✦ */}
-      {banner.active && banner.text && (
+      {/* ✦ ANNOUNCEMENT BANNER INFINITO MULTI-ORACIÓN ✦ */}
+      {banner.active && phrases.length > 0 && (
         <div className="announcement-banner">
           <div className="announcement-banner__track">
             {/* Carril 1 */}
             <div className="announcement-banner__content">
-              {Array(8).fill(banner.text).map((text, idx) => (
+              {Array(6).fill(phrases).flat().map((phrase, idx) => (
                 <span key={`c1-${idx}`} className="banner-phrase">
-                  {text} <span className="banner-diamond">✦</span>
+                  {phrase} <span className="banner-diamond">✦</span>
                 </span>
               ))}
             </div>
-            {/* Carril 2 (Espejo idéntico para loop infinito) */}
+            {/* Carril 2 Mirror */}
             <div className="announcement-banner__content" aria-hidden="true">
-              {Array(8).fill(banner.text).map((text, idx) => (
+              {Array(6).fill(phrases).flat().map((phrase, idx) => (
                 <span key={`c2-${idx}`} className="banner-phrase">
-                  {text} <span className="banner-diamond">✦</span>
+                  {phrase} <span className="banner-diamond">✦</span>
                 </span>
               ))}
             </div>
