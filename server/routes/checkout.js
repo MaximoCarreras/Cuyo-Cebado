@@ -63,13 +63,20 @@ router.post('/', async (req, res) => {
 
     if (orderErr) throw orderErr;
 
-    // 3. Crear Preferencia de Mercado Pago
+    // 3. Crear Preferencia de Mercado Pago con Mercado Envíos activo
     const preference = new Preference(mpClient);
 
     const response = await preference.create({
       body: {
         items: orderItems,
         payer: { email, name },
+
+        // 🚚 INTEGRACIÓN DE MERCADO ENVÍOS ACTIVA 🚚
+        shipments: {
+          mode: "me2",          // Activa Mercado Envíos oficial en la pantalla de MP
+          local_pickup: true    // Permite al cliente elegir "Retiro" si prefiere pasar por Código Vinario
+        },
+
         back_urls: {
           success: `${FRONTEND_URL}/`,
           failure: `${FRONTEND_URL}/carrito`,
