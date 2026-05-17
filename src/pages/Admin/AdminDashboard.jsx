@@ -111,7 +111,40 @@ export default function AdminDashboard() {
         const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
         if (!error) {
             setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-            toast.success("Venta actualizada");
+            toast.success(`Pedido marcado como ${newStatus}`);
+        }
+    };
+
+    // 💥 FUNCIÓN LOGÍSTICA: CANCELAR PEDIDO Y RESTAURAR STOCK 💥
+    const handleCancelOrder = async (order) => {
+        if (!window.confirm(`¿Seguro que querés CANCELAR el pedido de ${order.customer_name}? Se devolverá el stock disponible.`)) return;
+
+        setTabLoading(true);
+        try {
+            // 1. Cambiar estado a cancelado
+            const { error: statusErr } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', order.id);
+            if (statusErr) throw statusErr;
+
+            // 2. Recorrer los items devueltos e incrementar el stock en Supabase
+            if (order.items && order.items.length > 0) {
+                for (const item of order.items) {
+                    // Buscamos el producto por su nombre (title en la orden)
+                    const { data: prod } = await supabase.from('products').select('id, stock').eq('name', item.title).single();
+
+                    if (prod) {
+                        const newStock = prod.stock + Number(item.quantity);
+                        await supabase.from('products').update({ stock: newStock }).eq('id', prod.id);
+                    }
+                }
+            }
+
+            toast.success("Pedido cancelado. Stock devuelto a la estancia 📦");
+            fetchData('orders');
+        } catch (err) {
+            console.error(err);
+            toast.error("No se pudo procesar la cancelación.");
+        } finally {
+            setTabLoading(false);
         }
     };
 
@@ -251,7 +284,7 @@ export default function AdminDashboard() {
                             </section>
                         )}
 
-                        {/* VENTAS */}
+                        {/* VENTAS CON ACCIÓN DE CANCELAR REPARADA */}
                         {activeTab === 'orders' && (
                             <section className="fade-in">
                                 <div className="table-container">
@@ -259,18 +292,34 @@ export default function AdminDashboard() {
                                         <thead><tr><th>FECHA</th><th>CLIENTE</th><th>TOTAL</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
                                         <tbody>
                                             {orders && orders.length > 0 ? orders.map(o => (
-                                                <tr key={o.id}>
+                                                <tr key={o.id} style={{ opacity: o.status === 'cancelled' ? 0.5 : 1 }}>
                                                     <td>{new Date(o.created_at).toLocaleDateString()}</td>
                                                     <td>{o.customer_name || 'Sin especificar'}</td>
                                                     <td>${o.total?.toLocaleString() || '0'}</td>
                                                     <td>
-                                                        <select className="status-selector" value={o.status || 'pending'} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}>
-                                                            <option value="pending">Pendiente</option>
-                                                            <option value="shipped">Enviado</option>
-                                                            <option value="completed">Completado</option>
+                                                        <select
+                                                            className={`status-selector ${o.status}`}
+                                                            value={o.status || 'pending'}
+                                                            disabled={o.status === 'cancelled'}
+                                                            onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
+                                                        >
+                                                            <option value="pending">Pendiente (Sin Pagar)</option>
+                                                            <option value="paid">Pagado (A preparar)</option>
+                                                            <option value="shipped">Enviado por Correo</option>
+                                                            <option value="completed">Entregado</option>
+                                                            <option value="cancelled">Cancelado</option>
                                                         </select>
                                                     </td>
-                                                    <td><button className="btn-edit-modern" onClick={() => setSelectedOrder(o)}>DETALLES</button></td>
+                                                    <td>
+                                                        <div className="actions-flex-row">
+                                                            <button className="btn-edit-modern" onClick={() => setSelectedOrder(o)}>DETALLES</button>
+                                                            {o.status !== 'cancelled' && (
+                                                                <button className="btn-delete-icon-only" title="Cancelar Orden" onClick={() => handleCancelOrder(o)}>
+                                                                    <span className="material-symbols-outlined">block</span>
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             )) : <tr><td colSpan="5" style={{ textAlign: 'center', padding: '40px' }}>No hay ventas registradas aún.</td></tr>}
                                         </tbody>
@@ -322,18 +371,13 @@ export default function AdminDashboard() {
                             </section>
                         )}
 
-                        {/* CONFIGURACIÓN WEB (CON EXPLICACIÓN PREMIUM DE LAS COMAS) */}
+                        {/* CONFIGURACIÓN WEB */}
                         {activeTab === 'settings' && (
                             <section className="fade-in">
                                 <div className="category-refined-add">
-                                    <div className="card-header-pro"><span className="material-symbols-outlined">campaign</span><h3>Configuración Barra Dorada</h3></div>
+                                    <div className="card-header-pro"><span className="material-symbols-outlined">campaign</span>...<h3>Configuración Barra Dorada</h3></div>
                                     <div className="settings-grid-pro">
-                                        <input
-                                            className="refined-input"
-                                            placeholder="Ej: ENVÍOS A TODO EL PAÍS, CALIDAD PREMIUM, 3 CUOTAS SIN INTERÉS"
-                                            value={siteSettings.banner_text || ''}
-                                            onChange={e => setSiteSettings({ ...siteSettings, banner_text: e.target.value })}
-                                        />
+                                        <input className="refined-input" placeholder="Ej: ENVÍOS A TODO EL PAÍS, CALIDAD PREMIUM" value={siteSettings.banner_text || ''} onChange={e => setSiteSettings({ ...siteSettings, banner_text: e.target.value })} />
                                         <p className="field-helper-text" style={{ color: '#a5813a', fontSize: '0.8rem', marginTop: '-10px', marginBottom: '15px', fontWeight: '700' }}>
                                             💡 ¡Truco Premium! Separá cada una de tus oraciones con una coma ( , ) y el sistema les inyectará el destello de la estrella automáticamente a cada una sin dejar baches.
                                         </p>
@@ -388,32 +432,53 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODAL PEDIDO */}
+            {/* 🚚 MODAL DETALLES PEDIDO EXTENDIDO PARA MERCADO ENVÍOS 🚚 */}
             {selectedOrder && (
                 <div className="refined-modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="refined-modal-card order-modal" onClick={e => e.stopPropagation()}>
                         <header className="modal-refined-header">
-                            <h2>Pedido #{selectedOrder.id?.slice(0, 5).toUpperCase()}</h2>
+                            <h2>Ficha de Venta #{selectedOrder.id?.slice(0, 5).toUpperCase()}</h2>
                             <button className="btn-close-modern-circle" onClick={() => setSelectedOrder(null)}><span className="material-symbols-outlined">close</span></button>
                         </header>
-                        <div className="order-details-grid">
-                            <div className="client-box">
-                                <h3>Información del Cliente</h3>
-                                <p><strong>Nombre:</strong> {selectedOrder.customer_name}</p>
-                                <p><strong>WhatsApp:</strong> {selectedOrder.customer_phone}</p>
-                                <p><strong>Fecha:</strong> {new Date(selectedOrder.created_at).toLocaleString()}</p>
-                                <p><strong>Método:</strong> {selectedOrder.shipping_method === 'pickup' ? 'Retiro en Local' : 'Envío a Domicilio'}</p>
-                                <p><strong>Dirección:</strong> {selectedOrder.shipping_address}</p>
+                        <div className="order-details-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginTop: '20px' }}>
+                            <div className="client-box" style={{ background: '#f8fafc', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0' }}>
+                                <h3 style={{ fontFamily: 'Noto Serif, serif', marginBottom: '15px', color: '#a5813a' }}>Datos de Entrega</h3>
+                                <p style={{ margin: '8px 0' }}><strong>Cliente:</strong> {selectedOrder.customer_name}</p>
+                                <p style={{ margin: '8px 0' }}><strong>WhatsApp:</strong> {selectedOrder.customer_phone}</p>
+                                <p style={{ margin: '8px 0' }}><strong>Email:</strong> {selectedOrder.customer_email || 'No especificado'}</p>
+                                <p style={{ margin: '8px 0' }}><strong>Fecha Compra:</strong> {new Date(selectedOrder.created_at).toLocaleString()}</p>
+                                <hr style={{ border: 'none', borderTop: '1px solid #cbd5e1', margin: '15px 0' }} />
+                                <p style={{ margin: '8px 0' }}><strong>Método de Despacho:</strong></p>
+                                <span style={{
+                                    display: 'inline-block',
+                                    padding: '6px 12px',
+                                    backgroundColor: selectedOrder.shipping_method?.includes('mercado_envios') ? '#fff159' : '#e2e8f0',
+                                    color: '#1a1614',
+                                    fontWeight: '800',
+                                    fontSize: '0.75rem',
+                                    borderRadius: '8px',
+                                    textTransform: 'uppercase',
+                                    marginBottom: '10px'
+                                }}>
+                                    {selectedOrder.shipping_method?.includes('mercado_envios') ? '🚚 MERCADO ENVÍOS ACTIVO' : '🏠 RETIRO EN LOCAL'}
+                                </span>
+                                <p style={{ margin: '8px 0', lineHeight: '1.4' }}><strong>Dirección Postal:</strong> <br />{selectedOrder.shipping_address || 'Retira en local (Código Vinario)'}</p>
                             </div>
-                            <div className="items-box">
-                                <h3>Productos</h3>
-                                {selectedOrder.items?.map((it, i) => (
-                                    <div key={i} className="it-row">
-                                        <span>{it.quantity}x {it.name}</span>
-                                        <span>${(it.price * it.quantity).toLocaleString()}</span>
-                                    </div>
-                                ))}
-                                <div className="total-row-pro"><span>TOTAL</span><span>${selectedOrder.total?.toLocaleString()}</span></div>
+
+                            <div className="items-box" style={{ background: '#f8fafc', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                <div>
+                                    <h3 style={{ fontFamily: 'Noto Serif, serif', marginBottom: '15px', color: '#a5813a' }}>Resumen del Mate</h3>
+                                    {selectedOrder.items?.map((it, i) => (
+                                        <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px dashed #e2e8f0' }}>
+                                            <span style={{ fontWeight: '600' }}>{it.quantity}x {it.title}</span>
+                                            <span style={{ fontWeight: '700' }}>${(it.unit_price * it.quantity).toLocaleString()}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div style={{ background: '#1a1614', color: '#a5813a', padding: '15px', borderRadius: '12px', marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span style={{ fontWeight: '800', fontSize: '0.9rem', color: '#fff' }}>TOTAL PROCESADO</span>
+                                    <span style={{ fontWeight: '800', fontSize: '1.4rem' }}>${selectedOrder.total?.toLocaleString()}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -436,7 +501,7 @@ export default function AdminDashboard() {
                                         <input type="file" id="main-img" className="hidden-input" onChange={(e) => uploadImage(e, 'main')} />
                                         {newProduct.image_url ? (
                                             <div className="preview-container-main">
-                                                <img src={newProduct.image_url} className="image-preview" />
+                                                <img src={newProduct.image_url} className="image-preview" alt="" />
                                                 <button type="button" className="btn-remove-photo-pro" onClick={removeMainImage}><span className="material-symbols-outlined">delete</span></button>
                                             </div>
                                         ) : (
@@ -447,7 +512,7 @@ export default function AdminDashboard() {
                                     <div className="extra-images-grid-admin">
                                         {newProduct.extra_images?.map((img, i) => (
                                             <div key={i} className="mini-thumb-container-pro">
-                                                <img src={img} className="mini-gallery-thumb" />
+                                                <img src={img} className="mini-gallery-thumb" alt="" />
                                                 <button type="button" className="btn-remove-extra-pro" onClick={(e) => removeExtraImage(e, i)}>×</button>
                                             </div>
                                         ))}
