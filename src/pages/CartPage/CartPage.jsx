@@ -15,13 +15,9 @@ export default function CartPage() {
     const [dbCategories, setDbCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Estados para Mercado Envíos
-    const [shippingCost, setShippingCost] = useState(0);
-    const [shippingType, setShippingType] = useState('standard');
-    const [calculated, setCalculated] = useState(false);
-
+    // Estado simplificado: Solo datos esenciales de contacto
     const [orderData, setOrderData] = useState({
-        name: '', email: '', phone: '', method: 'shipment', address: '', city: '', zip: '', notes: ''
+        name: '', email: '', phone: '', notes: ''
     });
 
     useEffect(() => {
@@ -32,66 +28,26 @@ export default function CartPage() {
         fetchCategories();
     }, []);
 
-    const handleCalculateShipping = () => {
-        if (!orderData.zip || orderData.zip.trim() === '') {
-            toast.error("Por favor, ingresá un Código Postal.");
-            return;
-        }
-
-        const cp = parseInt(orderData.zip);
-
-        if (cp >= 5500 && cp <= 5613) {
-            if (shippingType === 'standard') setShippingCost(3500);
-            else setShippingCost(5200);
-        } else {
-            if (shippingType === 'standard') setShippingCost(5900);
-            else setShippingCost(8400);
-        }
-
-        setCalculated(true);
-        toast.success("Envío calculado correctamente");
-    };
-
-    useEffect(() => {
-        if (calculated) {
-            handleCalculateShipping();
-        }
-    }, [shippingType]);
-
-    useEffect(() => {
-        if (orderData.method === 'pickup') {
-            setShippingCost(0);
-            setCalculated(false);
-        }
-    }, [orderData.method]);
-
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
     const getCategoryIcon = (slug) => dbCategories.find(c => c.id === slug)?.icon || '🧉';
 
-    // 💥 PROCESO DE CHECKOUT AUTOMATIZADO CON RENDER 💥
+    // 🚀 CONTROLADOR DE CHECKOUT TOTALMENTE AUTOMÁTICO 🚀
     const handleCheckout = async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        if (orderData.method === 'shipment' && !calculated) {
-            toast.error("Calculá el costo de Mercado Envíos antes de pagar.");
-            setLoading(false);
-            return;
-        }
-
         try {
-            // Conecta a Render usando la variable de entorno de Vercel
+            // Conecta al backend (Render en producción / localhost en desarrollo)
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
-            // Petición al backend mandando productos, datos del cliente y costo de envío
+            // Enviamos el carrito junto con el nombre y el email requeridos
             const response = await fetch(`${baseUrl}/api/checkout`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     items: cart,
                     name: orderData.name,
-                    email: orderData.email,
-                    shippingCost: shippingCost
+                    email: orderData.email
                 })
             });
 
@@ -103,22 +59,22 @@ export default function CartPage() {
 
             toast.success("Redirigiendo a Mercado Pago...");
 
-            // 🛡️ REDIRECCIÓN BLINDADA CONTRA ERRORES DE MINIFICACIÓN 🛡️
+            // 🛡️ Redirección blindada ante minificación
             setTimeout(() => {
                 try {
                     if (typeof clearCart === 'function') {
                         clearCart();
                     }
                 } catch (contextError) {
-                    console.warn("Aviso: No se pudo vaciar el carrito automáticamente, pero redirigiendo igual.", contextError);
+                    console.warn("Aviso: No se pudo vaciar el carrito automáticamente, redirigiendo igual.", contextError);
                 }
 
-                // Redirección directa pase lo que pase
+                // Salto directo a la pasarela externa de Mercado Pago
                 window.location.href = data.init_point;
             }, 1500);
 
         } catch (err) {
-            console.error("Error en checkout flow:", err);
+            console.error("Error en el flujo de checkout:", err);
             toast.error(err.message || "No se pudo conectar con el servidor de pagos.");
             setLoading(false);
         }
@@ -142,6 +98,7 @@ export default function CartPage() {
             <Toaster position="top-center" />
             <div className="cart-container-pro">
 
+                {/* COLUMNA IZQUIERDA: LISTA DE PRODUCTOS */}
                 <div className="cart-main-content">
                     <div className="cart-header-actions">
                         <h2>Mi Carrito</h2>
@@ -171,116 +128,32 @@ export default function CartPage() {
                     </div>
                 </div>
 
+                {/* COLUMNA DERECHA: FORMULARIO PREMIUM DE CLIENTE */}
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
-                        <h3>Finalizar Compra</h3>
-
-                        <div className="shipping-selector">
-                            <button type="button" className={orderData.method === 'shipment' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'shipment' })}>🚚 Envío</button>
-                            <button type="button" className={orderData.method === 'pickup' ? 'active' : ''} onClick={() => setOrderData({ ...orderData, method: 'pickup' })}>🏠 Retiro</button>
-                        </div>
+                        <h3>Datos del Comprador</h3>
 
                         <div className="form-inputs-group">
                             <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
 
-                            {/* Correo obligatorio para Checkout Pro */}
                             <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
 
                             <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
-                            {orderData.method === 'shipment' ? (
-                                <div className="address-fields animate-fade">
-
-                                    {/* BANNER LOGÍSTICA OFICIAL */}
-                                    <div className="mercado-envios-header-badge" style={{
-                                        display: 'flex', alignItems: 'center', gap: '12px',
-                                        backgroundColor: '#fff159',
-                                        padding: '12px 16px', borderRadius: '14px', marginBottom: '15px',
-                                        border: '1.5px solid #ebd432',
-                                        boxShadow: '0 4px 12px rgba(255, 241, 89, 0.25)'
-                                    }}>
-                                        <img src={meLogo} alt="Mercado Envíos" style={{ height: '24px', width: 'auto' }} />
-                                        <span style={{ fontSize: '0.75rem', fontWeight: '900', color: '#1a1614', letterSpacing: '0.5px' }}>
-                                            LOGÍSTICA OFICIAL INTEGRADA
-                                        </span>
-                                    </div>
-
-                                    <div className="grid-cp" style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
-                                        <input type="text" placeholder="Código Postal (CP)" required style={{ marginBottom: '0', flex: '1' }} value={orderData.zip} onChange={e => setOrderData({ ...orderData, zip: e.target.value })} />
-                                        <button
-                                            type="button"
-                                            style={{
-                                                height: '52px', padding: '0 24px', backgroundColor: '#fff159', color: '#1a1614',
-                                                border: 'none', borderRadius: '14px', fontWeight: '800', fontSize: '0.75rem',
-                                                cursor: 'pointer', transition: '0.2s ease', boxShadow: '0 2px 6px rgba(255, 241, 89, 0.3)'
-                                            }}
-                                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#ebd432'}
-                                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fff159'}
-                                            onClick={handleCalculateShipping}
-                                        >
-                                            CALCULAR
-                                        </button>
-                                    </div>
-
-                                    {calculated && (
-                                        <div className="mercado-envios-options" style={{
-                                            background: '#f8fafc', padding: '15px', borderRadius: '14px',
-                                            border: '1.5px solid #e2e8f0', marginBottom: '15px', display: 'flex',
-                                            flexDirection: 'column', gap: '12px'
-                                        }}>
-                                            <label style={{
-                                                display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer',
-                                                fontSize: '0.85rem', fontWeight: '700', padding: '10px', borderRadius: '10px',
-                                                border: shippingType === 'standard' ? '1.5px solid #fff159' : '1.5px solid transparent',
-                                                background: shippingType === 'standard' ? '#ffffea' : 'transparent'
-                                            }}>
-                                                <input type="radio" name="me_type" checked={shippingType === 'standard'} onChange={() => setShippingType('standard')} style={{ accentColor: '#a5813a', width: '16px', height: '16px' }} />
-                                                <div style={{ flex: '1' }}>
-                                                    <div style={{ color: '#1a1614' }}>Estándar a domicilio</div>
-                                                    <small style={{ color: '#00a650', fontWeight: '700' }}>Llega de 3 a 5 días hábiles</small>
-                                                </div>
-                                                <span style={{ color: '#1a1614', fontWeight: '800' }}>{formatCurrency(orderData.zip >= 5500 && orderData.zip <= 5613 ? 3500 : 5900)}</span>
-                                            </label>
-
-                                            <label style={{
-                                                display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer',
-                                                fontSize: '0.85rem', fontWeight: '700', padding: '10px', borderRadius: '10px',
-                                                border: shippingType === 'express' ? '1.5px solid #fff159' : '1.5px solid transparent',
-                                                background: shippingType === 'express' ? '#ffffea' : 'transparent'
-                                            }}>
-                                                <input type="radio" name="me_type" checked={shippingType === 'express'} onChange={() => setShippingType('express')} style={{ accentColor: '#a5813a', width: '16px', height: '16px' }} />
-                                                <div style={{ flex: '1' }}>
-                                                    <div style={{ color: '#1a1614' }}>Express prioritario</div>
-                                                    <small style={{ color: '#00a650', fontWeight: '700' }}>Llega de 1 a 2 días hábiles</small>
-                                                </div>
-                                                <span style={{ color: '#1a1614', fontWeight: '800' }}>{orderData.zip >= 5500 && orderData.zip <= 5613 ? formatCurrency(5200) : formatCurrency(8400)}</span>
-                                            </label>
-                                        </div>
-                                    )}
-
-                                    <input type="text" placeholder="Dirección (Calle y N°)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} />
-                                    <input type="text" placeholder="Ciudad" required value={orderData.city} onChange={e => setOrderData({ ...orderData, city: e.target.value })} />
-                                </div>
-                            ) : (
-                                <div className="pickup-info-card animate-fade">
-                                    <div className="pickup-header">
-                                        <span className="material-symbols-outlined">store</span>
-                                        <div>
-                                            <h4>Código Vinario</h4>
-                                            <p>Punto de Retiro Oficial</p>
-                                        </div>
-                                    </div>
-                                    <div className="pickup-details">
-                                        <p>📍 Av. Colón 701, Mendoza Capital</p>
-                                        <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
-                                        <p>📞 261 238-1448</p>
-                                    </div>
-                                    <a href="https://share.google/c76gmYsh1bYwmbVUc" target="_blank" rel="noreferrer" className="btn-maps-dorado">
-                                        <span className="material-symbols-outlined">location_on</span>
-                                        VER EN GOOGLE MAPS
-                                    </a>
-                                </div>
-                            )}
+                            {/* BANNER INFORMATIVO DE LOGÍSTICA INTEGRADA AUTOMÁTICA */}
+                            <div className="mercado-envios-header-badge" style={{
+                                display: 'flex', alignItems: 'center', gap: '12px',
+                                backgroundColor: '#fff159',
+                                padding: '12px 16px', borderRadius: '14px', marginBottom: '15px',
+                                border: '1.5px solid #ebd432',
+                                boxShadow: '0 4px 12px rgba(255, 241, 89, 0.25)',
+                                marginTop: '10px'
+                            }}>
+                                <img src={meLogo} alt="Mercado Envíos" style={{ height: '24px', width: 'auto' }} />
+                                <span style={{ fontSize: '0.74rem', fontWeight: '900', color: '#1a1614', letterSpacing: '0.5px' }}>
+                                    ENVÍO CALCULADO EN EL PRÓXIMO PASO
+                                </span>
+                            </div>
 
                             <textarea
                                 className="notes-box"
@@ -290,25 +163,18 @@ export default function CartPage() {
                             />
                         </div>
 
+                        {/* RESUMEN DE COMPRA */}
                         <div className="total-summary-card">
-                            {orderData.method === 'shipment' && (
-                                <div className="t-row" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', marginBottom: '10px', fontWeight: '600', color: '#64748b' }}>
-                                    <span>Subtotal</span>
-                                    <span>{formatCurrency(cartTotal)}</span>
-                                </div>
-                            )}
-                            {orderData.method === 'shipment' && (
-                                <div className="t-row" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', marginBottom: '15px', fontWeight: '600', color: '#64748b' }}>
-                                    <span>Costo de Envío</span>
-                                    <span>{shippingCost > 0 ? formatCurrency(shippingCost) : 'Calcular'}</span>
-                                </div>
-                            )}
                             <div className="t-row main-total">
-                                <span>TOTAL</span>
-                                <span>{formatCurrency(cartTotal + shippingCost)}</span>
+                                <span>PRODUCTOS</span>
+                                <span>{formatCurrency(cartTotal)}</span>
                             </div>
+                            <p style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '10px', textAlign: 'center', fontWeight: '700', lineHeight: '1.4' }}>
+                                📌 Vas a poder elegir recibir a domicilio por correo o retirar gratis por el local directamente en la pantalla de pago.
+                            </p>
                         </div>
 
+                        {/* BOTÓN CELESTE OFICIAL DE MERCADO PAGO */}
                         <button
                             type="submit"
                             className="btn-mercadopago-pro"
