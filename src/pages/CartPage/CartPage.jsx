@@ -68,6 +68,7 @@ export default function CartPage() {
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
     const getCategoryIcon = (slug) => dbCategories.find(c => c.id === slug)?.icon || '🧉';
 
+    // 💥 FUNCIÓN DE PAGO CONECTADA CON TU API DE RENDER 💥
     const handleCheckout = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -78,36 +79,39 @@ export default function CartPage() {
             return;
         }
 
-        const shipmentLabel = shippingType === 'standard'
-            ? 'Mercado Envíos Estándar'
-            : 'Mercado Envíos Express';
+        try {
+            // Lee la variable que cargamos en Vercel, o cae en localhost de respaldo
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
-        const shippingAddress = orderData.method === 'pickup'
-            ? 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)'
-            : `${orderData.address}, ${orderData.city} (CP: ${orderData.zip}) - [${shipmentLabel}]`;
+            // Le pegamos directo al endpoint de tu checkout.js del servidor
+            const response = await fetch(`${baseUrl}/api/checkout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    items: cart,
+                    name: orderData.name,
+                    email: orderData.email
+                })
+            });
 
-        const finalTotal = cartTotal + shippingCost;
+            const data = await response.json();
 
-        const { error } = await supabase.from('orders').insert([{
-            customer_email: orderData.email || 'No proveído',
-            customer_name: orderData.name,
-            customer_phone: orderData.phone,
-            shipping_method: orderData.method === 'pickup' ? 'pickup' : `mercado_envios_${shippingType}`,
-            shipping_address: shippingAddress,
-            total: finalTotal,
-            items: cart,
-            status: 'pending'
-        }]);
+            if (!response.ok) {
+                throw new Error(data.error || 'Falla al inicializar la pasarela.');
+            }
 
-        if (error) {
-            toast.error("Error al procesar el pedido.");
-            setLoading(false);
-        } else {
             toast.success("Redirigiendo a Mercado Pago...");
+
+            // Esperamos un segundo y mandamos al cliente al portal oficial de cobros
             setTimeout(() => {
                 clearCart();
-                navigate('/');
-            }, 2000);
+                window.location.href = data.init_point;
+            }, 1500);
+
+        } catch (err) {
+            console.error("Error en checkout flow:", err);
+            toast.error(err.message || "No se pudo conectar con el servidor de pagos.");
+            setLoading(false);
         }
     };
 
@@ -169,6 +173,10 @@ export default function CartPage() {
 
                         <div className="form-inputs-group">
                             <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
+
+                            {/* 💥 CASILLERO AGREGADO: Email para sincronizar con Mercado Pago 💥 */}
+                            <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
+
                             <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
                             {orderData.method === 'shipment' ? (
@@ -292,16 +300,16 @@ export default function CartPage() {
                             </div>
                         </div>
 
-                        {/* 🟦 BOTÓN PRINCIPAL EN CELESTE MERCADO PAGO - LOGO CORREGIDO 🟦 */}
+                        {/* 🟦 BOTÓN PRINCIPAL EN CELESTE MERCADO PAGO - REDIRECCIÓN CONECTADA 🟦 */}
                         <button
                             type="submit"
                             className="btn-mercadopago-pro"
                             disabled={loading}
                             style={{
                                 width: '100%',
-                                padding: '18px', // Aumentamos padding para dar aire
-                                backgroundColor: '#009EE3', // Celeste oficial MP
-                                color: '#ffffff',          // Texto blanco impecable
+                                padding: '18px',
+                                backgroundColor: '#009EE3',
+                                color: '#ffffff',
                                 border: 'none',
                                 borderRadius: '14px',
                                 fontWeight: '800',
@@ -312,7 +320,7 @@ export default function CartPage() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '12px', // Más espacio entre logo y texto
+                                gap: '12px',
                                 marginTop: '20px',
                                 boxShadow: '0 4px 15px rgba(0, 158, 227, 0.2)'
                             }}
@@ -321,15 +329,14 @@ export default function CartPage() {
                         >
                             {loading ? 'Procesando...' : (
                                 <>
-                                    {/* 💥 ARREGLO LOGO: Agrandado a 28px y quitado el filtro de inversión 💥 */}
                                     <img
                                         src={mpLogo}
                                         alt="MP"
                                         className="mp-icon-final"
                                         style={{
-                                            height: '28px', // Más grande (antes 22px)
+                                            height: '28px',
                                             width: 'auto',
-                                            filter: 'none', // QUITADO EL FILTRO DE INVERSIÓN: Ahora se ve en colores oficiales
+                                            filter: 'none',
                                             display: 'block'
                                         }}
                                     />
@@ -347,4 +354,4 @@ export default function CartPage() {
             </div>
         </section>
     );
-}
+}   
