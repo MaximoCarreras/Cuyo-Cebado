@@ -1,9 +1,6 @@
 /**
  * Webhook Routes — Handles Mercado Pago IPN notifications.
  * POST /api/webhooks/mercadopago — Processes payment notifications.
- * 
- * On approved payment: updates order status + decrements product stock.
- * On rejected payment: updates order status to rejected. [SF][SFT]
  */
 import { Router } from 'express';
 import { Payment } from 'mercadopago';
@@ -39,18 +36,23 @@ router.post('/mercadopago', async (req, res) => {
     const paymentData = await payment.get({ id: paymentId });
 
     const orderId = paymentData.external_reference;
-    const status = paymentData.status; // approved, rejected, pending, etc.
+    const mpStatus = paymentData.status; // approved, rejected, pending, etc.
 
     if (!orderId) {
       console.warn('Payment without external_reference:', paymentId);
       return;
     }
 
+    // 💥 SINCRONIZACIÓN DE COLOR: Mapeamos los estados oficiales para tu AdminDashboard 💥
+    let finalStatus = 'pending';
+    if (mpStatus === 'approved') finalStatus = 'paid';
+    if (mpStatus === 'rejected' || mpStatus === 'cancelled') finalStatus = 'cancelled';
+
     /* Update order status in Supabase */
     const { error: updateErr } = await supabaseAdmin
       .from('orders')
       .update({
-        status,
+        status: finalStatus,
         mp_payment_id: String(paymentId),
       })
       .eq('id', orderId);
@@ -61,7 +63,7 @@ router.post('/mercadopago', async (req, res) => {
     }
 
     /* If payment approved, decrement stock for each item [IV] */
-    if (status === 'approved') {
+    if (mpStatus === 'approved') {
       const { data: order } = await supabaseAdmin
         .from('orders')
         .select('items')
@@ -70,33 +72,49 @@ router.post('/mercadopago', async (req, res) => {
 
       if (order?.items) {
         for (const item of order.items) {
-          /* Use RPC or direct update to decrement stock atomically */
-          const { error: stockErr } = await supabaseAdmin
-            .rpc('decrement_stock', {
-              product_id: item.product_id,
-              quantity: item.quantity,
-            });
 
-          /* Fallback if RPC not available: direct decrement */
-          if (stockErr) {
-            const { data: product } = await supabaseAdmin
+          // 🚚 BLINDAJE DE STOCK: Si no viene product_id, lo buscamos por su nombre/title
+          let targetProductId = item.product_id;
+
+          if (!targetProductId && item.title) {
+            const { data: prod } = await supabaseAdmin
               .from('products')
-              .select('stock')
-              .eq('id', item.product_id)
+              .select('id')
+              .eq('name', item.title)
               .single();
+            if (prod) targetProductId = prod.id;
+          }
 
-            if (product) {
-              await supabaseAdmin
+          // Si logramos resolver el ID del mate, procedemos a bajar el stock
+          if (targetProductId) {
+            /* Use RPC or direct update to decrement stock atomically */
+            const { error: stockErr } = await supabaseAdmin
+              .rpc('decrement_stock', {
+                product_id: targetProductId,
+                quantity: Number(item.quantity),
+              });
+
+            /* Fallback if RPC not available: direct decrement */
+            if (stockErr) {
+              const { data: product } = await supabaseAdmin
                 .from('products')
-                .update({ stock: Math.max(0, product.stock - item.quantity) })
-                .eq('id', item.product_id);
+                .select('stock')
+                .eq('id', targetProductId)
+                .single();
+
+              if (product) {
+                await supabaseAdmin
+                  .from('products')
+                  .update({ stock: Math.max(0, product.stock - Number(item.quantity)) })
+                  .eq('id', targetProductId);
+              }
             }
           }
         }
-        console.log(`✅ Order ${orderId} approved. Stock decremented.`);
+        console.log(`✅ Order ${orderId} successfully marked as PAID. Stock updated in storage.`);
       }
     } else {
-      console.log(`ℹ️ Order ${orderId} status: ${status}`);
+      console.log(`ℹ️ Order ${orderId} synced with MP status: ${mpStatus} -> Dashboard: ${finalStatus}`);
     }
 
   } catch (err) {
