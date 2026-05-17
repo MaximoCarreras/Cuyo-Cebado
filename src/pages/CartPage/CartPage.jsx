@@ -174,10 +174,10 @@ export default function CartPage() {
                             {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
 
-                                    {/* 🟨 BANNER LOGÍSTICA EN AMARILLO MERCADO LIBRE 🟨 */}
+                                    {/* BANNER LOGÍSTICA EN AMARILLO MERCADO LIBRE */}
                                     <div className="mercado-envios-header-badge" style={{
                                         display: 'flex', alignItems: 'center', gap: '12px',
-                                        backgroundColor: '#fff159', // Amarillo oficial ML
+                                        backgroundColor: '#fff159',
                                         padding: '12px 16px', borderRadius: '14px', marginBottom: '15px',
                                         border: '1.5px solid #ebd432',
                                         boxShadow: '0 4px 12px rgba(255, 241, 89, 0.25)'
@@ -292,19 +292,18 @@ export default function CartPage() {
                             </div>
                         </div>
 
-                        {/* 🟦 BOTÓN PRINCIPAL EN CELESTE MERCADO PAGO 🟦 */}
+                        {/* 🟦 BOTÓN PRINCIPAL EN CELESTE MERCADO PAGO - LOGO CORREGIDO 🟦 */}
                         <button
                             type="submit"
                             className="btn-mercadopago-pro"
                             disabled={loading}
                             style={{
                                 width: '100%',
-                                padding: '18px',
-                                backgroundColor: '#009EE3', // El celeste oficial de Mercado Pago
-                                color: '#ffffff',          // Texto blanco para contraste de lectura impecable
+                                padding: '18px', // Aumentamos padding para dar aire
+                                backgroundColor: '#009EE3', // Celeste oficial MP
+                                color: '#ffffff',          // Texto blanco impecable
                                 border: 'none',
                                 borderRadius: '14px',
-                                fontProject: 'Inter',
                                 fontWeight: '800',
                                 cursor: 'pointer',
                                 transition: '0.3s ease',
@@ -313,21 +312,27 @@ export default function CartPage() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '10px',
+                                gap: '12px', // Más espacio entre logo y texto
                                 marginTop: '20px',
                                 boxShadow: '0 4px 15px rgba(0, 158, 227, 0.2)'
                             }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.backgroundColor = '#0086c3'; // Tono más oscuro al pasar el mouse
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.backgroundColor = '#009EE3'; // Vuelve al celeste base
-                            }}
+                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0086c3'}
+                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#009EE3'}
                         >
                             {loading ? 'Procesando...' : (
                                 <>
-                                    {/* Invertimos el logo a blanco puro para que resalte hermoso sobre el fondo celeste */}
-                                    <img src={mpLogo} alt="MP" className="mp-icon-final" style={{ height: '22px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
+                                    {/* 💥 ARREGLO LOGO: Agrandado a 28px y quitado el filtro de inversión 💥 */}
+                                    <img
+                                        src={mpLogo}
+                                        alt="MP"
+                                        className="mp-icon-final"
+                                        style={{
+                                            height: '28px', // Más grande (antes 22px)
+                                            width: 'auto',
+                                            filter: 'none', // QUITADO EL FILTRO DE INVERSIÓN: Ahora se ve en colores oficiales
+                                            display: 'block'
+                                        }}
+                                    />
                                     PAGAR CON MERCADO PAGO
                                 </>
                             )}
