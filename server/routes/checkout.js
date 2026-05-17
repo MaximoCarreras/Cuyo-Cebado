@@ -15,9 +15,9 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // 💥 RECIBIMOS EL SHIPPING COST DESDE EL FRONTEND 💥
-    const { items, email, name, shippingCost } = req.body;
+    const { items, email, name } = req.body;
 
+    // 1. Verificación de Stock en Supabase
     const productIds = items.map(i => i.id);
     const { data: products, error: fetchErr } = await supabaseAdmin
       .from('products')
@@ -41,18 +41,9 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // 🚚 SI HAY COSTO DE ENVÍO, LO AGREGAMOS COMO UN ÍTEM MÁS 🚚
-    if (shippingCost && Number(shippingCost) > 0) {
-      orderItems.push({
-        title: 'Costo de Envío a domicilio',
-        unit_price: Number(shippingCost),
-        quantity: 1,
-        currency_id: 'ARS'
-      });
-    }
-
     const total = orderItems.reduce((sum, i) => sum + i.unit_price * i.quantity, 0);
 
+    // 2. Crear orden en Supabase
     const { data: order, error: orderErr } = await supabaseAdmin
       .from('orders')
       .insert({
@@ -66,13 +57,32 @@ router.post('/', async (req, res) => {
 
     if (orderErr) throw orderErr;
 
+    // 3. Inicializar la preferencia de Mercado Pago
     const preference = new Preference(mpClient);
 
-    // 🛠️ CONFIGURACIÓN LIMPIA SIN FORZAR ME2 🛠️
     const response = await preference.create({
       body: {
-        items: orderItems,
+        // ✨ INYECTAMOS PAQUETERÍA AUTOMÁTICA A CADA PRODUCTO ✨
+        items: orderItems.map(item => ({
+          title: item.title,
+          unit_price: item.unit_price,
+          quantity: item.quantity,
+          currency_id: 'ARS',
+          dimensions: {
+            weight: 450,   // Peso promedio en gramos (ej: un mate completo con embalaje)
+            height: 15,    // Alto en cm
+            width: 15,     // Ancho en cm
+            depth: 15      // Profundidad en cm
+          }
+        })),
         payer: { email, name },
+
+        // 🚚 INTEGRACIÓN DE MERCADO ENVÍOS AUTOMÁTICA RE-ACTIVADA 🚚
+        shipments: {
+          mode: "me2",
+          local_pickup: true // Habilita la opción "Retiro gratis por el local"
+        },
+
         back_urls: {
           success: `${FRONTEND_URL}/`,
           failure: `${FRONTEND_URL}/carrito`,
