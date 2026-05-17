@@ -5,9 +5,9 @@ import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
 import './CartPage.css';
 
-// Importación de los Logos Oficiales
+// Importación de los Logos Oficiales (asegurate que estén en src/assets)
 import mpLogo from '../../assets/mp-logo.png';
-import meLogo from '../../assets/me-logo.png'; // <--- Vercel busca este archivo exacto
+import meLogo from '../../assets/me-logo.png';
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
@@ -97,13 +97,14 @@ export default function CartPage() {
             total: finalTotal,
             items: cart,
             status: 'pending'
-        }]).select();
+        }]).select().single();
 
         if (error) {
             toast.error("Error al procesar el pedido.");
             setLoading(false);
         } else {
-            toast.success("Redirigiendo a la pasarela...");
+            toast.success("Redirigiendo a Mercado Pago...");
+            // Aquí iría la lógica para abrir el Checkout Pro
             setTimeout(() => {
                 clearCart();
                 navigate('/');
@@ -289,10 +290,47 @@ export default function CartPage() {
                             </div>
                         </div>
 
-                        <button type="submit" className="btn-mercadopago-pro" disabled={loading}>
+                        {/* 💥 BOTÓN PRINCIPAL ACTUALIZADO CON AMARILLO OFICIAL (#FFE600) 💥 */}
+                        <button
+                            type="submit"
+                            className="btn-mercadopago-pro"
+                            disabled={loading}
+                            style={{
+                                width: '100%',
+                                padding: '18px',
+                                backgroundColor: '#FFE600', // El amarillo característico de Mercado Pago
+                                color: '#1a1614',          // Texto negro para contraste perfecto
+                                border: '2px solid #E6CF00', // Sutil borde más oscuro para dar profundidad
+                                borderRadius: '14px',
+                                fontWeight: '800',
+                                cursor: 'pointer',
+                                transition: '0.3s ease',
+                                textTransform: 'uppercase',
+                                letterSpacing: '1px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '10px',
+                                marginTop: '20px',
+                                boxShadow: '0 4px 15px rgba(255, 230, 0, 0.15)' // Sombra amarilla suave
+                            }}
+                            // EFECTOS INTERACTIVOS (HOVER)
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.backgroundColor = '#009EE3'; // Cambia al azul de acción de MP
+                                e.currentTarget.style.color = '#fff';             // Texto blanco en hover
+                                e.currentTarget.style.borderColor = '#007BB2';   // Borde azul más oscuro
+                                e.currentTarget.querySelector('img').style.filter = 'brightness(0) invert(1)'; // Logo MP se vuelve blanco
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.backgroundColor = '#FFE600'; // Vuelve al amarillo oficial
+                                e.currentTarget.style.color = '#1a1614';          // Vuelve al texto negro
+                                e.currentTarget.style.borderColor = '#E6CF00';   // Vuelve al borde amarillo oscuro
+                                e.currentTarget.querySelector('img').style.filter = 'none'; // Logo MP vuelve a color normal
+                            }}
+                        >
                             {loading ? 'Procesando...' : (
                                 <>
-                                    <img src={mpLogo} alt="MP" className="mp-icon-final" />
+                                    <img src={mpLogo} alt="MP" className="mp-icon-final" style={{ height: '22px', width: 'auto', transition: '0.3s' }} />
                                     PAGAR CON MERCADO PAGO
                                 </>
                             )}
