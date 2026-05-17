@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
 import './CartPage.css';
 
-// Importación de los Logos Oficiales (asegurate que estén en src/assets)
+// Importación de los Logos Oficiales
 import mpLogo from '../../assets/mp-logo.png';
 import meLogo from '../../assets/me-logo.png';
 
@@ -88,7 +88,7 @@ export default function CartPage() {
 
         const finalTotal = cartTotal + shippingCost;
 
-        const { data, error } = await supabase.from('orders').insert([{
+        const { error } = await supabase.from('orders').insert([{
             customer_email: orderData.email || 'No proveído',
             customer_name: orderData.name,
             customer_phone: orderData.phone,
@@ -97,14 +97,13 @@ export default function CartPage() {
             total: finalTotal,
             items: cart,
             status: 'pending'
-        }]).select().single();
+        }]);
 
         if (error) {
             toast.error("Error al procesar el pedido.");
             setLoading(false);
         } else {
             toast.success("Redirigiendo a Mercado Pago...");
-            // Aquí iría la lógica para abrir el Checkout Pro
             setTimeout(() => {
                 clearCart();
                 navigate('/');
@@ -175,13 +174,16 @@ export default function CartPage() {
                             {orderData.method === 'shipment' ? (
                                 <div className="address-fields animate-fade">
 
+                                    {/* 🟨 BANNER LOGÍSTICA EN AMARILLO MERCADO LIBRE 🟨 */}
                                     <div className="mercado-envios-header-badge" style={{
-                                        display: 'flex', alignItems: 'center', gap: '12px', background: '#fff',
+                                        display: 'flex', alignItems: 'center', gap: '12px',
+                                        backgroundColor: '#fff159', // Amarillo oficial ML
                                         padding: '12px 16px', borderRadius: '14px', marginBottom: '15px',
-                                        border: '1.5px solid #fff159', boxShadow: '0 4px 12px rgba(255, 241, 89, 0.15)'
+                                        border: '1.5px solid #ebd432',
+                                        boxShadow: '0 4px 12px rgba(255, 241, 89, 0.25)'
                                     }}>
                                         <img src={meLogo} alt="Mercado Envíos" style={{ height: '24px', width: 'auto' }} />
-                                        <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#1a1614', letterSpacing: '0.5px' }}>
+                                        <span style={{ fontSize: '0.75rem', fontWeight: '900', color: '#1a1614', letterSpacing: '0.5px' }}>
                                             LOGÍSTICA OFICIAL INTEGRADA
                                         </span>
                                     </div>
@@ -290,7 +292,7 @@ export default function CartPage() {
                             </div>
                         </div>
 
-                        {/* 💥 BOTÓN PRINCIPAL ACTUALIZADO CON AMARILLO OFICIAL (#FFE600) 💥 */}
+                        {/* 🟦 BOTÓN PRINCIPAL EN CELESTE MERCADO PAGO 🟦 */}
                         <button
                             type="submit"
                             className="btn-mercadopago-pro"
@@ -298,10 +300,11 @@ export default function CartPage() {
                             style={{
                                 width: '100%',
                                 padding: '18px',
-                                backgroundColor: '#FFE600', // El amarillo característico de Mercado Pago
-                                color: '#1a1614',          // Texto negro para contraste perfecto
-                                border: '2px solid #E6CF00', // Sutil borde más oscuro para dar profundidad
+                                backgroundColor: '#009EE3', // El celeste oficial de Mercado Pago
+                                color: '#ffffff',          // Texto blanco para contraste de lectura impecable
+                                border: 'none',
                                 borderRadius: '14px',
+                                fontProject: 'Inter',
                                 fontWeight: '800',
                                 cursor: 'pointer',
                                 transition: '0.3s ease',
@@ -312,25 +315,19 @@ export default function CartPage() {
                                 justifyContent: 'center',
                                 gap: '10px',
                                 marginTop: '20px',
-                                boxShadow: '0 4px 15px rgba(255, 230, 0, 0.15)' // Sombra amarilla suave
+                                boxShadow: '0 4px 15px rgba(0, 158, 227, 0.2)'
                             }}
-                            // EFECTOS INTERACTIVOS (HOVER)
                             onMouseOver={(e) => {
-                                e.currentTarget.style.backgroundColor = '#009EE3'; // Cambia al azul de acción de MP
-                                e.currentTarget.style.color = '#fff';             // Texto blanco en hover
-                                e.currentTarget.style.borderColor = '#007BB2';   // Borde azul más oscuro
-                                e.currentTarget.querySelector('img').style.filter = 'brightness(0) invert(1)'; // Logo MP se vuelve blanco
+                                e.currentTarget.style.backgroundColor = '#0086c3'; // Tono más oscuro al pasar el mouse
                             }}
                             onMouseOut={(e) => {
-                                e.currentTarget.style.backgroundColor = '#FFE600'; // Vuelve al amarillo oficial
-                                e.currentTarget.style.color = '#1a1614';          // Vuelve al texto negro
-                                e.currentTarget.style.borderColor = '#E6CF00';   // Vuelve al borde amarillo oscuro
-                                e.currentTarget.querySelector('img').style.filter = 'none'; // Logo MP vuelve a color normal
+                                e.currentTarget.style.backgroundColor = '#009EE3'; // Vuelve al celeste base
                             }}
                         >
                             {loading ? 'Procesando...' : (
                                 <>
-                                    <img src={mpLogo} alt="MP" className="mp-icon-final" style={{ height: '22px', width: 'auto', transition: '0.3s' }} />
+                                    {/* Invertimos el logo a blanco puro para que resalte hermoso sobre el fondo celeste */}
+                                    <img src={mpLogo} alt="MP" className="mp-icon-final" style={{ height: '22px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
                                     PAGAR CON MERCADO PAGO
                                 </>
                             )}
