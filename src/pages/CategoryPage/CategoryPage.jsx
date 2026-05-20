@@ -8,7 +8,7 @@ export default function CategoryPage() {
     const { categoryId } = useParams();
     const { addToCart } = useCart();
     const [dbProducts, setDbProducts] = useState([]);
-    const [currentCategory, setCurrentCategory] = useState(null); // Info de la categoría actual
+    const [currentCategory, setCurrentCategory] = useState(null);
     const [loading, setLoading] = useState(true);
     const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
@@ -18,8 +18,6 @@ export default function CategoryPage() {
         const fetchData = async () => {
             try {
                 setLoading(true);
-
-                // 1. Traemos los productos de esta categoría
                 const { data: pData, error: pError } = await supabase
                     .from('products')
                     .select('*')
@@ -27,21 +25,18 @@ export default function CategoryPage() {
                 if (pError) throw pError;
                 setDbProducts(pData || []);
 
-                // 2. Traemos la info de la categoría (Para el Título y el Emoji)
                 const { data: cData } = await supabase
                     .from('categories')
                     .select('*')
                     .eq('id', categoryId)
                     .single();
                 if (cData) setCurrentCategory(cData);
-
             } catch (error) {
                 console.error("Error en CategoryPage:", error);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchData();
         setSelectedMaterial('todos');
         setSelectedType('todos');
@@ -119,22 +114,19 @@ export default function CategoryPage() {
                         {filteredProducts.map(product => (
                             <Link key={product.id} to={`/producto/${product.slug}`} className="product-card-link-mafia">
                                 <div className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
-
-                                    {product.stock === 0 ? (
-                                        <span className="product-badge out-of-stock">Próximo Ingreso</span>
-                                    ) : product.is_featured ? (
+                                    
+                                    {/* SOLO MUESTRA BADGES DE VENTA O PROPIOS, NO DE STOCK */}
+                                    {product.is_featured ? (
                                         <span className="product-badge">Top Ventas</span>
                                     ) : product.badge ? (
                                         <span className="product-badge">{product.badge}</span>
                                     ) : null}
 
-                                    <div className="product-image-container-mafia" style={{ overflow: 'hidden' }}>
+                                    <div className="product-image-container-mafia">
                                         <img
                                             src={product.image_url || '/assets/placeholder.png'}
                                             alt={product.name}
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                         />
-                                        {product.stock === 0 && <div className="out-of-stock-overlay-mafia">Próximamente</div>}
                                     </div>
 
                                     <div className="product-info-mafia">
