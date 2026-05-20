@@ -19,13 +19,13 @@ router.post('/', async (req, res) => {
         return res.status(400).send('ID de pago no encontrado');
       }
 
-      // 1. Consultamos a Mercado Pago el estado real y oficial de ese pago
+      // 1. Consultamos a Mercado Pago el estado real de ese pago
       const payment = new Payment(mpClient);
       const paymentData = await payment.get({ id: paymentId });
 
-      // 2. Si el pago está aprobado e impactado, procesamos los cambios
+      // 2. Si el pago está aprobado, procesamos el pedido
       if (paymentData.status === 'approved') {
-        const orderId = paymentData.external_reference; // El ID de la orden de Supabase
+        const orderId = paymentData.external_reference; // El ID de la orden en tu Supabase
 
         // Buscamos la orden asociada en nuestra base de datos
         const { data: order, error: orderErr } = await supabaseAdmin
@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
           return res.status(404).send('Orden no encontrada');
         }
 
-        // 🛡️ Si la orden ya figura como 'approved', salimos (evita restar stock doble si MP manda el aviso dos veces)
+        // 🛡️ Si la orden ya figura como 'approved', salimos (evita restar stock doble)
         if (order.status === 'approved') {
           return res.status(200).send('La orden ya fue procesada previamente.');
         }
@@ -77,7 +77,7 @@ router.post('/', async (req, res) => {
       }
     }
 
-    // ⚠️ CRÍTICO: Mercado Pago exige que le respondas un 200 OK rápido para saber que abriste la puerta
+    // ⚠️ CRÍTICO: Mercado Pago exige que le respondas un 200 OK rápido para saber que recibió el aviso
     return res.status(200).send('OK');
 
   } catch (error) {
