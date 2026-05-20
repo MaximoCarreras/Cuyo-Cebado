@@ -1,294 +1,213 @@
-/* Estructura Base */
-.category-page {
-    max-width: 1400px;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Serif:wght@700&display=swap');
+
+.products-page {
+    padding: 120px 24px 100px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 140px 24px 80px;
-    background-color: #fdfaf7;
     min-height: 100vh;
+    font-family: 'Inter', sans-serif;
 }
 
-.category-page__nav {
-    margin-bottom: 30px;
-}
-
-.btn-back {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #a5813a;
-    text-decoration: none;
-    font-weight: 800;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-}
-
-.category-page__main {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 50px;
-}
-
-/* Sidebar Estilo Boutique */
-.sidebar-mafia {
-    background: #1a1614;
-    padding: 35px;
-    border-radius: 20px;
-    color: #fdfaf7;
-    height: fit-content;
-    position: sticky;
-    top: 120px;
-    border: 1px solid rgba(165, 129, 58, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar__title {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 30px;
-}
-
-.sidebar__title h3 {
+.products-page__title {
     font-family: 'Noto Serif', serif;
-    color: #a5813a;
-    text-transform: uppercase;
-    font-size: 1rem;
-    letter-spacing: 2px;
-}
-
-.gold-dot {
-    width: 6px;
-    height: 6px;
-    background: #a5813a;
-    border-radius: 50%;
-}
-
-.filter-group {
-    margin-bottom: 30px;
-}
-
-.filter-group label {
-    display: block;
-    font-size: 0.7rem;
-    color: #888;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    font-weight: 800;
-}
-
-.filter-group label b {
-    color: #a5813a;
-}
-
-.filter-group select {
-    width: 100%;
-    padding: 14px;
-    background: #2b2520;
-    border: 1px solid rgba(165, 129, 58, 0.2);
-    color: #fdfaf7;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.price-slider-mafia {
-    width: 100%;
-    accent-color: #a5813a;
-    cursor: pointer;
-}
-
-/* Grilla y Header */
-.section__title {
-    font-family: 'Noto Serif', serif;
-    font-size: 3rem;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
     color: #1a1614;
-    margin-bottom: 10px;
-}
-
-.products-count {
-    color: #888;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    margin-bottom: 30px;
-}
-
-.products-grid-mafia {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 30px;
-}
-
-.product-card-link-mafia {
-    text-decoration: none;
-    color: inherit;
-}
-
-.product-card-mafia {
-    background: #fff;
-    border-radius: 15px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    transition: 0.4s ease;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.product-card-mafia:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-}
-
-/* Badges Premium */
-.product-badge {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: #1a1614;
-    color: #a5813a;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 0.65rem;
+    text-align: center;
     font-weight: 800;
-    text-transform: uppercase;
-    z-index: 10;
+    margin-top: 0;
+    margin-bottom: 50px;
 }
 
-.product-badge.out-of-stock {
-    background: rgba(26, 22, 20, 0.85);
-    color: #a5813a;
-    border: 1px solid #a5813a;
-    backdrop-filter: blur(4px);
+.products-page__title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: #a5813a;
+    margin: 20px auto 0;
+    border-radius: 2px;
 }
 
-.out-of-stock-card {
-    opacity: 0.85;
-}
-
-.product-image-container-mafia {
-    width: 100%;
-    aspect-ratio: 1;
-    background-color: #f9f7f5;
-    display: flex;
-    align-items: center;
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
     justify-content: center;
 }
 
-.emoji-display {
-    font-size: 5rem;
-}
-
-.product-info-mafia {
-    padding: 25px;
+.product-category-card {
+    background-color: #1a1614;
+    border-radius: 20px;
+    padding: 50px 30px;
+    text-decoration: none;
     text-align: center;
-    flex-grow: 1;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(165, 129, 58, 0.3);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.product-tag-mafia {
-    font-size: 0.6rem;
-    font-weight: 800;
-    color: #a5813a;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+.product-category-card:hover {
+    transform: translateY(-10px);
+    border-color: #a5813a;
+    box-shadow: 0 15px 40px rgba(165, 129, 58, 0.2);
 }
 
-.product-name-mafia {
-    font-family: 'Noto Serif', serif;
-    font-size: 1.15rem;
-    color: #1a1614;
-    margin-bottom: 15px;
-}
-
-.product-price-mafia {
-    font-size: 1.4rem;
-    font-weight: 900;
-    color: #1a1614;
+.category-card__icon {
+    font-size: 3.5rem;
     margin-bottom: 20px;
+    transition: transform 0.3s;
 }
 
-/* Botón de Agregar (Estilo Gold) */
-.btn-add-mafia {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #1a1614 0%, #2b2520 100%);
-    color: #fdfaf7;
-    border: 1px solid rgba(165, 129, 58, 0.2);
-    border-radius: 10px;
+.category-card__icon img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.product-category-card:hover .category-card__icon {
+    transform: scale(1.15);
+}
+
+.category-card__info h3 {
+    color: #fff;
+    font-family: 'Noto Serif', serif;
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+}
+
+.category-card__info span {
+    color: #a5813a;
     font-weight: 800;
     text-transform: uppercase;
-    font-size: 0.7rem;
-    cursor: pointer;
-    transition: 0.3s ease;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
 }
 
-.btn-add-mafia:hover:not(.btn-disabled) {
+.catalog-grid-premium {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.catalog-card-premium {
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+.catalog-card-premium:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+    border-color: #e2e8f0;
+}
+
+.catalog-image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #f8fafc;
+    overflow: hidden;
+}
+
+.catalog-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.catalog-card-premium:hover .catalog-image {
+    transform: scale(1.08);
+}
+
+.catalog-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
     background: #a5813a;
     color: #1a1614;
-    border-color: #1a1614;
-    transform: scale(1.02);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    z-index: 2;
+    box-shadow: 0 4px 10px rgba(165, 129, 58, 0.3);
 }
 
-.btn-disabled {
-    background: #e0e0e0;
-    color: #999;
-    cursor: not-allowed;
+.catalog-out-of-stock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(26, 22, 20, 0.85);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 800;
+    z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-/* No Results */
-.no-results-mafia {
-    text-align: center;
-    padding: 60px 0;
-    color: #bbb;
+.catalog-info-premium {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
-/* Responsive Quirúrgico */
-@media (max-width: 950px) {
-    .category-page__main {
-        grid-template-columns: 1fr;
-    }
-
-    .sidebar-mafia {
-        position: relative;
-        top: 0;
-        margin-bottom: 20px;
-    }
+.catalog-title {
+    font-family: 'Noto Serif', serif;
+    font-size: 1.3rem;
+    color: #1a1614;
+    margin: 0 0 20px 0;
+    line-height: 1.3;
 }
 
+.catalog-price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #a5813a;
+}
+
+/* FIX PARA EL OVERLAY DE SIN STOCK */
+.out-of-stock-overlay-mafia {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    z-index: 5;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .products-grid-mafia {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 15px;
+    .products-page { padding: 90px 10px 80px; }
+    .products-grid, .catalog-grid-premium {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
-
-    .product-image-container-mafia {
-        height: 160px;
-    }
-
-    .emoji-display {
-        font-size: 3.5rem;
-    }
-
-    .product-info-mafia {
-        padding: 15px;
-    }
-
-    .product-name-mafia {
-        font-size: 0.85rem;
-        min-height: 40px;
-        margin-bottom: 10px;
-    }
-
-    .product-price-mafia {
-        font-size: 1.1rem;
-        margin-bottom: 15px;
-    }
-
-    .btn-add-mafia {
-        padding: 10px;
-        font-size: 0.6rem;
-    }
+    .product-category-card { padding: 20px 10px; border-radius: 12px; }
+    .category-card__icon { font-size: 2.2rem; }
 }
