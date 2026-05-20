@@ -113,11 +113,17 @@ export default function CategoryPage() {
                     <div className="products-grid-mafia">
                         {filteredProducts.map(product => (
                             <Link key={product.id} to={`/producto/${product.slug}`} className="product-card-link-mafia">
-                                <div className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
-                                    {product.is_featured && <span className="product-badge">Top Ventas</span>}
+                                <div className={`product-card-mafia`}>
                                     
+                                    {product.is_featured && (
+                                        <span className="product-badge">Top Ventas</span>
+                                    )}
+
                                     <div className="product-image-container-mafia">
-                                        <img src={product.image_url || '/assets/placeholder.png'} alt={product.name} />
+                                        <img
+                                            src={product.image_url || '/assets/placeholder.png'}
+                                            alt={product.name}
+                                        />
                                     </div>
 
                                     <div className="product-info-mafia">

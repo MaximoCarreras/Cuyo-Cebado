@@ -3,17 +3,15 @@
 .category-page { max-width: 1400px; margin: 0 auto; padding: 140px 24px 80px; background-color: #fdfaf7; min-height: 100vh; font-family: 'Inter', sans-serif; }
 .category-page__nav { margin-bottom: 30px; }
 .btn-back { display: flex; align-items: center; gap: 8px; color: #a5813a; text-decoration: none; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; }
+.category-page__main { display: grid; grid-template-columns: 280px 1fr; gap: 50px; align-items: start; }
 
-.category-page__main { display: grid; grid-template-columns: 280px 1fr; gap: 50px; }
-
-/* SIDEBAR BOUTIQUE */
-.sidebar-mafia { background: #1a1614; padding: 35px; border-radius: 20px; color: #fdfaf7; height: fit-content; position: sticky; top: 120px; border: 1px solid rgba(165, 129, 58, 0.2); }
+/* SIDEBAR */
+.sidebar-mafia { background: #1a1614; padding: 35px; border-radius: 20px; color: #fdfaf7; position: sticky; top: 120px; border: 1px solid rgba(165, 129, 58, 0.2); }
 .sidebar__title { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
 .sidebar__title h3 { font-family: 'Noto Serif', serif; color: #a5813a; text-transform: uppercase; font-size: 1rem; letter-spacing: 2px; }
 .gold-dot { width: 6px; height: 6px; background: #a5813a; border-radius: 50%; }
 .filter-group { margin-bottom: 30px; }
 .filter-group label { display: block; font-size: 0.7rem; color: #888; margin-bottom: 15px; text-transform: uppercase; font-weight: 800; }
-.filter-group label b { color: #a5813a; }
 .filter-group select { width: 100%; padding: 14px; background: #2b2520; border: 1px solid rgba(165, 129, 58, 0.2); color: #fdfaf7; border-radius: 10px; cursor: pointer; }
 .price-slider-mafia { width: 100%; accent-color: #a5813a; cursor: pointer; }
 
@@ -24,29 +22,36 @@
 
 /* TARJETA */
 .product-card-link-mafia { text-decoration: none; color: inherit; }
-.product-card-mafia { background: #fff; border-radius: 15px; border: 1px solid rgba(0, 0, 0, 0.05); transition: 0.4s ease; overflow: hidden; display: flex; flex-direction: column; height: 100%; }
+.product-card-mafia { background: #fff; border-radius: 15px; border: 1px solid rgba(0, 0, 0, 0.05); transition: 0.4s ease; overflow: hidden; position: relative; display: flex; flex-direction: column; height: 100%; }
 .product-card-mafia:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); }
 
 /* IMAGEN CUADRADA BOUTIQUE */
 .product-image-container-mafia { width: 100%; aspect-ratio: 1 / 1; background-color: #f9f7f5; display: flex; align-items: center; justify-content: center; }
 .product-image-container-mafia img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* INFO */
+/* BADGE BOUTIQUE (CORREGIDO) */
+.product-badge { 
+    position: absolute; top: 12px; left: 12px; 
+    background: #1a1614; color: #a5813a; 
+    padding: 4px 10px; border-radius: 4px; 
+    font-size: 0.65rem; font-weight: 800; 
+    text-transform: uppercase; z-index: 10;
+    border: 1px solid #a5813a;
+}
+
 .product-info-mafia { padding: 25px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
 .product-tag-mafia { font-size: 0.6rem; font-weight: 800; color: #a5813a; text-transform: uppercase; margin-bottom: 10px; }
 .product-name-mafia { font-family: 'Noto Serif', serif; font-size: 1.15rem; color: #1a1614; margin-bottom: 15px; }
 .product-price-mafia { font-size: 1.4rem; font-weight: 900; color: #1a1614; margin-bottom: 20px; }
 
-/* BOTÓN */
 .btn-add-mafia { width: 100%; padding: 14px; background: #1a1614; color: #fdfaf7; border: 1px solid rgba(165, 129, 58, 0.2); border-radius: 10px; font-weight: 800; text-transform: uppercase; font-size: 0.7rem; cursor: pointer; transition: 0.3s; }
 .btn-add-mafia:hover:not(.btn-disabled) { background: #a5813a; color: #1a1614; }
 .btn-disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
 
-/* RESPONSIVE */
 @media (max-width: 950px) {
     .category-page__main { grid-template-columns: 1fr; }
     .sidebar-mafia { position: relative; top: 0; margin-bottom: 20px; }
 }
 @media (max-width: 768px) {
-    .products-grid-mafia { grid-template-columns: repeat(2, 1fr) !important; gap: 15px; }
+    .products-grid-mafia { grid-template-columns: repeat(2, 1fr) !important; gap: 12px; }
 }
