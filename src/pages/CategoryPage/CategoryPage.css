@@ -1,33 +1,52 @@
-.category-page { max-width: 1200px; margin: 0 auto; padding: 120px 20px; }
-.category-page__main { display: grid; grid-template-columns: 280px 1fr; gap: 40px; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Serif:wght@700&display=swap');
 
-/* FILTROS: Quitamos el sticky en mobile */
-.sidebar-mafia { background: #1a1614; padding: 30px; border-radius: 16px; color: #fdfaf7; height: fit-content; position: sticky; top: 120px; }
+.category-page { max-width: 1400px; margin: 0 auto; padding: 140px 24px 80px; background-color: #fdfaf7; min-height: 100vh; font-family: 'Inter', sans-serif; }
+.category-page__nav { margin-bottom: 30px; }
+.btn-back { display: flex; align-items: center; gap: 8px; color: #a5813a; text-decoration: none; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; }
+
+.category-page__main { display: grid; grid-template-columns: 280px 1fr; gap: 50px; }
+
+/* SIDEBAR BOUTIQUE */
+.sidebar-mafia { background: #1a1614; padding: 35px; border-radius: 20px; color: #fdfaf7; height: fit-content; position: sticky; top: 120px; border: 1px solid rgba(165, 129, 58, 0.2); }
+.sidebar__title { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
+.sidebar__title h3 { font-family: 'Noto Serif', serif; color: #a5813a; text-transform: uppercase; font-size: 1rem; letter-spacing: 2px; }
+.gold-dot { width: 6px; height: 6px; background: #a5813a; border-radius: 50%; }
+.filter-group { margin-bottom: 30px; }
+.filter-group label { display: block; font-size: 0.7rem; color: #888; margin-bottom: 15px; text-transform: uppercase; font-weight: 800; }
+.filter-group label b { color: #a5813a; }
+.filter-group select { width: 100%; padding: 14px; background: #2b2520; border: 1px solid rgba(165, 129, 58, 0.2); color: #fdfaf7; border-radius: 10px; cursor: pointer; }
+.price-slider-mafia { width: 100%; accent-color: #a5813a; cursor: pointer; }
 
 /* GRILLA */
-.products-grid-mafia { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+.section__title { font-family: 'Noto Serif', serif; font-size: 3rem; color: #1a1614; margin-bottom: 10px; }
+.products-count { color: #888; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 30px; }
+.products-grid-mafia { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
 
-/* TARJETA UNIFORME */
-.product-card { 
-    background: #fff; border-radius: 12px; border: 1px solid #eee; 
-    display: flex; flex-direction: column; overflow: hidden; height: 100%; transition: 0.3s;
-}
-.product-card:hover { border-color: #a5813a; }
+/* TARJETA */
+.product-card-link-mafia { text-decoration: none; color: inherit; }
+.product-card-mafia { background: #fff; border-radius: 15px; border: 1px solid rgba(0, 0, 0, 0.05); transition: 0.4s ease; overflow: hidden; display: flex; flex-direction: column; height: 100%; }
+.product-card-mafia:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); }
 
-/* IMAGEN CUADRADA PERFECTA */
-.img-container { width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #f8fafc; }
-.img-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* IMAGEN CUADRADA BOUTIQUE */
+.product-image-container-mafia { width: 100%; aspect-ratio: 1 / 1; background-color: #f9f7f5; display: flex; align-items: center; justify-content: center; }
+.product-image-container-mafia img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* INFO Y BOTONES (FORZADOS A ALINEARSE) */
-.info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
-.info h4 { font-family: 'Noto Serif', serif; font-size: 1rem; margin-bottom: 10px; flex-grow: 1; }
-.info .price { font-weight: 800; color: #a5813a; margin-bottom: 15px; }
-.info button { width: 100%; padding: 12px; background: #1a1614; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
-.info button:disabled { background: #eee; color: #999; }
+/* INFO */
+.product-info-mafia { padding: 25px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.product-tag-mafia { font-size: 0.6rem; font-weight: 800; color: #a5813a; text-transform: uppercase; margin-bottom: 10px; }
+.product-name-mafia { font-family: 'Noto Serif', serif; font-size: 1.15rem; color: #1a1614; margin-bottom: 15px; }
+.product-price-mafia { font-size: 1.4rem; font-weight: 900; color: #1a1614; margin-bottom: 20px; }
+
+/* BOTÓN */
+.btn-add-mafia { width: 100%; padding: 14px; background: #1a1614; color: #fdfaf7; border: 1px solid rgba(165, 129, 58, 0.2); border-radius: 10px; font-weight: 800; text-transform: uppercase; font-size: 0.7rem; cursor: pointer; transition: 0.3s; }
+.btn-add-mafia:hover:not(.btn-disabled) { background: #a5813a; color: #1a1614; }
+.btn-disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
 
 /* RESPONSIVE */
-@media (max-width: 768px) {
+@media (max-width: 950px) {
     .category-page__main { grid-template-columns: 1fr; }
-    .sidebar-mafia { position: static; margin-bottom: 30px; } /* ¡Acá está el fix del filtro! */
-    .products-grid-mafia { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .sidebar-mafia { position: relative; top: 0; margin-bottom: 20px; }
+}
+@media (max-width: 768px) {
+    .products-grid-mafia { grid-template-columns: repeat(2, 1fr) !important; gap: 15px; }
 }
