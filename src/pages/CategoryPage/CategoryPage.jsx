@@ -115,12 +115,9 @@ export default function CategoryPage() {
                             <Link key={product.id} to={`/producto/${product.slug}`} className="product-card-link-mafia">
                                 <div className={`product-card-mafia ${product.stock === 0 ? 'out-of-stock-card' : ''}`}>
                                     
-                                    {/* SOLO MUESTRA BADGES DE VENTA O PROPIOS, NO DE STOCK */}
-                                    {product.is_featured ? (
-                                        <span className="product-badge">Top Ventas</span>
-                                    ) : product.badge ? (
-                                        <span className="product-badge">{product.badge}</span>
-                                    ) : null}
+                                    {/* Badge simple (Top Ventas o Badge personalizado) */}
+                                    {product.is_featured && product.stock > 0 && <span className="product-badge">Top Ventas</span>}
+                                    {product.badge && product.stock > 0 && <span className="product-badge">{product.badge}</span>}
 
                                     <div className="product-image-container-mafia">
                                         <img
