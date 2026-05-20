@@ -1,86 +1,158 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Serif:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@700&display=swap');
 
-.products-page { padding: 120px 24px 100px; max-width: 1200px; margin: 0 auto; min-height: 100vh; font-family: 'Inter', sans-serif; }
+/* --- ESTRUCTURA GENERAL --- */
+.category-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 140px 24px 80px;
+    background-color: #fdfaf7;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
 
-.products-page__title { font-family: 'Noto Serif', serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); color: #1a1614; text-align: center; margin-bottom: 50px; }
+.category-page__nav { margin-bottom: 30px; }
 
-/* GRID PRODUCTOS */
-.catalog-grid-premium {
+.btn-back {
+    display: flex; align-items: center; gap: 8px;
+    color: #a5813a; text-decoration: none; font-weight: 800;
+    font-size: 0.75rem; text-transform: uppercase;
+}
+
+.category-page__main {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: 280px 1fr;
+    gap: 50px;
+    align-items: start;
+}
+
+/* --- SIDEBAR FILTROS --- */
+.sidebar-mafia {
+    background: #1a1614;
+    padding: 35px;
+    border-radius: 20px;
+    color: #fdfaf7;
+    position: sticky;
+    top: 120px;
+    border: 1px solid rgba(165, 129, 58, 0.2);
+}
+
+.sidebar__title { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
+.sidebar__title h3 { font-family: 'Noto Serif', serif; color: #a5813a; text-transform: uppercase; font-size: 1rem; letter-spacing: 2px; }
+.gold-dot { width: 6px; height: 6px; background: #a5813a; border-radius: 50%; }
+
+.filter-group { margin-bottom: 30px; }
+.filter-group label { display: block; font-size: 0.7rem; color: #888; margin-bottom: 15px; text-transform: uppercase; font-weight: 800; }
+.filter-group select { width: 100%; padding: 12px; background: #2b2520; border: 1px solid rgba(165, 129, 58, 0.2); color: #fdfaf7; border-radius: 8px; cursor: pointer; }
+.price-slider-mafia { width: 100%; accent-color: #a5813a; cursor: pointer; }
+
+/* --- GRILLA PRODUCTOS --- */
+.category-header { margin-bottom: 40px; }
+.section__title { font-family: 'Noto Serif', serif; font-size: 2.5rem; color: #1a1614; margin-bottom: 10px; }
+.products-count { color: #888; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
+
+.products-grid-mafia {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 30px;
 }
 
-/* LA TARJETA DEL PRODUCTO */
-.catalog-card-premium {
+/* --- TARJETA DE PRODUCTO (CORRECCIÓN ESTÉTICA) --- */
+.product-card-link-mafia { text-decoration: none; color: inherit; }
+
+.product-card-mafia {
     background: #fff;
-    border-radius: 18px;
-    overflow: hidden;
+    border-radius: 16px;
     border: 1px solid #f1f5f9;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    color: inherit;
+    transition: 0.3s ease;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
-/* CORRECCIÓN IMAGEN: Aspect ratio cuadrado obligatorio */
-.catalog-image-wrapper {
-    position: relative;
+.product-card-mafia:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* CORRECCIÓN: IMAGEN CUADRADA BOUTIQUE */
+.product-image-container-mafia {
     width: 100%;
-    aspect-ratio: 1 / 1;
-    background: #f8fafc;
+    aspect-ratio: 1 / 1; /* Esto hace que la foto sea un cuadrado perfecto */
+    background-color: #f8fafc;
+    position: relative;
     overflow: hidden;
 }
 
-.catalog-image {
+.product-image-container-mafia img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    display: block;
+    object-fit: cover; /* Esto evita que la foto se deforme o se vea gigante */
+    transition: transform 0.5s ease;
 }
 
-/* BADGES Y TEXTOS */
-.catalog-badge {
+.product-card-mafia:hover .product-image-container-mafia img {
+    transform: scale(1.05);
+}
+
+/* --- BADGES Y STOCK (LIMPIOS) --- */
+.product-badge {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 12px;
+    left: 12px;
     background: #a5813a;
     color: #1a1614;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.65rem;
     font-weight: 800;
     text-transform: uppercase;
+    z-index: 5;
 }
 
-.catalog-out-of-stock {
-    position: absolute;
-    top: 15px;
-    right: 15px;
+.product-badge.out-of-stock {
     background: #1a1614;
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 20px;
+    color: #a5813a;
+}
+
+/* Overlay sutil para Sin Stock */
+.out-of-stock-overlay-mafia {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 8px;
+    background: rgba(26, 22, 20, 0.9);
+    color: #a5813a;
     font-size: 0.7rem;
     font-weight: 800;
+    text-align: center;
     text-transform: uppercase;
+    z-index: 5;
 }
 
-.catalog-info-premium { padding: 25px; flex-grow: 1; }
-.catalog-title { font-family: 'Noto Serif', serif; font-size: 1.3rem; margin-bottom: 10px; }
-.catalog-price { font-weight: 800; color: #a5813a; }
+.product-info-mafia { padding: 20px; text-align: center; }
+.product-tag-mafia { font-size: 0.6rem; font-weight: 800; color: #a5813a; text-transform: uppercase; margin-bottom: 8px; }
+.product-name-mafia { font-family: 'Noto Serif', serif; font-size: 1rem; color: #1a1614; margin-bottom: 15px; }
+.product-price-mafia { font-size: 1.2rem; font-weight: 800; margin-bottom: 15px; }
 
-/* SECCIÓN TAMBIÉN TE PODRÍA GUSTAR (CORRECCIÓN) */
-.also-like-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    margin-top: 50px;
+.btn-add-mafia {
+    width: 100%; padding: 12px; background: #1a1614; color: #fdfaf7;
+    border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
+    transition: 0.3s; font-size: 0.75rem; text-transform: uppercase;
 }
 
-/* RESPONSIVE */
+.btn-add-mafia:hover:not(.btn-disabled) { background: #a5813a; }
+.btn-disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 950px) {
+    .category-page__main { grid-template-columns: 1fr; }
+    .sidebar-mafia { position: relative; top: 0; margin-bottom: 30px; }
+}
+
 @media (max-width: 768px) {
-    .products-page { padding: 90px 10px 80px; }
-    .catalog-grid-premium { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .products-page { padding: 80px 15px 40px; }
+    .products-grid-mafia { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .product-info-mafia { padding: 15px; }
+    .product-name-mafia { font-size: 0.85rem; height: 35px; }
 }
