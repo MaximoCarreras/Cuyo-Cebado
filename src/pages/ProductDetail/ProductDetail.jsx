@@ -23,7 +23,6 @@ export default function ProductDetail() {
                 setProduct(data);
                 setActiveImg(data.image_url);
 
-                // Buscar Relacionados
                 const { data: relData } = await supabase.from('products')
                     .select('*')
                     .eq('category', data.category)
@@ -113,14 +112,15 @@ export default function ProductDetail() {
                 </div>
             </div>
 
-            {/* SECCIÓN RELACIONADOS */}
             {related.length > 0 && (
                 <section className="related-products-section">
                     <h3 className="section-title-premium">TAMBIÉN TE PODRÍA GUSTAR</h3>
                     <div className="related-grid">
                         {related.map(r => (
                             <Link key={r.id} to={`/producto/${r.slug}`} className="related-card">
-                                <img src={r.image_url} alt={r.name} />
+                                <div className="related-img-box">
+                                    <img src={r.image_url} alt={r.name} />
+                                </div>
                                 <h5>{r.name}</h5>
                                 <p>${r.price.toLocaleString()}</p>
                             </Link>
