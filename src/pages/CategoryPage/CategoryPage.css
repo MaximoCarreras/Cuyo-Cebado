@@ -15,19 +15,67 @@
 .filter-group select { width: 100%; padding: 14px; background: #2b2520; border: 1px solid rgba(165, 129, 58, 0.2); color: #fdfaf7; border-radius: 10px; cursor: pointer; }
 .price-slider-mafia { width: 100%; accent-color: #a5813a; cursor: pointer; }
 
-/* GRILLA */
-.section__title { font-family: 'Noto Serif', serif; font-size: 3rem; color: #1a1614; margin-bottom: 10px; }
-.products-count { color: #888; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 30px; }
-.products-grid-mafia { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
+/* ... (mantiene tus estilos anteriores de sidebar) ... */
 
-/* TARJETA */
-.product-card-link-mafia { text-decoration: none; color: inherit; }
-.product-card-mafia { background: #fff; border-radius: 15px; border: 1px solid rgba(0, 0, 0, 0.05); transition: 0.4s ease; overflow: hidden; position: relative; display: flex; flex-direction: column; height: 100%; }
-.product-card-mafia:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); }
+/* GRILLA UNIFORME */
+.products-grid-mafia { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+    gap: 30px; 
+}
 
-/* IMAGEN CUADRADA BOUTIQUE */
-.product-image-container-mafia { width: 100%; aspect-ratio: 1 / 1; background-color: #f9f7f5; display: flex; align-items: center; justify-content: center; }
-.product-image-container-mafia img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* TARJETA UNIFORME */
+.product-card-mafia { 
+    background: #fff; 
+    border-radius: 15px; 
+    border: 1px solid rgba(0, 0, 0, 0.05); 
+    display: flex; 
+    flex-direction: column; /* Esto es clave para alinear todo verticalmente */
+    height: 100%; 
+    overflow: hidden; 
+    position: relative;
+    transition: 0.3s;
+}
+
+/* IMAGEN CUADRADA FIJA */
+.product-image-container-mafia { 
+    width: 100%; 
+    aspect-ratio: 1 / 1; /* Fuerza a que sea un cuadrado perfecto */
+    background-color: #f9f7f5; 
+    overflow: hidden;
+}
+
+.product-image-container-mafia img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* Recorta la imagen para que llene el cuadrado sin deformarse */
+    display: block; 
+}
+
+/* CUERPO DE LA TARJETA */
+.product-info-mafia { 
+    padding: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    flex-grow: 1; /* Esto hace que el contenedor de texto ocupe todo el espacio disponible */
+}
+
+/* El botón se mantendrá siempre abajo gracias a que el padre es Flex */
+.btn-add-mafia { 
+    margin-top: auto; /* Empuja el botón siempre a la parte inferior de la tarjeta */
+    width: 100%; 
+    padding: 14px; 
+    background: #1a1614; 
+    color: #fdfaf7; 
+    border: none; 
+    border-radius: 8px; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    font-size: 0.7rem; 
+    cursor: pointer; 
+}
+
+/* ... (mantén el resto de tus estilos de colores y fuentes) ... */
 
 /* BADGE BOUTIQUE (CORREGIDO) */
 .product-badge { 
