@@ -1,92 +1,92 @@
 /* --- SECCIÓN CON FONDO LIMPIO --- */
 .ourstory--light {
-  background-color: #fdfaf7;
-  /* Reducimos el padding top porque WhyUs ya da el espacio arriba */
-  padding: 60px 20px 100px 20px;
-  display: flex;
-  justify-content: center;
+    background-color: #fdfaf7;
+    padding: 60px 20px 100px 20px;
+    display: flex;
+    justify-content: center;
 }
 
 /* --- LA TARJETA (El "Objeto" de lujo) --- */
 .ourstory__card {
-  max-width: 850px;
-  margin: 0 auto;
-  text-align: center;
-  background-color: #2b2520 !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(165, 129, 58, 0.2);
-  padding: 80px 50px !important;
+    max-width: 850px;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #2b2520 !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(165, 129, 58, 0.2);
+    padding: 80px 50px !important;
 }
 
 .ourstory__content {
-  position: relative;
-  z-index: 2;
+    position: relative;
+    z-index: 2;
 }
 
 .ourstory__overline {
-  display: block;
-  color: #a5813a;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
+    display: block;
+    color: #a5813a;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
 }
 
-/* --- TÍTULO DOMADO (Igual que en la Guía) --- */
 .ourstory__title {
-  color: #fdfaf7;
-  font-size: clamp(1.5rem, 3vw, 2rem) !important;
-  /* Ahora coincide con la Guía */
-  text-transform: uppercase;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  letter-spacing: 2px;
-  font-family: 'Noto Serif', serif;
+    color: #fdfaf7;
+    font-size: clamp(1.5rem, 3vw, 2rem) !important;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+    font-family: 'Noto Serif', serif;
 }
 
-/* Divisor sutil */
 .gold-line--small {
-  width: 50px;
-  height: 2px;
-  background-color: #a5813a;
-  margin: 0 auto 30px auto;
+    width: 50px;
+    height: 2px;
+    background-color: #a5813a;
+    margin: 0 auto 30px auto;
 }
 
 /* --- TEXTOS REFINADOS --- */
 .ourstory__text p {
-  color: #fdfaf7;
-  line-height: 1.8;
-  margin-bottom: 1.2rem;
-  opacity: 0.9;
-  font-size: 1rem;
-  /* Bajamos de 1.1rem a 1rem para más elegancia */
+    color: #fdfaf7;
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+    opacity: 0.9;
+    font-size: 1rem;
 }
 
 .ourstory__text b {
-  color: #a5813a;
+    color: #a5813a;
 }
 
 .ourstory__thanks {
-  margin-top: 2.5rem;
-  font-style: italic;
-  font-size: 1.1rem !important;
-  /* Más equilibrado */
-  opacity: 1 !important;
+    margin-top: 2.5rem;
+    font-style: italic;
+    font-size: 1.1rem !important;
+    opacity: 1 !important;
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-  .ourstory--light {
-    padding: 100px 15px 60px 15px;
-    /* Ajuste para el Navbar mobile */
-  }
+    .ourstory--light {
+        padding: 40px 15px 60px 15px; /* Menos espacio arriba/abajo en celu */
+    }
 
-  .ourstory__card {
-    padding: 40px 20px !important;
-  }
+    .ourstory__card {
+        padding: 40px 20px !important;
+        border-radius: 16px; /* Borde más amigable en pantallas chicas */
+    }
 
-  .ourstory__title {
-    font-size: 1.6rem !important;
-  }
+    .ourstory__title {
+        font-size: 1.6rem !important;
+        margin-bottom: 1rem;
+    }
+
+    .ourstory__text p {
+        font-size: 0.95rem; /* Letra apenas más chica para el pulgar */
+        line-height: 1.6;
+    }
 }

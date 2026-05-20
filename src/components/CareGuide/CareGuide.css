@@ -1,97 +1,117 @@
 /* CareGuide — Sección Limpia y Elegante */
 .careguide {
-  background-color: #fdfaf7;
-  padding: 80px 20px;
+    background-color: #fdfaf7;
+    padding: 80px 20px;
 }
 
 /* --- DOMANDO LOS TÍTULOS GIGANTES --- */
 .careguide__header h2 {
-  font-size: clamp(1.5rem, 3vw, 2rem) !important;
-  color: #2b2520;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 10px;
-  font-family: 'Noto Serif', serif;
-  font-weight: 800;
+    font-size: clamp(1.5rem, 3vw, 2rem) !important;
+    color: #2b2520;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    font-family: 'Noto Serif', serif;
+    font-weight: 800;
 }
 
 .careguide__header p {
-  font-size: 1rem;
-  color: #a5813a;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 600;
-  margin-bottom: 15px;
+    font-size: 1rem;
+    color: #a5813a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 15px;
 }
 
 .gold-line {
-  width: 50px;
-  height: 3px;
-  background-color: #a5813a;
-  margin: 0 auto 40px auto;
-  border-radius: 5px;
+    width: 50px;
+    height: 3px;
+    background-color: #a5813a;
+    margin: 0 auto 40px auto;
+    border-radius: 5px;
 }
 
 /* --- TARJETAS DE PASOS --- */
 .careguide__steps {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
-  max-width: 1200px;
-  margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .careguide__card {
-  background: #ffffff;
-  padding: 30px 20px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(43, 37, 32, 0.05);
-  border: 1px solid rgba(165, 129, 58, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  transition: all 0.3s ease;
+    background: #ffffff;
+    padding: 30px 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(43, 37, 32, 0.05);
+    border: 1px solid rgba(165, 129, 58, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
 .careguide__card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(43, 37, 32, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(43, 37, 32, 0.1);
 }
 
 /* --- NÚMERO DORADO SÓLIDO --- */
 .careguide__number {
-  font-family: 'Noto Serif', serif;
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: #a5813a;
-  /* ACÁ CAMBIAMOS AL DORADO PURO */
-  line-height: 0.8;
-  margin-bottom: 15px;
+    font-family: 'Noto Serif', serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #a5813a;
+    line-height: 0.8;
+    margin-bottom: 15px;
 }
 
 .careguide__text h3 {
-  font-size: 1.1rem;
-  color: #2b2520;
-  margin-bottom: 10px;
-  font-weight: 700;
+    font-size: 1.1rem;
+    color: #2b2520;
+    margin-bottom: 10px;
+    font-weight: 700;
 }
 
 .careguide__text p {
-  font-size: 0.9rem;
-  color: #6a5f58;
-  line-height: 1.6;
+    font-size: 0.9rem;
+    color: #6a5f58;
+    line-height: 1.6;
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
-  .careguide__steps {
-    grid-template-columns: repeat(2, 1fr);
-  }
+    .careguide__steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 600px) {
-  .careguide__steps {
-    grid-template-columns: 1fr;
-  }
+    .careguide {
+        padding: 50px 15px; /* Menos espacio inútil en celu */
+    }
+
+    .careguide__steps {
+        grid-template-columns: 1fr;
+        gap: 15px; /* Tarjetas más juntas */
+    }
+
+    .careguide__card {
+        padding: 20px 15px; /* Tarjeta más compacta */
+        flex-direction: row; /* Hacemos que en celu quede [Número] [Texto] horizontalmente */
+        text-align: left;
+        gap: 20px;
+    }
+
+    .careguide__number {
+        font-size: 2.5rem;
+        margin-bottom: 0; /* Quitamos el margen inferior porque ahora está al lado */
+    }
+
+    .careguide__text h3 {
+        margin-bottom: 5px;
+    }
 }
