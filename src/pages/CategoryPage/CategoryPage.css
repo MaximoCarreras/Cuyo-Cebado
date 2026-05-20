@@ -1,89 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Serif:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Serif:wght@700&display=swap');
 
-.products-page {
-    padding: 120px 24px 100px;
-    max-width: 1200px;
-    margin: 0 auto;
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
-}
+.products-page { padding: 120px 24px 100px; max-width: 1200px; margin: 0 auto; min-height: 100vh; font-family: 'Inter', sans-serif; }
 
-.products-page__title {
-    font-family: 'Noto Serif', serif;
-    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-    color: #1a1614;
-    text-align: center;
-    font-weight: 800;
-    margin-top: 0;
-    margin-bottom: 50px;
-}
+.products-page__title { font-family: 'Noto Serif', serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); color: #1a1614; text-align: center; margin-bottom: 50px; }
 
-.products-page__title::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 4px;
-    background-color: #a5813a;
-    margin: 20px auto 0;
-    border-radius: 2px;
-}
-
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    justify-content: center;
-}
-
-.product-category-card {
-    background-color: #1a1614;
-    border-radius: 20px;
-    padding: 50px 30px;
-    text-decoration: none;
-    text-align: center;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(165, 129, 58, 0.3);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.product-category-card:hover {
-    transform: translateY(-10px);
-    border-color: #a5813a;
-    box-shadow: 0 15px 40px rgba(165, 129, 58, 0.2);
-}
-
-.category-card__icon {
-    font-size: 3.5rem;
-    margin-bottom: 20px;
-    transition: transform 0.3s;
-}
-
-/* FOTO CATEGORÍA BOUTIQUE */
-.category-card__icon img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 50%;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-}
-
-.category-card__info h3 {
-    color: #fff;
-    font-family: 'Noto Serif', serif;
-    font-size: 1.5rem;
-    margin: 0 0 10px 0;
-}
-
+/* GRID PRODUCTOS */
 .catalog-grid-premium {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 30px;
 }
 
+/* LA TARJETA DEL PRODUCTO */
 .catalog-card-premium {
     background: #fff;
     border-radius: 18px;
@@ -96,6 +24,7 @@
     flex-direction: column;
 }
 
+/* CORRECCIÓN IMAGEN: Aspect ratio cuadrado obligatorio */
 .catalog-image-wrapper {
     position: relative;
     width: 100%;
@@ -108,8 +37,10 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
+/* BADGES Y TEXTOS */
 .catalog-badge {
     position: absolute;
     top: 15px;
@@ -121,7 +52,6 @@
     font-size: 0.75rem;
     font-weight: 800;
     text-transform: uppercase;
-    z-index: 2;
 }
 
 .catalog-out-of-stock {
@@ -137,29 +67,20 @@
     text-transform: uppercase;
 }
 
-.catalog-info-premium {
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+.catalog-info-premium { padding: 25px; flex-grow: 1; }
+.catalog-title { font-family: 'Noto Serif', serif; font-size: 1.3rem; margin-bottom: 10px; }
+.catalog-price { font-weight: 800; color: #a5813a; }
+
+/* SECCIÓN TAMBIÉN TE PODRÍA GUSTAR (CORRECCIÓN) */
+.also-like-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 50px;
 }
 
-.catalog-title {
-    font-family: 'Noto Serif', serif;
-    font-size: 1.3rem;
-    color: #1a1614;
-    margin: 0 0 20px 0;
-}
-
-.catalog-price {
-    font-weight: 800;
-    color: #a5813a;
-}
-
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .products-page { padding: 90px 10px 80px; }
-    .products-grid, .catalog-grid-premium {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
+    .catalog-grid-premium { grid-template-columns: repeat(2, 1fr); gap: 15px; }
 }
