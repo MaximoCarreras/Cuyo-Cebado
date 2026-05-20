@@ -101,7 +101,7 @@
 }
 
 /* =========================================
-   2. ESTILOS RESULTADOS DE BÚSQUEDA (TARJETAS PREMIUM)
+   2. ESTILOS RESULTADOS DE BÚSQUEDA
    ========================================= */
 .catalog-grid-premium {
     display: grid;
@@ -230,7 +230,6 @@
     border-color: #1a1614;
 }
 
-/* CARGA Y ERRORES */
 .catalog-loading {
     text-align: center;
     padding: 100px 20px;
@@ -258,44 +257,54 @@
 }
 
 /* =========================================
-   3. RESPONSIVE MÓVIL
+   3. RESPONSIVE MÓVIL ESTILO APP
    ========================================= */
 @media (max-width: 768px) {
     .products-page {
-        padding: 100px 15px 80px;
+        padding: 90px 10px 80px; /* Reducimos espacios laterales para aprovechar la pantalla */
+    }
+
+    .products-page__title {
+        margin-bottom: 30px;
     }
 
     .products-grid,
     .catalog-grid-premium {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 10px; /* Gap más apretado para estilo catálogo celular */
     }
 
     .product-category-card {
-        padding: 30px 15px;
-        border-radius: 15px;
+        padding: 20px 10px;
+        border-radius: 12px;
     }
 
     .category-card__icon {
-        font-size: 2.5rem;
-        margin-bottom: 15px;
+        font-size: 2.2rem;
+        margin-bottom: 10px;
     }
 
     .category-card__info h3 {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     .category-card__info span {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
     }
 
     .catalog-info-premium {
-        padding: 15px;
+        padding: 12px; /* Menos padding en la tarjeta móvil */
     }
 
     .catalog-title {
-        font-size: 1.1rem;
-        margin-bottom: 15px;
+        font-size: 0.95rem; /* Achicamos texto para que no rompa en dos renglones */
+        margin-bottom: 10px;
+        line-height: 1.2;
+    }
+
+    .catalog-category {
+        font-size: 0.65rem;
+        margin-bottom: 5px;
     }
 
     .catalog-price {
@@ -303,7 +312,6 @@
     }
 
     .btn-quick-view {
-        display: none;
-        /* Ocultamos el botón en móvil para que quede más limpio tipo Mercadolibre */
+        display: none; /* Oculto en móvil para limpiar la vista */
     }
 }

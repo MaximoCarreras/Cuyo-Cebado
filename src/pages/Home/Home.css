@@ -11,7 +11,6 @@
     overflow-x: hidden;
 }
 
-/* HERO ESCRITORIO (MANTENIDO) */
 .hero-mafia {
     height: 90vh;
     background-color: var(--mafia-black);
@@ -93,7 +92,6 @@
     z-index: 2;
 }
 
-/* CATEGORÍAS (MANTENIDO) */
 .home-categories-section {
     padding: 80px 24px;
     max-width: 1400px;
@@ -190,7 +188,6 @@
     text-align: center;
 }
 
-/* --- SECCIÓN FEATURED SHOWCASE (ELEGIDO) --- */
 .featured-showcase {
     padding: 100px 20px;
     background-color: #fff;
@@ -288,7 +285,6 @@
     color: var(--mafia-black);
 }
 
-/* --- CLUB DE MATEROS --- */
 .club-newsletter {
     padding: 100px 20px;
     display: flex;
@@ -352,7 +348,6 @@
     transform: translateY(-2px);
 }
 
-/* --- BOTONES PREMIUM MANTENIDOS --- */
 .btn-gold-mafia {
     background: linear-gradient(135deg, #a5813a 0%, #b89b5e 100%);
     color: var(--mafia-black);
@@ -397,11 +392,10 @@
     transform: translateY(-2px);
 }
 
-
-/* --- RESPONSIVE QUIRÚRGICO FINAL --- */
+/* =========================================
+   RESPONSIVE QUIRÚRGICO (ALINEADO AL ESCRITORIO)
+   ========================================= */
 @media (max-width: 768px) {
-
-    /* *** RESTAURACIÓN DE IMAGEN HERO Y MÁSCARA MÓVIL *** */
     .hero-mafia {
         height: auto;
         flex-direction: column;
@@ -411,9 +405,7 @@
     .hero-mafia__content {
         width: 100%;
         padding: 40px 20px 80px;
-        /* Padding ajustado para la máscara */
         text-align: center;
-        background-color: var(--mafia-black);
         position: relative;
         z-index: 10;
     }
@@ -439,11 +431,9 @@
 
     .hero-visual-block {
         display: block;
-        /* ASEGURAMOS QUE SE MUESTRE LA IMAGEN */
         position: relative;
         width: 100%;
         height: 50vh;
-        /* Altura de imagen en celu */
         min-height: 300px;
         clip-path: none;
         z-index: 5;
@@ -451,7 +441,6 @@
 
     .hero-mobile-gradient-mask {
         display: block;
-        /* ACTIVAMOS LA MÁSCARA MÓVIL */
         position: absolute;
         bottom: 0;
         left: 0;
@@ -461,7 +450,6 @@
         z-index: 6;
     }
 
-    /* CATEGORÍAS 2 COLUMNAS (MANTENIDO) */
     .home-categories-section {
         padding: 40px 15px;
     }
@@ -496,7 +484,6 @@
         letter-spacing: 0.5px;
     }
 
-    /* --- FEATURED SHOWCASE (ELEGIDO) CORREGIDO --- */
     .featured-showcase {
         padding: 50px 15px;
     }
@@ -550,24 +537,12 @@
         font-size: 1.6rem;
     }
 
-    /* *** ARREGLO ESTILO BOTÓN ELEGIDO MÓVIL (RÚSTICO) *** */
+    /* Mantenemos los botones premium en móvil */
     .showcase-actions .btn-gold-mafia {
         width: 100%;
         max-width: 280px;
-        padding: 12px 20px;
-        font-size: 0.7rem;
-        text-align: center;
-        background: linear-gradient(135deg, #a5813a 0%, #7e622b 100%);
-        /* Degradado Rústico restaurado */
-        border-radius: 8px;
-        /* Botón Rústico */
-        text-transform: uppercase;
-        font-weight: 800;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        /* Sombra Rústica */
     }
 
-    /* --- CLUB DE MATEROS (MOBILE) CORREGIDO --- */
     .club-newsletter {
         padding: 60px 15px;
     }
@@ -588,39 +563,24 @@
 
     .club-form {
         flex-direction: column;
-        /* Apilados */
         width: 100%;
         gap: 12px;
         max-width: 300px;
-        /* Ancho máximo para el form */
     }
 
+    /* Input mantiene el borde redondeado del escritorio */
     .club-form input {
         width: 100%;
         padding: 14px 20px;
-        border-radius: 8px;
-        /* Input Rústico */
+        border-radius: 50px; 
         font-size: 0.9rem;
     }
 
-    /* *** ARREGLO ESTILO BOTÓN UNIRME MÓVIL (RÚSTICO) *** */
+    /* Botón mantiene el borde redondeado del escritorio */
     .btn-club {
         width: 100%;
         padding: 14px;
-        height: auto;
-        min-height: 48px;
-        /* Asegura altura táctil */
-        text-align: center;
-        margin: 0 auto;
-        display: block;
-        background: linear-gradient(135deg, #a5813a 0%, #7e622b 100%);
-        /* Degradado Rústico */
-        border-radius: 8px;
-        /* Botón Rústico */
-        text-transform: uppercase;
-        font-weight: 800;
+        border-radius: 50px;
         font-size: 0.75rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        /* Sombra Rústica */
     }
 }

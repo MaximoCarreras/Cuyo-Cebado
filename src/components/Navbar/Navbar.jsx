@@ -45,18 +45,16 @@ export default function Navbar() {
     }
   };
 
-  // 💥 PARSEO DINÁMICO DE ORACIONES SEPARADAS POR COMAS 💥
   const phrases = banner.text
     ? banner.text.split(',').map(p => p.trim()).filter(Boolean)
     : [];
 
   return (
     <>
-      {/* ✦ ANNOUNCEMENT BANNER INFINITO MULTI-ORACIÓN ✦ */}
+      {/* BANNER INFINITO */}
       {banner.active && phrases.length > 0 && (
         <div className="announcement-banner">
           <div className="announcement-banner__track">
-            {/* Carril 1 */}
             <div className="announcement-banner__content">
               {Array(6).fill(phrases).flat().map((phrase, idx) => (
                 <span key={`c1-${idx}`} className="banner-phrase">
@@ -64,7 +62,6 @@ export default function Navbar() {
                 </span>
               ))}
             </div>
-            {/* Carril 2 Mirror */}
             <div className="announcement-banner__content" aria-hidden="true">
               {Array(6).fill(phrases).flat().map((phrase, idx) => (
                 <span key={`c2-${idx}`} className="banner-phrase">
@@ -120,6 +117,20 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+
+      {/* --- AGREGADO: OVERLAY Y MENÚ MÓVIL --- */}
+      {isMenuOpen && <div className="navbar__blur-overlay" onClick={() => setIsMenuOpen(false)}></div>}
+      
+      <div className={`navbar__mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+        <Link to="/" onClick={() => setIsMenuOpen(false)}>Inicio</Link>
+        <Link to="/productos" onClick={() => setIsMenuOpen(false)}>Productos</Link>
+        <Link to="/nosotros" onClick={() => setIsMenuOpen(false)}>Nosotros</Link>
+        <Link to="/guia-curado" onClick={() => setIsMenuOpen(false)}>Guía de Curado</Link>
+        {userRole === 'admin' && (
+          <Link to="/admin" onClick={() => setIsMenuOpen(false)} style={{ color: '#a5813a' }}>Panel Admin</Link>
+        )}
+        <Link to="/mi-cuenta" onClick={() => setIsMenuOpen(false)}>Mi Cuenta</Link>
+      </div>
     </>
   );
 }
