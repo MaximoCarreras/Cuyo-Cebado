@@ -84,3 +84,25 @@
     border: 1px solid #ddd;
     font-size: 0.8rem;
 }
+
+/* =========================================
+   RESPONSIVE MÓVIL
+   ========================================= */
+@media (max-width: 768px) {
+    .status-page {
+        padding: 100px 15px 60px;
+    }
+
+    .status-card {
+        padding: 40px 20px; /* Reducimos el padding interno */
+        border-radius: 20px;
+    }
+
+    .status-icon {
+        font-size: 60px !important; /* Icono un poco más chico */
+    }
+
+    .status-card h1 {
+        font-size: 1.6rem;
+    }
+}
