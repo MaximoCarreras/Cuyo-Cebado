@@ -231,16 +231,24 @@
   cursor: pointer;
   padding: 10px;
 }
+/* Ocultar el menú móvil y sus fondos en la vista de escritorio */
+.navbar__mobile-menu,
+.navbar__blur-overlay {
+    display: none;
+}
 
+/* RESPONSIVE */
 @media (max-width: 1000px) {
-  .navbar {
-    height: 75px;
-  }
+    .navbar {
+        height: 75px;
+    }
+    
+    .navbar__desktop-links,
+    .navbar__logo-text {
+        display: none !important;
+    }
 
-  .navbar__desktop-links,
-  .navbar__logo-text {
-    display: none !important;
-  }
+    /* ... y sigue el resto normal ... */
 
   .navbar__hamburger-btn {
     display: block;
