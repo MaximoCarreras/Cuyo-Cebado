@@ -110,29 +110,29 @@ export default function CategoryPage() {
                         <h1 className="section__title">{currentCategory ? currentCategory.label : 'Productos'}</h1>
                         <p className="products-count">{filteredProducts.length} piezas encontradas</p>
                     </header>
-// ... (mantiene exactamente igual toda tu lógica de filtros y useEffects)
-// Asegúrate de que el renderizado de la tarjeta tenga esta estructura:
+                    <div className="products-grid-mafia">
+                        {filteredProducts.map(product => (
+                            <Link key={product.id} to={`/producto/${product.slug}`} className="product-card-link-mafia">
+                                <div className={`product-card-mafia`}>
+                                    
+                                    <div className="product-image-container-mafia">
+                                        <img src={product.image_url || '/assets/placeholder.png'} alt={product.name} />
+                                    </div>
 
-<div className="products-grid-mafia">
-    {filteredProducts.map(product => (
-        <Link key={product.id} to={`/producto/${product.slug}`} className="product-card-link-mafia">
-            <div className="product-card-mafia">
-                
-                {product.is_featured && <span className="product-badge">Top Ventas</span>}
-
-                <div className="product-image-container-mafia">
-                    <img src={product.image_url || '/assets/placeholder.png'} alt={product.name} />
-                </div>
-
-                <div className="product-info-mafia">
-                    <p className="product-tag-mafia">{product.type} {product.material ? `| ${product.material}` : ''}</p>
-                    <h4 className="product-name-mafia">{product.name}</h4>
-                    <p className="product-price-mafia">${Number(product.price).toLocaleString('es-AR')}</p>
-                    <button className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`} disabled={product.stock === 0} onClick={(e) => handleQuickAdd(e, product)}>
-                        {product.stock === 0 ? 'Sin Stock' : 'Agregar al Carrito'}
-                    </button>
-                </div>
+                                    <div className="product-info-mafia">
+                                        <p className="product-tag-mafia">{product.type} {product.material ? `| ${product.material}` : ''}</p>
+                                        <h4 className="product-name-mafia">{product.name}</h4>
+                                        <p className="product-price-mafia">${Number(product.price).toLocaleString('es-AR')}</p>
+                                        <button className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`} disabled={product.stock === 0} onClick={(e) => handleQuickAdd(e, product)}>
+                                            {product.stock === 0 ? 'Sin Stock' : 'Agregar al Carrito'}
+                                        </button>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </section>
             </div>
-        </Link>
-    ))}
-</div>
+        </div>
+    );
+}
