@@ -51,7 +51,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* BANNER INFINITO */}
       {banner.active && phrases.length > 0 && (
         <div className="announcement-banner">
           <div className="announcement-banner__track">
@@ -112,16 +111,20 @@ export default function Navbar() {
               {totalItems > 0 && <span className="cart-count-premium">{totalItems}</span>}
             </Link>
             <button className="navbar__hamburger-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              <span className="material-symbols-outlined">{isMenuOpen ? 'close' : 'menu'}</span>
+              <span className="material-symbols-outlined">menu</span>
             </button>
           </div>
         </div>
       </nav>
 
-      {/* --- AGREGADO: OVERLAY Y MENÚ MÓVIL --- */}
       {isMenuOpen && <div className="navbar__blur-overlay" onClick={() => setIsMenuOpen(false)}></div>}
       
       <div className={`navbar__mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+        {/* BOTÓN X AGREGADO AQUÍ */}
+        <button className="navbar__close-btn" onClick={() => setIsMenuOpen(false)}>
+          <span className="material-symbols-outlined">close</span>
+        </button>
+        
         <Link to="/" onClick={() => setIsMenuOpen(false)}>Inicio</Link>
         <Link to="/productos" onClick={() => setIsMenuOpen(false)}>Productos</Link>
         <Link to="/nosotros" onClick={() => setIsMenuOpen(false)}>Nosotros</Link>

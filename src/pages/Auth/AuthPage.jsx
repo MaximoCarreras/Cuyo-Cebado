@@ -8,21 +8,20 @@ export default function AuthPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [user, setUser] = useState(null); // Para saber si hay alguien logueado
+    const [user, setUser] = useState(null);
 
     const navigate = useNavigate();
 
-    // 1. Escuchar cambios de sesión al cargar
     useEffect(() => {
-        // Obtener sesión actual
         const getSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             setUser(session?.user ?? null);
         };
         getSession();
 
-        // Escuchar cambios (login/logout)
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
         });
@@ -41,12 +40,16 @@ export default function AuthPage() {
                     password,
                 });
                 if (error) throw error;
-                // Al loguear, el useEffect de arriba detectará el cambio y mostrará el perfil
             } else {
                 const { error } = await supabase.auth.signUp({
                     email,
                     password,
-                    options: { data: { full_name: name } }
+                    options: { 
+                        data: { 
+                            full_name: name,
+                            phone: phone 
+                        } 
+                    }
                 });
                 if (error) throw error;
                 alert("¡Cuenta creada! Ya podés iniciar sesión.");
@@ -64,7 +67,6 @@ export default function AuthPage() {
         navigate('/');
     };
 
-    // VISTA DE PERFIL (Si está logueado)
     if (user) {
         return (
             <div className="auth-page">
@@ -89,7 +91,6 @@ export default function AuthPage() {
         );
     }
 
-    // VISTA DE FORMULARIO (Si NO está logueado)
     return (
         <div className="auth-page">
             <div className="auth-card">
@@ -101,10 +102,16 @@ export default function AuthPage() {
 
                 <form className="auth-form" onSubmit={handleAuth}>
                     {!isLogin && (
-                        <div className="auth-input-group">
-                            <label>Nombre Completo</label>
-                            <input type="text" placeholder="Tu nombre" value={name} onChange={(e) => setName(e.target.value)} required />
-                        </div>
+                        <>
+                            <div className="auth-input-group">
+                                <label>Nombre Completo</label>
+                                <input type="text" placeholder="Tu nombre" value={name} onChange={(e) => setName(e.target.value)} required />
+                            </div>
+                            <div className="auth-input-group">
+                                <label>Teléfono / WhatsApp</label>
+                                <input type="tel" placeholder="Ej: 2611234567" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                            </div>
+                        </>
                     )}
                     <div className="auth-input-group">
                         <label>Correo Electrónico</label>
@@ -112,7 +119,24 @@ export default function AuthPage() {
                     </div>
                     <div className="auth-input-group">
                         <label>Contraseña</label>
-                        <input type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        <div className="password-wrapper">
+                            <input 
+                                type={showPassword ? "text" : "password"} 
+                                placeholder="••••••••" 
+                                value={password} 
+                                onChange={(e) => setPassword(e.target.value)} 
+                                required 
+                            />
+                            <button 
+                                type="button" 
+                                className="btn-toggle-password" 
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                <span className="material-symbols-outlined">
+                                    {showPassword ? 'visibility_off' : 'visibility'}
+                                </span>
+                            </button>
+                        </div>
                     </div>
                     <button type="submit" className="btn-auth-primary" disabled={loading}>
                         {loading ? 'Procesando...' : (isLogin ? 'Iniciar Sesión' : 'Crear Cuenta')}

@@ -1,309 +1,312 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@700&display=swap');
 
-/* --- CONTENEDOR MAESTRO DE LA MARQUESINA --- */
 .announcement-banner {
-  background-color: #a5813a;
-  color: #1a1614;
-  width: 100% !important;
-  height: 38px !important;
-  /* Altura estilizada, más delgada y elegante */
-  overflow: hidden !important;
-  display: flex !important;
-  align-items: center !important;
-  position: relative;
-  border-bottom: 1px solid rgba(26, 22, 20, 0.1);
+    background-color: #a5813a;
+    color: #1a1614;
+    width: 100% !important;
+    height: 38px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    position: relative;
+    border-bottom: 1px solid rgba(26, 22, 20, 0.1);
 }
 
-/* CARRETERA DE ANIMACIÓN */
 .announcement-banner__track {
-  display: flex !important;
-  width: max-content;
-  animation: marquee-to-right 28s linear infinite !important;
-  /* Movimiento constante y ultra-fluido */
-  will-change: transform;
+    display: flex !important;
+    width: max-content;
+    animation: marquee-to-right 28s linear infinite !important;
+    will-change: transform;
 }
 
-/* BLOQUES DE TEXTO HILADOS */
 .announcement-banner__content {
-  display: flex !important;
-  align-items: center !important;
-  white-space: nowrap !important;
-  flex-shrink: 0;
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+    flex-shrink: 0;
 }
 
-/* ESTILO BOUTIQUE DE LAS FRASES */
 .banner-phrase {
-  display: inline-flex !important;
-  align-items: center;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.78rem !important;
-  /* Tipografía más chica = Más categoría */
-  font-weight: 700 !important;
-  text-transform: uppercase;
-  letter-spacing: 2px !important;
-  /* Separación de letras estilo premium */
-  padding: 0 25px !important;
-  /* Espaciado perfecto entre repeticiones */
+    display: inline-flex !important;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 2px !important;
+    padding: 0 25px !important;
 }
 
-/* SEPARADOR EXCLUSIVO (ROMBO) */
 .banner-diamond {
-  color: #1a1614;
-  opacity: 0.4;
-  /* Sutil, fino, no molesta a la lectura */
-  margin-left: 50px;
-  /* Distancia perfecta hacia la siguiente oración */
-  font-size: 0.7rem;
+    color: #1a1614;
+    opacity: 0.4;
+    margin-left: 50px;
+    font-size: 0.7rem;
 }
 
-/* ANIMACIÓN DIRECCIÓN DERECHA SIN TRABAS VISUALES */
 @keyframes marquee-to-right {
-  0% {
-    transform: translate3d(-50%, 0, 0);
-  }
-
-  100% {
-    transform: translate3d(0%, 0, 0);
-  }
+    0% {
+        transform: translate3d(-50%, 0, 0);
+    }
+    100% {
+        transform: translate3d(0%, 0, 0);
+    }
 }
 
-/* --- NAVBAR STICKY PREMIUM --- */
 .navbar {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 90px;
-  background-color: #1a1614;
-  border-bottom: 1px solid rgba(165, 129, 58, 0.2);
-  z-index: 4000;
-  display: flex;
-  align-items: center;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    background-color: #1a1614;
+    border-bottom: 1px solid rgba(165, 129, 58, 0.2);
+    z-index: 4000;
+    display: flex;
+    align-items: center;
 }
 
 .navbar__container {
-  width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 0 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
 }
 
-/* LOGO */
 .navbar__left {
-  flex-shrink: 0;
+    flex-shrink: 0;
 }
 
 .navbar__brand {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 10px;
 }
 
 .navbar__logo {
-  height: 42px;
-  width: auto;
+    height: 42px;
+    width: auto;
 }
 
 .navbar__logo-text {
-  color: #fdfaf7;
-  font-family: 'Noto Serif', serif;
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+    color: #fdfaf7;
+    font-family: 'Noto Serif', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .navbar__logo-text span {
-  color: #a5813a;
+    color: #a5813a;
 }
 
-/* BUSCADOR */
 .navbar__center {
-  flex: 1;
-  max-width: 400px;
-  margin: 0 20px;
+    flex: 1;
+    max-width: 400px;
+    margin: 0 20px;
 }
 
 .navbar__search {
-  display: flex;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(165, 129, 58, 0.2);
-  border-radius: 50px;
-  padding: 2px 12px;
-  transition: 0.3s;
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(165, 129, 58, 0.2);
+    border-radius: 50px;
+    padding: 2px 12px;
+    transition: 0.3s;
 }
 
 .navbar__search:focus-within {
-  border-color: #a5813a;
-  background: rgba(255, 255, 255, 0.08);
+    border-color: #a5813a;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .navbar__search input {
-  background: none;
-  border: none;
-  color: #fff;
-  padding: 10px;
-  width: 100%;
-  outline: none;
-  font-size: 0.8rem;
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 10px;
+    width: 100%;
+    outline: none;
+    font-size: 0.8rem;
 }
 
 .navbar__search button {
-  background: none;
-  border: none;
-  color: #a5813a;
-  cursor: pointer;
+    background: none;
+    border: none;
+    color: #a5813a;
+    cursor: pointer;
 }
 
-/* BOTONES NAVEGACIÓN */
 .navbar__right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  flex-shrink: 0;
-  flex-wrap: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
 }
 
 .navbar__desktop-links {
-  display: flex;
-  gap: 20px;
-  flex-shrink: 0;
+    display: flex;
+    gap: 20px;
+    flex-shrink: 0;
 }
 
 .nav-item {
-  color: #fdfaf7 !important;
-  text-decoration: none;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  transition: 0.3s;
-  white-space: nowrap;
+    color: #fdfaf7 !important;
+    text-decoration: none;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    transition: 0.3s;
+    white-space: nowrap;
 }
 
 .nav-item:hover {
-  color: #a5813a !important;
+    color: #a5813a !important;
 }
 
-/* CARRITO */
 .navbar__cart-link {
-  position: relative;
-  color: #fdfaf7;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  flex-shrink: 0;
+    position: relative;
+    color: #fdfaf7;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    flex-shrink: 0;
 }
 
 .cart-icon-nav {
-  font-size: 28px !important;
+    font-size: 28px !important;
 }
 
 .cart-count-premium {
-  position: absolute;
-  top: 2px;
-  right: 0px;
-  background: #a5813a;
-  color: #1a1614;
-  font-size: 9px;
-  font-weight: 900;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #1a1614;
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    background: #a5813a;
+    color: #1a1614;
+    font-size: 9px;
+    font-weight: 900;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #1a1614;
 }
 
-/* RESPONSIVE */
 .navbar__hamburger-btn {
-  display: none;
-  background: none;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  padding: 10px;
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px;
 }
+
 /* Ocultar el menú móvil y sus fondos en la vista de escritorio */
 .navbar__mobile-menu,
 .navbar__blur-overlay {
     display: none;
 }
 
-/* RESPONSIVE */
 @media (max-width: 1000px) {
     .navbar {
         height: 75px;
     }
-    
+
     .navbar__desktop-links,
     .navbar__logo-text {
         display: none !important;
     }
 
-    /* ... y sigue el resto normal ... */
+    .navbar__hamburger-btn {
+        display: block;
+    }
 
-  .navbar__hamburger-btn {
-    display: block;
-  }
+    .navbar__container {
+        padding: 0 10px;
+    }
 
-  .navbar__container {
-    padding: 0 10px;
-  }
+    .navbar__logo {
+        height: 32px;
+    }
 
-  .navbar__logo {
-    height: 32px;
-  }
+    .navbar__center {
+        flex: 1;
+        margin: 0 8px;
+    }
 
-  .navbar__center {
-    flex: 1;
-    margin: 0 8px;
-  }
+    .navbar__mobile-menu {
+        display: flex;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: #1a1614;
+        flex-direction: column;
+        padding: 100px 30px;
+        gap: 25px;
+        transition: 0.4s ease;
+        z-index: 2500;
+    }
 
-  .navbar__mobile-menu {
-    display: flex;
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 280px;
-    height: 100vh;
-    background: #1a1614;
-    flex-direction: column;
-    padding: 100px 30px;
-    gap: 25px;
-    transition: 0.4s ease;
-    z-index: 2500;
-  }
+    .navbar__mobile-menu.active {
+        right: 0;
+    }
 
-  .navbar__mobile-menu.active {
-    right: 0;
-  }
+    /* ESTILO DE LA NUEVA "X" */
+    .navbar__close-btn {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        background: none;
+        border: none;
+        color: #fdfaf7;
+        cursor: pointer;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s;
+    }
 
-  .navbar__mobile-menu a {
-    color: #fdfaf7 !important;
-    text-decoration: none;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    font-weight: 600;
-    border-bottom: 1px solid rgba(165, 129, 58, 0.1);
-    padding-bottom: 10px;
-  }
+    .navbar__close-btn:hover {
+        color: #a5813a;
+    }
 
-  .navbar__blur-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-    z-index: 2400;
-  }
+    .navbar__close-btn .material-symbols-outlined {
+        font-size: 32px;
+    }
+
+    .navbar__mobile-menu a {
+        color: #fdfaf7 !important;
+        text-decoration: none;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        border-bottom: 1px solid rgba(165, 129, 58, 0.1);
+        padding-bottom: 10px;
+    }
+
+    .navbar__blur-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        z-index: 2400;
+    }
 }

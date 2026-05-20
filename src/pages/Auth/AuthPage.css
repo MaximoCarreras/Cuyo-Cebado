@@ -4,13 +4,11 @@
     align-items: center;
     justify-content: center;
     background-color: #fdfaf7;
-    /* Crema boutique */
     padding: 120px 20px 60px;
 }
 
 .auth-card {
     background: #1a1614;
-    /* Negro mate */
     width: 100%;
     max-width: 450px;
     padding: 50px 40px;
@@ -36,7 +34,6 @@
 
 .auth-header p {
     color: #a5813a;
-    /* Dorado */
     font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 35px;
@@ -75,6 +72,39 @@
     outline: none;
     border-color: #a5813a;
     background: #1a1614;
+}
+
+/* === LÓGICA DEL OJITO DE CONTRASEÑA === */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    padding-right: 50px; /* Deja espacio para que el ojito no pise el texto */
+}
+
+.btn-toggle-password {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color 0.3s;
+}
+
+.btn-toggle-password:hover {
+    color: #a5813a;
+}
+
+.btn-toggle-password .material-symbols-outlined {
+    font-size: 20px;
 }
 
 .btn-auth-primary {
@@ -118,7 +148,6 @@
     text-decoration: underline;
 }
 
-/* RESPONSIVE */
 @media (max-width: 480px) {
     .auth-card {
         padding: 40px 20px;
