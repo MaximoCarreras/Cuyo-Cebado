@@ -1,6 +1,6 @@
 .ritual-carousel {
   padding: 100px 0;
-  background-color: #fdfaf7; /* Fondo crema muy claro */
+  background-color: #fdfaf7;
   overflow: hidden;
 }
 
@@ -35,12 +35,14 @@
 .ritual-marquee {
   display: flex;
   width: 100%;
+  overflow: hidden; /* Esconde lo que se sale de la pantalla */
 }
 
 .ritual-track {
   display: flex;
   gap: 20px;
-  animation: ritualScroll 40s linear infinite;
+  width: max-content; /* Permite que la caja mida todo lo que necesite */
+  animation: ritualScroll 25s linear infinite; /* Tiempo de giro continuo */
 }
 
 .ritual-track:hover {
@@ -81,9 +83,11 @@
   transition: 0.4s;
 }
 
-.ritual-overlay i {
+/* Icono genérico por si no tenés cargado FontAwesome */
+.ritual-overlay::after {
+  content: '✦';
   color: #fff;
-  font-size: 2rem;
+  font-size: 2.5rem;
 }
 
 .ritual-item:hover img {
@@ -95,7 +99,20 @@
   opacity: 1;
 }
 
+/* LA SOLUCIÓN DEL BUCLE INFINITO */
 @keyframes ritualScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-300px * 8 - 20px * 8)); }
+  0% { 
+    transform: translateX(0); 
+  }
+  100% { 
+    /* Se mueve exactamente el 50% de la caja, menos la mitad del gap, para un reinicio invisible */
+    transform: translateX(calc(-50% - 10px)); 
+  }
+}
+
+@media (max-width: 768px) {
+  .ritual-item {
+    width: 250px;
+    height: 250px;
+  }
 }
