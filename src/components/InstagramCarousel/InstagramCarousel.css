@@ -1,81 +1,101 @@
-.insta-carousel-section {
-  padding: 80px 0;
-  background-color: #fff;
-  overflow: hidden; /* Oculta lo que se sale de la pantalla */
+.ritual-carousel {
+  padding: 100px 0;
+  background-color: #fdfaf7; /* Fondo crema muy claro */
+  overflow: hidden;
 }
 
-.insta-carousel-header {
+.ritual-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
 }
 
-.insta-overline {
-  display: block; color: #a5813a; letter-spacing: 3px;
-  text-transform: uppercase; font-size: 0.8rem; font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.insta-title {
-  font-family: 'Noto Serif', serif; font-size: 2.2rem; color: #1a1614;
+.ritual-overline {
+  color: #a5813a;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: block;
   margin-bottom: 15px;
 }
 
-.gold-line {
-  width: 50px; height: 3px; background-color: #a5813a;
-  margin: 0 auto; border-radius: 2px;
+.ritual-title {
+  font-family: 'Noto Serif', serif;
+  font-size: 2.5rem;
+  color: #1a1614;
 }
 
-/* Animación del Carrusel Infinito */
-.insta-marquee {
+.ritual-divider {
+  width: 60px;
+  height: 2px;
+  background: #a5813a;
+  margin: 25px auto 0;
+}
+
+.ritual-marquee {
+  display: flex;
   width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  position: relative;
 }
 
-.insta-marquee-track {
-  display: inline-flex;
+.ritual-track {
+  display: flex;
   gap: 20px;
-  animation: scrollMarquee 30s linear infinite;
-  padding: 0 10px;
+  animation: ritualScroll 40s linear infinite;
 }
 
-/* Pausa al poner el mouse encima */
-.insta-marquee-track:hover {
+.ritual-track:hover {
   animation-play-state: paused;
 }
 
-.insta-card {
-  position: relative;
-  width: 250px;
-  height: 250px;
-  border-radius: 16px;
-  overflow: hidden;
+.ritual-item {
+  width: 300px;
+  height: 300px;
   flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
 }
 
-.insta-card img {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform 0.5s ease;
+.ritual-img-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
-.insta-overlay {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(26, 22, 20, 0.4);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: 0.3s ease;
+.ritual-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(20%);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.insta-overlay span { color: #fff; font-size: 2rem; }
+.ritual-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(165, 129, 58, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: 0.4s;
+}
 
-.insta-card:hover img { transform: scale(1.1); }
-.insta-card:hover .insta-overlay { opacity: 1; }
+.ritual-overlay i {
+  color: #fff;
+  font-size: 2rem;
+}
 
-@keyframes scrollMarquee {
+.ritual-item:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.05);
+}
+
+.ritual-item:hover .ritual-overlay {
+  opacity: 1;
+}
+
+@keyframes ritualScroll {
   0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-250px * 8 - 20px * 8)); /* Ajustado a la cantidad de fotos */ }
-}
-
-@media (max-width: 768px) {
-  .insta-card { width: 200px; height: 200px; }
+  100% { transform: translateX(calc(-300px * 8 - 20px * 8)); }
 }

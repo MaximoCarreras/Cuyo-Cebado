@@ -1,23 +1,43 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import './NotFound.css';
 
 export default function NotFound() {
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+
+  // Efecto de Spotlight manual para máxima elegancia y compatibilidad
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      setMousePos({ x, y });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
-    <div className="notfound-page">
-      <div className="notfound-card-wrapper" style={{ background: '#fff', padding: '20px', borderRadius: '24px' }}>
-        <div className="notfound-content">
-          <div className="notfound-logo">🧉</div>
-          <h1 className="notfound-title">¡Oops! Este mate se lavó.</h1>
-          <div className="gold-line"></div>
-          <p className="notfound-text">
-            La página que buscás parece que no existe o cambió de lugar.
-            <br />No te preocupes, hay yerba fresca en el inicio.
-          </p>
-          <Link to="/" className="btn-notfound">
-            <span className="material-symbols-outlined">home</span>
-            Volver al Inicio
-          </Link>
-        </div>
+    <div className="boutique-404" style={{
+      '--mask-x': `${mousePos.x}%`,
+      '--mask-y': `${mousePos.y}%`
+    }}>
+      <div className="boutique-overlay"></div>
+      
+      <div className="boutique-content fade-in">
+        <span className="boutique-tag">Error 404</span>
+        <h1 className="boutique-title">Un rincón sin cebar.</h1>
+        <div className="boutique-divider"></div>
+        <p className="boutique-text">
+          A veces el camino se pierde, pero el ritual siempre nos guía de vuelta.<br />
+          Te invitamos a reanudar la cebada en nuestra tienda principal.
+        </p>
+        
+        <Link to="/" className="boutique-btn">
+          <span>Retomar el Ritual</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </Link>
       </div>
     </div>
   );

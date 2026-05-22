@@ -7,8 +7,11 @@ export default function InstagramCarousel() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      // Necesitás crear esta tabla en Supabase: id, image_url, post_url, created_at
-      const { data } = await supabase.from('instagram_posts').select('*').limit(8);
+      // Usamos la tabla que creamos con SQL
+      const { data } = await supabase
+        .from('instagram_posts')
+        .select('*')
+        .order('created_at', { ascending: false });
       setPosts(data || []);
     };
     fetchPosts();
@@ -17,21 +20,23 @@ export default function InstagramCarousel() {
   if (posts.length === 0) return null;
 
   return (
-    <section className="insta-carousel-section">
-      <div className="insta-carousel-header">
-        <span className="insta-overline">Comunidad</span>
-        <h2 className="insta-title">#CuyoCebado</h2>
-        <div className="gold-line"></div>
+    <section className="ritual-carousel">
+      <div className="ritual-header">
+        <span className="ritual-overline">Comunidad</span>
+        <h2 className="ritual-title">Momentos Cuyo Cebado</h2>
+        <div className="ritual-divider"></div>
       </div>
 
-      <div className="insta-marquee">
-        <div className="insta-marquee-track">
-          {/* Duplicamos el array para el efecto de scroll infinito continuo */}
-          {[...posts, ...posts].map((post, idx) => (
-            <a key={idx} href={post.post_url} target="_blank" rel="noreferrer" className="insta-card">
-              <img src={post.image_url} alt="Instagram Cuyo Cebado" />
-              <div className="insta-overlay">
-                <span className="material-symbols-outlined">favorite</span>
+      <div className="ritual-marquee">
+        <div className="ritual-track">
+          {/* Repetimos los posts para el scroll infinito */}
+          {[...posts, ...posts, ...posts].map((post, idx) => (
+            <a key={idx} href={post.post_url} target="_blank" rel="noreferrer" className="ritual-item">
+              <div className="ritual-img-container">
+                <img src={post.image_url} alt="Cuyo Cebado Instagram" />
+                <div className="ritual-overlay">
+                  <i className="fa-brands fa-instagram"></i>
+                </div>
               </div>
             </a>
           ))}
