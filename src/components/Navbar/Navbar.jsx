@@ -14,26 +14,53 @@ export default function Navbar() {
   const { cart } = useCart();
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
+  // Función separada para buscar el rol del usuario
+  const fetchUserRole = async (userId) => {
+    if (!userId) {
+      setUserRole(null);
+      return;
+    }
+    const { data: pData } = await supabase.from('profiles').select('role').eq('id', userId).single();
+    setUserRole(pData?.role);
+  };
+
   useEffect(() => {
+    // 1. Cargar datos iniciales (Banner y Usuario si ya estaba logueado)
     const fetchNavbarData = async () => {
       const { data: bData } = await supabase.from('site_settings').select('*').eq('id', 'global').single();
       if (bData) setBanner({ text: bData.banner_text, active: bData.banner_active });
 
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: pData } = await supabase.from('profiles').select('role').eq('id', user.id).single();
-        setUserRole(pData?.role);
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        fetchUserRole(session.user.id);
       }
     };
     fetchNavbarData();
 
+    // 2. ESCUCHADOR EN TIEMPO REAL PARA EL LOGIN/LOGOUT (¡La Magia!)
+    const { data: { subscription: authSubscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        // Si hay sesión (se logueó), buscamos su rol. Si no (cerró sesión), borramos el rol.
+        if (session?.user) {
+          fetchUserRole(session.user.id);
+        } else {
+          setUserRole(null);
+        }
+      }
+    );
+
+    // 3. Escuchador en tiempo real para el banner
     const channel = supabase.channel('site_settings_changes')
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'site_settings' }, (payload) => {
         setBanner({ text: payload.new.banner_text, active: payload.new.banner_active });
       })
       .subscribe();
 
-    return () => supabase.removeChannel(channel);
+    // Limpieza al desmontar el componente
+    return () => {
+      supabase.removeChannel(channel);
+      authSubscription.unsubscribe();
+    };
   }, []);
 
   const handleSearch = (e) => {
@@ -120,7 +147,6 @@ export default function Navbar() {
       {isMenuOpen && <div className="navbar__blur-overlay" onClick={() => setIsMenuOpen(false)}></div>}
       
       <div className={`navbar__mobile-menu ${isMenuOpen ? 'active' : ''}`}>
-        {/* BOTÓN X AGREGADO AQUÍ */}
         <button className="navbar__close-btn" onClick={() => setIsMenuOpen(false)}>
           <span className="material-symbols-outlined">close</span>
         </button>
