@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useCart } from '../../context/CartContext';
 import heroImg from '../../assets/fondo_hero_principal.png';
+import InstagramCarousel from '../../components/InstagramCarousel/InstagramCarousel'; // Importamos el carrusel
 import './Home.css';
 
 export default function Home() {
@@ -10,7 +11,7 @@ export default function Home() {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('');
     const [featuredKit, setFeaturedKit] = useState(null);
-    const [dbCategories, setDbCategories] = useState([]); // Nuevo estado para categorías
+    const [dbCategories, setDbCategories] = useState([]);
 
     const heroRef = useRef(null);
     const categoryCardRefs = useRef([]);
@@ -80,7 +81,7 @@ export default function Home() {
                 card.removeEventListener('mousemove', (e) => handleCardMouse(e, card));
             });
         };
-    }, [featuredKit, dbCategories]); // Agregamos dbCategories a las dependencias
+    }, [featuredKit, dbCategories]);
 
     const handleNewsletter = (e) => {
         e.preventDefault();
@@ -112,7 +113,6 @@ export default function Home() {
             <section className="home-categories-section">
                 <h2 className="global-section-title">Nuestras Colecciones</h2>
                 <div className="categories-grid-premium">
-                    {/* AHORA MAPEAMOS DESDE LA BASE DE DATOS */}
                     {dbCategories.map((cat, index) => (
                         <Link
                             key={cat.id}
@@ -184,6 +184,10 @@ export default function Home() {
                     {status === 'exito' && <p className="club-msg-ok">¡Bienvenido al Club!</p>}
                 </div>
             </section>
+
+            {/* SECCIÓN DE INSTAGRAM AGREGADA AQUÍ */}
+            <InstagramCarousel />
+            
         </div>
     );
 }

@@ -5,7 +5,7 @@ import './NotFound.css';
 export default function NotFound() {
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
-  // Efecto de Spotlight manual para máxima elegancia y compatibilidad
+  // Escuchador manual del mouse para un Spotlight sutil y compatible
   useEffect(() => {
     const handleMouseMove = (e) => {
       const x = (e.clientX / window.innerWidth) * 100;
@@ -24,7 +24,7 @@ export default function NotFound() {
       <div className="boutique-overlay"></div>
       
       <div className="boutique-content fade-in">
-        <span className="boutique-tag">Error 404</span>
+        <span className="boutique-tag">Interrupción</span>
         <h1 className="boutique-title">Un rincón sin cebar.</h1>
         <div className="boutique-divider"></div>
         <p className="boutique-text">

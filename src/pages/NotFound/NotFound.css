@@ -1,7 +1,7 @@
 .boutique-404 {
   height: 100vh;
   width: 100%;
-  background-color: #1a1614; /* Marrón Ébano Profundo */
+  background-color: #2b2520; /* Marrón Cálido Profundo (No ébano) */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,11 +9,12 @@
   overflow: hidden;
   color: #fdfaf7;
   font-family: 'Inter', sans-serif;
-  /* El efecto de Spotlight */
+  
+  /* CORRECCIÓN: Spotlight Dorado súper sutil y suave */
   background: radial-gradient(
     circle at var(--mask-x) var(--mask-y),
-    rgba(165, 129, 58, 0.15) 0%,
-    rgba(26, 22, 20, 1) 50%
+    rgba(165, 129, 58, 0.05) 0%, /* Solo 5% de opacidad dorada */
+    rgba(43, 37, 32, 1) 70% /* Transición suave al marrón de fondo */
   );
 }
 
@@ -21,7 +22,7 @@
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
   background: url('https://www.transparenttextures.com/patterns/dark-leather.png');
-  opacity: 0.1;
+  opacity: 0.05; /* Textura casi invisible */
   pointer-events: none;
 }
 
@@ -34,7 +35,7 @@
 
 .boutique-tag {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   letter-spacing: 5px;
   text-transform: uppercase;
   color: #a5813a;
@@ -44,24 +45,24 @@
 
 .boutique-title {
   font-family: 'Noto Serif', serif;
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
   margin-bottom: 20px;
   font-weight: 400;
   letter-spacing: -1px;
 }
 
 .boutique-divider {
-  width: 80px;
+  width: 60px;
   height: 1px;
   background-color: #a5813a;
   margin: 0 auto 30px auto;
 }
 
 .boutique-text {
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.8;
   color: #d1d5db;
-  margin-bottom: 40px;
+  margin-bottom: 45px;
   font-weight: 300;
 }
 
@@ -71,17 +72,22 @@
   gap: 15px;
   background: transparent;
   color: #fdfaf7;
-  padding: 18px 35px;
+  padding: 16px 32px;
   border: 1px solid #a5813a;
+  
+  /* CORRECCIÓN: Botón curvo y elegante (como las tarjetas) */
+  border-radius: 12px; 
+  
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 2px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
 }
 
 .boutique-btn svg {
-  width: 18px;
+  width: 16px;
   transition: transform 0.4s;
 }
 
