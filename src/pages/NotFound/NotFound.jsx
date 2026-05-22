@@ -1,12 +1,10 @@
 import { Link } from 'react-router-dom';
-import SpotlightCard from '../../Animations/SpotlightCard'; // Llamamos al efecto que ya tenés
 import './NotFound.css';
 
 export default function NotFound() {
   return (
     <div className="notfound-page">
-      {/* Envolvemos la tarjeta en tu SpotlightCard */}
-      <SpotlightCard className="notfound-card-wrapper" spotlightColor="rgba(165, 129, 58, 0.15)">
+      <div className="notfound-card-wrapper" style={{ background: '#fff', padding: '20px', borderRadius: '24px' }}>
         <div className="notfound-content">
           <div className="notfound-logo">🧉</div>
           <h1 className="notfound-title">¡Oops! Este mate se lavó.</h1>
@@ -20,7 +18,7 @@ export default function NotFound() {
             Volver al Inicio
           </Link>
         </div>
-      </SpotlightCard>
+      </div>
     </div>
   );
 }
