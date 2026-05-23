@@ -35,14 +35,15 @@
 .ritual-marquee {
   display: flex;
   width: 100%;
-  overflow: hidden; /* Esconde lo que se sale de la pantalla */
+  overflow: hidden; 
 }
 
 .ritual-track {
   display: flex;
   gap: 20px;
-  width: max-content; /* Permite que la caja mida todo lo que necesite */
-  animation: ritualScroll 25s linear infinite; /* Tiempo de giro continuo */
+  width: max-content; 
+  /* La animación dura 35 segundos para que no maree y se vea elegante */
+  animation: ritualScroll 35s linear infinite; 
 }
 
 .ritual-track:hover {
@@ -64,7 +65,7 @@
   position: relative;
 }
 
-.ritual-img-container img {
+.ritual-main-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -75,7 +76,7 @@
 .ritual-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(165, 129, 58, 0.4);
+  background: rgba(165, 129, 58, 0.5); /* Filtro dorado un poco más marcado */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -83,14 +84,17 @@
   transition: 0.4s;
 }
 
-/* Icono genérico por si no tenés cargado FontAwesome */
-.ritual-overlay::after {
-  content: '✦';
-  color: #fff;
-  font-size: 2.5rem;
+/* --- ESTILOS DEL NUEVO LOGO --- */
+.ritual-overlay-logo {
+  width: 90px; /* Tamaño del logo. Lo podés achicar o agrandar */
+  height: auto;
+  /* El filtro de abajo convierte tu logo de color a Blanco puro brillante. 
+     Si querés que tu logo conserve su color original (dorado/negro), borrá la línea de filter de abajo */
+  filter: brightness(0) invert(1); 
+  transition: transform 0.4s ease;
 }
 
-.ritual-item:hover img {
+.ritual-item:hover .ritual-main-img {
   filter: grayscale(0%);
   transform: scale(1.05);
 }
@@ -99,13 +103,16 @@
   opacity: 1;
 }
 
-/* LA SOLUCIÓN DEL BUCLE INFINITO */
+.ritual-item:hover .ritual-overlay-logo {
+  transform: scale(1.1); /* Hace que el logo palpite un poquito al pasar el mouse */
+}
+
+/* MATEMÁTICA EXACTA DEL BUCLE INFINITO */
 @keyframes ritualScroll {
   0% { 
     transform: translateX(0); 
   }
   100% { 
-    /* Se mueve exactamente el 50% de la caja, menos la mitad del gap, para un reinicio invisible */
     transform: translateX(calc(-50% - 10px)); 
   }
 }
