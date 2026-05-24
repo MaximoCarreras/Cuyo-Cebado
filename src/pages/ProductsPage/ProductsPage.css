@@ -101,6 +101,35 @@
 }
 
 /* =========================================
+   1.5. MAGIA DEL SPOTLIGHT (LUZ DORADA)
+   ========================================= */
+.spotlight-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.spotlight-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    /* El círculo de luz dorada sutil que sigue al mouse */
+    background: radial-gradient(
+        800px circle at var(--mouse-x) var(--mouse-y),
+        rgba(165, 129, 58, 0.12),
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none; /* Evita que la luz bloquee los clics */
+    z-index: 1;
+}
+
+.spotlight-card:hover::before {
+    opacity: 1; /* Se enciende al pasar el mouse */
+}
+
+
+/* =========================================
    2. ESTILOS RESULTADOS DE BÚSQUEDA
    ========================================= */
 .catalog-grid-premium {
@@ -261,7 +290,7 @@
    ========================================= */
 @media (max-width: 768px) {
     .products-page {
-        padding: 90px 10px 80px; /* Reducimos espacios laterales para aprovechar la pantalla */
+        padding: 90px 10px 80px; 
     }
 
     .products-page__title {
@@ -271,7 +300,7 @@
     .products-grid,
     .catalog-grid-premium {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px; /* Gap más apretado para estilo catálogo celular */
+        gap: 10px; 
     }
 
     .product-category-card {
@@ -293,11 +322,11 @@
     }
 
     .catalog-info-premium {
-        padding: 12px; /* Menos padding en la tarjeta móvil */
+        padding: 12px; 
     }
 
     .catalog-title {
-        font-size: 0.95rem; /* Achicamos texto para que no rompa en dos renglones */
+        font-size: 0.95rem; 
         margin-bottom: 10px;
         line-height: 1.2;
     }
@@ -312,6 +341,6 @@
     }
 
     .btn-quick-view {
-        display: none; /* Oculto en móvil para limpiar la vista */
+        display: none; 
     }
 }

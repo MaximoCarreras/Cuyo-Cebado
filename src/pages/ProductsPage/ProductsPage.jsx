@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import './ProductsPage.css';
@@ -9,7 +9,11 @@ export default function ProductsPage() {
     const [isSearching, setIsSearching] = useState(false);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
+    
+    // 1. Creamos la referencia para "enganchar" las tarjetas
+    const categoryRefs = useRef([]);
 
+    // Efecto original para cargar productos o categorías
     useEffect(() => {
         const fetchPageData = async () => {
             const params = new URLSearchParams(location.search);
@@ -48,6 +52,31 @@ export default function ProductsPage() {
         };
         fetchPageData();
     }, [location.search]);
+
+    // 2. EFECTO SPOTLIGHT: Rastrea el mouse en las categorías
+    useEffect(() => {
+        const handleCardMouse = (e, card) => {
+            if (!card) return;
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty("--mouse-x", `${x}px`);
+            card.style.setProperty("--mouse-y", `${y}px`);
+        };
+
+        const cards = categoryRefs.current;
+        cards.forEach((card) => {
+            if (!card) return;
+            card.addEventListener('mousemove', (e) => handleCardMouse(e, card));
+        });
+
+        return () => {
+            cards.forEach((card) => {
+                if (!card) return;
+                card.removeEventListener('mousemove', (e) => handleCardMouse(e, card));
+            });
+        };
+    }, [dbCategories]); // Se vuelve a ejecutar cuando cargan las categorías de la base de datos
 
     if (loading) return <div className="catalog-loading">Preparando el catálogo...</div>;
 
@@ -92,10 +121,15 @@ export default function ProductsPage() {
         <div className="products-page">
             <h1 className="products-page__title">¿Qué estás buscando hoy?</h1>
             <div className="products-grid">
-                {dbCategories.map(cat => (
-                    <Link key={cat.id} to={`/productos/${cat.id}`} className="product-category-card">
-                        {/* LÓGICA DE FOTO O EMOJI ACTUALIZADA */}
-                        <div className="category-card__icon" style={{ display: 'flex', justifyContent: 'center' }}>
+                {/* 3. ASIGNAMOS LA REFERENCIA (ref) Y LA CLASE (spotlight-card) A CADA TARJETA */}
+                {dbCategories.map((cat, index) => (
+                    <Link 
+                        key={cat.id} 
+                        to={`/productos/${cat.id}`} 
+                        className="product-category-card spotlight-card"
+                        ref={(el) => (categoryRefs.current[index] = el)}
+                    >
+                        <div className="category-card__icon" style={{ display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
                             {cat.image_url ? (
                                 <img
                                     src={cat.image_url}
@@ -106,7 +140,7 @@ export default function ProductsPage() {
                                 cat.icon
                             )}
                         </div>
-                        <div className="category-card__info">
+                        <div className="category-card__info" style={{ position: 'relative', zIndex: 2 }}>
                             <h3>{cat.label}</h3>
                             <span>Explorar colección</span>
                         </div>
