@@ -1,0 +1,179 @@
+.admin-insta-manager {
+  background: #1a1614;
+  color: #fdfaf7;
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid rgba(165, 129, 58, 0.2);
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+}
+
+.admin-insta-header h2 {
+  font-family: 'Noto Serif', serif;
+  color: #a5813a;
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+}
+
+.admin-insta-header p {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  margin-bottom: 25px;
+}
+
+/* Mensajes de estado */
+.admin-message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.admin-message.success { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; }
+.admin-message.error { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid #ef4444; }
+
+/* Formulario */
+.admin-insta-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 40px;
+}
+
+.admin-input-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #a5813a;
+  margin-bottom: 8px;
+}
+
+.admin-input-group input[type="url"] {
+  width: 100%;
+  padding: 12px 16px;
+  background: #26211e;
+  border: 1px solid #3f3732;
+  border-radius: 8px;
+  color: #fdfaf7;
+  font-family: inherit;
+  transition: 0.3s;
+}
+
+.admin-input-group input[type="url"]:focus {
+  outline: none;
+  border-color: #a5813a;
+  box-shadow: 0 0 0 2px rgba(165, 129, 58, 0.2);
+}
+
+.admin-input-group input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: #26211e;
+  border: 1px solid #3f3732;
+  border-radius: 8px;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.btn-admin-submit {
+  background: #a5813a;
+  color: #1a1614;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-admin-submit:hover:not(:disabled) {
+  background: #fdfaf7;
+}
+
+.btn-admin-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Listado inferior */
+.admin-insta-list-container h3 {
+  font-family: 'Noto Serif', serif;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 10px;
+}
+
+.no-posts { color: #6b7280; font-size: 0.9rem; text-align: center; padding: 20px; }
+
+.admin-insta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 20px;
+}
+
+.admin-insta-card {
+  background: #26211e;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #3f3732;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-card-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.admin-card-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-card-info {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.admin-link-check {
+  font-size: 0.75rem;
+  color: #a5813a;
+  text-decoration: none;
+  text-align: center;
+}
+
+.admin-link-check:hover { text-decoration: underline; }
+
+.btn-admin-delete {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  padding: 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  text-transform: uppercase;
+}
+
+.btn-admin-delete:hover {
+  background: #ef4444;
+  color: #fff;
+}
