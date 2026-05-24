@@ -11,7 +11,12 @@ export default function AuthPage() {
     const [phone, setPhone] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    
+    // Estados para el Dashboard del Cliente
     const [user, setUser] = useState(null);
+    const [profile, setProfile] = useState(null);
+    const [myOrders, setMyOrders] = useState([]);
+    const [fetchingData, setFetchingData] = useState(false);
 
     const navigate = useNavigate();
 
@@ -19,15 +24,53 @@ export default function AuthPage() {
         const getSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             setUser(session?.user ?? null);
+            if (session?.user) {
+                fetchClientData(session.user.id);
+            }
         };
         getSession();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
+            if (session?.user) {
+                fetchClientData(session.user.id);
+            } else {
+                setProfile(null);
+                setMyOrders([]);
+            }
         });
 
         return () => subscription.unsubscribe();
     }, []);
+
+    // Función para buscar los puntos y las compras del cliente en Supabase
+    const fetchClientData = async (userId) => {
+        setFetchingData(true);
+        try {
+            // 1. Buscar los Puntos en el perfil
+            const { data: profileData } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', userId)
+                .single();
+            
+            if (profileData) setProfile(profileData);
+
+            // 2. Buscar el Historial de Compras (Rituales)
+            const { data: ordersData } = await supabase
+                .from('orders')
+                .select('*')
+                .eq('user_id', userId)
+                .order('created_at', { ascending: false });
+            
+            if (ordersData) setMyOrders(ordersData);
+
+        } catch (error) {
+            console.error("Error al cargar datos del cliente:", error);
+        } finally {
+            setFetchingData(false);
+        }
+    };
 
     const handleAuth = async (e) => {
         e.preventDefault();
@@ -67,30 +110,104 @@ export default function AuthPage() {
         navigate('/');
     };
 
+    // Función para renderizar el "Semáforo" de Estado de forma visual
+    const renderStatusBadge = (status) => {
+        const statusMap = {
+            'pending': { text: 'Pago Pendiente', class: 'status-pending' },
+            'en_preparacion': { text: 'En Preparación 🛠️', class: 'status-prep' },
+            'en_distribucion': { text: 'En Distribución 🚚', class: 'status-dist' },
+            'listo_para_retirar': { text: 'Listo para Retirar 🏠', class: 'status-ready' },
+            'completed': { text: 'Entregado ✔️', class: 'status-done' },
+            'cancelled': { text: 'Cancelado ❌', class: 'status-cancelled' }
+        };
+        const current = statusMap[status] || statusMap['pending'];
+        return <span className={`client-status-badge ${current.class}`}>{current.text}</span>;
+    };
+
+    // VISTA 1: DASHBOARD DEL CLIENTE LOGUEADO
     if (user) {
         return (
-            <div className="auth-page">
-                <div className="auth-card">
-                    <div className="auth-header">
-                        <div className="auth-logo">🧉</div>
-                        <h2>Mi Perfil</h2>
-                        <p style={{ color: '#a5813a', fontWeight: 'bold' }}>{user.email}</p>
-                    </div>
-                    <div style={{ marginTop: '30px' }}>
-                        <p style={{ color: '#888' }}>¡Bienvenido al Club de Cuyo Cebado!</p>
-                        <button
-                            onClick={handleLogout}
-                            className="btn-auth-primary"
-                            style={{ marginTop: '20px', background: '#1a1614', color: '#a5813a', border: '1px solid #a5813a' }}
-                        >
-                            Cerrar Sesión
+            <div className="client-dashboard-page">
+                <div className="dashboard-container">
+                    {/* ENCABEZADO Y TARJETA DEL CLUB */}
+                    <div className="dashboard-header">
+                        <div className="user-greeting">
+                            <h2>Hola, {profile?.full_name || 'Matero'}</h2>
+                            <p>{user.email}</p>
+                        </div>
+                        <button onClick={handleLogout} className="btn-logout-minimal">
+                            <span className="material-symbols-outlined">logout</span> Salir
                         </button>
+                    </div>
+
+                    <div className="club-card-premium">
+                        <div className="club-card-content">
+                            <div className="club-logo">🧉 Cuyo Cebado Club</div>
+                            <div className="club-points">
+                                <h3>{profile?.puntos || 0}</h3>
+                                <span>Cuyo Puntos ✨</span>
+                            </div>
+                            <p className="club-perk">
+                                Equivalen a <strong>${((profile?.puntos || 0) * 3).toLocaleString()}</strong> de crédito a favor.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* HISTORIAL DE COMPRAS */}
+                    <div className="dashboard-history">
+                        <h3>Mis Rituales</h3>
+                        
+                        {fetchingData ? (
+                            <p className="loading-text">Buscando tus piezas en la estancia...</p>
+                        ) : myOrders.length === 0 ? (
+                            <div className="no-orders-box">
+                                <span className="material-symbols-outlined">shopping_bag</span>
+                                <p>Aún no tenés compras registradas.</p>
+                                <button onClick={() => navigate('/productos')} className="btn-auth-primary">
+                                    Ir al Catálogo
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="orders-grid">
+                                {myOrders.map(order => (
+                                    <div key={order.id} className="client-order-card">
+                                        <div className="order-card-header">
+                                            <span className="order-date">
+                                                {new Date(order.created_at).toLocaleDateString()}
+                                            </span>
+                                            {renderStatusBadge(order.tracking_status || order.status)}
+                                        </div>
+                                        
+                                        <div className="order-items-list">
+                                            {order.items?.map((item, idx) => (
+                                                <div key={idx} className="order-item-row">
+                                                    <span>{item.quantity}x {item.title}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="order-card-footer">
+                                            <div className="order-total-col">
+                                                <span className="label">Total Abonado</span>
+                                                <span className="amount">${order.total?.toLocaleString()}</span>
+                                            </div>
+                                            <div className="order-points-col">
+                                                {order.puntos_ganados > 0 && (
+                                                    <span className="points-earned">+ {order.puntos_ganados} pts</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
         );
     }
 
+    // VISTA 2: FORMULARIO DE INGRESO / REGISTRO (Intacto)
     return (
         <div className="auth-page">
             <div className="auth-card">

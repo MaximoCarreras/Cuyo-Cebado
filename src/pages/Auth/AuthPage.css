@@ -1,3 +1,6 @@
+/* =========================================
+   1. LOGIN / REGISTRO ORIGINAL
+   ========================================= */
 .auth-page {
     min-height: 100vh;
     display: flex;
@@ -74,7 +77,6 @@
     background: #1a1614;
 }
 
-/* === LÓGICA DEL OJITO DE CONTRASEÑA === */
 .password-wrapper {
     position: relative;
     display: flex;
@@ -82,7 +84,7 @@
 }
 
 .password-wrapper input {
-    padding-right: 50px; /* Deja espacio para que el ojito no pise el texto */
+    padding-right: 50px; 
 }
 
 .btn-toggle-password {
@@ -122,9 +124,14 @@
     transition: 0.3s;
 }
 
-.btn-auth-primary:hover {
+.btn-auth-primary:hover:not(:disabled) {
     background: #fdfaf7;
     transform: translateY(-2px);
+}
+
+.btn-auth-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
 .auth-footer {
@@ -146,6 +153,319 @@
     margin-left: 8px;
     cursor: pointer;
     text-decoration: underline;
+}
+
+/* =========================================
+   2. DASHBOARD PRIVADO DEL CLIENTE
+   ========================================= */
+.client-dashboard-page {
+    min-height: 100vh;
+    background-color: #fdfaf7;
+    padding: 120px 24px 80px;
+    font-family: 'Inter', sans-serif;
+}
+
+.dashboard-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Encabezado */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
+}
+
+.user-greeting h2 {
+    font-family: 'Noto Serif', serif;
+    font-size: 2.2rem;
+    color: #1a1614;
+    margin: 0 0 5px 0;
+}
+
+.user-greeting p {
+    color: #64748b;
+    margin: 0;
+    font-weight: 500;
+}
+
+.btn-logout-minimal {
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.btn-logout-minimal:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* Tarjeta Premium de Puntos */
+.club-card-premium {
+    background: linear-gradient(135deg, #1a1614 0%, #2b2520 100%);
+    border: 1px solid rgba(165, 129, 58, 0.4);
+    border-radius: 20px;
+    padding: 40px;
+    color: #fff;
+    box-shadow: 0 20px 40px rgba(165, 129, 58, 0.15);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 50px;
+}
+
+/* Reflejo dorado estilo tarjeta de crédito */
+.club-card-premium::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(165, 129, 58, 0.1) 0%, transparent 60%);
+    transform: rotate(30deg);
+    pointer-events: none;
+}
+
+.club-card-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.club-logo {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #a5813a;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.club-points h3 {
+    font-family: 'Noto Serif', serif;
+    font-size: 5rem;
+    color: #fdfaf7;
+    margin: 0;
+    line-height: 1;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.club-points span {
+    display: block;
+    font-size: 1.2rem;
+    color: #a5813a;
+    font-weight: 700;
+    margin-top: 5px;
+    margin-bottom: 25px;
+}
+
+.club-perk {
+    background: rgba(255, 255, 255, 0.05);
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.club-perk strong {
+    color: #a5813a;
+    font-size: 1.1rem;
+}
+
+/* Historial de Rituales (Compras) */
+.dashboard-history h3 {
+    font-family: 'Noto Serif', serif;
+    font-size: 1.6rem;
+    color: #1a1614;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.loading-text {
+    text-align: center;
+    color: #a5813a;
+    font-weight: 600;
+    padding: 40px;
+}
+
+.no-orders-box {
+    text-align: center;
+    background: #fff;
+    padding: 60px 20px;
+    border-radius: 16px;
+    border: 1px dashed #cbd5e1;
+}
+
+.no-orders-box .material-symbols-outlined {
+    font-size: 3rem;
+    color: #a5813a;
+    margin-bottom: 15px;
+}
+
+.no-orders-box p {
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.orders-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.client-order-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 25px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    transition: 0.3s;
+}
+
+.client-order-card:hover {
+    border-color: rgba(165, 129, 58, 0.3);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.order-date {
+    font-weight: 700;
+    color: #1a1614;
+    font-size: 1.1rem;
+}
+
+/* Etiquetas de Estado Logístico (El Semáforo) */
+.client-status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending { background: #f1f5f9; color: #64748b; }
+.status-prep { background: #e0e7ff; color: #4f46e5; }
+.status-dist { background: #fef08a; color: #854d0e; }
+.status-ready { background: #a5813a; color: #1a1614; box-shadow: 0 2px 8px rgba(165,129,58,0.4); }
+.status-done { background: #dcfce3; color: #166534; }
+.status-cancelled { background: #fee2e2; color: #991b1b; }
+
+/* Lista de ítems */
+.order-items-list {
+    margin-bottom: 20px;
+}
+
+.order-item-row {
+    color: #475569;
+    font-weight: 500;
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+}
+
+.order-item-row::before {
+    content: '•';
+    color: #a5813a;
+    margin-right: 10px;
+    font-size: 1.5rem;
+    line-height: 0;
+}
+
+/* Footer de la orden */
+.order-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.order-total-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-total-col .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #94a3b8;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.order-total-col .amount {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1a1614;
+}
+
+.points-earned {
+    background: rgba(165, 129, 58, 0.1);
+    color: #a5813a;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    border: 1px solid rgba(165, 129, 58, 0.2);
+}
+
+/* =========================================
+   3. RESPONSIVE MÓVIL
+   ========================================= */
+@media (max-width: 768px) {
+    .client-dashboard-page {
+        padding: 100px 15px 60px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .btn-logout-minimal {
+        align-self: flex-start;
+        padding: 8px 0;
+    }
+
+    .club-card-premium {
+        padding: 30px 20px;
+    }
+
+    .club-points h3 {
+        font-size: 4rem;
+    }
+
+    .order-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .order-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
 }
 
 @media (max-width: 480px) {
