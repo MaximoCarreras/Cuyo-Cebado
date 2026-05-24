@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
+import AdminInstagram from './AdminInstagram'; // <-- IMPORT NUEVO DEL CARRUSEL
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
@@ -115,20 +116,16 @@ export default function AdminDashboard() {
         }
     };
 
-    // 💥 FUNCIÓN LOGÍSTICA: CANCELAR PEDIDO Y RESTAURAR STOCK 💥
     const handleCancelOrder = async (order) => {
         if (!window.confirm(`¿Seguro que querés CANCELAR el pedido de ${order.customer_name}? Se devolverá el stock disponible.`)) return;
 
         setTabLoading(true);
         try {
-            // 1. Cambiar estado a cancelado
             const { error: statusErr } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', order.id);
             if (statusErr) throw statusErr;
 
-            // 2. Recorrer los items devueltos e incrementar el stock en Supabase
             if (order.items && order.items.length > 0) {
                 for (const item of order.items) {
-                    // Buscamos el producto por su nombre (title en la orden)
                     const { data: prod } = await supabase.from('products').select('id, stock').eq('name', item.title).single();
 
                     if (prod) {
@@ -284,7 +281,7 @@ export default function AdminDashboard() {
                             </section>
                         )}
 
-                        {/* VENTAS CON ACCIÓN DE CANCELAR REPARADA */}
+                        {/* VENTAS */}
                         {activeTab === 'orders' && (
                             <section className="fade-in">
                                 <div className="table-container">
@@ -388,6 +385,11 @@ export default function AdminDashboard() {
                                         <button className="btn-save-gold-full" onClick={handleUpdateSettings}>GUARDAR AJUSTES</button>
                                     </div>
                                 </div>
+
+                                {/* --- GESTOR DE INSTAGRAM AÑADIDO ACÁ --- */}
+                                <div style={{ marginTop: '40px' }}>
+                                    <AdminInstagram />
+                                </div>
                             </section>
                         )}
 
@@ -432,7 +434,7 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* 🚚 MODAL DETALLES PEDIDO EXTENDIDO PARA MERCADO ENVÍOS 🚚 */}
+            {/* MODALES INTACTOS */}
             {selectedOrder && (
                 <div className="refined-modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="refined-modal-card order-modal" onClick={e => e.stopPropagation()}>
@@ -485,7 +487,6 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            {/* MODAL FICHA PRODUCTO */}
             {isModalOpen && (
                 <div className="refined-modal-backdrop" onClick={closeModal}>
                     <div className="refined-modal-card" onClick={e => e.stopPropagation()}>
