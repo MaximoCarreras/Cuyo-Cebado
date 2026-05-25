@@ -15,7 +15,9 @@ export default function Navbar() {
   const { cart } = useCart();
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Busca el rol y los puntos del usuario logueado
+  // Función de normalización para que el buscador sea "inteligente"
+  const normalize = (text) => text?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") || "";
+
   const fetchUserData = async (userId) => {
     if (!userId) {
       setUserRole(null);
@@ -73,9 +75,7 @@ export default function Navbar() {
     }
   };
 
-  const phrases = banner.text
-    ? banner.text.split(',').map(p => p.trim()).filter(Boolean)
-    : [];
+  const phrases = banner.text ? banner.text.split(',').map(p => p.trim()).filter(Boolean) : [];
 
   return (
     <>
@@ -84,16 +84,12 @@ export default function Navbar() {
           <div className="announcement-banner__track">
             <div className="announcement-banner__content">
               {Array(6).fill(phrases).flat().map((phrase, idx) => (
-                <span key={`c1-${idx}`} className="banner-phrase">
-                  {phrase} <span className="banner-diamond">✦</span>
-                </span>
+                <span key={`c1-${idx}`} className="banner-phrase">{phrase} <span className="banner-diamond">✦</span></span>
               ))}
             </div>
             <div className="announcement-banner__content" aria-hidden="true">
               {Array(6).fill(phrases).flat().map((phrase, idx) => (
-                <span key={`c2-${idx}`} className="banner-phrase">
-                  {phrase} <span className="banner-diamond">✦</span>
-                </span>
+                <span key={`c2-${idx}`} className="banner-phrase">{phrase} <span className="banner-diamond">✦</span></span>
               ))}
             </div>
           </div>
@@ -123,11 +119,9 @@ export default function Navbar() {
               <Link to="/nosotros" className="nav-item">Nosotros</Link>
               <Link to="/guia-curado" className="nav-item">Guía</Link>
               
-              {/* LÓGICA DEL PATOVICA VIP */}
               {userRole === 'admin' ? (
                 <Link to="/admin" className="nav-item nav-item--admin" style={{ color: '#a5813a', fontWeight: 'bold' }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', verticalAlign: 'middle', marginRight: '4px' }}>admin_panel_settings</span>
-                  ADMIN
+                  <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', verticalAlign: 'middle', marginRight: '4px' }}>admin_panel_settings</span> ADMIN
                 </Link>
               ) : (
                 <Link to="/mi-cuenta" className="nav-item nav-item--account" style={{ color: userPoints > 0 ? '#a5813a' : 'inherit', fontWeight: userPoints > 0 ? '700' : 'normal' }}>
@@ -162,7 +156,6 @@ export default function Navbar() {
         <Link to="/nosotros" onClick={() => setIsMenuOpen(false)}>Nosotros</Link>
         <Link to="/guia-curado" onClick={() => setIsMenuOpen(false)}>Guía de Curado</Link>
         
-        {/* LÓGICA DEL PATOVICA VIP EN MÓVIL */}
         {userRole === 'admin' ? (
           <Link to="/admin" onClick={() => setIsMenuOpen(false)} style={{ color: '#a5813a', fontWeight: 'bold' }}>Panel Admin</Link>
         ) : (
