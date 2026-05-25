@@ -13,7 +13,6 @@ export default function CartPage() {
     const [dbCategories, setDbCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Sistema de Puntos
     const [userProfile, setUserProfile] = useState(null);
     const [applyPoints, setApplyPoints] = useState(false);
 
@@ -83,7 +82,6 @@ export default function CartPage() {
             });
 
             const data = await response.json();
-
             if (!response.ok) throw new Error(data.error || 'Falla al inicializar la pasarela.');
 
             toast.success("Redirigiendo a Mercado Pago...");
@@ -149,7 +147,6 @@ export default function CartPage() {
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Datos para el Retiro</h3>
-
                         <div className="form-inputs-group">
                             <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
                             <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
@@ -167,13 +164,11 @@ export default function CartPage() {
                                     <p>📍 Av. Colón 701, Mendoza Capital</p>
                                     <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
                                 </div>
-                                
-                                {/* MAPA INTEGRADO */}
                                 <div className="map-container" style={{ width: '100%', marginTop: '15px', borderRadius: '12px', overflow: 'hidden' }}>
                                     <iframe 
-                                        src="AQUÍ_VA_TU_URL_DE_EMBED_DE_GOOGLE" 
+                                        src="PONER_AQUÍ_TU_URL_DE_GOOGLE_MAPS" 
                                         width="100%" 
-                                        height="300" 
+                                        height="250" 
                                         style={{ border: 0 }} 
                                         allowFullScreen="" 
                                         loading="lazy" 
@@ -203,14 +198,12 @@ export default function CartPage() {
                                 <span style={{ fontSize: applyPoints ? '1rem' : 'inherit' }}>Subtotal</span>
                                 <span style={{ fontSize: applyPoints ? '1rem' : 'inherit' }}>{formatCurrency(cartTotal)}</span>
                             </div>
-                            
                             {applyPoints && (
                                 <div className="t-row main-total" style={{ color: '#a5813a', marginTop: '5px' }}>
                                     <span>TOTAL</span>
                                     <span>{formatCurrency(finalTotal)}</span>
                                 </div>
                             )}
-
                             <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '12px', textAlign: 'center', fontWeight: '600' }}>
                                 🛍️ Sumás <strong>{earnedPoints} puntos</strong> con esta compra.
                             </p>
