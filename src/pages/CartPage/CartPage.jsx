@@ -12,7 +12,6 @@ export default function CartPage() {
     const navigate = useNavigate();
     const [dbCategories, setDbCategories] = useState([]);
     const [loading, setLoading] = useState(false);
-
     const [userProfile, setUserProfile] = useState(null);
     const [applyPoints, setApplyPoints] = useState(false);
 
@@ -166,7 +165,7 @@ export default function CartPage() {
                                 </div>
                                 <div className="map-container" style={{ width: '100%', marginTop: '15px', borderRadius: '12px', overflow: 'hidden' }}>
                                     <iframe 
-                                        src="PONER_AQUÍ_TU_URL_DE_GOOGLE_MAPS" 
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.598501306354!2d-68.84755102377309!3d-32.89069507364408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e0901e1492d2b%3A0x6b2b73f707f4339b!2sAv.+Col%C3%B3n+701%2C+M5500+Mendoza!5e0!3m2!1ses-419!2sar!4v1716637372297!5m2!1ses-419!2sar" 
                                         width="100%" 
                                         height="250" 
                                         style={{ border: 0 }} 
