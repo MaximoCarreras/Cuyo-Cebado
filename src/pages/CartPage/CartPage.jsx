@@ -41,7 +41,6 @@ export default function CartPage() {
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
     const getCategoryIcon = (slug) => dbCategories.find(c => c.id === slug)?.icon || '🧉';
 
-    // Matemáticas de Fidelización
     const discountAmount = applyPoints && userProfile?.puntos ? userProfile.puntos * 3 : 0;
     const finalTotal = cartTotal - discountAmount;
     const earnedPoints = Math.floor(cartTotal / 100);
@@ -54,14 +53,13 @@ export default function CartPage() {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
             const fixedAddress = 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)';
 
-            // Guardamos la orden en Supabase con la data de los puntos
             const { error: dbError } = await supabase.from('orders').insert([{
                 customer_email: orderData.email,
                 customer_name: orderData.name,
                 customer_phone: orderData.phone,
                 shipping_method: 'pickup',
                 shipping_address: fixedAddress,
-                total: finalTotal, // Enviamos el total con descuento aplicado
+                total: finalTotal,
                 items: cart,
                 status: 'pending',
                 tracking_status: 'pending',
@@ -72,7 +70,6 @@ export default function CartPage() {
 
             if (dbError) throw dbError;
 
-            // Enviar a Mercado Pago (Le mandamos el descuento en el body)
             const response = await fetch(`${baseUrl}/api/checkout`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -87,18 +84,12 @@ export default function CartPage() {
 
             const data = await response.json();
 
-            if (!response.ok) {
-                throw new Error(data.error || 'Falla al inicializar la pasarela.');
-            }
+            if (!response.ok) throw new Error(data.error || 'Falla al inicializar la pasarela.');
 
             toast.success("Redirigiendo a Mercado Pago...");
 
             setTimeout(() => {
-                try {
-                    if (typeof clearCart === 'function') clearCart();
-                } catch (err) {
-                    console.warn(err);
-                }
+                if (typeof clearCart === 'function') clearCart();
                 window.location.href = data.init_point;
             }, 1500);
 
@@ -176,12 +167,24 @@ export default function CartPage() {
                                     <p>📍 Av. Colón 701, Mendoza Capital</p>
                                     <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
                                 </div>
+                                
+                                {/* MAPA INTEGRADO */}
+                                <div className="map-container" style={{ width: '100%', marginTop: '15px', borderRadius: '12px', overflow: 'hidden' }}>
+                                    <iframe 
+                                        src="AQUÍ_VA_TU_URL_DE_EMBED_DE_GOOGLE" 
+                                        width="100%" 
+                                        height="300" 
+                                        style={{ border: 0 }} 
+                                        allowFullScreen="" 
+                                        loading="lazy" 
+                                        referrerPolicy="no-referrer-when-downgrade">
+                                    </iframe>
+                                </div>
                             </div>
 
                             <textarea className="notes-box" placeholder="Notas o pedido de grabado (Opcional)" value={orderData.notes} onChange={e => setOrderData({ ...orderData, notes: e.target.value })} />
                         </div>
 
-                        {/* CAJA DE CANJE DE PUNTOS */}
                         {userProfile && userProfile.puntos > 0 && (
                             <div style={{ background: 'rgba(165, 129, 58, 0.1)', border: '1px solid #a5813a', padding: '15px', borderRadius: '12px', marginBottom: '20px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
