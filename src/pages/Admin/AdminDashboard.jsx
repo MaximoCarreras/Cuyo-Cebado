@@ -116,12 +116,23 @@ export default function AdminDashboard() {
         }
     };
 
+    // 💥 NUEVA FUNCIÓN: ACTUALIZA EL SEMÁFORO LOGÍSTICO PARA EL CLIENTE 💥
+    const handleUpdateTrackingStatus = async (orderId, newTracking) => {
+        const { error } = await supabase.from('orders').update({ tracking_status: newTracking }).eq('id', orderId);
+        if (!error) {
+            setOrders(prev => prev.map(o => o.id === orderId ? { ...o, tracking_status: newTracking } : o));
+            toast.success('Estado logístico actualizado al cliente ✔️');
+        } else {
+            toast.error('Error al actualizar logística');
+        }
+    };
+
     const handleCancelOrder = async (order) => {
         if (!window.confirm(`¿Seguro que querés CANCELAR el pedido de ${order.customer_name}? Se devolverá el stock disponible.`)) return;
 
         setTabLoading(true);
         try {
-            const { error: statusErr } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', order.id);
+            const { error: statusErr } = await supabase.from('orders').update({ status: 'cancelled', tracking_status: 'cancelled' }).eq('id', order.id);
             if (statusErr) throw statusErr;
 
             if (order.items && order.items.length > 0) {
@@ -281,18 +292,20 @@ export default function AdminDashboard() {
                             </section>
                         )}
 
-                        {/* VENTAS */}
+                        {/* VENTAS CON SEMÁFORO LOGÍSTICO */}
                         {activeTab === 'orders' && (
                             <section className="fade-in">
                                 <div className="table-container">
-                                    <table className="refined-table">
-                                        <thead><tr><th>FECHA</th><th>CLIENTE</th><th>TOTAL</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
+                                    <table className="refined-table" style={{ minWidth: '900px' }}>
+                                        <thead><tr><th>FECHA</th><th>CLIENTE</th><th>ESTADO PAGO</th><th>LOGÍSTICA (A CLIENTE)</th><th>ACCIONES</th></tr></thead>
                                         <tbody>
                                             {orders && orders.length > 0 ? orders.map(o => (
                                                 <tr key={o.id} style={{ opacity: o.status === 'cancelled' ? 0.5 : 1 }}>
                                                     <td>{new Date(o.created_at).toLocaleDateString()}</td>
-                                                    <td>{o.customer_name || 'Sin especificar'}</td>
-                                                    <td>${o.total?.toLocaleString() || '0'}</td>
+                                                    <td>
+                                                        <strong>{o.customer_name || 'Sin especificar'}</strong><br/>
+                                                        <span style={{ fontSize: '0.8rem', color: '#64748b' }}>${o.total?.toLocaleString() || '0'}</span>
+                                                    </td>
                                                     <td>
                                                         <select
                                                             className={`status-selector ${o.status}`}
@@ -300,12 +313,32 @@ export default function AdminDashboard() {
                                                             disabled={o.status === 'cancelled'}
                                                             onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
                                                         >
-                                                            <option value="pending">Pendiente (Sin Pagar)</option>
-                                                            <option value="paid">Pagado (A preparar)</option>
-                                                            <option value="shipped">Enviado por Correo</option>
-                                                            <option value="completed">Entregado</option>
-                                                            <option value="cancelled">Cancelado</option>
+                                                            <option value="pending">Pendiente MP</option>
+                                                            <option value="paid">✅ Pagado</option>
+                                                            <option value="cancelled">❌ Cancelado</option>
                                                         </select>
+                                                    </td>
+                                                    <td>
+                                                        <div style={{ display: 'flex', gap: '5px' }}>
+                                                            <button 
+                                                                title="En Preparación"
+                                                                onClick={() => handleUpdateTrackingStatus(o.id, 'en_preparacion')}
+                                                                style={{ padding: '6px', borderRadius: '6px', border: '1px solid #4f46e5', background: o.tracking_status === 'en_preparacion' ? '#4f46e5' : 'transparent', color: o.tracking_status === 'en_preparacion' ? '#fff' : '#4f46e5', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                                                🛠️ Prep
+                                                            </button>
+                                                            <button 
+                                                                title="En Distribución"
+                                                                onClick={() => handleUpdateTrackingStatus(o.id, 'en_distribucion')}
+                                                                style={{ padding: '6px', borderRadius: '6px', border: '1px solid #d97706', background: o.tracking_status === 'en_distribucion' ? '#d97706' : 'transparent', color: o.tracking_status === 'en_distribucion' ? '#fff' : '#d97706', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                                                🚚 Dist
+                                                            </button>
+                                                            <button 
+                                                                title="Listo para Retirar"
+                                                                onClick={() => handleUpdateTrackingStatus(o.id, 'listo_para_retirar')}
+                                                                style={{ padding: '6px', borderRadius: '6px', border: '1px solid #16a34a', background: o.tracking_status === 'listo_para_retirar' ? '#16a34a' : 'transparent', color: o.tracking_status === 'listo_para_retirar' ? '#fff' : '#16a34a', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                                                🏠 Listo
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <div className="actions-flex-row">
@@ -434,7 +467,7 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODALES INTACTOS */}
+            {/* MODALES INTACTOS CON MEJORA DE PUNTOS */}
             {selectedOrder && (
                 <div className="refined-modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="refined-modal-card order-modal" onClick={e => e.stopPropagation()}>
@@ -449,6 +482,11 @@ export default function AdminDashboard() {
                                 <p style={{ margin: '8px 0' }}><strong>WhatsApp:</strong> {selectedOrder.customer_phone}</p>
                                 <p style={{ margin: '8px 0' }}><strong>Email:</strong> {selectedOrder.customer_email || 'No especificado'}</p>
                                 <p style={{ margin: '8px 0' }}><strong>Fecha Compra:</strong> {new Date(selectedOrder.created_at).toLocaleString()}</p>
+                                
+                                {/* NUEVO: MUESTRA LOS PUNTOS EN LA ORDEN */}
+                                {selectedOrder.puntos_ganados > 0 && <p style={{ margin: '8px 0', color: '#16a34a', fontWeight: 'bold' }}><strong>Puntos Ganados:</strong> +{selectedOrder.puntos_ganados}</p>}
+                                {selectedOrder.puntos_descontados > 0 && <p style={{ margin: '8px 0', color: '#d97706', fontWeight: 'bold' }}><strong>Puntos Canjeados:</strong> -{selectedOrder.puntos_descontados}</p>}
+                                
                                 <hr style={{ border: 'none', borderTop: '1px solid #cbd5e1', margin: '15px 0' }} />
                                 <p style={{ margin: '8px 0' }}><strong>Método de Despacho:</strong></p>
                                 <span style={{

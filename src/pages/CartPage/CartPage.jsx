@@ -13,21 +13,38 @@ export default function CartPage() {
     const [dbCategories, setDbCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Estado simplificado: Solo datos de contacto esenciales
+    // Sistema de Puntos
+    const [userProfile, setUserProfile] = useState(null);
+    const [applyPoints, setApplyPoints] = useState(false);
+
     const [orderData, setOrderData] = useState({
         name: '', email: '', phone: '', notes: ''
     });
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            const { data } = await supabase.from('categories').select('*');
-            if (data) setDbCategories(data);
+        const fetchInitialData = async () => {
+            const { data: cats } = await supabase.from('categories').select('*');
+            if (cats) setDbCategories(cats);
+
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+                const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
+                if (profile) {
+                    setUserProfile(profile);
+                    setOrderData(prev => ({ ...prev, name: profile.full_name || '', email: session.user.email || '', phone: profile.phone || '' }));
+                }
+            }
         };
-        fetchCategories();
+        fetchInitialData();
     }, []);
 
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
     const getCategoryIcon = (slug) => dbCategories.find(c => c.id === slug)?.icon || '🧉';
+
+    // Matemáticas de Fidelización
+    const discountAmount = applyPoints && userProfile?.puntos ? userProfile.puntos * 3 : 0;
+    const finalTotal = cartTotal - discountAmount;
+    const earnedPoints = Math.floor(cartTotal / 100);
 
     const handleCheckout = async (e) => {
         e.preventDefault();
@@ -37,21 +54,25 @@ export default function CartPage() {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
             const fixedAddress = 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)';
 
-            // 1. Guardamos la orden fija como Retiro en Supabase
+            // Guardamos la orden en Supabase con la data de los puntos
             const { error: dbError } = await supabase.from('orders').insert([{
                 customer_email: orderData.email,
                 customer_name: orderData.name,
                 customer_phone: orderData.phone,
                 shipping_method: 'pickup',
                 shipping_address: fixedAddress,
-                total: cartTotal,
+                total: finalTotal, // Enviamos el total con descuento aplicado
                 items: cart,
-                status: 'pending'
+                status: 'pending',
+                tracking_status: 'pending',
+                user_id: userProfile?.id || null,
+                puntos_ganados: earnedPoints,
+                puntos_descontados: applyPoints ? userProfile?.puntos : 0
             }]);
 
             if (dbError) throw dbError;
 
-            // 2. Solicitamos el link a Mercado Pago enviando costo de envío en 0
+            // Enviar a Mercado Pago (Le mandamos el descuento en el body)
             const response = await fetch(`${baseUrl}/api/checkout`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -59,7 +80,8 @@ export default function CartPage() {
                     items: cart,
                     name: orderData.name,
                     email: orderData.email,
-                    shippingCost: 0
+                    shippingCost: 0,
+                    discount: discountAmount // Backend debe procesar este descuento
                 })
             });
 
@@ -73,9 +95,7 @@ export default function CartPage() {
 
             setTimeout(() => {
                 try {
-                    if (typeof clearCart === 'function') {
-                        clearCart();
-                    }
+                    if (typeof clearCart === 'function') clearCart();
                 } catch (err) {
                     console.warn(err);
                 }
@@ -106,8 +126,6 @@ export default function CartPage() {
         <section className="cart-page-modern">
             <Toaster position="top-center" />
             <div className="cart-container-pro">
-
-                {/* COLUMNA IZQUIERDA: LISTA DE PRODUCTOS */}
                 <div className="cart-main-content">
                     <div className="cart-header-actions">
                         <h2>Mi Carrito</h2>
@@ -137,7 +155,6 @@ export default function CartPage() {
                     </div>
                 </div>
 
-                {/* COLUMNA DERECHA: FORMULARIO EXCLUSIVO RETIRO */}
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
                         <h3>Datos para el Retiro</h3>
@@ -147,7 +164,6 @@ export default function CartPage() {
                             <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
-                            {/* TARJETA VISUAL DE CÓDIGO VINARIO */}
                             <div className="pickup-info-card animate-fade" style={{ marginTop: '5px', marginBottom: '15px' }}>
                                 <div className="pickup-header">
                                     <span className="material-symbols-outlined">store</span>
@@ -165,18 +181,38 @@ export default function CartPage() {
                             <textarea className="notes-box" placeholder="Notas o pedido de grabado (Opcional)" value={orderData.notes} onChange={e => setOrderData({ ...orderData, notes: e.target.value })} />
                         </div>
 
-                        {/* RESUMEN DEL TICKET */}
-                        <div className="total-summary-card">
-                            <div className="t-row main-total">
-                                <span>TOTAL</span>
-                                <span>{formatCurrency(cartTotal)}</span>
+                        {/* CAJA DE CANJE DE PUNTOS */}
+                        {userProfile && userProfile.puntos > 0 && (
+                            <div style={{ background: 'rgba(165, 129, 58, 0.1)', border: '1px solid #a5813a', padding: '15px', borderRadius: '12px', marginBottom: '20px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                    <span style={{ fontWeight: '800', color: '#1a1614', fontSize: '0.9rem' }}>✨ TENÉS {userProfile.puntos} PUNTOS</span>
+                                    <span style={{ fontWeight: '800', color: '#a5813a' }}>- {formatCurrency(userProfile.puntos * 3)}</span>
+                                </div>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', cursor: 'pointer', fontWeight: '600' }}>
+                                    <input type="checkbox" checked={applyPoints} onChange={(e) => setApplyPoints(e.target.checked)} style={{ width: '18px', height: '18px', accentColor: '#a5813a' }} />
+                                    Aplicar descuento a esta compra
+                                </label>
                             </div>
+                        )}
+
+                        <div className="total-summary-card">
+                            <div className="t-row main-total" style={{ textDecoration: applyPoints ? 'line-through' : 'none', opacity: applyPoints ? 0.5 : 1 }}>
+                                <span style={{ fontSize: applyPoints ? '1rem' : 'inherit' }}>Subtotal</span>
+                                <span style={{ fontSize: applyPoints ? '1rem' : 'inherit' }}>{formatCurrency(cartTotal)}</span>
+                            </div>
+                            
+                            {applyPoints && (
+                                <div className="t-row main-total" style={{ color: '#a5813a', marginTop: '5px' }}>
+                                    <span>TOTAL</span>
+                                    <span>{formatCurrency(finalTotal)}</span>
+                                </div>
+                            )}
+
                             <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '12px', textAlign: 'center', fontWeight: '600' }}>
-                                🛍️ Pagás online de forma segura y retiras por el local cuando quieras.
+                                🛍️ Sumás <strong>{earnedPoints} puntos</strong> con esta compra.
                             </p>
                         </div>
 
-                        {/* BOTÓN CELESTE MERCADO PAGO */}
                         <button type="submit" className="btn-mercadopago-pro" disabled={loading}>
                             {loading ? 'Procesando...' : (
                                 <>

@@ -8,55 +8,56 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [userRole, setUserRole] = useState(null);
+  const [userPoints, setUserPoints] = useState(0);
   const [banner, setBanner] = useState({ text: '', active: false });
 
   const navigate = useNavigate();
   const { cart } = useCart();
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Función separada para buscar el rol del usuario
-  const fetchUserRole = async (userId) => {
+  // Busca el rol y los puntos del usuario logueado
+  const fetchUserData = async (userId) => {
     if (!userId) {
       setUserRole(null);
+      setUserPoints(0);
       return;
     }
-    const { data: pData } = await supabase.from('profiles').select('role').eq('id', userId).single();
-    setUserRole(pData?.role);
+    const { data: profile } = await supabase.from('profiles').select('role, puntos').eq('id', userId).single();
+    if (profile) {
+      setUserRole(profile.role);
+      setUserPoints(profile.puntos || 0);
+    }
   };
 
   useEffect(() => {
-    // 1. Cargar datos iniciales (Banner y Usuario si ya estaba logueado)
     const fetchNavbarData = async () => {
       const { data: bData } = await supabase.from('site_settings').select('*').eq('id', 'global').single();
       if (bData) setBanner({ text: bData.banner_text, active: bData.banner_active });
 
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
-        fetchUserRole(session.user.id);
+        fetchUserData(session.user.id);
       }
     };
     fetchNavbarData();
 
-    // 2. ESCUCHADOR EN TIEMPO REAL PARA EL LOGIN/LOGOUT (¡La Magia!)
     const { data: { subscription: authSubscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        // Si hay sesión (se logueó), buscamos su rol. Si no (cerró sesión), borramos el rol.
         if (session?.user) {
-          fetchUserRole(session.user.id);
+          fetchUserData(session.user.id);
         } else {
           setUserRole(null);
+          setUserPoints(0);
         }
       }
     );
 
-    // 3. Escuchador en tiempo real para el banner
     const channel = supabase.channel('site_settings_changes')
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'site_settings' }, (payload) => {
         setBanner({ text: payload.new.banner_text, active: payload.new.banner_active });
       })
       .subscribe();
 
-    // Limpieza al desmontar el componente
     return () => {
       supabase.removeChannel(channel);
       authSubscription.unsubscribe();
@@ -121,16 +122,21 @@ export default function Navbar() {
               <Link to="/productos" className="nav-item">Productos</Link>
               <Link to="/nosotros" className="nav-item">Nosotros</Link>
               <Link to="/guia-curado" className="nav-item">Guía</Link>
-              {userRole === 'admin' && (
+              
+              {/* LÓGICA DEL PATOVICA VIP */}
+              {userRole === 'admin' ? (
                 <Link to="/admin" className="nav-item nav-item--admin" style={{ color: '#a5813a', fontWeight: 'bold' }}>
                   <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', verticalAlign: 'middle', marginRight: '4px' }}>admin_panel_settings</span>
                   ADMIN
                 </Link>
+              ) : (
+                <Link to="/mi-cuenta" className="nav-item nav-item--account" style={{ color: userPoints > 0 ? '#a5813a' : 'inherit', fontWeight: userPoints > 0 ? '700' : 'normal' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', verticalAlign: 'middle', marginRight: '4px' }}>
+                    {userPoints > 0 ? 'stars' : 'person'}
+                  </span>
+                  {userPoints > 0 ? `✨ ${userPoints} PUNTOS` : 'Mi Cuenta'}
+                </Link>
               )}
-              <Link to="/mi-cuenta" className="nav-item nav-item--account">
-                <span className="material-symbols-outlined" style={{ fontSize: '1.2rem', verticalAlign: 'middle', marginRight: '4px' }}>person</span>
-                Mi Cuenta
-              </Link>
             </div>
 
             <Link to="/carrito" className="navbar__cart-link" onClick={() => setIsMenuOpen(false)}>
@@ -155,10 +161,15 @@ export default function Navbar() {
         <Link to="/productos" onClick={() => setIsMenuOpen(false)}>Productos</Link>
         <Link to="/nosotros" onClick={() => setIsMenuOpen(false)}>Nosotros</Link>
         <Link to="/guia-curado" onClick={() => setIsMenuOpen(false)}>Guía de Curado</Link>
-        {userRole === 'admin' && (
-          <Link to="/admin" onClick={() => setIsMenuOpen(false)} style={{ color: '#a5813a' }}>Panel Admin</Link>
+        
+        {/* LÓGICA DEL PATOVICA VIP EN MÓVIL */}
+        {userRole === 'admin' ? (
+          <Link to="/admin" onClick={() => setIsMenuOpen(false)} style={{ color: '#a5813a', fontWeight: 'bold' }}>Panel Admin</Link>
+        ) : (
+          <Link to="/mi-cuenta" onClick={() => setIsMenuOpen(false)} style={{ color: userPoints > 0 ? '#a5813a' : 'inherit' }}>
+            {userPoints > 0 ? `✨ ${userPoints} PUNTOS` : 'Mi Cuenta'}
+          </Link>
         )}
-        <Link to="/mi-cuenta" onClick={() => setIsMenuOpen(false)}>Mi Cuenta</Link>
       </div>
     </>
   );
