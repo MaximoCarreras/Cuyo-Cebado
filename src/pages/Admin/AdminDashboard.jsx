@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
-import AdminInstagram from './AdminInstagram'; // <-- IMPORT NUEVO DEL CARRUSEL
+import AdminInstagram from './AdminInstagram';
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
@@ -86,6 +86,12 @@ export default function AdminDashboard() {
         fetchData(tab);
     };
 
+    // FUNCIÓN DE CERRAR SESIÓN DEL ADMIN
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        window.location.href = '/'; 
+    };
+
     const handleSeedFAQs = async () => {
         setTabLoading(true);
         await supabase.from('faqs').delete().neq('question', '');
@@ -116,7 +122,7 @@ export default function AdminDashboard() {
         }
     };
 
-    // 💥 NUEVA FUNCIÓN: ACTUALIZA EL SEMÁFORO LOGÍSTICO PARA EL CLIENTE 💥
+    // ACTUALIZA EL SEMÁFORO LOGÍSTICO PARA EL CLIENTE
     const handleUpdateTrackingStatus = async (orderId, newTracking) => {
         const { error } = await supabase.from('orders').update({ tracking_status: newTracking }).eq('id', orderId);
         if (!error) {
@@ -231,7 +237,33 @@ export default function AdminDashboard() {
         <div className="admin-refined-page">
             <Toaster position="top-right" />
             <header className="admin-refined-header">
-                <div className="header-info"><h1>Gestión Cuyo Cebado</h1><p>Boutique Digital Admin</p></div>
+                <div className="header-info">
+                    <h1>Gestión Cuyo Cebado</h1>
+                    <p>Boutique Digital Admin</p>
+                </div>
+                
+                {/* BOTÓN DE LOGOUT DEL ADMIN */}
+                <button 
+                    onClick={handleLogout} 
+                    style={{ 
+                        background: 'none', 
+                        border: '1px solid #ef4444', 
+                        color: '#ef4444', 
+                        padding: '8px 15px', 
+                        borderRadius: '8px', 
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        marginLeft: 'auto',
+                        marginRight: '20px'
+                    }}
+                >
+                    <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>logout</span> 
+                    SALIR
+                </button>
+
                 <div className="tab-refined-switcher">
                     <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => handleTabChange('inventory')}>Stock</button>
                     <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => handleTabChange('orders')}>Ventas</button>
@@ -419,7 +451,6 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
 
-                                {/* --- GESTOR DE INSTAGRAM AÑADIDO ACÁ --- */}
                                 <div style={{ marginTop: '40px' }}>
                                     <AdminInstagram />
                                 </div>
@@ -467,7 +498,7 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODALES INTACTOS CON MEJORA DE PUNTOS */}
+            {/* MODALES CON INFORMACIÓN DE PUNTOS */}
             {selectedOrder && (
                 <div className="refined-modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="refined-modal-card order-modal" onClick={e => e.stopPropagation()}>
@@ -483,7 +514,6 @@ export default function AdminDashboard() {
                                 <p style={{ margin: '8px 0' }}><strong>Email:</strong> {selectedOrder.customer_email || 'No especificado'}</p>
                                 <p style={{ margin: '8px 0' }}><strong>Fecha Compra:</strong> {new Date(selectedOrder.created_at).toLocaleString()}</p>
                                 
-                                {/* NUEVO: MUESTRA LOS PUNTOS EN LA ORDEN */}
                                 {selectedOrder.puntos_ganados > 0 && <p style={{ margin: '8px 0', color: '#16a34a', fontWeight: 'bold' }}><strong>Puntos Ganados:</strong> +{selectedOrder.puntos_ganados}</p>}
                                 {selectedOrder.puntos_descontados > 0 && <p style={{ margin: '8px 0', color: '#d97706', fontWeight: 'bold' }}><strong>Puntos Canjeados:</strong> -{selectedOrder.puntos_descontados}</p>}
                                 

@@ -81,7 +81,7 @@ export default function CartPage() {
                     name: orderData.name,
                     email: orderData.email,
                     shippingCost: 0,
-                    discount: discountAmount // Backend debe procesar este descuento
+                    discount: discountAmount
                 })
             });
 
