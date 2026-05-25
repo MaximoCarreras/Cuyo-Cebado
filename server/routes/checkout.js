@@ -15,8 +15,8 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // Recibimos los productos, datos del cliente y el costo logístico calculado
-    const { items, email, name, shippingCost } = req.body;
+    // Recibimos los datos, incluyendo el descuento de puntos si el usuario lo aplicó
+    const { items, email, name, shippingCost, discount } = req.body;
 
     const productIds = items.map(i => i.id);
     const { data: products, error: fetchErr } = await supabaseAdmin
@@ -27,6 +27,8 @@ router.post('/', async (req, res) => {
     if (fetchErr) throw fetchErr;
 
     const orderItems = [];
+    let totalCalculado = 0;
+
     for (const item of items) {
       const product = products.find(p => p.id === item.id);
       if (!product || product.stock < item.quantity) {
@@ -39,36 +41,56 @@ router.post('/', async (req, res) => {
         quantity: Number(item.quantity),
         currency_id: 'ARS'
       });
+      totalCalculado += Number(product.price) * Number(item.quantity);
     }
 
-    // Si el cliente eligió envío a domicilio, lo sumamos al ticket final de Mercado Pago
     if (shippingCost && Number(shippingCost) > 0) {
       orderItems.push({
-        title: 'Costo de Envío a domicilio',
+        title: 'Costo de Envío',
         unit_price: Number(shippingCost),
         quantity: 1,
         currency_id: 'ARS'
       });
+      totalCalculado += Number(shippingCost);
     }
 
-    const total = orderItems.reduce((sum, i) => sum + i.unit_price * i.quantity, 0);
+    // Si el cliente aplicó puntos, enviamos el descuento a Mercado Pago
+    if (discount && Number(discount) > 0) {
+      orderItems.push({
+        title: 'Descuento Cuyo Puntos ✨',
+        unit_price: -Number(discount),
+        quantity: 1,
+        currency_id: 'ARS'
+      });
+      totalCalculado -= Number(discount);
+    }
 
-    const { data: order, error: orderErr } = await supabaseAdmin
+    // Buscamos la orden pendiente que el frontend acaba de crear para enganchar el ID
+    const { data: recentOrder } = await supabaseAdmin
       .from('orders')
-      .insert({
-        status: 'pending',
-        items: orderItems,
-        customer_email: email,
-        customer_name: name,
-        total
-      })
-      .select().single();
+      .select('*')
+      .eq('customer_email', email)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
 
-    if (orderErr) throw orderErr;
+    let orderId = '';
+
+    if (recentOrder) {
+      orderId = recentOrder.id;
+      // Actualizamos los montos de seguridad en la base de datos
+      await supabaseAdmin.from('orders').update({ total: totalCalculado, items: orderItems }).eq('id', orderId);
+    } else {
+      // Fallback de seguridad por si no se encontró
+      const { data: newOrder } = await supabaseAdmin.from('orders').insert({
+        status: 'pending', items: orderItems, customer_email: email, customer_name: name, total: totalCalculado
+      }).select().single();
+      orderId = newOrder.id;
+    }
 
     const preference = new Preference(mpClient);
 
-    // Preferencia limpia sin configuraciones restrictivas de Mercado Envíos
     const response = await preference.create({
       body: {
         items: orderItems,
@@ -79,7 +101,7 @@ router.post('/', async (req, res) => {
           pending: `${FRONTEND_URL}/`
         },
         auto_return: "approved",
-        external_reference: order.id
+        external_reference: orderId
       }
     });
 
