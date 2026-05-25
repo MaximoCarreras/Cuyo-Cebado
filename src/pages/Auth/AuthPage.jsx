@@ -54,7 +54,16 @@ export default function AuthPage() {
                 .eq('id', userId)
                 .single();
             
-            if (profileData) setProfile(profileData);
+            if (profileData) {
+                // 💥 LA MAGIA ACÁ: Si es Admin, lo teletransportamos al Panel Admin al instante 💥
+                if (profileData.role === 'admin') {
+                    navigate('/admin');
+                    return; // Cortamos la ejecución para que no cargue los puntos de cliente
+                }
+                
+                // Si es un cliente normal, guardamos su perfil y seguimos
+                setProfile(profileData);
+            }
 
             // 2. Buscar el Historial de Compras (Rituales)
             const { data: ordersData } = await supabase
@@ -114,6 +123,7 @@ export default function AuthPage() {
     const renderStatusBadge = (status) => {
         const statusMap = {
             'pending': { text: 'Pago Pendiente', class: 'status-pending' },
+            'paid': { text: 'Pagado ✅', class: 'status-prep' },
             'en_preparacion': { text: 'En Preparación 🛠️', class: 'status-prep' },
             'en_distribucion': { text: 'En Distribución 🚚', class: 'status-dist' },
             'listo_para_retirar': { text: 'Listo para Retirar 🏠', class: 'status-ready' },
@@ -126,6 +136,16 @@ export default function AuthPage() {
 
     // VISTA 1: DASHBOARD DEL CLIENTE LOGUEADO
     if (user) {
+        // Pantalla de carga suave mientras detecta si sos admin o cliente
+        if (!profile || profile.role === 'admin') {
+            return (
+                <div className="client-dashboard-page" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <p style={{ color: '#a5813a', fontWeight: 'bold', fontSize: '1.2rem' }}>Verificando credenciales...</p>
+                </div>
+            );
+        }
+
+        // Vista de cliente normal
         return (
             <div className="client-dashboard-page">
                 <div className="dashboard-container">
