@@ -1,0 +1,503 @@
+[33mdb31a20[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m a
+[33m78f139e[m a
+[33m5411633[m a
+[33md7ee459[m a
+[33m149a312[m a
+[33m9dc831f[m a
+[33m12616f6[m a
+[33meafd7c2[m a
+[33m8d872a3[m a
+[33mc172444[m a
+[33mcfc24e7[m a
+[33m357f9b3[m a
+[33me42f65e[m a
+[33m0858a6d[m a
+[33m6b64bf0[m a
+[33mcba94f0[m a
+[33mda5c1c0[m a
+[33m88cca91[m a
+[33m8bfbeb9[m a
+[33mf7a4702[m a
+[33m937d229[m a
+[33m0bfac3c[m a
+[33ma75cdef[m a
+[33m1d0824f[m a
+[33mfd89285[m a
+[33md05d41a[m A
+[33m8db6d15[m a
+[33md95a37f[m a
+[33m152efc0[m a
+[33mc2972a8[m a
+[33med5e076[m a
+[33m62b3f7a[m s
+[33m0e999ef[m a
+[33m117f997[m a
+[33m38ccfe4[m a
+[33mcda4587[m a
+[33m84ebc3c[m a
+[33mf8f8e28[m a
+[33m93d63fe[m a
+[33m91a53c1[m a
+[33mbeadc23[m a
+[33m7371d2c[m a
+[33m69ab762[m a
+[33m475b751[m a
+[33m30b994f[m a
+[33mc1d8011[m A
+[33m72e13b5[m A
+[33mcdd5bef[m a
+[33m1315629[m a
+[33m9297687[m a
+[33mfb31637[m a
+[33m951dbc0[m a
+[33m03b399c[m a
+[33mfc5bf26[m a
+[33m26fbbbc[m a
+[33m8fc3817[m a
+[33m73eb7a5[m a
+[33m253f935[m a
+[33m3d82e7c[m a
+[33m116101c[m a
+[33mc7245fe[m a
+[33m29deef0[m a
+[33m664b46b[m a
+[33ma145879[m a
+[33m0cd1c7f[m a
+[33m7f54e26[m feat: reactivado mercado envios automatico con dimensiones
+[33m5187509[m a
+[33m4281466[m a
+[33m258185b[m A
+[33m583ae33[m a
+[33m109e3a0[m a
+[33m4a64ff0[m a
+[33m1e8b74c[m feat: reactivado mercado envios automatico con dimensiones
+[33m07ad148[m a
+[33m384ff64[m A
+[33m0955726[m A
+[33mb1cdb57[m A
+[33mdfc5b61[m A
+[33m19a39b0[m A
+[33mb909b4d[m A
+[33md78d4f0[m a
+[33m581d7c2[m a
+[33m6231f01[m a
+[33m526237e[m a
+[33m3c7106a[m a
+[33m8963607[m a
+[33ma6c341a[m a
+[33m869b6f9[m a
+[33m3ed75ec[m a
+[33m7365afe[m a
+[33m548d38d[m A
+[33m2fb6819[m a
+[33m02f68d9[m a
+[33m5d420e0[m a
+[33m51e0ff5[m a
+[33mc17ad38[m a
+[33m2256a8a[m a
+[33md9e2ea6[m a
+[33m6edc6a7[m a
+[33mf407093[m A
+[33mf3a5d14[m a
+[33ma5a1ceb[m a
+[33ma13e25e[m a
+[33m658bfa7[m a
+[33ma194a39[m a
+[33mc4b7e75[m A
+[33m5b61b69[m a
+[33m02e70d7[m a
+[33m7cbb827[m a
+[33m72caae4[m a
+[33mdcea422[m a
+[33m6b8271d[m a
+[33me7d580c[m a
+[33m922a387[m a
+[33m6571506[m a
+[33m392ce4e[m a
+[33m2f24527[m a
+[33mfa3af14[m a
+[33mc0c1095[m a
+[33md85fbec[m a
+[33md271e2c[m a
+[33m8ee76b7[m a
+[33me6e158d[m a
+[33m527eaba[m a
+[33mde6cfa4[m a
+[33m4c08a3d[m a
+[33m02e4ad5[m a
+[33mcb9ee72[m a
+[33mde35a7c[m a
+[33mcc4e015[m a
+[33m04ec9ac[m a
+[33m5a267b2[m aa
+[33m731028b[m a
+[33m4a80e3c[m a
+[33m5604785[m a
+[33meb52d01[m a
+[33mf570a1e[m a
+[33m2abb826[m a
+[33m08b7d0d[m a
+[33m213d992[m a
+[33m565ffac[m a
+[33m4d6cc54[m a
+[33m1045e2b[m a
+[33m8246b43[m a
+[33m1eec6b6[m a
+[33m3a2d591[m a
+[33md1ef69f[m a
+[33ma66bc19[m a
+[33md33b422[m s
+[33m171269c[m a
+[33m2815fae[m a
+[33md2ba9e4[m a
+[33mb0084f5[m a
+[33mb850eb2[m a
+[33m9e04242[m a
+[33md8a6c87[m a
+[33m2a1c26c[m a
+[33m430b674[m a
+[33mb225d82[m a
+[33m5e05c24[m a
+[33m0581497[m S
+[33mf554372[m a
+[33m11024d7[m a
+[33m7bd67e5[m a
+[33md9c58ec[m a
+[33ma857e3f[m a
+[33m3f05c84[m a
+[33mc7c1543[m a
+[33m727e7b9[m a
+[33mf6a8924[m a
+[33m8618675[m a
+[33m808f423[m a
+[33m0ca481e[m Solución de rutas y guardado de cliente supabase
+[33m3fc8947[m a
+[33m6f728f7[m Agregado cliente de supabase y carpeta lib
+[33md53ba19[m a
+[33mb57d182[m a
+[33mc3a3657[m a
+[33mefedd5f[m a
+[33mb9faf27[m a
+[33m525d401[m a
+[33m80d2dc1[m a
+[33m01fb693[m a
+[33m2ea8f86[m a
+[33me6047f9[m a
+[33mf0871d0[m a
+[33m659a6d5[m a
+[33m6c1e481[m a
+[33mdf2b0df[m a
+[33m7312bc4[m a
+[33m91350ed[m a
+[33m41a8a4f[m a
+[33mb0caf39[m a
+[33ma09fabf[m a
+[33mb6c25b1[m a
+[33m3609ea4[m a
+[33mb50e4e4[m a
+[33mbdc434e[m a
+[33mf49cd7c[m s
+[33m9dfed39[m a
+[33mb19754a[m s
+[33mc119860[m a
+[33m54f3789[m a
+[33m3d062ff[m a
+[33m6d60fd6[m s
+[33m1f1ef1f[m s
+[33m51d14e5[m s
+[33m2abf32b[m s
+[33m074b8d4[m s
+[33me883bde[m s
+[33maa40d72[m s
+[33me030e41[m s
+[33m4400987[m s
+[33m52d70ea[m S
+[33m2a78b40[m S
+[33mc5915f8[m S
+[33m445a645[m S
+[33m724c212[m S
+[33m4e387fb[m s
+[33m8a5fb18[m s
+[33m6dd2615[m S
+[33m3e7c3ac[m s
+[33ma9e67a6[m s
+[33m9de0027[m S
+[33m18fdb1c[m s
+[33m55beda8[m s
+[33m3898ca4[m s
+[33m19c4359[m s
+[33m9798cce[m s
+[33mbb68cd8[m ss
+[33ma3b4fa4[m s
+[33mc9874cd[m s
+[33m2e5d6bf[m s
+[33me961f9f[m s
+[33m580f49b[m S
+[33m0c2730d[m S
+[33m58f25ab[m s
+[33me99ea61[m ss
+[33m09bb7bd[m s
+[33m7dfb6d0[m ss
+[33maf95e3f[m s
+[33m7fa5712[m s
+[33m3d3d02f[m s
+[33m085df3b[m ss
+[33mf44ac9a[m ss
+[33m85a1ff0[m s
+[33me6dd184[m ss
+[33m70a14e1[m ss
+[33m1f8a0a4[m aa
+[33m0428a7e[m ss
+[33me7c393e[m aa
+[33mae07fea[m asd
+[33m15df20f[m s
+[33mdf0ddc7[m listo
+[33m897fa77[m s
+[33m61def9b[m ss
+[33m348a948[m s
+[33m5734a14[m S
+[33m809f38d[m s
+[33m6cfc815[m s
+[33mb32a7aa[m s
+[33mc13e99f[m s
+[33mfb2f488[m s
+[33me217f0d[m s
+[33ma1955d3[m s
+[33mddc8acf[m ss
+[33m194bab5[m s
+[33m6067f64[m ss
+[33maf8206c[m s
+[33m7b886cd[m ss
+[33m7edbac9[m ss
+[33mdbd88ab[m ss
+[33m640e0d6[m ss
+[33m8a6cdee[m ss
+[33m17da2fd[m SS
+[33m104af13[m ss
+[33m83e106d[m s
+[33mf778a7d[m sf
+[33m19d53b0[m ss
+[33m527f276[m ss
+[33m1ead067[m ss
+[33m6eea127[m s
+[33m12ed706[m s
+[33mc81cf22[m ss
+[33m6529d73[m ss
+[33mcd4c7dc[m ssss
+[33m26809fa[m ss
+[33m4b1436a[m filtros
+[33me586437[m cambio de pagina
+[33m56f1460[m sss
+[33m924a42a[m sss
+[33me417d7e[m sss
+[33mb6b8025[m sss
+[33m9ad6c0d[m sss
+[33m1900d88[m ssss
+[33m6aa72e5[m sss
+[33m376e13b[m listo
+[33m67f8f94[m asasa
+[33ma1c43ea[m asaaa
+[33m3070f6d[m dfdfdf
+[33mb77fe44[m asdsa
+[33m1b4998f[m SSS
+[33mac1c630[m SS
+[33m7c8aaad[m ssssss
+[33me245041[m asdsa
+[33m4fcdabc[m sssss
+[33mda521a6[m SSSS
+[33m854a55c[m SSS
+[33m7eb3b1c[m SS
+[33m0789aa3[m DD
+[33mab5b4f3[m SSSS
+[33m4ec024b[m SS
+[33m6e2f38d[m LS
+[33m58ccd61[m SS
+[33md124e68[m ss
+[33mdc0c878[m sss
+[33md2ae96c[m lis
+[33m51a6c74[m list
+[33mf923549[m listo
+[33m7826de9[m listp
+[33m73eb514[m listo
+[33mdfb79e7[m listo
+[33ma59d6d0[m list
+[33m6d1b96f[m listo
+[33m829cd17[m listo
+[33m3406798[m listo
+[33m50b5fa8[m listo
+[33mba103c5[m listo
+[33m08d6130[m listo
+[33mfd6b170[m listo
+[33md87b0f1[m listo
+[33m99fed46[m listo
+[33m98a401e[m LISTO
+[33mc0949b6[m listo
+[33m31db3b3[m listo
+[33m8b15eb7[m listo
+[33m1df1e07[m listo
+[33m2c63d76[m lis
+[33m1b3806a[m listo
+[33me23cef1[m listo
+[33mfc2fcf1[m listo
+[33m567c7eb[m listo
+[33mda6a522[m listo
+[33me4e6284[m listo
+[33m500c523[m listo
+[33md1892dd[m listo
+[33mce1a529[m Actualizar OurStory.jsx
+[33m2b0c24c[m Actualizar OurStory.css
+[33m40ec129[m Actualizar Hero.jsx
+[33m64b8cdb[m Actualizar Hero.css
+[33m754c710[m Actualizar Hero.css
+[33m640f789[m Actualizar Hero.jsx
+[33md8dfd7b[m Actualizar Navbar.css
+[33mca43b3d[m Actualizar Navbar.jsx
+[33ma122fd4[m Actualizar Hero.css
+[33m6512f72[m listo
+[33m88a51fd[m listo
+[33mfa1b400[m listo
+[33mc77ba6a[m listo
+[33m9a6ad6c[m listo
+[33m642961f[m listo
+[33m917566d[m listo
+[33m56b15f0[m listo
+[33mfdd9260[m listo
+[33m1922280[m listo
+[33m71ff076[m listo
+[33mc8a50f7[m listo
+[33m637c79a[m listo
+[33m1314755[m listo
+[33mf01c00c[m listo
+[33md28ed9d[m listo
+[33mbc49e5f[m listo
+[33me1fb02e[m listo
+[33maf08cf4[m listo
+[33m32aa32b[m oa
+[33mb9fcb12[m listo
+[33m9ef8769[m listo
+[33m7474952[m listo
+[33m6ee8189[m listo
+[33mbca40e1[m cambio
+[33m0af1103[m termiando
+[33m027f2bf[m LISTO
+[33ma125554[m dale
+[33med6ba45[m esp
+[33mfa7a498[m eso
+[33ma499de2[m eso
+[33m02fdeba[m eso
+[33m07cb3f6[m mp
+[33mb84df8a[m listo
+[33m76ea565[m mp
+[33m1a91232[m mp
+[33m5881d09[m mp
+[33md61fab3[m final
+[33m2a2581c[m ultimatum
+[33m46ded0c[m cambios
+[33mb8465ea[m orden con lsa imagenes
+[33m4086176[m imagenes
+[33mabf7a81[m cambios
+[33mbf82238[m nuevo
+[33m76f547c[m estilo
+[33me6cde66[m esop
+[33md0df23b[m camboi
+[33mae01238[m camv
+[33mba45a64[m cambio
+[33m175cf88[m cambio
+[33m882ea95[m cart
+[33m44109a0[m cambio de app
+[33maa6cf2f[m cambios
+[33m3721b65[m cambio
+[33mc6fa814[m gift
+[33m08a7b12[m cambio
+[33mf245e94[m cambio
+[33m6bee728[m cambio
+[33mee4d834[m cambio
+[33mcfde739[m marron
+[33m45841ce[m nuevo hero
+[33mae89f64[m nuevo
+[33m0a4009f[m actualizacion
+[33ma2be6b0[m fondo
+[33m872e493[m precios
+[33mc06fc8e[m centreo
+[33mca13386[m 404
+[33mff9019d[m correcciones de carrito
+[33ma94c8fc[m carrito
+[33m55ae337[m eso
+[33mba30052[m Merge branch 'main' of https://github.com/MaximoCarreras/Cuyo-Cebado
+[33mf1fc7a0[m solucion de titulos
+[33md4bf4c4[m Update App.css
+[33ma423d32[m resolucion de cart
+[33m1be1d95[m cart
+[33m66cc37a[m Update CartPage.jsx
+[33m661b11a[m vistas
+[33m7929087[m Merge branch 'main' of https://github.com/MaximoCarreras/Cuyo-Cebado
+[33ma4e2e67[m actualizacion de vistas
+[33m9ae24c3[m Update Navbar.jsx
+[33m8193abc[m actualizacion de vistas
+[33m7d4feaa[m Merge branch 'main' of https://github.com/MaximoCarreras/Cuyo-Cebado
+[33m597368d[m actualizacion de vistas
+[33md925c40[m Update Newsletter.css
+[33m604d607[m Update Newsletter.css
+[33m829a29f[m Update Newsletter.css
+[33ma8fdf86[m Update Navbar.css
+[33m805037b[m Update Navbar.css
+[33m160c05e[m Update Navbar.jsx
+[33mfbc199b[m actualiza index
+[33m09498a5[m subir logo
+[33m98c8fb8[m actualiza
+[33m136a47b[m actualizacion de assets
+[33m49845ec[m Arreglo Supabase.
+[33m86c1d80[m actualiza supabase.js
+[33m60bbf57[m Instala cliente de Supabase
+[33m2de41e4[m actualiza image hero
+[33ma82b76e[m Actualiza imagen hero
+[33mf87c714[m Update Hero.jsx
+[33m26be05a[m Update Hero.jsx
+[33md7b8643[m Actualiza imagen hero expandida
+[33mc9987ac[m Merge branch 'main' of https://github.com/MaximoCarreras/Cuyo-Cebado
+[33mefc8510[m Agrega imagen de fondo para el Hero
+[33m29985d5[m Update Hero.css
+[33meff7582[m Update Hero.jsx
+[33m23cf1a1[m Update Hero.jsx
+[33m8d4b9ba[m Update Hero.css
+[33mc76a8dc[m Update Hero.css
+[33m92078bb[m Update Hero.jsx
+[33m4463b31[m Update Hero.css
+[33mba5fe81[m Update Hero.jsx
+[33m1afe2c5[m Update Hero.css
+[33mb1425a0[m Enhance Hero component with background layers
+[33mdc169b2[m Actualizar Hero.jsx
+[33m1864b3c[m Actualizar Navbar.jsx
+[33me235056[m Actualizar Hero.css
+[33m0ad92ac[m Actualizar Hero.css
+[33m54ed994[m Actualizar Hero.jsx
+[33m32e28f1[m Actualizar Hero.css
+[33m4157d5d[m Actualizar Hero.css
+[33m29d2f08[m Actualizar Hero.jsx
+[33m98ffe3b[m Actualizar Navbar.jsx
+[33mcb6d694[m Actualizar CareGuide.jsx
+[33m6f97b58[m Actualizar TrustBar.jsx
+[33mfc515fb[m Actualizar TrustBar.jsx
+[33m074b411[m Actualizar BestSellers.jsx
+[33m45a6ddf[m Actualizar SpecialOffer.css
+[33m88a2da3[m Actualizar SpecialOffer.jsx
+[33m1f8a308[m Actualizar SpecialOffer.css
+[33m95adc6e[m Actualizar SpecialOffer.jsx
+[33m1514e8b[m Actualizar BestSellers.jsx
+[33m6905e47[m Actualizar GiftKit.jsx
+[33m5c9a204[m Actualizar BestSellers.jsx
+[33mf6dbfec[m Actualizar Navbar.jsx
+[33mcb03ec6[m Actualizar Testimonials.jsx
+[33mfc5a1b7[m Actualizar Testimonials.jsx
+[33mb50e84b[m Actualizar Hero.jsx
+[33maeac7af[m Actualizar OurStory.jsx
+[33mfa34149[m Actualizar FAQ.jsx
+[33m5827385[m Actualizar Footer.css
+[33m83f9fca[m Actualizar Footer.jsx
+[33mc876a45[m Actualizar Gallery.jsx
+[33m197911f[m Actualizar Hero.jsx
+[33m97bea16[m Actualizar Navbar.jsx
+[33mbf7808b[m Actualizar Hero.css
+[33m0e62bfa[m Actualizar Hero.jsx
+[33m549d7a1[m Actualizar index.html
+[33m5a45d0e[m feat: complete Mates Mendoza landing page
