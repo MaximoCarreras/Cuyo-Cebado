@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient'; // Asegurate que esta ruta sea correcta
+import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
+// CORRECCIÓN: Ruta ajustada para buscar el archivo en la misma carpeta
+import AdminInstagram from './AdminInstagram';
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
@@ -85,7 +87,6 @@ export default function AdminDashboard() {
         fetchData(tab);
     };
 
-    // FUNCIÓN DE CERRAR SESIÓN DEL ADMIN
     const handleLogout = async () => {
         await supabase.auth.signOut();
         window.location.href = '/'; 
@@ -121,7 +122,6 @@ export default function AdminDashboard() {
         }
     };
 
-    // ACTUALIZA EL SEMÁFORO LOGÍSTICO PARA EL CLIENTE
     const handleUpdateTrackingStatus = async (orderId, newTracking) => {
         const { error } = await supabase.from('orders').update({ tracking_status: newTracking }).eq('id', orderId);
         if (!error) {
@@ -241,26 +241,11 @@ export default function AdminDashboard() {
                     <p>Boutique Digital Admin</p>
                 </div>
                 
-                {/* BOTÓN DE LOGOUT DEL ADMIN */}
                 <button 
                     onClick={handleLogout} 
-                    style={{ 
-                        background: 'none', 
-                        border: '1px solid #ef4444', 
-                        color: '#ef4444', 
-                        padding: '8px 15px', 
-                        borderRadius: '8px', 
-                        cursor: 'pointer',
-                        fontWeight: 'bold',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '5px',
-                        marginLeft: 'auto',
-                        marginRight: '20px'
-                    }}
+                    style={{ background: 'none', border: '1px solid #ef4444', color: '#ef4444', padding: '8px 15px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px', marginLeft: 'auto', marginRight: '20px' }}
                 >
-                    <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>logout</span> 
-                    SALIR
+                    <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>logout</span> SALIR
                 </button>
 
                 <div className="tab-refined-switcher">
@@ -351,24 +336,9 @@ export default function AdminDashboard() {
                                                     </td>
                                                     <td>
                                                         <div style={{ display: 'flex', gap: '5px' }}>
-                                                            <button 
-                                                                title="En Preparación"
-                                                                onClick={() => handleUpdateTrackingStatus(o.id, 'en_preparacion')}
-                                                                style={{ padding: '6px', borderRadius: '6px', border: '1px solid #4f46e5', background: o.tracking_status === 'en_preparacion' ? '#4f46e5' : 'transparent', color: o.tracking_status === 'en_preparacion' ? '#fff' : '#4f46e5', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                                                                🛠️ Prep
-                                                            </button>
-                                                            <button 
-                                                                title="En Distribución"
-                                                                onClick={() => handleUpdateTrackingStatus(o.id, 'en_distribucion')}
-                                                                style={{ padding: '6px', borderRadius: '6px', border: '1px solid #d97706', background: o.tracking_status === 'en_distribucion' ? '#d97706' : 'transparent', color: o.tracking_status === 'en_distribucion' ? '#fff' : '#d97706', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                                                                🚚 Dist
-                                                            </button>
-                                                            <button 
-                                                                title="Listo para Retirar"
-                                                                onClick={() => handleUpdateTrackingStatus(o.id, 'listo_para_retirar')}
-                                                                style={{ padding: '6px', borderRadius: '6px', border: '1px solid #16a34a', background: o.tracking_status === 'listo_para_retirar' ? '#16a34a' : 'transparent', color: o.tracking_status === 'listo_para_retirar' ? '#fff' : '#16a34a', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                                                                🏠 Listo
-                                                            </button>
+                                                            <button title="En Preparación" onClick={() => handleUpdateTrackingStatus(o.id, 'en_preparacion')} style={{ padding: '6px', borderRadius: '6px', border: '1px solid #4f46e5', background: o.tracking_status === 'en_preparacion' ? '#4f46e5' : 'transparent', color: o.tracking_status === 'en_preparacion' ? '#fff' : '#4f46e5', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}>🛠️ Prep</button>
+                                                            <button title="En Distribución" onClick={() => handleUpdateTrackingStatus(o.id, 'en_distribucion')} style={{ padding: '6px', borderRadius: '6px', border: '1px solid #d97706', background: o.tracking_status === 'en_distribucion' ? '#d97706' : 'transparent', color: o.tracking_status === 'en_distribucion' ? '#fff' : '#d97706', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}>🚚 Dist</button>
+                                                            <button title="Listo para Retirar" onClick={() => handleUpdateTrackingStatus(o.id, 'listo_para_retirar')} style={{ padding: '6px', borderRadius: '6px', border: '1px solid #16a34a', background: o.tracking_status === 'listo_para_retirar' ? '#16a34a' : 'transparent', color: o.tracking_status === 'listo_para_retirar' ? '#fff' : '#16a34a', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}>🏠 Listo</button>
                                                         </div>
                                                     </td>
                                                     <td>
@@ -497,7 +467,7 @@ export default function AdminDashboard() {
                 )}
             </main>
 
-            {/* MODALES CON INFORMACIÓN DE PUNTOS */}
+            {/* MODALES */}
             {selectedOrder && (
                 <div className="refined-modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="refined-modal-card order-modal" onClick={e => e.stopPropagation()}>
@@ -512,11 +482,6 @@ export default function AdminDashboard() {
                                 <p style={{ margin: '8px 0' }}><strong>WhatsApp:</strong> {selectedOrder.customer_phone}</p>
                                 <p style={{ margin: '8px 0' }}><strong>Email:</strong> {selectedOrder.customer_email || 'No especificado'}</p>
                                 <p style={{ margin: '8px 0' }}><strong>Fecha Compra:</strong> {new Date(selectedOrder.created_at).toLocaleString()}</p>
-                                
-                                {selectedOrder.puntos_ganados > 0 && <p style={{ margin: '8px 0', color: '#16a34a', fontWeight: 'bold' }}><strong>Puntos Ganados:</strong> +{selectedOrder.puntos_ganados}</p>}
-                                {selectedOrder.puntos_descontados > 0 && <p style={{ margin: '8px 0', color: '#d97706', fontWeight: 'bold' }}><strong>Puntos Canjeados:</strong> -{selectedOrder.puntos_descontados}</p>}
-                                
-                                <hr style={{ border: 'none', borderTop: '1px solid #cbd5e1', margin: '15px 0' }} />
                                 <p style={{ margin: '8px 0' }}><strong>Método de Despacho:</strong></p>
                                 <span style={{
                                     display: 'inline-block',
@@ -533,7 +498,6 @@ export default function AdminDashboard() {
                                 </span>
                                 <p style={{ margin: '8px 0', lineHeight: '1.4' }}><strong>Dirección Postal:</strong> <br />{selectedOrder.shipping_address || 'Retira en local (Código Vinario)'}</p>
                             </div>
-
                             <div className="items-box" style={{ background: '#f8fafc', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <div>
                                     <h3 style={{ fontFamily: 'Noto Serif, serif', marginBottom: '15px', color: '#a5813a' }}>Resumen del Mate</h3>
