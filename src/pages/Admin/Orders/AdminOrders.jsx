@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../../../lib/supabaseClient';
+import { supabase } from '../../../lib/supabaseClient'; // 3 niveles arriba para llegar a lib
 import toast from 'react-hot-toast';
+import './AdminOrders.css'; 
 
 export default function AdminOrders() {
     const [orders, setOrders] = useState([]);
     const [tabLoading, setTabLoading] = useState(false);
 
-    useEffect(() => { fetchOrders(); }, []);
+    useEffect(() => {
+        fetchOrders();
+    }, []);
 
     const fetchOrders = async () => {
         setTabLoading(true);
@@ -15,7 +18,6 @@ export default function AdminOrders() {
         setTabLoading(false);
     };
 
-    // --- LÓGICA DE WHATSAPP ---
     const sendWhatsAppNotification = (order, statusName) => {
         const phone = order.customer_phone?.replace(/\D/g, ''); 
         const message = encodeURIComponent(`Hola ${order.customer_name}, te informamos que tu pedido de Cuyo Cebado ha cambiado a estado: ${statusName}. ¡Gracias por confiar en nosotros!`);
@@ -34,40 +36,29 @@ export default function AdminOrders() {
         const { error } = await supabase.from('orders').update({ tracking_status: newTracking }).eq('id', order.id);
         if (!error) {
             setOrders(prev => prev.map(o => o.id === order.id ? { ...o, tracking_status: newTracking } : o));
-            toast.success('Estado actualizado y notificando al cliente...');
+            toast.success('Estado logístico actualizado y notificando...');
             sendWhatsAppNotification(order, statusName);
         } else {
             toast.error('Error al actualizar logística');
         }
     };
 
-    const handleCancelOrder = async (order) => {
-        if (!window.confirm(`¿Seguro que querés CANCELAR el pedido de ${order.customer_name}?`)) return;
-        setTabLoading(true);
-        const { error } = await supabase.from('orders').update({ status: 'cancelled', tracking_status: 'cancelled' }).eq('id', order.id);
-        if (!error) {
-            toast.success("Pedido cancelado.");
-            fetchOrders();
-        }
-        setTabLoading(false);
-    };
-
     return (
         <section className="fade-in">
             <h2>Gestión de Ventas</h2>
-            {tabLoading ? <p>Sincronizando...</p> : (
+            {tabLoading ? <p>Cargando ventas...</p> : (
                 <div className="table-container">
-                    <table className="refined-table">
+                    <table className="refined-table" style={{ minWidth: '900px' }}>
                         <thead><tr><th>FECHA</th><th>CLIENTE</th><th>ESTADO</th><th>ACCIONES LOGÍSTICA</th></tr></thead>
                         <tbody>
                             {orders.map(o => (
                                 <tr key={o.id}>
                                     <td>{new Date(o.created_at).toLocaleDateString()}</td>
-                                    <td>{o.customer_name}</td>
+                                    <td><strong>{o.customer_name}</strong></td>
                                     <td>
-                                        <select value={o.status} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}>
+                                        <select value={o.status || 'pending'} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}>
                                             <option value="pending">Pendiente</option>
-                                            <option value="paid">Pagado</option>
+                                            <option value="paid">✅ Pagado</option>
                                         </select>
                                     </td>
                                     <td>
