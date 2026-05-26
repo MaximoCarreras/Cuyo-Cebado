@@ -11,8 +11,7 @@ import ProductsPage from './pages/ProductsPage/ProductsPage';
 import CategoryPage from './pages/CategoryPage/CategoryPage';
 import ProductDetail from './pages/ProductDetail/ProductDetail';
 import AuthPage from './pages/Auth/AuthPage';
-// RUTA CORREGIDA: Apunta a tu nueva carpeta Dashboard
-import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
+import AdminDashboard from './pages/Admin/AdminDashboard';
 import SuccessPage from './pages/Checkout/SuccessPage';
 import FailurePage from './pages/Checkout/FailurePage';
 import NotFound from './pages/NotFound/NotFound'; 
