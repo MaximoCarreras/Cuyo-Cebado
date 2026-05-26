@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../../../lib/supabaseClient'; // 3 niveles arriba para llegar a lib
+import { supabase } from '../../../lib/supabaseClient';
 import toast from 'react-hot-toast';
-import './AdminOrders.css'; 
 
 export default function AdminOrders() {
     const [orders, setOrders] = useState([]);
     const [tabLoading, setTabLoading] = useState(false);
 
-    useEffect(() => {
-        fetchOrders();
-    }, []);
+    useEffect(() => { fetchOrders(); }, []);
 
     const fetchOrders = async () => {
         setTabLoading(true);
@@ -18,60 +15,41 @@ export default function AdminOrders() {
         setTabLoading(false);
     };
 
-    const sendWhatsAppNotification = (order, statusName) => {
-        const phone = order.customer_phone?.replace(/\D/g, ''); 
-        const message = encodeURIComponent(`Hola ${order.customer_name}, te informamos que tu pedido de Cuyo Cebado ha cambiado a estado: ${statusName}. ¡Gracias por confiar en nosotros!`);
-        window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+    const sendWhatsApp = (order, status) => {
+        const phone = order.customer_phone?.replace(/\D/g, '');
+        const msg = encodeURIComponent(`Hola ${order.customer_name}, tu pedido de Cuyo Cebado ha cambiado a estado: ${status}. ¡Gracias!`);
+        window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
     };
 
-    const handleUpdateOrderStatus = async (orderId, newStatus) => {
-        const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
-        if (!error) {
-            setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-            toast.success(`Pedido marcado como ${newStatus}`);
-        }
-    };
-
-    const handleUpdateTrackingStatus = async (order, newTracking, statusName) => {
+    const updateStatus = async (order, newTracking, statusName) => {
         const { error } = await supabase.from('orders').update({ tracking_status: newTracking }).eq('id', order.id);
         if (!error) {
             setOrders(prev => prev.map(o => o.id === order.id ? { ...o, tracking_status: newTracking } : o));
-            toast.success('Estado logístico actualizado y notificando...');
-            sendWhatsAppNotification(order, statusName);
-        } else {
-            toast.error('Error al actualizar logística');
+            toast.success('Logística actualizada');
+            sendWhatsApp(order, statusName);
         }
     };
 
     return (
-        <section className="fade-in">
+        <div className="fade-in">
             <h2>Gestión de Ventas</h2>
-            {tabLoading ? <p>Cargando ventas...</p> : (
-                <div className="table-container">
-                    <table className="refined-table" style={{ minWidth: '900px' }}>
-                        <thead><tr><th>FECHA</th><th>CLIENTE</th><th>ESTADO</th><th>ACCIONES LOGÍSTICA</th></tr></thead>
-                        <tbody>
-                            {orders.map(o => (
-                                <tr key={o.id}>
-                                    <td>{new Date(o.created_at).toLocaleDateString()}</td>
-                                    <td><strong>{o.customer_name}</strong></td>
-                                    <td>
-                                        <select value={o.status || 'pending'} onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}>
-                                            <option value="pending">Pendiente</option>
-                                            <option value="paid">✅ Pagado</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <button onClick={() => handleUpdateTrackingStatus(o, 'en_preparacion', 'En Preparación')}>🛠️ Prep</button>
-                                        <button onClick={() => handleUpdateTrackingStatus(o, 'en_distribucion', 'En Distribución')}>🚚 Dist</button>
-                                        <button onClick={() => handleUpdateTrackingStatus(o, 'listo_para_retirar', 'Listo para Retirar')}>🏠 Listo</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+            {tabLoading ? <p>Cargando...</p> : (
+                <table className="refined-table">
+                    <thead><tr><th>Cliente</th><th>Estado</th><th>Logística</th></tr></thead>
+                    <tbody>
+                        {orders.map(o => (
+                            <tr key={o.id}>
+                                <td>{o.customer_name}</td>
+                                <td>{o.status}</td>
+                                <td>
+                                    <button onClick={() => updateStatus(o, 'en_preparacion', 'En Preparación')}>🛠️ Prep</button>
+                                    <button onClick={() => updateStatus(o, 'en_distribucion', 'En Distribución')}>🚚 Dist</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             )}
-        </section>
+        </div>
     );
 }

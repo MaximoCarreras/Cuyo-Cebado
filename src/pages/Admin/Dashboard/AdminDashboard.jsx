@@ -3,7 +3,7 @@ import { supabase } from '../../../lib/supabaseClient';
 import { Toaster } from 'react-hot-toast';
 import './AdminDashboard.css';
 
-// Importamos los módulos desde las subcarpetas que creaste
+// Importación de módulos (ya están listos para que los crees)
 import AdminInventory from '../Inventory/AdminInventory';
 import AdminOrders from '../Orders/AdminOrders';
 import AdminCategories from '../Categories/AdminCategories';
@@ -30,14 +30,14 @@ export default function AdminDashboard() {
         window.location.href = '/'; 
     };
 
-    if (initialLoading) return <div className="admin-loader">Abriendo la estancia...</div>;
-    if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Restringido</h1><button onClick={() => window.location.href = '/'}>Volver al Inicio</button></div>;
+    if (initialLoading) return <div className="admin-loader">Cargando...</div>;
+    if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Restringido</h1></div>;
 
     return (
         <div className="admin-refined-page">
             <Toaster position="top-right" />
             <header className="admin-refined-header">
-                <h1>Gestión Cuyo Cebado</h1>
+                <div className="header-info"><h1>Panel de Administración</h1></div>
                 <button onClick={handleLogout} className="btn-logout">SALIR</button>
                 <div className="tab-refined-switcher">
                     <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => setActiveTab('inventory')}>Stock</button>
@@ -47,7 +47,6 @@ export default function AdminDashboard() {
                     <button className={activeTab === 'faq' ? 'active' : ''} onClick={() => setActiveTab('faq')}>FAQ</button>
                 </div>
             </header>
-
             <main className="admin-refined-content">
                 {activeTab === 'inventory' && <AdminInventory />}
                 {activeTab === 'orders' && <AdminOrders />}
