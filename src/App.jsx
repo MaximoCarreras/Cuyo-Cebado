@@ -11,7 +11,7 @@ import ProductsPage from './pages/ProductsPage/ProductsPage';
 import CategoryPage from './pages/CategoryPage/CategoryPage';
 import ProductDetail from './pages/ProductDetail/ProductDetail';
 import AuthPage from './pages/Auth/AuthPage';
-// Ruta corregida a la subcarpeta Dashboard
+// Ruta exacta hacia tu nueva estructura de carpetas:
 import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
 import SuccessPage from './pages/Checkout/SuccessPage';
 import FailurePage from './pages/Checkout/FailurePage';
