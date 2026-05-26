@@ -17,18 +17,26 @@ export default function AdminDashboardHome() {
 
     const fetchDashboardData = async () => {
         setLoading(true);
-        // Traemos datos básicos
+        
+        // Traemos órdenes y perfil de usuarios
         const { data: orders } = await supabase.from('orders').select('total, status, created_at');
-        const { data: users } = await supabase.from('profiles').select('id', { count: 'exact' });
+        const { count: usersCount } = await supabase.from('profiles').select('id', { count: 'exact', head: true });
 
         if (orders) {
-            const total = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+            // LÓGICA CORREGIDA:
+            // Facturación total: Solo sumamos si status === 'approved'
+            const total = orders
+                .filter(o => o.status === 'approved')
+                .reduce((sum, o) => sum + (o.total || 0), 0);
+            
+            // Pedidos pendientes: Contamos los que siguen como 'pending'
             const pending = orders.filter(o => o.status === 'pending').length;
+            
             setStats({
                 totalSales: total,
                 pendingOrders: pending,
-                totalUsers: users?.length || 0,
-                recentOrders: orders.slice(0, 5)
+                totalUsers: usersCount || 0,
+                recentOrders: orders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5)
             });
         }
         setLoading(false);
@@ -39,14 +47,14 @@ export default function AdminDashboardHome() {
             <h2 style={{ fontFamily: 'Noto Serif, serif', color: '#a5813a', marginBottom: '30px' }}>📊 Centro de Comando</h2>
 
             {loading ? (
-                <p>Calculando métricas...</p>
+                <p>Calculando métricas reales...</p>
             ) : (
                 <>
                     <div className="stats-refined-grid">
                         <div className="stat-card">
                             <span className="material-symbols-outlined icon-stat">payments</span>
                             <div className="stat-data">
-                                <span className="stat-label">Facturación Total</span>
+                                <span className="stat-label">Facturación Real (Cobrado)</span>
                                 <span className="stat-value">${stats.totalSales.toLocaleString()}</span>
                             </div>
                         </div>
@@ -60,14 +68,14 @@ export default function AdminDashboardHome() {
                         <div className="stat-card">
                             <span className="material-symbols-outlined icon-stat">group</span>
                             <div className="stat-data">
-                                <span className="stat-label">Usuarios Reg.</span>
+                                <span className="stat-label">Clientes Registrados</span>
                                 <span className="stat-value">{stats.totalUsers}</span>
                             </div>
                         </div>
                     </div>
 
                     <div className="category-refined-add" style={{ marginTop: '30px' }}>
-                        <h3>Últimas Ventas</h3>
+                        <h3>Últimas Operaciones</h3>
                         <table className="refined-table">
                             <thead>
                                 <tr><th>FECHA</th><th>TOTAL</th><th>ESTADO</th></tr>
@@ -77,7 +85,11 @@ export default function AdminDashboardHome() {
                                     <tr key={i}>
                                         <td>{new Date(o.created_at).toLocaleDateString()}</td>
                                         <td>${o.total?.toLocaleString()}</td>
-                                        <td>{o.status}</td>
+                                        <td>
+                                            <span className={`status-badge ${o.status}`}>
+                                                {o.status.toUpperCase()}
+                                            </span>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
