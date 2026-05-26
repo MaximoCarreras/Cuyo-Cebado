@@ -11,8 +11,8 @@ import ProductsPage from './pages/ProductsPage/ProductsPage';
 import CategoryPage from './pages/CategoryPage/CategoryPage';
 import ProductDetail from './pages/ProductDetail/ProductDetail';
 import AuthPage from './pages/Auth/AuthPage';
-// RUTA CORREGIDA:
-import AdminDashboard from "./pages/Admin/Dashboard/AdminDashboard";
+// RUTA CORREGIDA: Apunta a tu nueva carpeta Dashboard
+import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
 import SuccessPage from './pages/Checkout/SuccessPage';
 import FailurePage from './pages/Checkout/FailurePage';
 import NotFound from './pages/NotFound/NotFound'; 
@@ -36,6 +36,8 @@ export default function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/pago-exitoso" element={<SuccessPage />} />
           <Route path="/pago-fallido" element={<FailurePage />} />
+          
+          {/* RUTA 404: Siempre tiene que ir al final de la lista */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
