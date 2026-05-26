@@ -12,7 +12,7 @@ import CategoryPage from './pages/CategoryPage/CategoryPage';
 import ProductDetail from './pages/ProductDetail/ProductDetail';
 import AuthPage from './pages/Auth/AuthPage';
 // RUTA CORREGIDA:
-import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard'; 
+import AdminDashboard from "./pages/Admin/Dashboard/AdminDashboard";
 import SuccessPage from './pages/Checkout/SuccessPage';
 import FailurePage from './pages/Checkout/FailurePage';
 import NotFound from './pages/NotFound/NotFound'; 
