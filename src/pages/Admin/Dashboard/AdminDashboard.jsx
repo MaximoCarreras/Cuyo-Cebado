@@ -3,12 +3,12 @@ import { supabase } from '../../../lib/supabaseClient';
 import { Toaster } from 'react-hot-toast';
 import './AdminDashboard.css';
 
-// Importamos los nuevos módulos
-import AdminInventory from './Inventory/AdminInventory';
-import AdminOrders from './Orders/AdminOrders';
-import AdminCategories from './Categories/AdminCategories';
-import AdminSettings from './Settings/AdminSettings';
-import AdminFAQ from './FAQ/AdminFAQ';
+// Importamos los módulos que vamos a ir rellenando
+import AdminInventory from '../Inventory/AdminInventory';
+import AdminOrders from '../Orders/AdminOrders';
+import AdminCategories from '../Categories/AdminCategories';
+import AdminSettings from '../Settings/AdminSettings';
+import AdminFAQ from '../FAQ/AdminFAQ';
 
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('inventory');
@@ -31,16 +31,14 @@ export default function AdminDashboard() {
     };
 
     if (initialLoading) return <div className="admin-loader">Abriendo la estancia...</div>;
-    if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Restringido</h1><button onClick={() => window.location.href = '/'}>Volver</button></div>;
+    if (!isAdmin) return <div className="no-access-screen"><h1>Acceso Restringido</h1><button onClick={() => window.location.href = '/'}>Volver al Inicio</button></div>;
 
     return (
         <div className="admin-refined-page">
             <Toaster position="top-right" />
             <header className="admin-refined-header">
-                <div className="header-info">
-                    <h1>Gestión Cuyo Cebado</h1>
-                </div>
-                <button onClick={handleLogout} className="btn-logout" style={{ background: 'none', border: '1px solid #ef4444', color: '#ef4444', padding: '8px 15px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>SALIR</button>
+                <h1>Gestión Cuyo Cebado</h1>
+                <button onClick={handleLogout} className="btn-logout">SALIR</button>
                 <div className="tab-refined-switcher">
                     <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => setActiveTab('inventory')}>Stock</button>
                     <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => setActiveTab('orders')}>Ventas</button>
