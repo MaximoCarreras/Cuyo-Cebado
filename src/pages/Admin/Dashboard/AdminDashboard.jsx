@@ -3,7 +3,7 @@ import { supabase } from '../../../lib/supabaseClient';
 import { Toaster } from 'react-hot-toast';
 import './AdminDashboard.css';
 
-// Importamos los módulos que vamos a ir rellenando
+// Importamos los módulos desde las subcarpetas que creaste
 import AdminInventory from '../Inventory/AdminInventory';
 import AdminOrders from '../Orders/AdminOrders';
 import AdminCategories from '../Categories/AdminCategories';
