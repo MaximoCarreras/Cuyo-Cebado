@@ -3,11 +3,12 @@ import { useRef, useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useCart } from '../../context/CartContext';
 import heroImg from '../../assets/fondo_hero_principal.png';
-import InstagramCarousel from '../../components/InstagramCarousel/InstagramCarousel'; // Importamos el carrusel
+import InstagramCarousel from '../../components/InstagramCarousel/InstagramCarousel'; 
 import './Home.css';
 
 export default function Home() {
-    const { addToCart } = useCart();
+    // Agregamos clearCart acá para poder usarlo
+    const { addToCart, clearCart } = useCart();
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('');
     const [featuredKit, setFeaturedKit] = useState(null);
@@ -16,14 +17,24 @@ export default function Home() {
     const heroRef = useRef(null);
     const categoryCardRefs = useRef([]);
 
+    // NUEVO: Detector de Pago Aprobado
+    useEffect(() => {
+        if (window.location.search.includes('status=approved')) {
+            // 1. Borramos el carrito de la memoria
+            localStorage.removeItem('cart');
+            if (typeof clearCart === 'function') clearCart();
+            
+            // 2. Limpiamos la URL para que quede prolija y no vuelva a dispararse
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }, [clearCart]);
+
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                // 1. Traemos las categorías dinámicas
                 const { data: catData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
                 if (catData) setDbCategories(catData);
 
-                // 2. Traemos el producto destacado
                 const { data: featuredData } = await supabase
                     .from('products')
                     .select('*')
@@ -185,7 +196,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* SECCIÓN DE INSTAGRAM AGREGADA AQUÍ */}
             <InstagramCarousel />
             
         </div>
