@@ -14,18 +14,17 @@ const PORT = process.env.PORT || 3001;
 
 /* --- Middleware --- */
 
-// Configuración de CORS Multiorigen
+// Configuración de CORS a prueba de fallos
 const allowedOrigins = [
   'http://localhost:5173',
   'https://cuyocebado.com.ar',
-  'https://www.cuyocebado.com.ar'
+  'https://www.cuyocebado.com.ar',
+  'https://cuyo-cebado.vercel.app'
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Permitir pedidos sin origen (como aplicaciones móviles o Postman)
     if (!origin) return callback(null, true);
-
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -33,8 +32,9 @@ app.use(cors({
       callback(new Error('No permitido por CORS'));
     }
   },
-  methods: ['GET', 'POST'],
-  credentials: true
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+  optionsSuccessStatus: 200 // Clave para que los navegadores viejos o estrictos no bloqueen la respuesta
 }));
 
 /* Parse JSON request bodies */
