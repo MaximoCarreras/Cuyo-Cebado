@@ -2,32 +2,37 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 serve(async (req) => {
-  // Recibimos el aviso de Mercado Pago
   const body = await req.json();
   const paymentId = body.data?.id;
-
   if (!paymentId) return new Response("No payment ID", { status: 400 });
 
-  // Consultamos a Mercado Pago para confirmar que el pago es real
-  const mpResponse = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
-    headers: { 'Authorization': `Bearer ${Deno.env.get('MP_ACCESS_TOKEN')}` }
-  });
-  const paymentData = await mpResponse.json();
-
-  // Conectamos con tu base de datos
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
   );
 
-  // Actualizamos el estado del pedido
-  // IMPORTANTE: Asegurate que en tu tabla 'orders' tengas una columna 'payment_id'
-  const { error } = await supabase
-    .from('orders')
-    .update({ status: paymentData.status === 'approved' ? 'approved' : 'pending' })
-    .eq('payment_id', paymentId);
+  // 1. Obtener datos del pago de MP
+  const mpResponse = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+    headers: { 'Authorization': `Bearer ${Deno.env.get('MP_ACCESS_TOKEN')}` }
+  });
+  const paymentData = await mpResponse.json();
 
-  if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+  if (paymentData.status === 'approved') {
+    // 2. Actualizar estado del pedido
+    const { data: order } = await supabase
+        .from('orders')
+        .update({ status: 'approved' })
+        .eq('payment_id', paymentId)
+        .select('id');
+
+    // 3. DESCONTAR STOCK: Buscar los productos de esa orden
+    const { data: items } = await supabase.from('order_items').select('product_id, quantity').eq('order_id', order[0].id);
+
+    for (const item of items) {
+        // Restar stock
+        await supabase.rpc('decrement_stock', { p_product_id: item.product_id, p_quantity: item.quantity });
+    }
+  }
 
   return new Response("OK", { status: 200 });
 })
