@@ -5,7 +5,7 @@ import { mpClient } from '../lib/mercadopago.js';
 
 const router = Router();
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://cuyocebado.com.ar';
 
 router.post('/', async (req, res) => {
   try {
@@ -13,7 +13,6 @@ router.post('/', async (req, res) => {
       return res.status(503).json({ error: 'Configuración de Supabase o MP ausente.' });
     }
 
-    // Ahora recibimos orderId directamente desde el frontend
     const { items, email, name, shippingCost, discount, orderId } = req.body;
 
     if (!orderId) {
@@ -69,12 +68,15 @@ router.post('/', async (req, res) => {
         items: orderItems,
         payer: { email, name },
         back_urls: {
-          success: `${FRONTEND_URL}/`,
+          // FORZAMOS LA URL PARA QUE EL CARRITO SE VACÍE SÍ O SÍ
+          success: `${FRONTEND_URL}/?status=approved`, 
           failure: `${FRONTEND_URL}/carrito`,
           pending: `${FRONTEND_URL}/`
         },
         auto_return: "approved",
-        external_reference: orderId // ¡CLAVE! MP devolverá este ID a tu Webhook
+        external_reference: orderId,
+        // LA BALA DE PLATA: Le decimos a MP exactamente dónde avisar del pago
+        notification_url: "https://bbqnusdjanbusrrtsotg.supabase.co/functions/v1/mercadopago-webhook" 
       }
     });
 
