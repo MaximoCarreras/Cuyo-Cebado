@@ -10,13 +10,15 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 router.post('/', async (req, res) => {
   try {
     if (!supabaseAdmin || !mpClient) {
-      return res.status(503).json({
-        error: 'Configuración de Supabase o MP ausente en el servidor.'
-      });
+      return res.status(503).json({ error: 'Configuración de Supabase o MP ausente.' });
     }
 
-    // Recibimos los datos, incluyendo el descuento de puntos si el usuario lo aplicó
-    const { items, email, name, shippingCost, discount } = req.body;
+    // Ahora recibimos orderId directamente desde el frontend
+    const { items, email, name, shippingCost, discount, orderId } = req.body;
+
+    if (!orderId) {
+        return res.status(400).json({ error: 'Falta el ID de la orden.' });
+    }
 
     const productIds = items.map(i => i.id);
     const { data: products, error: fetchErr } = await supabaseAdmin
@@ -27,7 +29,6 @@ router.post('/', async (req, res) => {
     if (fetchErr) throw fetchErr;
 
     const orderItems = [];
-    let totalCalculado = 0;
 
     for (const item of items) {
       const product = products.find(p => p.id === item.id);
@@ -41,7 +42,6 @@ router.post('/', async (req, res) => {
         quantity: Number(item.quantity),
         currency_id: 'ARS'
       });
-      totalCalculado += Number(product.price) * Number(item.quantity);
     }
 
     if (shippingCost && Number(shippingCost) > 0) {
@@ -51,10 +51,8 @@ router.post('/', async (req, res) => {
         quantity: 1,
         currency_id: 'ARS'
       });
-      totalCalculado += Number(shippingCost);
     }
 
-    // Si el cliente aplicó puntos, enviamos el descuento a Mercado Pago
     if (discount && Number(discount) > 0) {
       orderItems.push({
         title: 'Descuento Cuyo Puntos ✨',
@@ -62,31 +60,6 @@ router.post('/', async (req, res) => {
         quantity: 1,
         currency_id: 'ARS'
       });
-      totalCalculado -= Number(discount);
-    }
-
-    // Buscamos la orden pendiente que el frontend acaba de crear para enganchar el ID
-    const { data: recentOrder } = await supabaseAdmin
-      .from('orders')
-      .select('*')
-      .eq('customer_email', email)
-      .eq('status', 'pending')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
-
-    let orderId = '';
-
-    if (recentOrder) {
-      orderId = recentOrder.id;
-      // Actualizamos los montos de seguridad en la base de datos
-      await supabaseAdmin.from('orders').update({ total: totalCalculado, items: orderItems }).eq('id', orderId);
-    } else {
-      // Fallback de seguridad por si no se encontró
-      const { data: newOrder } = await supabaseAdmin.from('orders').insert({
-        status: 'pending', items: orderItems, customer_email: email, customer_name: name, total: totalCalculado
-      }).select().single();
-      orderId = newOrder.id;
     }
 
     const preference = new Preference(mpClient);
@@ -101,15 +74,14 @@ router.post('/', async (req, res) => {
           pending: `${FRONTEND_URL}/`
         },
         auto_return: "approved",
-        external_reference: orderId
+        external_reference: orderId // ¡CLAVE! MP devolverá este ID a tu Webhook
       }
     });
 
     res.json({ init_point: response.init_point });
 
   } catch (err) {
-    console.error('--- ERROR DETALLADO EN CHECKOUT ---');
-    console.error(err);
+    console.error('--- ERROR DETALLADO EN CHECKOUT ---', err);
     res.status(500).json({ error: 'Falla en el servidor de Cuyo Cebado.' });
   }
 });

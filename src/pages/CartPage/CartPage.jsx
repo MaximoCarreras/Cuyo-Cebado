@@ -51,24 +51,8 @@ export default function CartPage() {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
             const fixedAddress = 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)';
 
-            // 1. Llamamos a la API para iniciar el pago
-            const response = await fetch(`${baseUrl}/api/checkout`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    items: cart,
-                    name: orderData.name,
-                    email: orderData.email,
-                    shippingCost: 0,
-                    discount: discountAmount
-                })
-            });
-
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Falla al inicializar la pasarela.');
-
-            // 2. Insertamos la orden con el ID de Mercado Pago obtenido
-            const { error: dbError } = await supabase.from('orders').insert([{
+            // 1. Crear la orden en Supabase PRIMERO para obtener su ID real
+            const { data: newOrder, error: dbError } = await supabase.from('orders').insert([{
                 customer_email: orderData.email,
                 customer_name: orderData.name,
                 customer_phone: orderData.phone,
@@ -77,19 +61,36 @@ export default function CartPage() {
                 total: finalTotal,
                 items: cart,
                 status: 'pending',
-                payment_id: data.id, // ID recibido de la API
                 user_id: userProfile?.id || null,
                 puntos_ganados: earnedPoints,
                 puntos_descontados: applyPoints ? userProfile?.puntos : 0
-            }]);
+            }]).select().single();
 
             if (dbError) throw dbError;
 
-            // 3. Limpiamos carrito y redirigimos
-            toast.success("Redirigiendo a Mercado Pago...");
+            // 2. Llamar a la API pasando el ID de la orden (orderId)
+            const response = await fetch(`${baseUrl}/api/checkout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    items: cart,
+                    name: orderData.name,
+                    email: orderData.email,
+                    shippingCost: 0,
+                    discount: discountAmount,
+                    orderId: newOrder.id 
+                })
+            });
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Falla al inicializar la pasarela.');
+
+            // 3. Limpiamos carrito INMEDIATAMENTE ANTES de redirigir
             localStorage.removeItem('cart');
             if (typeof clearCart === 'function') clearCart();
-            
+            toast.success("Redirigiendo a Mercado Pago...");
+
+            // 4. Redirigimos sin demoras
             window.location.href = data.init_point;
 
         } catch (err) {
@@ -164,6 +165,17 @@ export default function CartPage() {
                                 <div className="pickup-details">
                                     <p>📍 Av. Colón 701, Mendoza Capital</p>
                                     <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
+                                </div>
+                                <div className="map-container" style={{ width: '100%', marginTop: '15px', borderRadius: '12px', overflow: 'hidden' }}>
+                                    <iframe
+                                        src="https://maps.google.com/maps?q=-32.88939,-68.84478&z=15&output=embed"
+                                        width="100%"
+                                        height="250"
+                                        style={{ border: 0 }}
+                                        allowFullScreen=""
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade">
+                                    </iframe>
                                 </div>
                             </div>
 
