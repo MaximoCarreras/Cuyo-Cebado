@@ -1,3 +1,4 @@
+/* Configuración Barra Dorada */
 .status-selector {
     padding: 8px 12px;
     border-radius: 8px;
@@ -23,8 +24,89 @@
     color: #1a1614;
 }
 
-.faq-form-pro {
+/* Gestor del Carrusel */
+.form-row-carousel {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.input-with-label {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 8px;
+}
+
+.file-input-pro {
+    background: #fff;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.carousel-grid-pro {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.carousel-card-pro {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.carousel-img-wrapper {
+    width: 100%;
+    aspect-ratio: 1; 
+    background: #f1f5f9;
+}
+
+.carousel-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-actions {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.link-preview-pro {
+    font-size: 0.75rem;
+    color: #a5813a;
+    text-decoration: none;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: 0.3s;
+}
+
+.link-preview-pro:hover {
+    color: #1a1614;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-row-carousel {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-save-gold-full {
+        width: 100% !important;
+    }
 }
