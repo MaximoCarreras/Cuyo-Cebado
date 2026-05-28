@@ -1,0 +1,252 @@
+/* FORMULARIO SUPERIOR */
+.supply-grid-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.supply-item-adder {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 25px;
+}
+
+.item-adder-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 15px;
+    align-items: center;
+}
+
+.btn-add-item-pro {
+    background: #1a1614;
+    color: #a5813a;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-add-item-pro:hover {
+    background: #2d2623;
+}
+
+.supply-draft-list {
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(165, 129, 58, 0.2);
+}
+
+.supply-totals-box {
+    background: #fdfaf7;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border: 1px dashed #a5813a;
+}
+
+.totals-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.totals-row.grand-total {
+    border-top: 1px solid #e2e8f0;
+    margin-top: 10px;
+    padding-top: 15px;
+    color: #1a1614;
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+/* HISTORIAL - ACORDEÓN */
+.accordion-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.accordion-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.accordion-card.expanded {
+    border-color: #a5813a;
+    box-shadow: 0 10px 25px rgba(165, 129, 58, 0.08);
+}
+
+.accordion-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: #fafafa;
+    transition: 0.2s;
+}
+
+.accordion-header:hover {
+    background: #fdfaf7;
+}
+
+.acc-info-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.acc-badge {
+    background: #1a1614;
+    color: #a5813a;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.acc-date {
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.acc-provider {
+    color: #1a1614;
+    font-size: 1.1rem;
+}
+
+.acc-info-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.acc-total {
+    font-size: 1.2rem;
+    color: #1a1614;
+}
+
+.expand-icon {
+    background: #e2e8f0;
+    color: #64748b;
+    border-radius: 50%;
+    padding: 4px;
+    transition: 0.3s;
+}
+
+.accordion-card.expanded .expand-icon {
+    background: #a5813a;
+    color: #fff;
+}
+
+.accordion-body {
+    padding: 25px;
+    background: #fff;
+    border-top: 1px solid #e2e8f0;
+}
+
+.acc-items-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.acc-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+.acc-item-main {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.acc-item-main img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f1f5f9;
+}
+
+.acc-item-name {
+    font-weight: 700;
+    color: #1a1614;
+    margin: 0 0 5px 0;
+}
+
+.acc-item-price {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+    font-weight: 600;
+}
+
+.acc-item-subtotal {
+    font-weight: 800;
+    color: #1a1614;
+}
+
+.acc-footer-summary {
+    background: #fdfaf7;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #a5813a;
+}
+
+.acc-summary-line {
+    display: flex;
+    justify-content: space-between;
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.acc-summary-line.total {
+    color: #1a1614;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 0;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(165, 129, 58, 0.2);
+}
+
+/* RESPONSIVE MÓVIL */
+@media (max-width: 768px) {
+    .supply-grid-top, .item-adder-row {
+        grid-template-columns: 1fr;
+    }
+
+    .acc-info-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .acc-date {
+        font-size: 0.8rem;
+    }
+}
