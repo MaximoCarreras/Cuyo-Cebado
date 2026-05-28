@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import toast from 'react-hot-toast';
-import '../AdminDashboard.css';
+import './AdminCategories.css';
 
 export default function AdminCategories() {
     const [categoriesList, setCategoriesList] = useState([]);

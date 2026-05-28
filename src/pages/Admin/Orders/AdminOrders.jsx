@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import toast from 'react-hot-toast';
-import '../AdminDashboard.css';
+import './AdminOrders.css';
 
 export default function AdminOrders() {
     const [orders, setOrders] = useState([]);
@@ -43,7 +43,6 @@ export default function AdminOrders() {
             if (statusErr) throw statusErr;
 
             if (order.items && order.items.length > 0) {
-                // Parsear items si vienen como string
                 let parsedItems = order.items;
                 if (typeof parsedItems === 'string') {
                     try { parsedItems = JSON.parse(parsedItems); } catch(e) {}
@@ -94,7 +93,6 @@ export default function AdminOrders() {
                                         <span style={{ fontSize: '0.8rem', color: '#64748b' }}>${o.total?.toLocaleString() || '0'}</span>
                                     </td>
                                     <td>
-                                        {/* ETIQUETA AUTOMÁTICA DE ESTADO */}
                                         {o.status === 'approved' || o.status === 'paid' ? (
                                             <span style={{ background: '#dcfce7', color: '#166534', padding: '6px 12px', borderRadius: '20px', fontWeight: 'bold', fontSize: '0.85rem' }}>✅ Pagado</span>
                                         ) : o.status === 'cancelled' ? (
@@ -142,7 +140,6 @@ export default function AdminOrders() {
                 </div>
             )}
 
-            {/* MODAL CON INFORMACIÓN DEL PEDIDO */}
             {selectedOrder && (
                 <div className="refined-modal-backdrop" onClick={() => setSelectedOrder(null)}>
                     <div className="refined-modal-card order-modal" onClick={e => e.stopPropagation()}>
@@ -182,7 +179,6 @@ export default function AdminOrders() {
                             <div className="items-box" style={{ background: '#f8fafc', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <div>
                                     <h3 style={{ fontFamily: 'Noto Serif, serif', marginBottom: '15px', color: '#a5813a' }}>Resumen del Mate</h3>
-                                    {/* Mapeo seguro de items */}
                                     {(typeof selectedOrder.items === 'string' ? JSON.parse(selectedOrder.items || '[]') : selectedOrder.items)?.map((it, i) => (
                                         <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px dashed #e2e8f0' }}>
                                             <span style={{ fontWeight: '600' }}>{it.quantity}x {it.title || it.name}</span>

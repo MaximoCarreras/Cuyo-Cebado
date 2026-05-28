@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../../../lib/supabaseClient'; // Ruta ajustada
+import { supabase } from '../../../lib/supabaseClient';
 import toast from 'react-hot-toast';
-import '../AdminDashboard.css'; // Mantenemos tu CSS original por ahora
+import './AdminInventory.css'; 
 
 export default function AdminInventory() {
     const [products, setProducts] = useState([]);
@@ -10,7 +10,6 @@ export default function AdminInventory() {
     const [searchTerm, setSearchTerm] = useState('');
     const [uploading, setUploading] = useState(false);
 
-    // Modales de Productos
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState(null);
@@ -138,7 +137,6 @@ export default function AdminInventory() {
                 </>
             )}
 
-            {/* MODAL DE PRODUCTO */}
             {isModalOpen && (
                 <div className="refined-modal-backdrop" onClick={closeModal}>
                     <div className="refined-modal-card" onClick={e => e.stopPropagation()}>

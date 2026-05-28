@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
-import '../AdminDashboard.css';
 
 export default function AdminDashboardHome() {
     const [stats, setStats] = useState({
@@ -23,7 +22,6 @@ export default function AdminDashboardHome() {
         const { count: usersCount } = await supabase.from('profiles').select('id', { count: 'exact', head: true });
 
         if (orders) {
-            // LÓGICA CORREGIDA:
             // Facturación total: Solo sumamos si status === 'approved'
             const total = orders
                 .filter(o => o.status === 'approved')

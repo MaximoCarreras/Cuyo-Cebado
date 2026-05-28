@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import toast from 'react-hot-toast';
-import '../AdminDashboard.css';
+import './AdminWebSettings.css';
 
 export default function AdminWebSettings() {
     const [siteSettings, setSiteSettings] = useState({ banner_text: '', banner_active: true });
