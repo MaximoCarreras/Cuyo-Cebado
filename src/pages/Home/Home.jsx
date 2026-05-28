@@ -7,7 +7,6 @@ import InstagramCarousel from '../../components/InstagramCarousel/InstagramCarou
 import './Home.css';
 
 export default function Home() {
-    // Agregamos clearCart acá para poder usarlo
     const { addToCart, clearCart } = useCart();
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('');
@@ -17,14 +16,15 @@ export default function Home() {
     const heroRef = useRef(null);
     const categoryCardRefs = useRef([]);
 
-    // NUEVO: Detector de Pago Aprobado
+    // NUEVO: Detector de Pago Aprobado AGRESIVO
     useEffect(() => {
-        if (window.location.search.includes('status=approved')) {
-            // 1. Borramos el carrito de la memoria
+        // Busca si el link dice "approved" (como cuando MP te devuelve exitosamente)
+        if (window.location.href.includes('approved')) {
+            console.log("✅ Pago aprobado detectado en URL. Limpiando carrito...");
             localStorage.removeItem('cart');
             if (typeof clearCart === 'function') clearCart();
             
-            // 2. Limpiamos la URL para que quede prolija y no vuelva a dispararse
+            // Limpia la barra de direcciones para que quede prolija
             window.history.replaceState({}, document.title, window.location.pathname);
         }
     }, [clearCart]);
