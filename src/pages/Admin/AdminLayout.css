@@ -5,7 +5,7 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* Barra Lateral (Sidebar) */
+/* Barra Lateral (Sidebar) - FIJADA A LA IZQUIERDA */
 .admin-sidebar {
     width: 260px;
     background-color: #1a1614;
@@ -14,9 +14,13 @@
     flex-direction: column;
     padding: 30px 20px;
     box-shadow: 4px 0 15px rgba(0,0,0,0.1);
-    position: sticky;
+    
+    /* MAGIA ACÁ: Se queda clavada y no se mueve NUNCA con el scroll */
+    position: fixed; 
     top: 0;
-    height: 100vh;
+    left: 0;
+    height: 100vh; /* Ocupa siempre el 100% de la pantalla visible */
+    z-index: 1000;
 }
 
 .sidebar-header h2 {
@@ -39,6 +43,12 @@
     flex-direction: column;
     gap: 10px;
     flex-grow: 1;
+    overflow-y: auto; /* Por si en el futuro agregás muchos más botones, se puede scrollear solo el menú */
+}
+
+/* Ocultar barra de scroll interna del menú */
+.sidebar-nav::-webkit-scrollbar {
+    display: none;
 }
 
 .nav-item {
@@ -67,6 +77,7 @@
 
 .sidebar-footer {
     margin-top: auto;
+    padding-top: 20px;
 }
 
 .btn-logout-pro {
@@ -90,9 +101,50 @@
     color: #fff;
 }
 
-/* Área donde se inyectan las vistas */
+/* Área donde se inyectan las vistas - EMPUJADA A LA DERECHA */
 .admin-main-content {
     flex-grow: 1;
-    overflow-y: auto;
+    /* Le decimos que arranque justo donde termina la barra lateral (260px) */
+    margin-left: 260px; 
     padding: 20px;
+    width: calc(100% - 260px); 
+    min-height: 100vh; /* Asegura que el fondo cubra todo aunque haya poco contenido */
+}
+
+/* =========================================================
+   MEDIA QUERY PARA CELULARES Y TABLETS
+   ========================================================= */
+@media (max-width: 900px) {
+    .admin-layout-container {
+        flex-direction: column;
+    }
+
+    /* En celulares, la barra lateral pasa a ser una barra superior horizontal */
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative; /* En celu sí scrollea con la página */
+        padding: 20px;
+    }
+
+    .sidebar-header {
+        text-align: center;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .nav-item {
+        white-space: nowrap;
+    }
+
+    .admin-main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px;
+    }
 }
