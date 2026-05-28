@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 
 const CartContext = createContext(null);
 const STORAGE_KEY = 'cuyo_cebado_cart_v2';
@@ -17,12 +17,10 @@ function cartReducer(state, action) {
       return { ...state, items: action.payload };
 
     case ACTIONS.ADD_ITEM: {
-      // Ahora recibimos el producto Y la cantidad que el cliente eligió
       const { product, qty } = action.payload;
       const existing = state.items.find(item => item.id === product.id);
 
       if (existing) {
-        // VALIDACIÓN: Calculamos la nueva cantidad sin pasarnos del stock
         const newQuantity = existing.quantity + qty;
         const safeQuantity = Math.min(newQuantity, existing.stock);
 
@@ -36,10 +34,8 @@ function cartReducer(state, action) {
         };
       }
 
-      // Si es nuevo pero no hay stock, no agregamos
       if (product.stock <= 0) return state;
 
-      // Nos aseguramos de no agregar más del stock disponible en la primera compra
       const safeNewQuantity = Math.min(qty, product.stock);
 
       return {
@@ -86,14 +82,19 @@ export function CartProvider({ children }) {
   const cartCount = state.items.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  // Le pasamos la cantidad (por defecto 1, por si lo agregás rápido desde el catálogo)
   const addToCart = (product, qty = 1) => dispatch({ type: ACTIONS.ADD_ITEM, payload: { product, qty } });
 
   const removeFromCart = (id) => dispatch({ type: ACTIONS.REMOVE_ITEM, payload: id });
   const updateQuantity = (id, quantity) => dispatch({ type: ACTIONS.UPDATE_QUANTITY, payload: { id, quantity } });
+  
+  // Envolvemos clearCart en useCallback para evitar problemas de re-renderizados
+  const clearCart = useCallback(() => {
+      dispatch({ type: ACTIONS.CLEAR_CART });
+      localStorage.removeItem(STORAGE_KEY);
+  }, []);
 
   return (
-    <CartContext.Provider value={{ cart: state.items, cartCount, cartTotal, addToCart, removeFromCart, updateQuantity }}>
+    <CartContext.Provider value={{ cart: state.items, cartCount, cartTotal, addToCart, removeFromCart, updateQuantity, clearCart }}>
       {children}
     </CartContext.Provider>
   );

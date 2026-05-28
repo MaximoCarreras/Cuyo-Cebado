@@ -12,7 +12,6 @@ export default function AuthPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     
-    // Estados para el Dashboard del Cliente
     const [user, setUser] = useState(null);
     const [profile, setProfile] = useState(null);
     const [myOrders, setMyOrders] = useState([]);
@@ -43,11 +42,9 @@ export default function AuthPage() {
         return () => subscription.unsubscribe();
     }, []);
 
-    // Función para buscar los puntos y las compras del cliente en Supabase
     const fetchClientData = async (userId) => {
         setFetchingData(true);
         try {
-            // 1. Buscar los Puntos en el perfil
             const { data: profileData } = await supabase
                 .from('profiles')
                 .select('*')
@@ -55,17 +52,13 @@ export default function AuthPage() {
                 .single();
             
             if (profileData) {
-                // 💥 LA MAGIA ACÁ: Si es Admin, lo teletransportamos al Panel Admin al instante 💥
                 if (profileData.role === 'admin') {
                     navigate('/admin');
-                    return; // Cortamos la ejecución para que no cargue los puntos de cliente
+                    return; 
                 }
-                
-                // Si es un cliente normal, guardamos su perfil y seguimos
                 setProfile(profileData);
             }
 
-            // 2. Buscar el Historial de Compras (Rituales)
             const { data: ordersData } = await supabase
                 .from('orders')
                 .select('*')
@@ -119,10 +112,11 @@ export default function AuthPage() {
         navigate('/');
     };
 
-    // Función para renderizar el "Semáforo" de Estado de forma visual
+    // CORRECCIÓN ACÁ: Mapeo exacto de los estados
     const renderStatusBadge = (status) => {
         const statusMap = {
             'pending': { text: 'Pago Pendiente', class: 'status-pending' },
+            'approved': { text: 'Pagado ✅', class: 'status-prep' }, // Agregado 'approved'
             'paid': { text: 'Pagado ✅', class: 'status-prep' },
             'en_preparacion': { text: 'En Preparación 🛠️', class: 'status-prep' },
             'en_distribucion': { text: 'En Distribución 🚚', class: 'status-dist' },
@@ -134,9 +128,7 @@ export default function AuthPage() {
         return <span className={`client-status-badge ${current.class}`}>{current.text}</span>;
     };
 
-    // VISTA 1: DASHBOARD DEL CLIENTE LOGUEADO
     if (user) {
-        // Pantalla de carga suave mientras detecta si sos admin o cliente
         if (!profile || profile.role === 'admin') {
             return (
                 <div className="client-dashboard-page" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -145,11 +137,9 @@ export default function AuthPage() {
             );
         }
 
-        // Vista de cliente normal
         return (
             <div className="client-dashboard-page">
                 <div className="dashboard-container">
-                    {/* ENCABEZADO Y TARJETA DEL CLUB */}
                     <div className="dashboard-header">
                         <div className="user-greeting">
                             <h2>Hola, {profile?.full_name || 'Matero'}</h2>
@@ -173,7 +163,6 @@ export default function AuthPage() {
                         </div>
                     </div>
 
-                    {/* HISTORIAL DE COMPRAS */}
                     <div className="dashboard-history">
                         <h3>Mis Rituales</h3>
                         
@@ -195,13 +184,13 @@ export default function AuthPage() {
                                             <span className="order-date">
                                                 {new Date(order.created_at).toLocaleDateString()}
                                             </span>
-                                            {renderStatusBadge(order.tracking_status || order.status)}
+                                            {renderStatusBadge(order.tracking_status !== 'pending' ? order.tracking_status : order.status)}
                                         </div>
                                         
                                         <div className="order-items-list">
                                             {order.items?.map((item, idx) => (
                                                 <div key={idx} className="order-item-row">
-                                                    <span>{item.quantity}x {item.title}</span>
+                                                    <span>{item.quantity}x {item.title || item.name}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -227,7 +216,6 @@ export default function AuthPage() {
         );
     }
 
-    // VISTA 2: FORMULARIO DE INGRESO / REGISTRO (Intacto)
     return (
         <div className="auth-page">
             <div className="auth-card">
