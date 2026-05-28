@@ -5,7 +5,7 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* Barra Lateral (Sidebar) - FIJADA A LA IZQUIERDA */
+/* Barra Lateral (Sidebar) - FIJADA DEBAJO DE LA NAVBAR */
 .admin-sidebar {
     width: 260px;
     background-color: #1a1614;
@@ -15,12 +15,12 @@
     padding: 30px 20px;
     box-shadow: 4px 0 15px rgba(0,0,0,0.1);
     
-    /* MAGIA ACÁ: Se queda clavada y no se mueve NUNCA con el scroll */
+    /* MAGIA ACÁ: Fijada, pero respetando la Navbar de arriba */
     position: fixed; 
-    top: 0;
+    top: 120px; /* Lo bajamos 120px para que no tape la Navbar */
     left: 0;
-    height: 100vh; /* Ocupa siempre el 100% de la pantalla visible */
-    z-index: 1000;
+    height: calc(100vh - 120px); /* Le restamos esos 120px a la altura total para que no se corte el botón de salir */
+    z-index: 90; /* Z-index menor a 100 para asegurar que la Navbar siempre mande por encima */
 }
 
 .sidebar-header h2 {
@@ -124,6 +124,7 @@
         width: 100%;
         height: auto;
         position: relative; /* En celu sí scrollea con la página */
+        top: 0; /* Reiniciamos el top para el celular */
         padding: 20px;
     }
 
