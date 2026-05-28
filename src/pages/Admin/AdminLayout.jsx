@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import './AdminGlobal.css';
 import './AdminLayout.css';
 
 export default function AdminLayout() {
@@ -51,7 +52,6 @@ export default function AdminLayout() {
                     <p>Boutique Digital Admin</p>
                 </div>
 
-                {/* ACÁ ESTABA EL ERROR: AGREGUÉ TODOS LOS BOTONES DEL ERP */}
                 <nav className="sidebar-nav">
                     <NavLink to="/admin" end className="nav-item">📊 Dashboard</NavLink>
                     <NavLink to="/admin/ventas" className="nav-item">🚚 Logística y Ventas</NavLink>

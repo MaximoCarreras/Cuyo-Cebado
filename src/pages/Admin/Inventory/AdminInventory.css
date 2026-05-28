@@ -1,0 +1,191 @@
+.cell-product {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: 600;
+}
+
+.mini-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.refined-stock-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f4f1ed;
+    padding: 5px 12px;
+    border-radius: 50px;
+    width: fit-content;
+    border: 1px solid #e0dbd6;
+}
+
+.stock-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.star-refined-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #e2e8f0;
+    transition: 0.3s;
+}
+
+.star-refined-btn.active {
+    color: #a5813a;
+    transform: scale(1.2);
+}
+
+.btn-add-main {
+    background: #a5813a;
+    color: #1a1614;
+    border: none;
+    padding: 18px 45px;
+    border-radius: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    margin: 30px auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Modales de Inventario y Subida de Fotos */
+.form-refined-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+}
+
+.form-side {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.upload-refined-main {
+    height: 220px;
+    border: 2.5px dashed #cbd5e1;
+    border-radius: 18px;
+    background: #f8fafc;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.preview-container-main {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-remove-photo-pro {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #ff4d4d;
+    color: #fff;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.extra-images-grid-admin {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.mini-thumb-container-pro, .upload-extra-pro {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    position: relative;
+}
+
+.upload-extra-pro {
+    border: 2px dashed #cbd5e1;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mini-gallery-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.btn-remove-extra-pro {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #1a1614;
+    color: #a5813a;
+    border: 1.5px solid #a5813a;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.form-split-modern {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.desc-box {
+    height: 120px;
+    resize: none;
+}
+
+/* Responsive específico de Inventario */
+@media (max-width: 950px) {
+    .form-refined-grid {
+        grid-template-columns: 1fr; 
+    }
+}
+
+@media (max-width: 768px) {
+    .form-split-modern {
+        grid-template-columns: 1fr; 
+    }
+}
