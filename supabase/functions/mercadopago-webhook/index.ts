@@ -3,7 +3,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 serve(async (req) => {
   try {
-      console.log("🔔 [WEBHOOK] ¡Petición recibida de Mercado Pago!");
+      console.log("🔔 [WEBHOOK] ¡Petición recibida!");
       
       const url = new URL(req.url);
       const queryId = url.searchParams.get("data.id") || url.searchParams.get("id");
@@ -14,7 +14,6 @@ serve(async (req) => {
 
       if (req.body && (!paymentId || !eventType)) {
           const bodyText = await req.text();
-          console.log("📦 [WEBHOOK] Cuerpo crudo:", bodyText);
           if (bodyText) {
               const body = JSON.parse(bodyText);
               paymentId = paymentId || body?.data?.id || body?.id;
@@ -22,16 +21,11 @@ serve(async (req) => {
           }
       }
 
-      console.log(`🔑 [WEBHOOK] Evento: ${eventType} | ID: ${paymentId}`);
-
-      // ESCUDO ANTI-404: Si no es un pago, lo ignoramos y le decimos "Todo OK" a MP
       if (eventType && eventType !== 'payment') {
-          console.log(`⚠️ [WEBHOOK] Ignorando evento de tipo: ${eventType}. Solo leemos 'payment'.`);
           return new Response("Ignored non-payment event", { status: 200 });
       }
 
       if (!paymentId) {
-          console.log("❌ [WEBHOOK] Error: No se encontró ID.");
           return new Response("No payment ID", { status: 400 });
       }
 
@@ -40,41 +34,46 @@ serve(async (req) => {
         Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
       );
 
-      console.log("🌐 [WEBHOOK] Consultando a MP el estado del pago...");
       const mpResponse = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
         headers: { 'Authorization': `Bearer ${Deno.env.get('MP_ACCESS_TOKEN')}` }
       });
 
-      if (!mpResponse.ok) {
-          console.log(`❌ [WEBHOOK] MP rechazó la consulta. HTTP: ${mpResponse.status} (Probable Token incorrecto)`);
-          return new Response("Error MP", { status: 400 });
-      }
+      if (!mpResponse.ok) return new Response("Error MP", { status: 400 });
 
       const paymentData = await mpResponse.json();
       const orderId = paymentData.external_reference;
-      
-      console.log(`✅ [WEBHOOK] Estado de MP: ${paymentData.status} | Order ID: ${orderId}`);
 
       if (paymentData.status === 'approved' && orderId) {
-        console.log(`🚀 [WEBHOOK] Aprobando pedido ${orderId} en base de datos...`);
-
+        
+        // 1. Aprobamos la orden
         await supabase.from('orders').update({ status: 'approved' }).eq('id', orderId);
 
-        const { data: items } = await supabase.from('order_items').select('product_id, quantity').eq('order_id', orderId);
+        // 2. Traemos la orden para leer la columna 'items' (que es un JSON)
+        const { data: orderData } = await supabase.from('orders').select('items').eq('id', orderId).single();
 
-        if (items && items.length > 0) {
-            for (const item of items) {
-                console.log(`⚙️ [WEBHOOK] Descontando ${item.quantity} de stock para ${item.product_id}`);
-                await supabase.rpc('decrement_stock', { p_product_id: item.product_id, p_quantity: item.quantity });
+        if (orderData && orderData.items) {
+            let cartItems = [];
+            // Si Supabase lo guardó como texto, lo convertimos a array. Si ya es array, lo usamos.
+            if (typeof orderData.items === 'string') {
+                try { cartItems = JSON.parse(orderData.items); } catch(e) {}
+            } else {
+                cartItems = orderData.items;
             }
-            console.log("✅ [WEBHOOK] Stock actualizado correctamente.");
+
+            // 3. Recorremos el carrito y descontamos el stock
+            for (const item of cartItems) {
+                // item.id es el ID del producto, item.quantity es la cantidad comprada
+                if (item.id && item.quantity) {
+                    await supabase.rpc('decrement_stock', { p_product_id: item.id, p_quantity: item.quantity });
+                }
+            }
         }
       }
 
       return new Response("OK", { status: 200 });
 
   } catch (error) {
-      console.log("💥 [WEBHOOK] ERROR CRÍTICO FATAL:", error);
+      console.log("💥 ERROR CRÍTICO:", error);
       return new Response("Internal Error", { status: 500 });
   }
 })

@@ -1,4 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useCart } from './context/CartContext';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import ScrollToTop from './components/ScrollToTop';
@@ -28,6 +30,18 @@ import AdminFAQ from './pages/Admin/FAQ/AdminFAQ';
 import './App.css';
 
 export default function App() {
+  const { clearCart } = useCart();
+
+  // DETECTOR GLOBAL DE PAGO APROBADO
+  useEffect(() => {
+    if (window.location.href.includes('approved')) {
+      console.log("✅ Pago aprobado global detectado. Limpiando carrito...");
+      localStorage.removeItem('cart');
+      if (typeof clearCart === 'function') clearCart();
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [clearCart]);
+
   return (
     <div className="app-container">
       <ScrollToTop />

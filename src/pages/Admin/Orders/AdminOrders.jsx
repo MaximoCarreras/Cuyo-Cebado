@@ -24,16 +24,6 @@ export default function AdminOrders() {
         setTabLoading(false);
     };
 
-    const handleUpdateOrderStatus = async (orderId, newStatus) => {
-        const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
-        if (!error) {
-            setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-            toast.success(`Pedido marcado como ${newStatus}`);
-        } else {
-            toast.error('Error al actualizar el pago');
-        }
-    };
-
     const handleUpdateTrackingStatus = async (orderId, newTracking) => {
         const { error } = await supabase.from('orders').update({ tracking_status: newTracking }).eq('id', orderId);
         if (!error) {
@@ -53,8 +43,14 @@ export default function AdminOrders() {
             if (statusErr) throw statusErr;
 
             if (order.items && order.items.length > 0) {
-                for (const item of order.items) {
-                    const { data: prod } = await supabase.from('products').select('id, stock').eq('name', item.title).single();
+                // Parsear items si vienen como string
+                let parsedItems = order.items;
+                if (typeof parsedItems === 'string') {
+                    try { parsedItems = JSON.parse(parsedItems); } catch(e) {}
+                }
+
+                for (const item of parsedItems) {
+                    const { data: prod } = await supabase.from('products').select('id, stock').eq('name', item.title || item.name).single();
 
                     if (prod) {
                         const newStock = prod.stock + Number(item.quantity);
@@ -98,16 +94,14 @@ export default function AdminOrders() {
                                         <span style={{ fontSize: '0.8rem', color: '#64748b' }}>${o.total?.toLocaleString() || '0'}</span>
                                     </td>
                                     <td>
-                                        <select
-                                            className={`status-selector ${o.status}`}
-                                            value={o.status || 'pending'}
-                                            disabled={o.status === 'cancelled'}
-                                            onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
-                                        >
-                                            <option value="pending">Pendiente MP</option>
-                                            <option value="paid">✅ Pagado</option>
-                                            <option value="cancelled">❌ Cancelado</option>
-                                        </select>
+                                        {/* ETIQUETA AUTOMÁTICA DE ESTADO */}
+                                        {o.status === 'approved' || o.status === 'paid' ? (
+                                            <span style={{ background: '#dcfce7', color: '#166534', padding: '6px 12px', borderRadius: '20px', fontWeight: 'bold', fontSize: '0.85rem' }}>✅ Pagado</span>
+                                        ) : o.status === 'cancelled' ? (
+                                            <span style={{ background: '#fee2e2', color: '#991b1b', padding: '6px 12px', borderRadius: '20px', fontWeight: 'bold', fontSize: '0.85rem' }}>❌ Cancelado</span>
+                                        ) : (
+                                            <span style={{ background: '#fef3c7', color: '#92400e', padding: '6px 12px', borderRadius: '20px', fontWeight: 'bold', fontSize: '0.85rem' }}>⏳ Pendiente</span>
+                                        )}
                                     </td>
                                     <td>
                                         <div style={{ display: 'flex', gap: '5px' }}>
@@ -188,10 +182,11 @@ export default function AdminOrders() {
                             <div className="items-box" style={{ background: '#f8fafc', padding: '20px', borderRadius: '18px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <div>
                                     <h3 style={{ fontFamily: 'Noto Serif, serif', marginBottom: '15px', color: '#a5813a' }}>Resumen del Mate</h3>
-                                    {selectedOrder.items?.map((it, i) => (
+                                    {/* Mapeo seguro de items */}
+                                    {(typeof selectedOrder.items === 'string' ? JSON.parse(selectedOrder.items || '[]') : selectedOrder.items)?.map((it, i) => (
                                         <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px dashed #e2e8f0' }}>
-                                            <span style={{ fontWeight: '600' }}>{it.quantity}x {it.title}</span>
-                                            <span style={{ fontWeight: '700' }}>${(it.unit_price * it.quantity).toLocaleString()}</span>
+                                            <span style={{ fontWeight: '600' }}>{it.quantity}x {it.title || it.name}</span>
+                                            <span style={{ fontWeight: '700' }}>${((it.unit_price || it.price) * it.quantity).toLocaleString()}</span>
                                         </div>
                                     ))}
                                 </div>
