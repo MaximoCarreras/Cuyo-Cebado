@@ -5,28 +5,36 @@ serve(async (req) => {
   try {
       console.log("🔔 [WEBHOOK] ¡Petición recibida de Mercado Pago!");
       
-      // 1. Buscamos el ID del pago. MP a veces lo manda en la URL y a veces en el Body
       const url = new URL(req.url);
       const queryId = url.searchParams.get("data.id") || url.searchParams.get("id");
+      const type = url.searchParams.get("type") || url.searchParams.get("topic");
+      
       let paymentId = queryId;
+      let eventType = type;
 
-      if (!paymentId && req.body) {
-          const bodyText = await req.text(); // Leemos como texto para que no crashee
-          console.log("📦 [WEBHOOK] Cuerpo crudo recibido:", bodyText);
+      if (req.body && (!paymentId || !eventType)) {
+          const bodyText = await req.text();
+          console.log("📦 [WEBHOOK] Cuerpo crudo:", bodyText);
           if (bodyText) {
               const body = JSON.parse(bodyText);
-              paymentId = body?.data?.id || body?.id;
+              paymentId = paymentId || body?.data?.id || body?.id;
+              eventType = eventType || body?.type || body?.topic;
           }
       }
 
-      console.log("🔑 [WEBHOOK] ID del pago encontrado:", paymentId);
+      console.log(`🔑 [WEBHOOK] Evento: ${eventType} | ID: ${paymentId}`);
+
+      // ESCUDO ANTI-404: Si no es un pago, lo ignoramos y le decimos "Todo OK" a MP
+      if (eventType && eventType !== 'payment') {
+          console.log(`⚠️ [WEBHOOK] Ignorando evento de tipo: ${eventType}. Solo leemos 'payment'.`);
+          return new Response("Ignored non-payment event", { status: 200 });
+      }
 
       if (!paymentId) {
-          console.log("❌ [WEBHOOK] Error: No se encontró ID en la petición.");
+          console.log("❌ [WEBHOOK] Error: No se encontró ID.");
           return new Response("No payment ID", { status: 400 });
       }
 
-      // 2. Conectamos con Supabase
       const supabase = createClient(
         Deno.env.get('SUPABASE_URL')!,
         Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -38,7 +46,7 @@ serve(async (req) => {
       });
 
       if (!mpResponse.ok) {
-          console.log("❌ [WEBHOOK] MP rechazó la consulta. HTTP:", mpResponse.status);
+          console.log(`❌ [WEBHOOK] MP rechazó la consulta. HTTP: ${mpResponse.status} (Probable Token incorrecto)`);
           return new Response("Error MP", { status: 400 });
       }
 
@@ -47,37 +55,20 @@ serve(async (req) => {
       
       console.log(`✅ [WEBHOOK] Estado de MP: ${paymentData.status} | Order ID: ${orderId}`);
 
-      // 3. Procesamos la orden si está aprobada
       if (paymentData.status === 'approved' && orderId) {
         console.log(`🚀 [WEBHOOK] Aprobando pedido ${orderId} en base de datos...`);
 
-        const { error: updateError } = await supabase
-            .from('orders')
-            .update({ status: 'approved' })
-            .eq('id', orderId);
+        await supabase.from('orders').update({ status: 'approved' }).eq('id', orderId);
 
-        if (updateError) console.log("❌ [WEBHOOK] Error al actualizar estado:", updateError);
-
-        const { data: items, error: itemsError } = await supabase
-            .from('order_items')
-            .select('product_id, quantity')
-            .eq('order_id', orderId);
-
-        if (itemsError) console.log("❌ [WEBHOOK] Error al buscar items:", itemsError);
+        const { data: items } = await supabase.from('order_items').select('product_id, quantity').eq('order_id', orderId);
 
         if (items && items.length > 0) {
             for (const item of items) {
                 console.log(`⚙️ [WEBHOOK] Descontando ${item.quantity} de stock para ${item.product_id}`);
-                const { error: rpcError } = await supabase.rpc('decrement_stock', { 
-                    p_product_id: item.product_id, 
-                    p_quantity: item.quantity 
-                });
-                if (rpcError) console.log("❌ [WEBHOOK] Error descontando stock:", rpcError);
+                await supabase.rpc('decrement_stock', { p_product_id: item.product_id, p_quantity: item.quantity });
             }
             console.log("✅ [WEBHOOK] Stock actualizado correctamente.");
         }
-      } else {
-          console.log(`⚠️ [WEBHOOK] Ignorado. Estado: ${paymentData.status}, OrderId: ${orderId}`);
       }
 
       return new Response("OK", { status: 200 });
