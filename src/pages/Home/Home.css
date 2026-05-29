@@ -92,22 +92,6 @@
     z-index: 2;
 }
 
-/* =========================================
-   NUEVO: MAGIA DE APARICIÓN ALTA VELOCIDAD
-   ========================================= */
-.reveal-on-scroll {
-    opacity: 0;
-    transform: translateY(15px); /* Salto muy cortito para no marear */
-    transition: opacity 0.25s ease-out, transform 0.25s ease-out; /* Velocidad extrema */
-    will-change: opacity, transform;
-}
-
-.reveal-on-scroll.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-/* ========================================= */
-
 .home-categories-section {
     padding: 80px 24px;
     max-width: 1400px;

@@ -54,7 +54,7 @@ export default function Home() {
         fetchHomeData();
     }, []);
 
-    // Efecto Spotlight
+    // Efecto Spotlight (Se mantiene intacto)
     useEffect(() => {
         if (!isPageLoaded) return; 
         
@@ -91,33 +91,6 @@ export default function Home() {
         };
     }, [isPageLoaded, featuredKit, dbCategories]);
 
-    // EFECTO DE APARICIÓN: VELOCIDAD EXTREMA
-    useEffect(() => {
-        if (!isPageLoaded) return; 
-        
-        const observerOptions = {
-            root: null,
-            rootMargin: '100px', // EL SECRETO: Le avisamos 100px ANTES de que aparezca en pantalla
-            threshold: 0 // Se dispara instantáneamente
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target); 
-                }
-            });
-        }, observerOptions);
-
-        const revealElements = document.querySelectorAll('.reveal-on-scroll');
-        revealElements.forEach(el => observer.observe(el));
-
-        return () => {
-            revealElements.forEach(el => observer.unobserve(el));
-        };
-    }, [isPageLoaded, featuredKit, dbCategories]);
-
     const handleNewsletter = (e) => {
         e.preventDefault();
         setStatus('enviando');
@@ -145,7 +118,7 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="home-categories-section reveal-on-scroll">
+            <section className="home-categories-section">
                 <h2 className="global-section-title">Nuestras Colecciones</h2>
                 <div className="categories-grid-premium">
                     {dbCategories.map((cat, index) => (
@@ -181,7 +154,7 @@ export default function Home() {
             </section>
 
             {featuredKit && (
-                <section className="featured-showcase reveal-on-scroll">
+                <section className="featured-showcase">
                     <div className="showcase-container">
                         <div className="showcase-image-side">
                             <div className="badge-premium">DESTACADO</div>
@@ -213,7 +186,7 @@ export default function Home() {
                 </section>
             )}
 
-            <section className="club-newsletter reveal-on-scroll">
+            <section className="club-newsletter">
                 <div className="club-card">
                     <h2 className="club-title">Unite al Club de Materos</h2>
                     <form className="club-form" onSubmit={handleNewsletter}>
@@ -224,9 +197,7 @@ export default function Home() {
                 </div>
             </section>
 
-            <div className="reveal-on-scroll">
-                <InstagramCarousel />
-            </div>
+            <InstagramCarousel />
             
         </div>
     );
