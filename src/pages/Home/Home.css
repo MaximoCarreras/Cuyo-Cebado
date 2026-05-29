@@ -92,6 +92,22 @@
     z-index: 2;
 }
 
+/* =========================================
+   NUEVO: MAGIA DE APARICIÓN AL SCROLLEAR
+   ========================================= */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(60px); /* Arranca un poco más abajo */
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0); /* Sube a su posición original */
+}
+/* ========================================= */
+
 .home-categories-section {
     padding: 80px 24px;
     max-width: 1400px;
@@ -170,7 +186,7 @@
     width: 100%;
 }
 
-/* LA MAGIA DEL ZOOM: FOTO DE CATEGORÍA */
+/* LA MAGIA DEL ZOOM (Lo agregamos también acá por si lo perdiste) */
 .category-card-img {
     width: 80px;
     height: 80px;
@@ -182,7 +198,7 @@
 }
 
 .card-cat-dark-spotlight:hover .category-card-img {
-    transform: scale(1.15); /* Efecto de acercamiento al pasar el mouse */
+    transform: scale(1.15);
 }
 
 .cat-text-display h3 {
@@ -226,20 +242,20 @@
     justify-content: center;
     position: relative;
     border: 1px solid rgba(0, 0, 0, 0.05);
-    overflow: hidden; /* Fundamental para que la foto no rompa los bordes redondeados al hacer zoom */
+    overflow: hidden;
 }
 
-/* LA MAGIA DEL ZOOM: FOTO PRODUCTO DESTACADO */
+/* LA MAGIA DEL ZOOM DESTACADO */
 .showcase-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 20px;
-    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Curva suave tipo Apple */
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .showcase-image-side:hover .showcase-img {
-    transform: scale(1.05); /* Efecto de acercamiento muy elegante */
+    transform: scale(1.05);
 }
 
 .showcase-emoji {
