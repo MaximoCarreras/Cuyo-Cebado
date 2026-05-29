@@ -40,10 +40,12 @@ export default function ProductDetail() {
         toast.success("Agregado al carrito 🧉");
     };
 
-    const waLink = `https://wa.me/5492612307516?text=Hola! Me interesa el ${product?.name} que vi en la web.`;
+    // Mensajes dinámicos para WhatsApp dependiendo del stock
+    const waLinkStock = `https://wa.me/5492612307516?text=Hola! Tengo una duda sobre el ${product?.name} que vi en la web.`;
+    const waLinkNoStock = `https://wa.me/5492612307516?text=Hola! Quería consultar cuándo vuelve a ingresar el ${product?.name} o si lo puedo encargar.`;
 
     if (loading) return <div className="product-loading">Preparando el mate...</div>;
-    if (!product) return <div className="product-not-found">Pucha, no lo encontramos.</div>;
+    if (!product) return <div className="product-not-found">No encontramos este producto.</div>;
 
     const allImages = [product.image_url, ...(product.extra_images || [])].filter(Boolean);
 
@@ -51,6 +53,8 @@ export default function ProductDetail() {
         <div className="product-detail-page fade-in">
             <Toaster position="bottom-center" />
             <div className="product-detail-container">
+                
+                {/* LADO IZQUIERDO: GALERÍA */}
                 <div className="product-image-section">
                     <div className="main-image-wrapper">
                         {product.badge && <span className="product-badge-premium">{product.badge}</span>}
@@ -67,8 +71,10 @@ export default function ProductDetail() {
                     )}
                 </div>
 
+                {/* LADO DERECHO: INFO Y COMPRA */}
                 <div className="product-info-section">
                     <div className="breadcrumbs"><Link to="/">Inicio</Link> / <span>{product.name}</span></div>
+                    
                     <h1 className="product-title">{product.name}</h1>
                     <p className="product-price">${product.price.toLocaleString('es-AR')}</p>
 
@@ -86,36 +92,52 @@ export default function ProductDetail() {
                         </div>
                     )}
 
-                    {/* LA MAGIA DEL STICKY BUTTON OCURRE ACÁ ABAJO CON LA CLASE .mobile-sticky */}
-                    <div className="purchase-controls mobile-sticky">
+                    {/* BLOQUE DE COMPRA PRINCIPAL */}
+                    <div className="purchase-block">
                         {product.stock > 0 ? (
                             <>
-                                <div className="qty-selector">
-                                    <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                                    <span>{quantity}</span>
-                                    <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}>+</button>
+                                {/* SI HAY STOCK: Carrito protagonista */}
+                                <div className="purchase-controls mobile-sticky">
+                                    <div className="qty-selector">
+                                        <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+                                        <span>{quantity}</span>
+                                        <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}>+</button>
+                                    </div>
+                                    <button className="btn-add-to-cart" onClick={handleAddToCart}>AGREGAR AL CARRITO</button>
                                 </div>
-                                <button className="btn-add-to-cart" onClick={handleAddToCart}>AGREGAR AL CARRITO</button>
+                                
+                                {/* Links secundarios discretos */}
+                                <div className="secondary-actions">
+                                    <a href={waLinkStock} target="_blank" rel="noreferrer" className="link-subtle">
+                                        ¿Tenés dudas? Consultanos
+                                    </a>
+                                    {product.video_url && (
+                                        <a href={product.video_url} target="_blank" rel="noreferrer" className="link-subtle">
+                                            Ver video del producto
+                                        </a>
+                                    )}
+                                </div>
                             </>
-                        ) : <div className="out-of-stock-alert">Sin stock por el momento</div>}
-                    </div>
-
-                    <div className="action-links-row">
-                        <a href={waLink} target="_blank" rel="noreferrer" className="btn-wa-smart">
-                            <span className="material-symbols-outlined">chat</span> CONSULTAR POR WHATSAPP
-                        </a>
-                        {product.video_url && (
-                            <a href={product.video_url} target="_blank" rel="noreferrer" className="btn-watch-video">
-                                <span className="material-symbols-outlined">play_circle</span> VER VIDEO
-                            </a>
+                        ) : (
+                            <>
+                                {/* SI NO HAY STOCK: Aviso y botón a WhatsApp */}
+                                <div className="out-of-stock-alert">
+                                    Este producto se encuentra temporalmente agotado.
+                                </div>
+                                <a href={waLinkNoStock} target="_blank" rel="noreferrer" className="btn-notify-stock mobile-sticky">
+                                    <span className="material-symbols-outlined">notifications_active</span>
+                                    AVISARME CUANDO INGRESE
+                                </a>
+                            </>
                         )}
                     </div>
                 </div>
             </div>
 
+            {/* PRODUCTOS RELACIONADOS */}
             {related.length > 0 && (
                 <section className="related-products-section">
-                    <h3 className="section-title-premium">TAMBIÉN TE PODRÍA GUSTAR</h3>
+                    <h3 className="section-title-premium">COMPLEMENTÁ TU RITUAL</h3>
                     <div className="related-grid">
                         {related.map(r => (
                             <Link key={r.id} to={`/producto/${r.slug}`} className="related-card">

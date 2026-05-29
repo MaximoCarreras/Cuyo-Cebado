@@ -1,75 +1,93 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Serif:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif:wght@700&display=swap');
 
 .product-detail-page { padding: 120px 20px 80px; background-color: #fdfaf7; min-height: 100vh; font-family: 'Inter', sans-serif; color: #1a1614; }
-.product-detail-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; background: #fff; padding: 40px; border-radius: 24px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04); }
+.product-detail-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 70px; background: transparent; padding: 0; }
 
 /* IMAGENES */
-.product-image-section { display: flex; flex-direction: column; gap: 15px; }
-.main-image-wrapper { position: relative; width: 100%; aspect-ratio: 1 / 1; border-radius: 20px; overflow: hidden; background: #f8fafc; }
-.product-main-image { width: 100%; height: 100%; object-fit: cover; display: block; }
-.product-badge-premium { position: absolute; top: 20px; left: 20px; background: #a5813a; color: #1a1614; padding: 6px 14px; border-radius: 30px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; z-index: 10; }
+.product-image-section { display: flex; flex-direction: column; gap: 15px; position: sticky; top: 120px; height: fit-content; }
+.main-image-wrapper { position: relative; width: 100%; aspect-ratio: 1 / 1; border-radius: 24px; overflow: hidden; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(165, 129, 58, 0.1); }
+.product-main-image { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+.main-image-wrapper:hover .product-main-image { transform: scale(1.05); }
+.product-badge-premium { position: absolute; top: 20px; left: 20px; background: #a5813a; color: #1a1614; padding: 6px 14px; border-radius: 30px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; z-index: 10; letter-spacing: 1px; }
 
-.product-thumbnails-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
-.thumb-box { width: 70px; height: 70px; border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; }
-.thumb-box.active { border-color: #a5813a; }
+.product-thumbnails-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+.thumb-box { width: 75px; height: 75px; border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; background: #fff; opacity: 0.6; transition: 0.3s; }
+.thumb-box:hover { opacity: 1; }
+.thumb-box.active { border-color: #a5813a; opacity: 1; }
 .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
 
-/* INFO */
-.product-info-section { display: flex; flex-direction: column; }
-.product-title { font-family: 'Noto Serif', serif; font-size: 2.5rem; margin: 0 0 15px 0; }
-.product-price { font-size: 2rem; font-weight: 800; color: #a5813a; margin-bottom: 25px; }
-.product-quick-specs { display: flex; flex-direction: column; gap: 10px; background: #fdfaf0; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
-.spec-item { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9rem; }
-.product-description { margin-bottom: 25px; line-height: 1.6; }
-.detailed-specs-box { margin-bottom: 25px; }
-.detailed-specs-box h4 { font-weight: 800; font-size: 0.85rem; letter-spacing: 1px; color: #a5813a; margin-bottom: 10px; }
+/* INFO GENERAL */
+.product-info-section { display: flex; flex-direction: column; padding-top: 20px; }
+.breadcrumbs { font-size: 0.8rem; color: #8a837b; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+.breadcrumbs a { color: #8a837b; text-decoration: none; transition: 0.3s; }
+.breadcrumbs a:hover { color: #a5813a; }
+.breadcrumbs span { color: #1a1614; }
 
-/* BOTONES (Escritorio) */
-.purchase-controls { display: flex; gap: 15px; margin-bottom: 30px; }
-.qty-selector { display: flex; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 5px; }
-.qty-selector button { background: none; border: none; width: 40px; height: 40px; cursor: pointer; font-weight: 700; }
-.btn-add-to-cart { flex: 1; background: #1a1614; color: #a5813a; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 1rem; transition: 0.3s; }
+.product-title { font-family: 'Noto Serif', serif; font-size: 2.8rem; margin: 0 0 15px 0; line-height: 1.1; letter-spacing: -0.5px; }
+.product-price { font-size: 2.2rem; font-weight: 800; color: #a5813a; margin-bottom: 30px; }
+
+/* BADGES DE ESPECIFICACIONES */
+.product-quick-specs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+.spec-item { display: flex; align-items: center; gap: 6px; background: rgba(165, 129, 58, 0.08); border: 1px solid rgba(165, 129, 58, 0.2); padding: 8px 16px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; color: #1a1614; text-transform: uppercase; letter-spacing: 1px; }
+.spec-item .material-symbols-outlined { font-size: 1.1rem; color: #a5813a; }
+
+.product-description { margin-bottom: 30px; line-height: 1.7; color: #4a403a; font-size: 1.05rem; }
+.detailed-specs-box { margin-bottom: 40px; padding-left: 15px; border-left: 2px solid #a5813a; }
+.detailed-specs-box h4 { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #8a837b; margin-bottom: 8px; }
+.detailed-specs-box p { font-size: 0.95rem; color: #4a403a; margin: 0; line-height: 1.5; }
+
+/* CONTROLES DE COMPRA (ESTILO BOUTIQUE) */
+.purchase-block { background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(165, 129, 58, 0.1); }
+
+.purchase-controls { display: flex; gap: 15px; margin-bottom: 20px; }
+.qty-selector { display: flex; align-items: center; background: #fdfaf7; border: 1px solid #e2e8f0; border-radius: 12px; padding: 5px; width: 120px; justify-content: space-between; }
+.qty-selector button { background: none; border: none; width: 35px; height: 35px; cursor: pointer; font-weight: 500; font-size: 1.2rem; color: #1a1614; transition: 0.2s; border-radius: 8px; }
+.qty-selector button:hover { background: #e2e8f0; }
+.qty-selector span { font-weight: 700; font-size: 1rem; }
+
+.btn-add-to-cart { flex: 1; background: #1a1614; color: #a5813a; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 0.9rem; letter-spacing: 1px; transition: 0.3s; text-transform: uppercase; }
 .btn-add-to-cart:hover { background: #a5813a; color: #1a1614; }
-.out-of-stock-alert { width: 100%; text-align: center; padding: 15px; background: #fee2e2; color: #991b1b; font-weight: 700; border-radius: 10px; }
 
-/* LINKS DE ACCIÓN */
-.action-links-row { display: flex; flex-direction: column; gap: 10px; }
-.btn-wa-smart, .btn-watch-video { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; transition: 0.3s; }
-.btn-wa-smart { border: 1px solid #25D366; color: #25D366; }
-.btn-wa-smart:hover { background: #25D366; color: #fff; }
-.btn-watch-video { border: 1px solid #1a1614; color: #1a1614; }
-.btn-watch-video:hover { background: #1a1614; color: #fff; }
+/* LINKS SECUNDARIOS DISCRETOS */
+.secondary-actions { display: flex; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 20px; }
+.link-subtle { color: #8a837b; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid transparent; }
+.link-subtle:hover { color: #a5813a; border-bottom-color: #a5813a; }
 
-/* RELACIONADOS (CORREGIDOS PARA SER CUADRADOS) */
-.related-products-section { max-width: 1200px; margin: 80px auto 0; }
-.section-title-premium { font-family: 'Noto Serif', serif; text-align: center; margin-bottom: 30px; font-size: 1.8rem; }
-.related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-.related-card { text-decoration: none; color: inherit; display: block; transition: 0.3s; }
-.related-card:hover { transform: translateY(-5px); }
-.related-img-box { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; background: #f8fafc; margin-bottom: 10px; border: 1px solid #e2e8f0; }
-.related-img-box img { width: 100%; height: 100%; object-fit: cover; }
-.related-card h5 { font-size: 0.9rem; margin: 5px 0; font-weight: 700; }
-.related-card p { color: #a5813a; font-weight: 800; margin: 0; }
+/* MANEJO DE SIN STOCK */
+.out-of-stock-alert { background: #fef2f2; color: #991b1b; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 0.95rem; text-align: center; margin-bottom: 15px; border: 1px solid #fecaca; }
+.btn-notify-stock { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; background: #fff; border: 2px solid #1a1614; color: #1a1614; padding: 16px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+.btn-notify-stock:hover { background: #1a1614; color: #fff; }
 
-@media (max-width: 768px) {
-    .product-detail-page {
-        padding: 90px 10px 120px; /* IMPORTANTE: Agregamos padding extra abajo para que la barra pegajosa no tape el contenido final */
-    }
+/* RELACIONADOS */
+.related-products-section { max-width: 1200px; margin: 100px auto 0; }
+.section-title-premium { font-family: 'Noto Serif', serif; text-align: center; margin-bottom: 40px; font-size: 2rem; color: #1a1614; }
+.related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; }
+.related-card { text-decoration: none; color: inherit; display: block; transition: 0.4s; background: #fff; padding: 15px; border-radius: 20px; border: 1px solid rgba(165, 129, 58, 0.1); }
+.related-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.05); border-color: #a5813a; }
+.related-img-box { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; background: #f8fafc; margin-bottom: 15px; }
+.related-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; }
+.related-card:hover .related-img-box img { transform: scale(1.08); }
+.related-card h5 { font-size: 1.05rem; margin: 0 0 5px 0; font-weight: 700; font-family: 'Noto Serif', serif; }
+.related-card p { color: #a5813a; font-weight: 800; margin: 0; font-size: 1.1rem; }
+
+/* =======================================
+   RESPONSIVE (BARRA PEGAJOSA MANTENIDA)
+   ======================================= */
+@media (max-width: 900px) {
+    .product-detail-page { padding: 90px 15px 120px; }
+    .product-detail-container { grid-template-columns: 1fr; gap: 30px; }
     
-    .product-detail-container { 
-        grid-template-columns: 1fr; 
-        padding: 20px; 
-    }
+    .product-image-section { position: relative; top: 0; }
+    .product-title { font-size: 2.2rem; }
+    .product-price { font-size: 1.8rem; }
     
-    .related-grid { 
-        grid-template-columns: 1fr 1fr; 
-    }
+    .purchase-block { padding: 20px; }
+    .secondary-actions { flex-direction: column; gap: 15px; align-items: center; }
     
-    .product-title {
-        font-size: 2rem;
-    }
+    .related-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+    .related-card { padding: 10px; }
 
-    /* EL SECRETO: LA BARRA PEGAJOSA PARA CELULARES */
+    /* BARRA PEGAJOSA PARA EL BOTÓN PRINCIPAL EN CELULAR */
     .mobile-sticky {
         position: fixed;
         bottom: 0;
@@ -78,62 +96,26 @@
         background: #fff;
         padding: 15px 20px;
         margin-bottom: 0;
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.08); /* Sombra hacia arriba */
+        box-shadow: 0 -10px 20px rgba(0,0,0,0.06);
         z-index: 1000;
-        border-top: 1px solid #e2e8f0;
-        /* Hacemos que se vea bien integrada a la pantalla del celu */
+        border-top: 1px solid rgba(165, 129, 58, 0.2);
         border-radius: 20px 20px 0 0;
         display: flex;
         gap: 10px;
+        align-items: center; /* Asegura que el botón de avisar stock quede centrado */
     }
 
-    /* Ajustamos los elementos internos de la barra para que no sean gigantes */
-    .mobile-sticky .qty-selector {
-        padding: 0;
-        width: 100px; /* Tamaño fijo para que el botón de compra respire */
-        justify-content: space-between;
-        background: #f1f5f9;
-        border: none;
-    }
-
-    .mobile-sticky .btn-add-to-cart {
-        padding: 12px;
-        font-size: 0.9rem;
-    }
-}
-@media (max-width: 768px) {
-    /* Le damos espacio extra abajo para que la barra no tape el texto */
-    .product-detail-page {
-        padding: 90px 10px 120px; 
-    }
-    
-    /* EL SECRETO: LA BARRA PEGAJOSA PARA CELULARES */
-    .mobile-sticky {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: #fff;
-        padding: 15px 20px;
-        margin-bottom: 0;
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.08); /* Sombra hacia arriba */
-        z-index: 1000;
-        border-top: 1px solid #e2e8f0;
-        border-radius: 20px 20px 0 0; /* Bordes redondeados integrados */
-        display: flex;
-        gap: 10px;
-    }
-
+    /* Ajustes específicos para los elementos dentro de la barra pegajosa */
     .mobile-sticky .qty-selector {
         padding: 0;
         width: 100px;
-        justify-content: space-between;
-        background: #f1f5f9;
-        border: none;
+        background: #fdfaf7;
+        border: 1px solid #e2e8f0;
     }
-
-    .mobile-sticky .btn-add-to-cart {
-        padding: 12px;
-        font-size: 0.9rem;
+    
+    .mobile-sticky.btn-notify-stock {
+        border: none;
+        background: #1a1614;
+        color: #fff;
     }
 }
