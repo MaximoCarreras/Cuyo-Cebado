@@ -59,7 +59,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.8rem;
+    overflow: hidden; /* Importante para que la foto no se salga */
 }
 
 .item-info {
@@ -143,31 +143,6 @@
     margin-top: 0;
     text-align: center;
     font-size: 1.5rem;
-}
-
-.shipping-selector {
-    display: flex;
-    background: #2a2522;
-    padding: 5px;
-    border-radius: 12px;
-    margin-bottom: 25px;
-}
-
-.shipping-selector button {
-    flex: 1;
-    background: none;
-    border: none;
-    color: #94a3b8;
-    padding: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: 0.3s;
-}
-
-.shipping-selector button.active {
-    background: #a5813a;
-    color: #1a1614;
 }
 
 .form-inputs-group {
@@ -264,7 +239,7 @@
     transform: translateY(-2px);
 }
 
-/* --- VISTA CARRITO VACÍO (CENTRADA) --- */
+/* --- VISTA CARRITO VACÍO --- */
 .cart-page-empty-container {
     display: flex;
     align-items: center;
@@ -315,14 +290,12 @@
     transition: 0.3s;
 }
 
-.btn-gold-empty:hover {
+.btn-gold-mafia:hover {
     transform: translateY(-3px);
     background: #c29d54;
 }
 
-/* =========================================
-   RESPONSIVE MÓVIL ESTILO APP
-   ========================================= */
+/* RESPONSIVE */
 @media (max-width: 1000px) {
     .cart-container-pro {
         grid-template-columns: 1fr;
@@ -337,7 +310,7 @@
 
 @media (max-width: 768px) {
     .cart-page-modern {
-        padding: 90px 15px 40px; /* Reducimos paddings gigantes */
+        padding: 90px 15px 40px;
     }
 
     .cart-header-actions h2 {
@@ -347,14 +320,13 @@
     .cart-item-card {
         padding: 15px;
         gap: 12px;
-        flex-direction: column; /* Apilamos en celular para que no se pise */
+        flex-direction: column;
         align-items: flex-start;
     }
 
     .item-img {
         width: 100%;
         height: 120px;
-        font-size: 3.5rem;
     }
 
     .item-info {
@@ -374,27 +346,5 @@
         text-align: left;
         font-size: 1.5rem;
         margin-top: 5px;
-    }
-
-    .checkout-form-premium {
-        padding: 25px 20px;
-        border-radius: 18px;
-    }
-
-    .pickup-info-card {
-        padding: 15px;
-    }
-
-    .pickup-header h4 {
-        font-size: 1rem;
-    }
-
-    .main-total {
-        font-size: 1.5rem;
-    }
-
-    .btn-mercadopago-pro {
-        font-size: 0.85rem;
-        padding: 15px;
     }
 }

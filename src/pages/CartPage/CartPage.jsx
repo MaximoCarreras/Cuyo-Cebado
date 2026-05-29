@@ -10,7 +10,6 @@ import mpLogo from '../../assets/mp-logo.png';
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
     const navigate = useNavigate();
-    const [dbCategories, setDbCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
     const [applyPoints, setApplyPoints] = useState(false);
@@ -21,9 +20,6 @@ export default function CartPage() {
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            const { data: cats } = await supabase.from('categories').select('*');
-            if (cats) setDbCategories(cats);
-
             const { data: { session } } = await supabase.auth.getSession();
             if (session?.user) {
                 const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
@@ -37,7 +33,6 @@ export default function CartPage() {
     }, []);
 
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
-    const getCategoryIcon = (slug) => dbCategories.find(c => c.id === slug)?.icon || '🧉';
 
     const discountAmount = applyPoints && userProfile?.puntos ? userProfile.puntos * 3 : 0;
     const finalTotal = cartTotal - discountAmount;
@@ -51,7 +46,6 @@ export default function CartPage() {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
             const fixedAddress = 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)';
 
-            // 1. Crear la orden en Supabase PRIMERO para obtener su ID real
             const { data: newOrder, error: dbError } = await supabase.from('orders').insert([{
                 customer_email: orderData.email,
                 customer_name: orderData.name,
@@ -68,7 +62,6 @@ export default function CartPage() {
 
             if (dbError) throw dbError;
 
-            // 2. Llamar a la API pasando el ID de la orden (orderId)
             const response = await fetch(`${baseUrl}/api/checkout`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -85,12 +78,10 @@ export default function CartPage() {
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || 'Falla al inicializar la pasarela.');
 
-            // 3. Limpiamos carrito INMEDIATAMENTE ANTES de redirigir
             localStorage.removeItem('cart');
             if (typeof clearCart === 'function') clearCart();
             toast.success("Redirigiendo a Mercado Pago...");
 
-            // 4. Redirigimos sin demoras
             window.location.href = data.init_point;
 
         } catch (err) {
@@ -127,7 +118,10 @@ export default function CartPage() {
                     <div className="cart-items-list">
                         {cart.map((item) => (
                             <div key={item.id} className="cart-item-card">
-                                <div className="item-img">{getCategoryIcon(item.category)}</div>
+                                {/* CAMBIO: Mostramos la imagen real del producto */}
+                                <div className="item-img">
+                                    <img src={item.image_url || '/assets/placeholder.png'} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }} />
+                                </div>
                                 <div className="item-info">
                                     <p className="item-cat">{item.material || 'Seleccionado'}</p>
                                     <h3>{item.name}</h3>
@@ -167,8 +161,9 @@ export default function CartPage() {
                                     <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
                                 </div>
                                 <div className="map-container" style={{ width: '100%', marginTop: '15px', borderRadius: '12px', overflow: 'hidden' }}>
+                                    {/* MAPA CORREGIDO A COLÓN 701 */}
                                     <iframe
-                                        src="https://maps.google.com/maps?q=-32.88939,-68.84478&z=15&output=embed"
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.627685040333!2d-68.8471271239616!3d-32.8876426736561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e090623f9b883%3A0xc3f92023d6a9926d!2sAv.%20Col%C3%B3n%20701%2C%20M5500%20Mendoza!5e0!3m2!1ses!2sar!4v1717000000000!5m2!1ses!2sar"
                                         width="100%"
                                         height="250"
                                         style={{ border: 0 }}
