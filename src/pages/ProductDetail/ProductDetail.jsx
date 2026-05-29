@@ -78,9 +78,10 @@ export default function ProductDetail() {
                     <h1 className="product-title">{product.name}</h1>
                     <p className="product-price">${product.price.toLocaleString('es-AR')}</p>
 
+                    {/* ACÁ REMOVIMOS LOS EMOJIS DE GOOGLE Y DEJAMOS SOLO EL TEXTO */}
                     <div className="product-quick-specs">
-                        {product.material && <div className="spec-item"><span className="material-symbols-outlined">diamond</span><span>{product.material}</span></div>}
-                        {product.type && <div className="spec-item"><span className="material-symbols-outlined">category</span><span>{product.type}</span></div>}
+                        {product.material && <div className="spec-item-elegant">MAT: <span>{product.material}</span></div>}
+                        {product.type && <div className="spec-item-elegant">MOD: <span>{product.type}</span></div>}
                     </div>
 
                     <p className="product-description">{product.description}</p>

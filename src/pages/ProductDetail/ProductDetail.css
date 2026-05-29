@@ -26,10 +26,25 @@
 .product-title { font-family: 'Noto Serif', serif; font-size: 2.8rem; margin: 0 0 15px 0; line-height: 1.1; letter-spacing: -0.5px; }
 .product-price { font-size: 2.2rem; font-weight: 800; color: #a5813a; margin-bottom: 30px; }
 
-/* BADGES DE ESPECIFICACIONES */
-.product-quick-specs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
-.spec-item { display: flex; align-items: center; gap: 6px; background: rgba(165, 129, 58, 0.08); border: 1px solid rgba(165, 129, 58, 0.2); padding: 8px 16px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; color: #1a1614; text-transform: uppercase; letter-spacing: 1px; }
-.spec-item .material-symbols-outlined { font-size: 1.1rem; color: #a5813a; }
+/* BADGES DE ESPECIFICACIONES (NUEVO ESTILO ELEGANTE) */
+.product-quick-specs { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
+.spec-item-elegant { 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    background: transparent; 
+    border: 1px solid #e2e8f0; 
+    padding: 8px 18px; 
+    border-radius: 6px; /* Borde más sutil, menos redondeado */
+    font-weight: 800; 
+    font-size: 0.7rem; 
+    color: #8a837b; 
+    text-transform: uppercase; 
+    letter-spacing: 1.5px; 
+}
+.spec-item-elegant span {
+    color: #1a1614;
+}
 
 .product-description { margin-bottom: 30px; line-height: 1.7; color: #4a403a; font-size: 1.05rem; }
 .detailed-specs-box { margin-bottom: 40px; padding-left: 15px; border-left: 2px solid #a5813a; }
@@ -102,10 +117,9 @@
         border-radius: 20px 20px 0 0;
         display: flex;
         gap: 10px;
-        align-items: center; /* Asegura que el botón de avisar stock quede centrado */
+        align-items: center;
     }
 
-    /* Ajustes específicos para los elementos dentro de la barra pegajosa */
     .mobile-sticky .qty-selector {
         padding: 0;
         width: 100px;
