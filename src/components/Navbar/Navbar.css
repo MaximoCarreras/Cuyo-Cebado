@@ -201,6 +201,7 @@
     align-items: center;
     justify-content: center;
     border: 1px solid #1a1614;
+    transition: transform 0.3s ease; /* Transición suave para el saltito */
 }
 
 .navbar__hamburger-btn {
@@ -217,6 +218,33 @@
 .navbar__blur-overlay {
     display: none;
 }
+
+/* =========================================
+   ANIMACIÓN DEL CARRITO (EL "SALTO")
+   ========================================= */
+
+/* Creamos la animación del rebote */
+@keyframes cartBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3) translateY(-3px); color: #a5813a; }
+    100% { transform: scale(1); }
+}
+
+@keyframes numberBounce {
+    0% { transform: scale(1); background-color: #a5813a; }
+    50% { transform: scale(1.4); background-color: #fff; }
+    100% { transform: scale(1); background-color: #a5813a; }
+}
+
+/* Aplicamos las animaciones cuando React pone la clase 'cart-bounce' */
+.cart-bounce .cart-icon-nav {
+    animation: cartBounce 0.3s ease-in-out;
+}
+
+.cart-bounce .cart-count-premium {
+    animation: numberBounce 0.3s ease-in-out;
+}
+
 
 @media (max-width: 1000px) {
     .navbar {
@@ -264,7 +292,6 @@
         right: 0;
     }
 
-    /* ESTILO DE LA NUEVA "X" */
     .navbar__close-btn {
         position: absolute;
         top: 25px;

@@ -10,12 +10,23 @@ export default function Navbar() {
   const [userRole, setUserRole] = useState(null);
   const [userPoints, setUserPoints] = useState(0);
   const [banner, setBanner] = useState({ text: '', active: false });
+  
+  // --- ESTADO PARA LA ANIMACIÓN DEL CARRITO ---
+  const [isBouncing, setIsBouncing] = useState(false);
 
   const navigate = useNavigate();
   const { cart } = useCart();
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Función de normalización para que el buscador sea "inteligente"
+  // --- EFECTO: ESCUCHAR CAMBIOS EN EL CARRITO ---
+  useEffect(() => {
+      if (totalItems > 0) {
+          setIsBouncing(true);
+          const timer = setTimeout(() => setIsBouncing(false), 300); // La animación dura 300ms
+          return () => clearTimeout(timer);
+      }
+  }, [totalItems]);
+
   const normalize = (text) => text?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") || "";
 
   const fetchUserData = async (userId) => {
@@ -133,10 +144,12 @@ export default function Navbar() {
               )}
             </div>
 
-            <Link to="/carrito" className="navbar__cart-link" onClick={() => setIsMenuOpen(false)}>
+            {/* --- ACÁ APLICAMOS LA CLASE DE ANIMACIÓN --- */}
+            <Link to="/carrito" className={`navbar__cart-link ${isBouncing ? 'cart-bounce' : ''}`} onClick={() => setIsMenuOpen(false)}>
               <span className="material-symbols-outlined cart-icon-nav">shopping_cart</span>
               {totalItems > 0 && <span className="cart-count-premium">{totalItems}</span>}
             </Link>
+            
             <button className="navbar__hamburger-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <span className="material-symbols-outlined">menu</span>
             </button>
