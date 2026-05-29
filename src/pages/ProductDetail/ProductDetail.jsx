@@ -78,10 +78,10 @@ export default function ProductDetail() {
                     <h1 className="product-title">{product.name}</h1>
                     <p className="product-price">${product.price.toLocaleString('es-AR')}</p>
 
-                    {/* PALABRAS COMPLETAS: MATERIAL Y MODELO */}
+                    {/* ETIQUETAS BOUTIQUE ULTRA LIMPIAS */}
                     <div className="product-quick-specs">
-                        {product.material && <div className="spec-item-elegant">MATERIAL: <span>{product.material}</span></div>}
-                        {product.type && <div className="spec-item-elegant">MODELO: <span>{product.type}</span></div>}
+                        {product.material && <div className="spec-item-elegant">{product.material}</div>}
+                        {product.type && <div className="spec-item-elegant">{product.type}</div>}
                     </div>
 
                     <p className="product-description">{product.description}</p>

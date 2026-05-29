@@ -31,19 +31,15 @@
 .spec-item-elegant { 
     display: flex; 
     align-items: center; 
-    gap: 6px; 
     background: transparent; 
     border: 1px solid #e2e8f0; 
     padding: 8px 18px; 
     border-radius: 6px; 
     font-weight: 800; 
     font-size: 0.7rem; 
-    color: #8a837b; 
+    color: #1a1614; 
     text-transform: uppercase; 
     letter-spacing: 1.5px; 
-}
-.spec-item-elegant span {
-    color: #1a1614;
 }
 
 .product-description { margin-bottom: 30px; line-height: 1.7; color: #4a403a; font-size: 1.05rem; }
@@ -102,7 +98,6 @@
     .related-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
     .related-card { padding: 10px; }
 
-    /* BARRA PEGAJOSA PARA EL BOTÓN PRINCIPAL EN CELULAR */
     .mobile-sticky {
         position: fixed;
         bottom: 0;
