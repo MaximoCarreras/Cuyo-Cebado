@@ -91,14 +91,14 @@ export default function Home() {
         };
     }, [isPageLoaded, featuredKit, dbCategories]);
 
-    // Efecto: Aparecer al scrollear MÁS RÁPIDO
+    // EFECTO DE APARICIÓN: VELOCIDAD EXTREMA
     useEffect(() => {
         if (!isPageLoaded) return; 
         
         const observerOptions = {
             root: null,
-            rootMargin: '0px',
-            threshold: 0.05 // Bajamos al 5%: se activa apenas asoma en la pantalla
+            rootMargin: '100px', // EL SECRETO: Le avisamos 100px ANTES de que aparezca en pantalla
+            threshold: 0 // Se dispara instantáneamente
         };
 
         const observer = new IntersectionObserver((entries, observer) => {

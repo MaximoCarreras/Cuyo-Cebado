@@ -93,12 +93,12 @@
 }
 
 /* =========================================
-   NUEVO: MAGIA DE APARICIÓN AL SCROLLEAR (VERSIÓN RÁPIDA)
+   NUEVO: MAGIA DE APARICIÓN ALTA VELOCIDAD
    ========================================= */
 .reveal-on-scroll {
     opacity: 0;
-    transform: translateY(30px); /* Distancia más corta */
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out; /* Animación más rápida */
+    transform: translateY(15px); /* Salto muy cortito para no marear */
+    transition: opacity 0.25s ease-out, transform 0.25s ease-out; /* Velocidad extrema */
     will-change: opacity, transform;
 }
 
