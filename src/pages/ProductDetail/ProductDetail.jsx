@@ -86,7 +86,8 @@ export default function ProductDetail() {
                         </div>
                     )}
 
-                    <div className="purchase-controls">
+                    {/* LA MAGIA DEL STICKY BUTTON OCURRE ACÁ ABAJO CON LA CLASE .mobile-sticky */}
+                    <div className="purchase-controls mobile-sticky">
                         {product.stock > 0 ? (
                             <>
                                 <div className="qty-selector">
