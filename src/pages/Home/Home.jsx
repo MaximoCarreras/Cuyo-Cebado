@@ -12,6 +12,9 @@ export default function Home() {
     const [status, setStatus] = useState('');
     const [featuredKit, setFeaturedKit] = useState(null);
     const [dbCategories, setDbCategories] = useState([]);
+    
+    // NUEVO: Estado para saber si ya tenemos los datos mínimos para mostrar la página fluida
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
 
     const heroRef = useRef(null);
     const categoryCardRefs = useRef([]);
@@ -19,18 +22,20 @@ export default function Home() {
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                const { data: catData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
-                if (catData) setDbCategories(catData);
+                // Hacemos las dos llamadas a Supabase al mismo tiempo para ahorrar tiempo
+                const [categoriesResponse, featuredResponse] = await Promise.all([
+                    supabase.from('categories').select('*').order('created_at', { ascending: true }),
+                    supabase.from('products')
+                        .select('*')
+                        .eq('is_featured', true)
+                        .order('created_at', { ascending: false })
+                        .limit(1)
+                ]);
 
-                const { data: featuredData } = await supabase
-                    .from('products')
-                    .select('*')
-                    .eq('is_featured', true)
-                    .order('created_at', { ascending: false })
-                    .limit(1);
+                if (categoriesResponse.data) setDbCategories(categoriesResponse.data);
 
-                if (featuredData && featuredData.length > 0) {
-                    setFeaturedKit(featuredData[0]);
+                if (featuredResponse.data && featuredResponse.data.length > 0) {
+                    setFeaturedKit(featuredResponse.data[0]);
                 } else {
                     const { data: fallbackData } = await supabase
                         .from('products')
@@ -44,6 +49,9 @@ export default function Home() {
                 }
             } catch (error) {
                 console.error("Error cargando Home:", error);
+            } finally {
+                // Ya tenemos los datos, le decimos a React que destrabe la UI
+                setIsPageLoaded(true);
             }
         };
         fetchHomeData();
@@ -51,6 +59,8 @@ export default function Home() {
 
     // Efecto Spotlight
     useEffect(() => {
+        if (!isPageLoaded) return; // No calculamos mouse hasta que la página esté lista
+        
         const handleHeroMouse = (e) => {
             if (!heroRef.current) return;
             const rect = heroRef.current.getBoundingClientRect();
@@ -67,12 +77,14 @@ export default function Home() {
             card.style.setProperty("--mouse-x", `${x}px`);
             card.style.setProperty("--mouse-y", `${y}px`);
         };
+        
         const currentHero = heroRef.current;
         if (currentHero) currentHero.addEventListener('mousemove', handleHeroMouse);
-        categoryCardRefs.current.forEach((card, index) => {
+        categoryCardRefs.current.forEach((card) => {
             if (!card) return;
             card.addEventListener('mousemove', (e) => handleCardMouse(e, card));
         });
+        
         return () => {
             if (currentHero) currentHero.removeEventListener('mousemove', handleHeroMouse);
             categoryCardRefs.current.forEach((card) => {
@@ -80,21 +92,23 @@ export default function Home() {
                 card.removeEventListener('mousemove', (e) => handleCardMouse(e, card));
             });
         };
-    }, [featuredKit, dbCategories]);
+    }, [isPageLoaded, featuredKit, dbCategories]);
 
-    // NUEVO EFECTO: Aparecer al scrollear (Fade-in on scroll)
+    // Efecto: Aparecer al scrollear (Fade-in on scroll)
     useEffect(() => {
+        if (!isPageLoaded) return; // No iniciamos el observador hasta que el HTML esté construido
+        
         const observerOptions = {
             root: null,
             rootMargin: '0px',
-            threshold: 0.15 // Se activa cuando el 15% del elemento es visible
+            threshold: 0.15 
         };
 
         const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target); // Dejamos de observar para que pase solo una vez
+                    observer.unobserve(entry.target); 
                 }
             });
         }, observerOptions);
@@ -105,7 +119,7 @@ export default function Home() {
         return () => {
             revealElements.forEach(el => observer.unobserve(el));
         };
-    }, [featuredKit, dbCategories]);
+    }, [isPageLoaded, featuredKit, dbCategories]);
 
     const handleNewsletter = (e) => {
         e.preventDefault();
@@ -119,7 +133,8 @@ export default function Home() {
                 <div className="hero-spotlight-layer"></div>
                 <div className="hero-visual-block">
                     <div className="spotlight-overlay"></div>
-                    <img src={heroImg} alt="Mate Cuyo Cebado" className="hero-main-image" />
+                    {/* Añadido fetchpriority="high" para que la foto principal se cargue primero */}
+                    <img src={heroImg} alt="Mate Cuyo Cebado" className="hero-main-image" fetchpriority="high" decoding="async" />
                     <div className="hero-mobile-gradient-mask"></div>
                 </div>
                 <div className="hero-mafia__content">
@@ -134,7 +149,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Agregamos la clase .reveal-on-scroll */}
             <section className="home-categories-section reveal-on-scroll">
                 <h2 className="global-section-title">Nuestras Colecciones</h2>
                 <div className="categories-grid-premium">
@@ -153,6 +167,8 @@ export default function Home() {
                                             src={cat.image_url}
                                             alt={cat.label}
                                             className="category-card-img"
+                                            loading="lazy" // Añadido lazy loading
+                                            decoding="async"
                                         />
                                     ) : (
                                         cat.icon
@@ -168,7 +184,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Agregamos la clase .reveal-on-scroll */}
             {featuredKit && (
                 <section className="featured-showcase reveal-on-scroll">
                     <div className="showcase-container">
@@ -178,6 +193,8 @@ export default function Home() {
                                 src={featuredKit.image_url || '/assets/placeholder.png'}
                                 alt={featuredKit.name}
                                 className="showcase-img"
+                                loading="lazy" // Añadido lazy loading
+                                decoding="async"
                             />
                         </div>
                         <div className="showcase-info-side">
@@ -200,7 +217,6 @@ export default function Home() {
                 </section>
             )}
 
-            {/* Agregamos la clase .reveal-on-scroll */}
             <section className="club-newsletter reveal-on-scroll">
                 <div className="club-card">
                     <h2 className="club-title">Unite al Club de Materos</h2>
@@ -212,7 +228,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Agregamos la clase .reveal-on-scroll al Carrusel */}
             <div className="reveal-on-scroll">
                 <InstagramCarousel />
             </div>
