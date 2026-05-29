@@ -13,7 +13,6 @@ export default function Home() {
     const [featuredKit, setFeaturedKit] = useState(null);
     const [dbCategories, setDbCategories] = useState([]);
     
-    // NUEVO: Estado para saber si ya tenemos los datos mínimos para mostrar la página fluida
     const [isPageLoaded, setIsPageLoaded] = useState(false);
 
     const heroRef = useRef(null);
@@ -22,7 +21,6 @@ export default function Home() {
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                // Hacemos las dos llamadas a Supabase al mismo tiempo para ahorrar tiempo
                 const [categoriesResponse, featuredResponse] = await Promise.all([
                     supabase.from('categories').select('*').order('created_at', { ascending: true }),
                     supabase.from('products')
@@ -50,7 +48,6 @@ export default function Home() {
             } catch (error) {
                 console.error("Error cargando Home:", error);
             } finally {
-                // Ya tenemos los datos, le decimos a React que destrabe la UI
                 setIsPageLoaded(true);
             }
         };
@@ -59,7 +56,7 @@ export default function Home() {
 
     // Efecto Spotlight
     useEffect(() => {
-        if (!isPageLoaded) return; // No calculamos mouse hasta que la página esté lista
+        if (!isPageLoaded) return; 
         
         const handleHeroMouse = (e) => {
             if (!heroRef.current) return;
@@ -94,14 +91,14 @@ export default function Home() {
         };
     }, [isPageLoaded, featuredKit, dbCategories]);
 
-    // Efecto: Aparecer al scrollear (Fade-in on scroll)
+    // Efecto: Aparecer al scrollear MÁS RÁPIDO
     useEffect(() => {
-        if (!isPageLoaded) return; // No iniciamos el observador hasta que el HTML esté construido
+        if (!isPageLoaded) return; 
         
         const observerOptions = {
             root: null,
             rootMargin: '0px',
-            threshold: 0.15 
+            threshold: 0.05 // Bajamos al 5%: se activa apenas asoma en la pantalla
         };
 
         const observer = new IntersectionObserver((entries, observer) => {
@@ -133,7 +130,6 @@ export default function Home() {
                 <div className="hero-spotlight-layer"></div>
                 <div className="hero-visual-block">
                     <div className="spotlight-overlay"></div>
-                    {/* Añadido fetchpriority="high" para que la foto principal se cargue primero */}
                     <img src={heroImg} alt="Mate Cuyo Cebado" className="hero-main-image" fetchpriority="high" decoding="async" />
                     <div className="hero-mobile-gradient-mask"></div>
                 </div>
@@ -167,7 +163,7 @@ export default function Home() {
                                             src={cat.image_url}
                                             alt={cat.label}
                                             className="category-card-img"
-                                            loading="lazy" // Añadido lazy loading
+                                            loading="lazy"
                                             decoding="async"
                                         />
                                     ) : (
@@ -193,7 +189,7 @@ export default function Home() {
                                 src={featuredKit.image_url || '/assets/placeholder.png'}
                                 alt={featuredKit.name}
                                 className="showcase-img"
-                                loading="lazy" // Añadido lazy loading
+                                loading="lazy"
                                 decoding="async"
                             />
                         </div>
