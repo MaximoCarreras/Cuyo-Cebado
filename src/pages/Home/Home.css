@@ -170,6 +170,21 @@
     width: 100%;
 }
 
+/* LA MAGIA DEL ZOOM: FOTO DE CATEGORÍA */
+.category-card-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    margin-bottom: 15px;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.card-cat-dark-spotlight:hover .category-card-img {
+    transform: scale(1.15); /* Efecto de acercamiento al pasar el mouse */
+}
+
 .cat-text-display h3 {
     color: var(--mafia-cream);
     font-family: 'Noto Serif', serif;
@@ -211,6 +226,20 @@
     justify-content: center;
     position: relative;
     border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Fundamental para que la foto no rompa los bordes redondeados al hacer zoom */
+}
+
+/* LA MAGIA DEL ZOOM: FOTO PRODUCTO DESTACADO */
+.showcase-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Curva suave tipo Apple */
+}
+
+.showcase-image-side:hover .showcase-img {
+    transform: scale(1.05); /* Efecto de acercamiento muy elegante */
 }
 
 .showcase-emoji {
@@ -228,6 +257,7 @@
     font-weight: 800;
     font-size: 0.75rem;
     letter-spacing: 1px;
+    z-index: 10;
 }
 
 .gold-tag {
@@ -537,7 +567,6 @@
         font-size: 1.6rem;
     }
 
-    /* Mantenemos los botones premium en móvil */
     .showcase-actions .btn-gold-mafia {
         width: 100%;
         max-width: 280px;
@@ -568,7 +597,6 @@
         max-width: 300px;
     }
 
-    /* Input mantiene el borde redondeado del escritorio */
     .club-form input {
         width: 100%;
         padding: 14px 20px;
@@ -576,7 +604,6 @@
         font-size: 0.9rem;
     }
 
-    /* Botón mantiene el borde redondeado del escritorio */
     .btn-club {
         width: 100%;
         padding: 14px;

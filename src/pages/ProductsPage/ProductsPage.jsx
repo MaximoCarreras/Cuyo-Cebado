@@ -76,7 +76,7 @@ export default function ProductsPage() {
                 card.removeEventListener('mousemove', (e) => handleCardMouse(e, card));
             });
         };
-    }, [dbCategories]); // Se vuelve a ejecutar cuando cargan las categorías de la base de datos
+    }, [dbCategories]);
 
     if (loading) return <div className="catalog-loading">Preparando el catálogo...</div>;
 
@@ -134,7 +134,7 @@ export default function ProductsPage() {
                                 <img
                                     src={cat.image_url}
                                     alt={cat.label}
-                                    style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '50%', boxShadow: '0 10px 20px rgba(0,0,0,0.3)', marginBottom: '15px' }}
+                                    className="category-card-img"
                                 />
                             ) : (
                                 cat.icon

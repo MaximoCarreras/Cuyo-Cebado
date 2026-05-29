@@ -125,7 +125,7 @@ export default function Home() {
                                         <img
                                             src={cat.image_url}
                                             alt={cat.label}
-                                            style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '50%', boxShadow: '0 10px 20px rgba(0,0,0,0.3)', marginBottom: '15px' }}
+                                            className="category-card-img"
                                         />
                                     ) : (
                                         cat.icon
@@ -149,7 +149,7 @@ export default function Home() {
                             <img
                                 src={featuredKit.image_url || '/assets/placeholder.png'}
                                 alt={featuredKit.name}
-                                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '20px' }}
+                                className="showcase-img"
                             />
                         </div>
                         <div className="showcase-info-side">
