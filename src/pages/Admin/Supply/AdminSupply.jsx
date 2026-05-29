@@ -12,8 +12,8 @@ export default function AdminSupply() {
     // Estado para la compra que estamos armando
     const [newSupply, setNewSupply] = useState({ proveedor: '', flete: 0, items: [] });
     
-    // Estado para el producto individual que estamos por agregar a la lista
-    const [draftItem, setDraftItem] = useState({ product_id: '', name: '', image_url: '', quantity: 1, unit_price: 0 });
+    // Estado para el producto individual (Ahora es texto libre)
+    const [draftItem, setDraftItem] = useState({ name: '', quantity: 1, unit_price: 0 });
 
     useEffect(() => {
         fetchData();
@@ -21,7 +21,7 @@ export default function AdminSupply() {
 
     const fetchData = async () => {
         setLoading(true);
-        // Traemos productos para el selector (necesitamos imagen y nombre)
+        // Traemos productos para el autocompletado (necesitamos imagen y nombre)
         const { data: prodData } = await supabase.from('products').select('id, name, image_url').order('name');
         setProducts(prodData || []);
 
@@ -32,26 +32,25 @@ export default function AdminSupply() {
         setLoading(false);
     };
 
-    // Manejar selección del producto en el form
-    const handleProductSelect = (e) => {
-        const selectedId = e.target.value;
-        const selectedProd = products.find(p => p.id === selectedId);
-        if (selectedProd) {
-            setDraftItem({ ...draftItem, product_id: selectedProd.id, name: selectedProd.name, image_url: selectedProd.image_url });
-        } else {
-            setDraftItem({ ...draftItem, product_id: '', name: '', image_url: '' });
-        }
-    };
-
-    // Agregar item a la compra actual
+    // Agregar item a la compra actual (Soporta productos nuevos y existentes)
     const handleAddItemToSupply = () => {
-        if (!draftItem.product_id || draftItem.quantity <= 0 || draftItem.unit_price <= 0) {
+        if (!draftItem.name.trim() || draftItem.quantity <= 0 || draftItem.unit_price <= 0) {
             toast.error("Completá bien los datos del producto");
             return;
         }
-        setNewSupply({ ...newSupply, items: [...newSupply.items, draftItem] });
+
+        // Buscamos si el nombre coincide exactamente con algún producto que ya existe en la base
+        const matchedProduct = products.find(p => p.name.toLowerCase() === draftItem.name.trim().toLowerCase());
+
+        const newItem = {
+            ...draftItem,
+            product_id: matchedProduct ? matchedProduct.id : null, // Si existe, guardamos el ID para sumarle stock luego
+            image_url: matchedProduct ? matchedProduct.image_url : '', // Si existe, traemos la foto
+        };
+
+        setNewSupply({ ...newSupply, items: [...newSupply.items, newItem] });
         // Resetear el form chiquito
-        setDraftItem({ product_id: '', name: '', image_url: '', quantity: 1, unit_price: 0 });
+        setDraftItem({ name: '', quantity: 1, unit_price: 0 });
     };
 
     // Quitar item de la compra actual
@@ -81,15 +80,28 @@ export default function AdminSupply() {
             return;
         }
 
-        // 2. Actualizar el stock de cada producto en la base de datos
+        // 2. Actualizar el stock SOLO de los productos que ya existen en el catálogo
+        let stockUpdatedCount = 0;
+        let nuevosCount = 0;
+
         for (const item of newSupply.items) {
-            const { data: prod } = await supabase.from('products').select('stock').eq('id', item.product_id).single();
-            if (prod) {
-                await supabase.from('products').update({ stock: prod.stock + Number(item.quantity) }).eq('id', item.product_id);
+            if (item.product_id) {
+                const { data: prod } = await supabase.from('products').select('stock').eq('id', item.product_id).single();
+                if (prod) {
+                    await supabase.from('products').update({ stock: prod.stock + Number(item.quantity) }).eq('id', item.product_id);
+                    stockUpdatedCount++;
+                }
+            } else {
+                nuevosCount++;
             }
         }
         
-        toast.success("Compra registrada. ¡Stock del catálogo sumado automáticamente! 📦");
+        if (nuevosCount > 0) {
+            toast.success(`Compra guardada. Recordá crear la ficha de los ${nuevosCount} productos nuevos en el Catálogo.`);
+        } else {
+            toast.success("Compra registrada. ¡Stock sumado automáticamente! 📦");
+        }
+
         setNewSupply({ proveedor: '', flete: 0, items: [] });
         fetchData();
     };
@@ -127,10 +139,19 @@ export default function AdminSupply() {
                 <div className="supply-item-adder">
                     <h4 className="admin-label" style={{ marginBottom: '15px', display: 'block' }}>Agregar Productos a este pedido</h4>
                     <div className="item-adder-row">
-                        <select className="refined-input" value={draftItem.product_id} onChange={handleProductSelect}>
-                            <option value="">-- Seleccionar Producto --</option>
-                            {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                        </select>
+                        
+                        {/* CAJA HÍBRIDA: Texto libre con autocompletado */}
+                        <input 
+                            className="refined-input" 
+                            list="catalogo-productos" 
+                            placeholder="Nombre del producto..." 
+                            value={draftItem.name} 
+                            onChange={e => setDraftItem({...draftItem, name: e.target.value})} 
+                        />
+                        <datalist id="catalogo-productos">
+                            {products.map(p => <option key={p.id} value={p.name} />)}
+                        </datalist>
+
                         <input className="refined-input" type="number" placeholder="Cantidad" value={draftItem.quantity} onChange={e => setDraftItem({...draftItem, quantity: e.target.value})} />
                         <input className="refined-input" type="number" placeholder="Costo Unitario ($)" value={draftItem.unit_price} onChange={e => setDraftItem({...draftItem, unit_price: e.target.value})} />
                         <button className="btn-add-item-pro" onClick={handleAddItemToSupply}>
@@ -148,7 +169,7 @@ export default function AdminSupply() {
                                     <tr key={idx}>
                                         <td className="cell-product">
                                             <img src={item.image_url || '/assets/placeholder.png'} className="cat-mini-thumb" alt="" style={{ width:'35px', height:'35px' }}/>
-                                            {item.name}
+                                            {item.name} {item.product_id ? '✅' : '🆕'}
                                         </td>
                                         <td>{item.quantity} u.</td>
                                         <td>${Number(item.unit_price).toLocaleString()}</td>
@@ -167,7 +188,7 @@ export default function AdminSupply() {
                             <div className="totals-row grand-total"><span>TOTAL INVERSIÓN:</span> <span>${totalActual.toLocaleString()}</span></div>
                         </div>
 
-                        <button className="btn-save-gold-full" onClick={handleConfirmSupply}>✅ CONFIRMAR Y SUMAR AL STOCK</button>
+                        <button className="btn-save-gold-full" onClick={handleConfirmSupply}>✅ CONFIRMAR COMPRA</button>
                     </div>
                 )}
             </div>
