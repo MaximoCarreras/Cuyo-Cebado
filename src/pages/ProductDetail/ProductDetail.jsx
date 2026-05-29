@@ -78,9 +78,16 @@ export default function ProductDetail() {
                     <h1 className="product-title">{product.name}</h1>
                     <p className="product-price">${product.price.toLocaleString('es-AR')}</p>
 
-                    {/* ETIQUETAS BOUTIQUE ULTRA LIMPIAS */}
+                    {/* ETIQUETAS BOUTIQUE MÚLTIPLES AUTOMÁTICAS */}
                     <div className="product-quick-specs">
-                        {product.material && <div className="spec-item-elegant">{product.material}</div>}
+                        {/* 1. Si hay materiales, los separamos por comas y armamos una etiqueta para cada uno */}
+                        {product.material && product.material.split(',').map((mat, index) => (
+                            <div key={index} className="spec-item-elegant">
+                                {mat.trim()}
+                            </div>
+                        ))}
+                        
+                        {/* 2. Etiqueta del modelo */}
                         {product.type && <div className="spec-item-elegant">{product.type}</div>}
                     </div>
 
