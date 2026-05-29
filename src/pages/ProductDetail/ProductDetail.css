@@ -101,3 +101,39 @@
         font-size: 0.9rem;
     }
 }
+@media (max-width: 768px) {
+    /* Le damos espacio extra abajo para que la barra no tape el texto */
+    .product-detail-page {
+        padding: 90px 10px 120px; 
+    }
+    
+    /* EL SECRETO: LA BARRA PEGAJOSA PARA CELULARES */
+    .mobile-sticky {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        padding: 15px 20px;
+        margin-bottom: 0;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.08); /* Sombra hacia arriba */
+        z-index: 1000;
+        border-top: 1px solid #e2e8f0;
+        border-radius: 20px 20px 0 0; /* Bordes redondeados integrados */
+        display: flex;
+        gap: 10px;
+    }
+
+    .mobile-sticky .qty-selector {
+        padding: 0;
+        width: 100px;
+        justify-content: space-between;
+        background: #f1f5f9;
+        border: none;
+    }
+
+    .mobile-sticky .btn-add-to-cart {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+}
