@@ -1,15 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useCart } from './context/CartContext';
-
-// Componentes Globales
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import Community from './components/Community/Community';
-import FloatingWhatsApp from './components/FloatingWhatsApp/FloatingWhatsApp'; // Importado
-
-// Páginas Públicas
 import Home from './pages/Home/Home';
 import About from './pages/About';
 import Guide from './pages/Guide';
@@ -51,7 +46,6 @@ export default function App() {
     <div className="app-container">
       <ScrollToTop />
       <Navbar />
-      
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -79,9 +73,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-
       <Community />
-      <FloatingWhatsApp /> 
       <Footer />
     </div>
   );
