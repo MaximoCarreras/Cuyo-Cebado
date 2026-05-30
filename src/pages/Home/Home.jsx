@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useCart } from '../../context/CartContext';
-import heroImg from '../../assets/fondo_hero_principal.png';
 import InstagramCarousel from '../../components/InstagramCarousel/InstagramCarousel'; 
 import './Home.css';
 
@@ -103,7 +102,7 @@ export default function Home() {
                 <div className="hero-spotlight-layer"></div>
                 <div className="hero-visual-block">
                     <div className="spotlight-overlay"></div>
-                    <img src={heroImg} alt="Mate Cuyo Cebado" className="hero-main-image" fetchpriority="high" decoding="async" />
+                    <img src="/images/fondo_hero_principal.webp" alt="Mate Cuyo Cebado" className="hero-main-image" fetchpriority="high" decoding="async" />
                     <div className="hero-mobile-gradient-mask"></div>
                 </div>
                 <div className="hero-mafia__content">
