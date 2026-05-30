@@ -35,13 +35,8 @@ body {
 }
 
 @keyframes scroll-right {
-  0% {
-    transform: translateX(-50%);
-  }
-
-  100% {
-    transform: translateX(0%);
-  }
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
 }
 
 .top-bar-item {
@@ -51,38 +46,21 @@ body {
   white-space: nowrap;
 }
 
-.top-bar-item span {
-  font-size: 22px;
-}
+.top-bar-item span { font-size: 22px; }
+.top-bar-item p { margin: 0; font-size: 0.8rem; line-height: 1.2; }
+.top-bar-item p strong { display: inline-block; text-transform: uppercase; font-weight: 800; margin-right: 5px; }
+.top-bar-item p span { font-size: 0.75rem; opacity: 0.8; }
 
-.top-bar-item p {
-  margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.2;
-}
-
-.top-bar-item p strong {
-  display: inline-block;
-  text-transform: uppercase;
-  font-weight: 800;
-  margin-right: 5px;
-}
-
-.top-bar-item p span {
-  font-size: 0.75rem;
-  opacity: 0.8;
-}
-
-/* FIX NAVBAR Y MENÚ HAMBURGUESA */
+/* FIX NAVBAR - Eliminamos la linea blanca */
 nav,
 .navbar {
   position: sticky !important;
-  top: 0 !important;
+  top: -1px !important; /* Ajuste para eliminar la línea blanca */
   z-index: 1000 !important;
   background-color: #1a1614;
+  display: block;
 }
 
-/* El menú abierto siempre arriba de la barra dorada */
 .nav-menu.active,
 .mobile-menu-container {
   z-index: 2000 !important;
@@ -92,6 +70,7 @@ main {
   flex: 1;
   padding-top: 0;
   background-color: #fdfaf7;
+  display: block; /* Asegura continuidad */
 }
 
 .section__title {
@@ -134,6 +113,7 @@ main {
   width: 32px;
   height: 32px;
   fill: #a5813a;
+  transition: fill 0.3s ease;
 }
 
 .whatsapp-float:hover .wa-icon {
@@ -145,11 +125,7 @@ main {
     animation: scroll-right 25s linear infinite;
     gap: 60px;
   }
-
-  .top-bar-item p span {
-    display: inline;
-  }
-
+  .top-bar-item p span { display: inline; }
   .whatsapp-float {
     width: 55px;
     height: 55px;
