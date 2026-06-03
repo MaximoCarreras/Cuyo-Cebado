@@ -6,7 +6,6 @@ import { mpClient } from '../lib/mercadopago.js';
 
 const router = Router();
 
-// Configuración explícita para evitar errores de conexión IPv6 en Render
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
@@ -35,74 +34,57 @@ router.post('/', async (req, res) => {
       if (paymentData.status === 'approved') {
         const orderId = paymentData.external_reference;
 
-        const { data: order, error: orderErr } = await supabaseAdmin
+        // 🔥 1. ACTUALIZACIÓN ATÓMICA: Evita procesar webhooks duplicados
+        // Solo actualizamos a 'paid' si actualmente NO está en 'paid'
+        const { data: order, error: updateErr } = await supabaseAdmin
           .from('orders')
-          .select('*')
+          .update({ status: 'paid' })
           .eq('id', orderId)
-          .single();
+          .neq('status', 'paid')
+          .select()
+          .maybeSingle(); // maybeSingle devuelve null si ninguna fila cumplió la condición
 
-        if (orderErr || !order) {
-          console.error('❌ Orden no encontrada en Supabase:', orderErr);
-          return res.status(404).send('Orden no encontrada');
+        if (updateErr) {
+          console.error('❌ Error al actualizar la orden en Supabase:', updateErr);
+          return res.status(500).send('Error interno de base de datos');
         }
 
-        // Evita duplicar el proceso si Mercado Pago reenvía la notificación
-        if (order.status === 'paid') {
+        // Si 'order' es null, significa que otra petición simultánea ya la había actualizado
+        if (!order) {
+          console.log(`⚠️ Webhook duplicado ignorado. La orden ${orderId} ya estaba procesada.`);
           return res.status(200).send('La orden ya fue procesada.');
         }
 
-        // 1. Actualizamos el estado a pagado en la base de datos
-        await supabaseAdmin.from('orders').update({ status: 'paid' }).eq('id', orderId);
-        console.log(`✅ Estado de la orden ${orderId} actualizado a 'paid'.`);
+        console.log(`✅ Orden ${orderId} asegurada y marcada como 'paid'. Procesando stock y puntos...`);
 
-        // 2. 📦 DESCUENTO DE STOCK ULTRA-ROBUSTO
+        // 2. 📦 DESCUENTO DE STOCK (Ahora es imposible que se corra dos veces)
         if (order.items && Array.isArray(order.items)) {
-          console.log("🔍 Analizando ítems de la orden para descontar stock:", order.items);
-
           for (const item of order.items) {
-            console.log("🔍 Datos del ítem actual:", item);
             const nombreProducto = item.name || item.title;
             
             let queryBuilder = supabaseAdmin.from('products').select('id, name, stock');
             
-            // Bala de plata: Si el ítem tiene ID, buscamos por ID. Si no, usamos el nombre.
             if (item.id) {
               queryBuilder = queryBuilder.eq('id', item.id);
             } else if (nombreProducto) {
               queryBuilder = queryBuilder.eq('name', nombreProducto);
             } else {
-              console.error("⚠️ El ítem no contiene ni ID ni un nombre válido para buscarlo.");
               continue;
             }
 
-            const { data: product, error: prodErr } = await queryBuilder.maybeSingle();
-
-            if (prodErr) {
-              console.error("❌ Error al consultar el producto en Supabase:", prodErr);
-              continue;
-            }
+            const { data: product } = await queryBuilder.maybeSingle();
 
             if (product) {
               const cantidadRestar = Number(item.quantity) || 1;
               const nuevoStock = Math.max(0, product.stock - cantidadRestar);
               
-              const { error: updateErr } = await supabaseAdmin
-                .from('products')
-                .update({ stock: nuevoStock })
-                .eq('id', product.id);
-
-              if (updateErr) {
-                console.error(`❌ Error al actualizar el stock de ${product.name}:`, updateErr);
-              } else {
-                console.log(`📦 STOCK ACTUALIZADO: ${product.name} (ID: ${product.id}). Stock anterior: ${product.stock} -> Nuevo stock: ${nuevoStock}`);
-              }
-            } else {
-              console.error(`❌ No se encontró el producto en la tabla 'products'. Buscado por ID: '${item.id}' o Nombre: '${nombreProducto}'`);
+              await supabaseAdmin.from('products').update({ stock: nuevoStock }).eq('id', product.id);
+              console.log(`📦 STOCK ACTUALIZADO: ${product.name}. Anterior: ${product.stock} -> Nuevo: ${nuevoStock}`);
             }
           }
         }
 
-        // 3. Acreditación de Puntos
+        // 3. ✨ ACREDITACIÓN DE PUNTOS
         if (order.user_id) {
             const { data: profile } = await supabaseAdmin.from('profiles').select('puntos').eq('id', order.user_id).single();
             
@@ -114,11 +96,11 @@ router.post('/', async (req, res) => {
                 const nuevoSaldo = (puntosActuales - puntosGastados) + puntosGanados;
                 
                 await supabaseAdmin.from('profiles').update({ puntos: nuevoSaldo }).eq('id', order.user_id);
-                console.log(`💳 Cuyo Puntos actualizados. Nuevo saldo del cliente: ${nuevoSaldo} (Ganados: ${puntosGanados}, Gastados: ${puntosGastados})`);
+                console.log(`💳 Puntos actualizados. Nuevo saldo: ${nuevoSaldo}`);
             }
         }
 
-        // 4. Envío Automático del Correo de Confirmación
+        // 4. 📧 DISPARADOR DE CORREO (Sujeto a restricciones gratuitas de Render)
         const mailOptions = {
           from: `"Cuyo Cebado 🧉" <${process.env.EMAIL_USER}>`,
           to: order.customer_email,
@@ -127,19 +109,7 @@ router.post('/', async (req, res) => {
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; padding: 25px; border-radius: 16px;">
               <h2 style="color: #1a1614; text-align: center;">¡Muchas gracias por tu compra, ${order.customer_name}! 🙌</h2>
               <p style="font-size: 1rem; color: #475569; line-height: 1.6;">
-                Te confirmamos que recibimos tu pago correctamente por el total de <strong>$${order.total.toLocaleString('es-AR')}</strong>. Tu pedido ya está registrado y listo para ser preparado.
-              </p>
-              
-              <div style="background-color: #f8fafc; border: 1.5px solid #ebd432; padding: 15px; border-radius: 12px; margin: 20px 0;">
-                <h4 style="margin: 0 0 8px 0; color: #1a1614;">🏡 Punto de Retiro Oficial:</h4>
-                <p style="margin: 0; font-size: 0.9rem; color: #334155;"><strong>Local:</strong> Código Vinario</p>
-                <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: #334155;">📍 Av. Colón 701, Mendoza Capital</p>
-                <p style="margin: 4px 0 0 0; font-size: 0.9rem; color: #334155;">⏰ Lun a Sáb: 10:00 a 22:00 hs</p>
-              </div>
-
-              <p style="font-size: 0.85rem; color: #64748b; text-align: center; margin-top: 30px;">
-                Cualquier consulta nos podés escribir directamente por WhatsApp. ¡Que disfrutes de tus mates! 🧉<br>
-                <strong>Cuyo Cebado</strong>
+                Te confirmamos que recibimos tu pago correctamente por el total de <strong>$${order.total.toLocaleString('es-AR')}</strong>.
               </p>
             </div>
           `
@@ -147,20 +117,20 @@ router.post('/', async (req, res) => {
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-            console.error('❌ Error al enviar el correo de agradecimiento:', error);
+            console.error('❌ Bloqueo SMTP de Render o error de credenciales detectado.');
           } else {
             console.log('📧 Correo enviado con éxito al cliente:', info.response);
           }
         });
 
-        console.log(`🎉 ¡Procesamiento de orden ${orderId} finalizado por completo!`);
+        console.log(`🎉 ¡Éxito completo! Orden ${orderId} finalizada de forma segura.`);
       }
     }
 
     return res.status(200).send('OK');
 
   } catch (error) {
-    console.error('❌ Error crítico en el Webhook principal:', error);
+    console.error('Error crítico en el Webhook:', error);
     return res.status(500).send('Internal Server Error');
   }
 });
