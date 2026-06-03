@@ -8,6 +8,7 @@ import productsRouter from './routes/products.js';
 import checkoutRouter from './routes/checkout.js';
 import webhooksRouter from './routes/webhooks.js';
 import newsletterRouter from './routes/newsletter.js';
+import shippingRouter from './routes/shipping.js'; // 🔥 AGREGADO: Importamos la ruta de envíos
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -45,6 +46,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/checkout', checkoutRouter);
 app.use('/api/webhooks', webhooksRouter);
 app.use('/api/newsletter', newsletterRouter);
+app.use('/api/shipping', shippingRouter); // 🔥 AGREGADO: Habilitamos el endpoint de cotización
 
 /* Health check endpoint */
 app.get('/api/health', (req, res) => {
