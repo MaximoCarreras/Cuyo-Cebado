@@ -10,7 +10,7 @@ router.post('/cotizar', async (req, res) => {
       return res.status(400).json({ error: 'Falta el código postal de destino.' });
     }
 
-    // 1. Nos autenticamos con Envíopack para obtener el Token de acceso temporal
+    // 1. Nos autenticamos con Envíopack
     const authResponse = await fetch('https://api.enviopack.com/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -20,16 +20,16 @@ router.post('/cotizar', async (req, res) => {
       })
     });
 
-    if (!authResponse.ok) {
-      throw new Error('Falló la autenticación con Envíopack');
-    }
-
+    if (!authResponse.ok) throw new Error('Falló la autenticación con Envíopack');
+    
     const authData = await authResponse.json();
     const token = authData.token;
 
-    // 2. Armamos la consulta de cotización (Origen: Mendoza, Destino: el del cliente)
-    // Usamos medidas estándar de una caja de mate (20x20x20cm, 1kg)
-    const quoteResponse = await fetch(`https://api.enviopack.com/cotizar/costo?provincia=M&localidad=Mendoza&cp=5500&cp_destino=${codigoPostalDestino}&peso=1&volumen=0.008&bultos=1`, {
+    // 2. Cotizamos usando SOLO el CP de destino, peso (1kg) y volumen
+    // El origen lo toma de tu cuenta de Envíopack automáticamente
+    const quoteUrl = `https://api.enviopack.com/cotizar/costo?cp=${codigoPostalDestino}&peso=1&volumen=0.008&bultos=1`;
+    
+    const quoteResponse = await fetch(quoteUrl, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -37,18 +37,19 @@ router.post('/cotizar', async (req, res) => {
       }
     });
 
-    if (!quoteResponse.ok) {
-      throw new Error('Error al cotizar con los transportes');
-    }
+    if (!quoteResponse.ok) throw new Error('Error al cotizar con los transportes');
 
     const opcionesDeEnvio = await quoteResponse.json();
 
-    // 3. Le mandamos los precios a tu carrito en el frontend
+    // Imprimimos en la consola de Render para ver qué responde exactamente Envíopack
+    console.log("Respuesta de Envíopack:", opcionesDeEnvio);
+
+    // 3. Devolvemos las opciones al frontend
     return res.status(200).json(opcionesDeEnvio);
 
   } catch (error) {
-    console.error('❌ Error en el cotizador de envíos:', error);
-    return res.status(500).json({ error: 'No se pudo calcular el envío en este momento.' });
+    console.error('❌ Error en el cotizador:', error);
+    return res.status(500).json({ error: 'No se pudo calcular el envío.' });
   }
 });
 
