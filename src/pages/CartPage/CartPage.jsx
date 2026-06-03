@@ -14,8 +14,15 @@ export default function CartPage() {
     const [userProfile, setUserProfile] = useState(null);
     const [applyPoints, setApplyPoints] = useState(false);
 
+    // NUEVO: Estados para el envío
+    const [shippingMethod, setShippingMethod] = useState('pickup'); // 'pickup' o 'delivery'
+    const [zipCode, setZipCode] = useState('');
+    const [shippingOptions, setShippingOptions] = useState([]);
+    const [selectedShipping, setSelectedShipping] = useState(null);
+    const [loadingShipping, setLoadingShipping] = useState(false);
+
     const [orderData, setOrderData] = useState({
-        name: '', email: '', phone: '', notes: ''
+        name: '', email: '', phone: '', notes: '', address: '' // Agregado address
     });
 
     useEffect(() => {
@@ -34,24 +41,59 @@ export default function CartPage() {
 
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
 
+    // NUEVO: Cálculos de totales
+    const shippingCost = selectedShipping ? selectedShipping.valor : 0;
     const discountAmount = applyPoints && userProfile?.puntos ? userProfile.puntos * 3 : 0;
-    const finalTotal = cartTotal - discountAmount;
+    const finalTotal = cartTotal + shippingCost - discountAmount;
     const earnedPoints = Math.floor(cartTotal / 100);
+
+    // NUEVO: Función para llamar al backend de Envíopack
+    const handleQuoteShipping = async () => {
+        if (!zipCode) return toast.error("Ingresá un código postal");
+        setLoadingShipping(true);
+        try {
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+            const res = await fetch(`${baseUrl}/api/shipping/cotizar`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ codigoPostalDestino: zipCode })
+            });
+            
+            if (!res.ok) throw new Error("Error al cotizar");
+            const data = await res.json();
+            
+            // Asumimos que Envíopack devuelve un array de opciones
+            setShippingOptions(data);
+            setSelectedShipping(null); 
+        } catch (error) {
+            console.error(error);
+            toast.error("No se pudo cotizar el envío. Revisá el código postal.");
+        } finally {
+            setLoadingShipping(false);
+        }
+    };
 
     const handleCheckout = async (e) => {
         e.preventDefault();
+        
+        if (shippingMethod === 'delivery' && !selectedShipping) {
+            return toast.error("Por favor, cotizá y elegí una opción de envío.");
+        }
+
         setLoading(true);
 
         try {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
             const fixedAddress = 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)';
+            const finalAddress = shippingMethod === 'pickup' ? fixedAddress : `${orderData.address}, CP: ${zipCode}`;
+            const finalShippingMethod = shippingMethod === 'pickup' ? 'pickup' : (selectedShipping?.transporte || 'delivery');
 
             const { data: newOrder, error: dbError } = await supabase.from('orders').insert([{
                 customer_email: orderData.email,
                 customer_name: orderData.name,
                 customer_phone: orderData.phone,
-                shipping_method: 'pickup',
-                shipping_address: fixedAddress,
+                shipping_method: finalShippingMethod,
+                shipping_address: finalAddress,
                 total: finalTotal,
                 items: cart,
                 status: 'pending',
@@ -69,7 +111,7 @@ export default function CartPage() {
                     items: cart,
                     name: orderData.name,
                     email: orderData.email,
-                    shippingCost: 0,
+                    shippingCost: shippingCost, // Mandamos el costo de envío
                     discount: discountAmount,
                     orderId: newOrder.id 
                 })
@@ -118,7 +160,6 @@ export default function CartPage() {
                     <div className="cart-items-list">
                         {cart.map((item) => (
                             <div key={item.id} className="cart-item-card">
-                                {/* CAMBIO: Mostramos la imagen real del producto */}
                                 <div className="item-img">
                                     <img src={item.image_url || '/assets/placeholder.png'} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }} />
                                 </div>
@@ -142,43 +183,85 @@ export default function CartPage() {
 
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
-                        <h3>Datos para el Retiro</h3>
+                        <h3>Opciones de Entrega</h3>
+                        
+                        {/* BOTONES DE SELECCIÓN DE ENVÍO */}
+                        <div className="delivery-toggle">
+                            <button type="button" className={`toggle-btn ${shippingMethod === 'pickup' ? 'active' : ''}`} onClick={() => setShippingMethod('pickup')}>
+                                <span className="material-symbols-outlined">store</span> Retiro Local
+                            </button>
+                            <button type="button" className={`toggle-btn ${shippingMethod === 'delivery' ? 'active' : ''}`} onClick={() => setShippingMethod('delivery')}>
+                                <span className="material-symbols-outlined">local_shipping</span> Envío
+                            </button>
+                        </div>
+
                         <div className="form-inputs-group">
                             <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
                             <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
-                            <div className="pickup-info-card animate-fade" style={{ marginTop: '5px', marginBottom: '15px' }}>
-                                <div className="pickup-header">
-                                    <span className="material-symbols-outlined">store</span>
-                                    <div>
-                                        <h4>Código Vinario</h4>
-                                        <p>Punto de Retiro Oficial</p>
+                            {/* CONDICIONAL: SI ELIGE RETIRO EN LOCAL */}
+                            {shippingMethod === 'pickup' && (
+                                <div className="pickup-info-card animate-fade" style={{ marginTop: '5px', marginBottom: '15px' }}>
+                                    <div className="pickup-header">
+                                        <span className="material-symbols-outlined">store</span>
+                                        <div>
+                                            <h4>Código Vinario</h4>
+                                            <p>Punto de Retiro Oficial</p>
+                                        </div>
+                                    </div>
+                                    <div className="pickup-details">
+                                        <p>📍 Av. Colón 701, Mendoza Capital</p>
+                                        <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
+                                    </div>
+                                    <div className="map-container" style={{ width: '100%', marginTop: '15px', borderRadius: '12px', overflow: 'hidden' }}>
+                                        <iframe
+                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.627685040333!2d-68.8471271239616!3d-32.8876426736561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e090623f9b883%3A0xc3f92023d6a9926d!2sAv.%20Col%C3%B3n%20701%2C%20M5500%20Mendoza!5e0!3m2!1ses!2sar!4v1717000000000!5m2!1ses!2sar"
+                                            width="100%"
+                                            height="250"
+                                            style={{ border: 0 }}
+                                            allowFullScreen=""
+                                            loading="lazy"
+                                            referrerPolicy="no-referrer-when-downgrade">
+                                        </iframe>
                                     </div>
                                 </div>
-                                <div className="pickup-details">
-                                    <p>📍 Av. Colón 701, Mendoza Capital</p>
-                                    <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
+                            )}
+
+                            {/* CONDICIONAL: SI ELIGE ENVÍO */}
+                            {shippingMethod === 'delivery' && (
+                                <div className="delivery-section animate-fade">
+                                    <input type="text" placeholder="Dirección completa (Calle, Número, Piso)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} style={{ marginBottom: '15px' }} />
+                                    
+                                    <div className="quote-row">
+                                        <input type="text" placeholder="Código Postal" value={zipCode} onChange={e => setZipCode(e.target.value)} className="zip-input" />
+                                        <button type="button" className="btn-quote" onClick={handleQuoteShipping} disabled={loadingShipping}>
+                                            {loadingShipping ? 'Calculando...' : 'Cotizar'}
+                                        </button>
+                                    </div>
+
+                                    {shippingOptions.length > 0 && (
+                                        <div className="shipping-options-list">
+                                            {shippingOptions.map((opt, index) => (
+                                                <label key={index} className={`shipping-option ${selectedShipping === opt ? 'selected' : ''}`}>
+                                                    <input type="radio" name="shipping" checked={selectedShipping === opt} onChange={() => setSelectedShipping(opt)} />
+                                                    <div className="shipping-info">
+                                                        <span className="carrier">{opt.transporte || 'Envío Estándar'}</span>
+                                                        <span className="time">{opt.horas_entrega ? `${opt.horas_entrega}hs hábiles` : 'A domicilio'}</span>
+                                                    </div>
+                                                    <span className="price">{formatCurrency(opt.valor)}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="map-container" style={{ width: '100%', marginTop: '15px', borderRadius: '12px', overflow: 'hidden' }}>
-                                    {/* MAPA CORREGIDO A COLÓN 701 */}
-                                    <iframe
-                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.627685040333!2d-68.8471271239616!3d-32.8876426736561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e090623f9b883%3A0xc3f92023d6a9926d!2sAv.%20Col%C3%B3n%20701%2C%20M5500%20Mendoza!5e0!3m2!1ses!2sar!4v1717000000000!5m2!1ses!2sar"
-                                        width="100%"
-                                        height="250"
-                                        style={{ border: 0 }}
-                                        allowFullScreen=""
-                                        loading="lazy"
-                                        referrerPolicy="no-referrer-when-downgrade">
-                                    </iframe>
-                                </div>
-                            </div>
+                            )}
 
                             <textarea className="notes-box" placeholder="Notas o pedido de grabado (Opcional)" value={orderData.notes} onChange={e => setOrderData({ ...orderData, notes: e.target.value })} />
                         </div>
 
                         {userProfile && userProfile.puntos > 0 && (
-                            <div style={{ background: 'rgba(165, 129, 58, 0.1)', border: '1px solid #a5813a', padding: '15px', borderRadius: '12px', marginBottom: '20px' }}>
+                            <div style={{ background: 'rgba(165, 129, 58, 0.1)', border: '1px solid #a5813a', padding: '15px', borderRadius: '12px', margin: '20px 0' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                                     <span style={{ fontWeight: '800', color: '#1a1614', fontSize: '0.9rem' }}>✨ TENÉS {userProfile.puntos} PUNTOS</span>
                                     <span style={{ fontWeight: '800', color: '#a5813a' }}>- {formatCurrency(userProfile.puntos * 3)}</span>
@@ -191,16 +274,23 @@ export default function CartPage() {
                         )}
 
                         <div className="total-summary-card">
-                            <div className="t-row main-total" style={{ textDecoration: applyPoints ? 'line-through' : 'none', opacity: applyPoints ? 0.5 : 1 }}>
-                                <span style={{ fontSize: applyPoints ? '1rem' : 'inherit' }}>Subtotal</span>
-                                <span style={{ fontSize: applyPoints ? '1rem' : 'inherit' }}>{formatCurrency(cartTotal)}</span>
+                            <div className="t-row sub-info" style={{ textDecoration: applyPoints ? 'line-through' : 'none', opacity: applyPoints ? 0.5 : 1 }}>
+                                <span>Subtotal</span>
+                                <span>{formatCurrency(cartTotal)}</span>
                             </div>
-                            {applyPoints && (
-                                <div className="t-row main-total" style={{ color: '#a5813a', marginTop: '5px' }}>
-                                    <span>TOTAL</span>
-                                    <span>{formatCurrency(finalTotal)}</span>
+                            
+                            {shippingMethod === 'delivery' && (
+                                <div className="t-row sub-info" style={{ color: '#009ee3', marginTop: '5px' }}>
+                                    <span>Envío</span>
+                                    <span>{shippingCost > 0 ? formatCurrency(shippingCost) : 'A calcular'}</span>
                                 </div>
                             )}
+
+                            <div className="t-row main-total" style={{ color: '#a5813a', marginTop: '15px' }}>
+                                <span>TOTAL</span>
+                                <span>{formatCurrency(finalTotal)}</span>
+                            </div>
+                            
                             <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '12px', textAlign: 'center', fontWeight: '600' }}>
                                 🛍️ Sumás <strong>{earnedPoints} puntos</strong> con esta compra.
                             </p>
