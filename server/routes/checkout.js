@@ -75,8 +75,8 @@ router.post('/', async (req, res) => {
         },
         auto_return: "approved",
         external_reference: orderId,
-        // LA BALA DE PLATA: Le decimos a MP exactamente dónde avisar del pago
-        notification_url: "https://bbqnusdjanbusrrtsotg.supabase.co/functions/v1/mercadopago-webhook" 
+        // Redirigido de forma definitiva a la ruta de tu servidor en Render
+        notification_url: "https://cuyo-cebado.onrender.com/api/webhooks" 
       }
     });
 
