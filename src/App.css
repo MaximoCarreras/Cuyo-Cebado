@@ -316,3 +316,20 @@ main {
 
 } 
 
+/* --- ESTILOS PARA PAGINAS LEGALES --- */
+.legal-page-container {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 0 24px;
+  min-height: 50vh;
+}
+.legal-content h3 {
+  color: #a5813a;
+  margin-top: 30px;
+  font-family: 'Noto Serif', serif;
+}
+.legal-content p, .legal-content ul {
+  color: #2b2520;
+  line-height: 1.8;
+  opacity: 0.9;
+}

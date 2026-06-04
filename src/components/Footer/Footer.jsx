@@ -33,13 +33,14 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* COLUMNA 3: Ayuda */}
+        {/* COLUMNA 3: Ayuda y Legales */}
         <div className="footer__group">
-          <h4 className="footer__subtitle">Atención</h4>
+          <h4 className="footer__subtitle">Ayuda y Legales</h4>
           <ul className="footer__list">
-            <li><a href="#faq">Preguntas Frecuentes</a></li>
+            <li><a href="/contacto">Contacto</a></li>
+            <li><a href="/envios">Envíos y Devoluciones</a></li>
+            <li><a href="/terminos">Términos y Condiciones</a></li>
             <li><a href="/carrito">Mi Carrito</a></li>
-            <li><a href="https://wa.me/5492625597956">Envíos y Entregas</a></li>
           </ul>
         </div>
 
