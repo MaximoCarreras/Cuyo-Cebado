@@ -3,7 +3,9 @@ import React from 'react';
 export default function WhatsAppBubble() {
   // Cambiá este texto por el mensaje predeterminado que quieras que te llegue
   const mensaje = "Hola Cuyo Cebado, tengo una consulta!";
-  const urlWA = `https://wa.me/5492625597956?text=${encodeURIComponent(mensaje)}`;
+  
+  // Número actualizado con el código de país de Argentina (54 9)
+  const urlWA = `https://wa.me/5492612307516?text=${encodeURIComponent(mensaje)}`;
 
   return (
     <a href={urlWA} className="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
