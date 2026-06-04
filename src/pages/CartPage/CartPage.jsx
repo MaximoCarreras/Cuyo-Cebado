@@ -14,17 +14,17 @@ export default function CartPage() {
     const [userProfile, setUserProfile] = useState(null);
     const [applyPoints, setApplyPoints] = useState(false);
 
-    // Mantenemos los estados pero forzamos pickup por defecto
+    // ESTADO FIJO: Por ahora forzamos 'pickup' (Retiro Local)
     const [shippingMethod, setShippingMethod] = useState('pickup'); 
     
-    // --- ESTADOS DE ENVÍO COMENTADOS HASTA TENER LA API ---
-    // const [zipCode, setZipCode] = useState('');
-    // const [shippingOptions, setShippingOptions] = useState([]);
-    // const [selectedShipping, setSelectedShipping] = useState(null);
-    // const [loadingShipping, setLoadingShipping] = useState(false);
+    // Estados de envío (mantenidos para futura reactivación)
+    const [zipCode, setZipCode] = useState('');
+    const [shippingOptions, setShippingOptions] = useState([]);
+    const [selectedShipping, setSelectedShipping] = useState(null);
+    const [loadingShipping, setLoadingShipping] = useState(false);
 
     const [orderData, setOrderData] = useState({
-        name: '', email: '', phone: '', notes: '', address: '' 
+        name: '', email: '', phone: '', notes: '', address: ''
     });
 
     useEffect(() => {
@@ -43,34 +43,36 @@ export default function CartPage() {
 
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
 
-    // Cálculos de totales (Sin costo de envío temporalmente)
-    const shippingCost = 0; // selectedShipping ? selectedShipping.valor : 0;
+    // Cálculos de totales (El costo de envío ahora siempre es 0)
+    const shippingCost = 0; 
     const discountAmount = applyPoints && userProfile?.puntos ? userProfile.puntos * 3 : 0;
     const finalTotal = cartTotal + shippingCost - discountAmount;
     const earnedPoints = Math.floor(cartTotal / 100);
 
-    /* --- FUNCIÓN DE COTIZACIÓN COMENTADA ---
+    // Función de cotización comentada temporalmente
+    /*
     const handleQuoteShipping = async () => {
-        // ... (Tu código anterior intacto) ...
+        // ... (código original de cotización mantenido pero inactivo) ...
     };
     */
 
     const handleCheckout = async (e) => {
         e.preventDefault();
         
-        // Validación omitida porque ahora solo hay pickup
-        // if (shippingMethod === 'delivery' && !selectedShipping) {
-        //     return toast.error("Por favor, cotizá y elegí una opción de envío.");
-        // }
+        // Validación omitida por ahora ya que solo hay pickup
+        /*
+        if (shippingMethod === 'delivery' && !selectedShipping) {
+            return toast.error("Por favor, cotizá y elegí una opción de envío.");
+        }
+        */
 
         setLoading(true);
 
         try {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-            const fixedAddress = 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701, Mendoza)';
-            // Forzamos pickup para esta versión sin envíos
-            const finalAddress = fixedAddress; // shippingMethod === 'pickup' ? fixedAddress : `${orderData.address}, CP: ${zipCode}`;
-            const finalShippingMethod = 'pickup'; // shippingMethod === 'pickup' ? 'pickup' : (selectedShipping?.transporte || 'delivery');
+            const fixedAddress = 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701, Mendoza Capital)';
+            const finalAddress = fixedAddress; // Forzado a pickup
+            const finalShippingMethod = 'pickup';
 
             const { data: newOrder, error: dbError } = await supabase.from('orders').insert([{
                 customer_email: orderData.email,
@@ -95,7 +97,7 @@ export default function CartPage() {
                     items: cart,
                     name: orderData.name,
                     email: orderData.email,
-                    shippingCost: shippingCost, 
+                    shippingCost: shippingCost,
                     discount: discountAmount,
                     orderId: newOrder.id 
                 })
@@ -167,10 +169,10 @@ export default function CartPage() {
 
                 <aside className="cart-checkout-sidebar">
                     <form className="checkout-form-premium" onSubmit={handleCheckout}>
-                        
-                        {/* BOTONES DE SELECCIÓN DE ENVÍO - COMENTADOS
                         <h3>Opciones de Entrega</h3>
-                        <div className="delivery-toggle">
+                        
+                        {/* SECCIÓN DE ENVÍO OCULTA TEMPORALMENTE */}
+                        {/* <div className="delivery-toggle">
                             <button type="button" className={`toggle-btn ${shippingMethod === 'pickup' ? 'active' : ''}`} onClick={() => setShippingMethod('pickup')}>
                                 <span className="material-symbols-outlined">store</span> Retiro Local
                             </button>
@@ -180,13 +182,12 @@ export default function CartPage() {
                         </div>
                         */}
 
-                        <h3 style={{ borderBottom: '1px solid rgba(165,129,58,0.2)', paddingBottom: '10px', marginBottom: '15px' }}>Tus Datos</h3>
                         <div className="form-inputs-group">
                             <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
                             <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
                             <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
 
-                            {/* TARJETA FIJA DE RETIRO LOCAL */}
+                            {/* TARJETA DE RETIRO LOCAL FIJA */}
                             <div className="pickup-info-card animate-fade" style={{ marginTop: '5px', marginBottom: '15px' }}>
                                 <div className="pickup-header">
                                     <span className="material-symbols-outlined">store</span>
@@ -199,15 +200,18 @@ export default function CartPage() {
                                     <p>📍 Av. Colón 701, Mendoza Capital</p>
                                     <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
                                 </div>
-                                {/* <div className="map-container" style={{ width: '100%', marginTop: '15px', borderRadius: '12px', overflow: 'hidden' }}>
-                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.627685040333!2d-68.8471271239616!3d-32.8876426736561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e090623f9b883%3A0xc3f92023d6a9926d!2sAv.%20Col%C3%B3n%20701%2C%20M5500%20Mendoza!5e0!3m2!1ses!2sar!4v1717000000000!5m2!1ses!2sar" width="100%" height="250" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
-                                </div> 
-                                */}
+                                <div className="map-container" style={{ width: '100%', marginTop: '15px', borderRadius: '12px', overflow: 'hidden' }}>
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.25875225126!2d-68.8502396!3d-32.8913296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e090333d4540d%3A0xc0fb19cecc6236b3!2sAv.%20Col%C3%B3n%20701%2C%20M5500%20Mendoza!5e0!3m2!1ses-419!2sar!4v1717462000000!5m2!1ses-419!2sar"
+                                        width="100%"
+                                        height="250"
+                                        style={{ border: 0 }}
+                                        allowFullScreen=""
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade">
+                                    </iframe>
+                                </div>
                             </div>
-
-                            {/* SECCIÓN DE ENVÍO - COMENTADA
-                            {shippingMethod === 'delivery' && ( ... )} 
-                            */}
 
                             <textarea className="notes-box" placeholder="Notas o pedido de grabado (Opcional)" value={orderData.notes} onChange={e => setOrderData({ ...orderData, notes: e.target.value })} />
                         </div>
@@ -231,14 +235,7 @@ export default function CartPage() {
                                 <span>{formatCurrency(cartTotal)}</span>
                             </div>
                             
-                            {/* FILA DE ENVÍO OCULTA 
-                            {shippingMethod === 'delivery' && (
-                                <div className="t-row sub-info" style={{ color: '#009ee3', marginTop: '5px' }}>
-                                    <span>Envío</span>
-                                    <span>{shippingCost > 0 ? formatCurrency(shippingCost) : 'A calcular'}</span>
-                                </div>
-                            )}
-                            */}
+                            {/* TEXTO DE ENVÍO A CALCULAR OCULTO TEMPORALMENTE */}
 
                             <div className="t-row main-total" style={{ color: '#a5813a', marginTop: '15px' }}>
                                 <span>TOTAL</span>
