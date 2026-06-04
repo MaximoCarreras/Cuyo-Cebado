@@ -7,6 +7,7 @@ export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState(''); // 🔥 NUEVO ESTADO
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -57,6 +58,8 @@ export default function AuthPage() {
                     return; 
                 }
                 setProfile(profileData);
+                // 🔥 REDIRECCIÓN AL NUEVO DASHBOARD PARA CLIENTES
+                navigate('/mi-cuenta/dashboard'); 
             }
 
             const { data: ordersData } = await supabase
@@ -76,6 +79,12 @@ export default function AuthPage() {
 
     const handleAuth = async (e) => {
         e.preventDefault();
+        
+        // 🔥 VALIDACIÓN DE CONTRASEÑA EN REGISTRO
+        if (!isLogin && password !== confirmPassword) {
+            return alert("Las contraseñas no coinciden. Por favor, verificalas.");
+        }
+
         setLoading(true);
 
         try {
@@ -263,6 +272,23 @@ export default function AuthPage() {
                             </button>
                         </div>
                     </div>
+                    
+                    {/* 🔥 CAMPO DE CONFIRMAR CONTRASEÑA SOLO EN REGISTRO */}
+                    {!isLogin && (
+                        <div className="auth-input-group">
+                            <label>Confirmar Contraseña</label>
+                            <div className="password-wrapper">
+                                <input 
+                                    type={showPassword ? "text" : "password"} 
+                                    placeholder="••••••••" 
+                                    value={confirmPassword} 
+                                    onChange={(e) => setConfirmPassword(e.target.value)} 
+                                    required 
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     <button type="submit" className="btn-auth-primary" disabled={loading}>
                         {loading ? 'Procesando...' : (isLogin ? 'Iniciar Sesión' : 'Crear Cuenta')}
                     </button>

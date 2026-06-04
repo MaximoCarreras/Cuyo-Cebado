@@ -23,6 +23,9 @@ import ShippingPolicies from './pages/Legal/ShippingPolicies';
 import TermsAndConditions from './pages/Legal/TermsAndConditions';
 import WhatsAppBubble from './components/WhatsAppBubble/WhatsAppBubble';
 
+// --- NUEVO PANEL DE CLIENTE ---
+import ClientDashboard from './pages/ClientDashboard/ClientDashboard';
+
 // --- ADMIN MODULES ---
 import AdminLayout from './pages/Admin/AdminLayout';
 import AdminDashboardHome from './pages/Admin/Dashboard/AdminDashboardHome';
@@ -62,6 +65,10 @@ export default function App() {
           <Route path="/productos/:categoryId" element={<CategoryPage />} />
           <Route path="/producto/:slug" element={<ProductDetail />} />
           <Route path="/mi-cuenta" element={<AuthPage />} />
+          
+          {/* 🔥 RUTA DEL NUEVO DASHBOARD */}
+          <Route path="/mi-cuenta/dashboard" element={<ClientDashboard />} />
+
           <Route path="/pago-exitoso" element={<SuccessPage />} />
           <Route path="/pago-fallido" element={<FailurePage />} />
 

@@ -1,0 +1,355 @@
+.dashboard-page-modern {
+    padding: 120px 15px 60px;
+    background-color: #fdfaf7;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.dashboard-layout-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: transparent;
+}
+
+/* HEADER DEL PANEL */
+.dashboard-user-header {
+    background: #1a1614;
+    border: 1px solid rgba(165, 129, 58, 0.2);
+    padding: 24px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.avatar-uploader-wrapper {
+    position: relative;
+    width: 75px;
+    height: 75px;
+}
+
+.user-dashboard-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #a5813a;
+    background: #2b2520;
+}
+
+.avatar-edit-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background: #a5813a;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid #1a1614;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.avatar-edit-badge span {
+    font-size: 14px;
+    color: #1a1614;
+}
+
+.user-header-text h2 {
+    margin: 0;
+    color: #fdfaf7;
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.user-email-sub {
+    margin: 4px 0 0;
+    color: #a5813a;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.btn-logout-dashboard {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-logout-dashboard:hover {
+    color: #a5813a;
+}
+
+/* BOTONERA TABS DE ENTRADA (MÓVIL-FIRST) */
+.dashboard-tabs-nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    padding: 6px;
+    border-radius: 16px;
+    margin: 25px 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.tab-link-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    padding: 12px 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tab-link-btn span {
+    font-size: 20px;
+}
+
+.tab-link-btn.active {
+    background: #1a1614;
+    color: #a5813a;
+}
+
+/* FORMULARIOS Y TARJETAS DEL CONTENIDO */
+.dashboard-card-form {
+    background: #fff;
+    border: 1px solid rgba(165, 129, 58, 0.1);
+    padding: 24px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.01);
+}
+
+.dashboard-card-form h3 {
+    margin: 0 0 20px 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #1a1614;
+    border-left: 3px solid #a5813a;
+    padding-left: 10px;
+}
+
+.subtitle-info-form {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: -10px 0 20px 0;
+}
+
+.input-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.input-field-group label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #4a403a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-field-group input {
+    background: #fdfaf7;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 0.95rem;
+    color: #1a1614;
+    font-family: inherit;
+    transition: 0.3s;
+}
+
+.input-field-group input:focus {
+    outline: none;
+    border-color: #a5813a;
+    background: #fff;
+}
+
+.btn-gold-panel {
+    width: 100%;
+    background: #1a1614;
+    color: #a5813a;
+    border: 1px solid #a5813a;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-gold-panel:hover {
+    background: #a5813a;
+    color: #1a1614;
+}
+
+/* ZONA DE PELIGRO */
+.danger-zone-card {
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.danger-zone-card h3 {
+    border-left-color: #ef4444;
+}
+
+.danger-zone-card p {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.btn-danger-panel {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-danger-panel:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+/* HISTORIAL DE PEDIDOS */
+.dashboard-orders-wrapper h3 {
+    margin: 0 0 20px 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1a1614;
+    text-transform: uppercase;
+}
+
+.empty-orders-dashboard {
+    text-align: center;
+    padding: 40px 20px;
+    color: #8a837b;
+}
+
+.empty-orders-dashboard span {
+    font-size: 40px;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+.orders-dashboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-dashboard-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.order-card-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+.order-id-tag {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #1a1614;
+}
+
+.order-date-tag {
+    margin: 2px 0 0 0;
+    font-size: 0.75rem;
+    color: #8a837b;
+}
+
+.status-pill {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+}
+
+.status-pill.pending { background: #fef3c7; color: #d97706; }
+.status-pill.approved { background: #dcfce7; color: #15803d; }
+
+.order-card-items-preview {
+    font-size: 0.85rem;
+    color: #4a403a;
+    line-height: 1.5;
+}
+
+.item-preview-text strong {
+    color: #a5813a;
+}
+
+.order-card-footer {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 12px;
+    margin-top: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.order-total-price {
+    font-size: 1.05rem;
+    color: #1a1614;
+    font-weight: 800;
+}
+
+/* ANIMACIÓN */
+.animate-fade {
+    animation: fadeInDashboard 0.3s ease forwards;
+}
+
+@keyframes fadeInDashboard {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+    .dashboard-user-header { padding: 16px; }
+    .user-header-text h2 { font-size: 1.1rem; }
+    .tab-link-btn { font-size: 0.7rem; }
+}
