@@ -5,6 +5,9 @@ import { useCart } from '../../context/CartContext';
 import toast, { Toaster } from 'react-hot-toast';
 import './ProductDetail.css';
 
+// 🔥 IMPORTAMOS EL COMPONENTE DE RESEÑAS
+import ProductReviews from '../../components/ProductReviews/ProductReviews'; 
+
 export default function ProductDetail() {
     const { slug } = useParams();
     const [product, setProduct] = useState(null);
@@ -78,16 +81,12 @@ export default function ProductDetail() {
                     <h1 className="product-title">{product.name}</h1>
                     <p className="product-price">${product.price.toLocaleString('es-AR')}</p>
 
-                    {/* ETIQUETAS BOUTIQUE MÚLTIPLES AUTOMÁTICAS */}
                     <div className="product-quick-specs">
-                        {/* 1. Si hay materiales, los separamos por comas y armamos una etiqueta para cada uno */}
                         {product.material && product.material.split(',').map((mat, index) => (
                             <div key={index} className="spec-item-elegant">
                                 {mat.trim()}
                             </div>
                         ))}
-                        
-                        {/* 2. Etiqueta del modelo */}
                         {product.type && <div className="spec-item-elegant">{product.type}</div>}
                     </div>
 
@@ -100,11 +99,9 @@ export default function ProductDetail() {
                         </div>
                     )}
 
-                    {/* BLOQUE DE COMPRA PRINCIPAL */}
                     <div className="purchase-block">
                         {product.stock > 0 ? (
                             <>
-                                {/* SI HAY STOCK: Carrito protagonista */}
                                 <div className="purchase-controls mobile-sticky">
                                     <div className="qty-selector">
                                         <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
@@ -114,7 +111,6 @@ export default function ProductDetail() {
                                     <button className="btn-add-to-cart" onClick={handleAddToCart}>AGREGAR AL CARRITO</button>
                                 </div>
                                 
-                                {/* Links secundarios discretos */}
                                 <div className="secondary-actions">
                                     <a href={waLinkStock} target="_blank" rel="noreferrer" className="link-subtle">
                                         ¿Tenés dudas? Consultanos
@@ -128,7 +124,6 @@ export default function ProductDetail() {
                             </>
                         ) : (
                             <>
-                                {/* SI NO HAY STOCK: Aviso y botón a WhatsApp */}
                                 <div className="out-of-stock-alert">
                                     Este producto se encuentra temporalmente agotado.
                                 </div>
@@ -141,6 +136,9 @@ export default function ProductDetail() {
                     </div>
                 </div>
             </div>
+
+            {/* 🔥 ACÁ INSERTAMOS LAS RESEÑAS */}
+            <ProductReviews productSlug={slug} />
 
             {/* PRODUCTOS RELACIONADOS */}
             {related.length > 0 && (
