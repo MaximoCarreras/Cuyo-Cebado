@@ -12,9 +12,9 @@ export default function ClientDashboard() {
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState([]);
 
-    // Estados para los formularios
+    // Estados para los formularios (Agregamos puntos al estado inicial)
     const [profileData, setProfileData] = useState({
-        fullName: '', phone: '', address: '', city: '', zipCode: '', avatarUrl: ''
+        fullName: '', phone: '', address: '', city: '', zipCode: '', avatarUrl: '', puntos: 0
     });
     const [passwordData, setPasswordData] = useState({
         currentPassword: '', newPassword: '', confirmPassword: ''
@@ -44,7 +44,8 @@ export default function ClientDashboard() {
                 address: data.address || '',
                 city: data.city || '',
                 zipCode: data.zip_code || '',
-                avatarUrl: data.avatar_url || ''
+                avatarUrl: data.avatar_url || '',
+                puntos: data.puntos || 0 // 🔥 Mapeamos los puntos desde Supabase
             });
         }
     };
@@ -83,7 +84,6 @@ export default function ClientDashboard() {
     };
 
     // Subir imagen de perfil al Storage
-// Subir imagen de perfil al Storage
     const handleAvatarUpload = async (e) => {
         try {
             setUploading(true);
@@ -107,7 +107,7 @@ export default function ClientDashboard() {
             // Actualizar estado local
             setProfileData(prev => ({ ...prev, avatarUrl: publicUrl }));
             
-            // 🔥 FIX: Usamos .update en lugar de .upsert para no borrar otros datos ni fallar
+            // Actualizar en base de datos
             const { error: dbError } = await supabase
                 .from('profiles')
                 .update({ avatar_url: publicUrl })
@@ -126,6 +126,7 @@ export default function ClientDashboard() {
             setUploading(false);
         }
     };
+
     // Cambiar contraseña de forma segura
     const handleChangePassword = async (e) => {
         e.preventDefault();
@@ -148,7 +149,7 @@ export default function ClientDashboard() {
         }
     };
 
-    // Autodestrucción de cuenta (Llama a la función RPC de la Fase 1)
+    // Autodestrucción de cuenta
     const handleDeleteAccount = async () => {
         const confirmar = window.confirm("🚨 ¿Estás seguro de que querés eliminar tu cuenta? Esta acción borrará tus datos y puntos acumulados de manera permanente.");
         if (!confirmar) return;
@@ -199,6 +200,20 @@ export default function ClientDashboard() {
                         <span className="material-symbols-outlined">logout</span>
                     </button>
                 </header>
+
+                {/* 🔥 TARJETA PREMIUM DEL CLUB DE BENEFICIOS REINCORPORADA */}
+                <div className="club-card-premium" style={{ marginTop: '20px', marginBottom: '5px' }}>
+                    <div className="club-card-content">
+                        <div className="club-logo">🧉 Cuyo Cebado Club</div>
+                        <div className="club-points">
+                            <h3>{profileData.puntos}</h3>
+                            <span>Cuyo Puntos ✨</span>
+                        </div>
+                        <p className="club-perk">
+                            Equivalen a <strong>{formatCurrency(profileData.puntos * 3)}</strong> de crédito a favor.
+                        </p>
+                    </div>
+                </div>
 
                 {/* NAVEGACIÓN DE PESTAÑAS (TABS MOBILE-FRIENDLY) */}
                 <nav className="dashboard-tabs-nav">
