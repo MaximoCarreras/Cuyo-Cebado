@@ -73,19 +73,21 @@ export default function ProductReviews({ productSlug }) {
                         <h4>Dejá tu reseña</h4>
                         <div className="star-selector">
                             {[1, 2, 3, 4, 5].map((star) => (
-                                <span 
-                                    key={star} 
-                                    className="material-symbols-outlined"
+                                /* 🔥 SVG NATIVO PARA EL SELECTOR DE ESTRELLAS (Relleno asegurado) */
+                                <svg
+                                    key={star}
                                     onClick={() => setRating(star)}
-                                    style={{
-                                        cursor: 'pointer', 
-                                        color: star <= rating ? '#a5813a' : '#ccc',
-                                        fontVariationSettings: star <= rating ? '"FILL" 1' : '"FILL" 0',
-                                        fontSize: '28px'
-                                    }}
+                                    width="32" 
+                                    height="32"
+                                    viewBox="0 0 24 24"
+                                    fill={star <= rating ? '#a5813a' : 'transparent'}
+                                    stroke={star <= rating ? '#a5813a' : '#ccc'}
+                                    strokeWidth="1.5"
+                                    style={{ cursor: 'pointer', transition: '0.2s', marginRight: '4px' }}
+                                    xmlns="http://www.w3.org/2000/svg"
                                 >
-                                    star
-                                </span>
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
                             ))}
                         </div>
                         <textarea 
@@ -124,18 +126,18 @@ export default function ProductReviews({ productSlug }) {
                                 </div>
                                 <div className="review-stars">
                                     {[...Array(5)].map((_, i) => (
-                                        <span 
-                                            key={i} 
-                                            className="material-symbols-outlined" 
-                                            style={{
-                                                color: i < rev.rating ? '#a5813a' : '#e2e8f0', 
-                                                fontSize: '18px',
-                                                /* 🔥 ACÁ ESTÁ LA MAGIA PARA RELLENAR LAS ESTRELLAS EN LA LISTA */
-                                                fontVariationSettings: i < rev.rating ? '"FILL" 1' : '"FILL" 0'
-                                            }}
+                                        /* 🔥 SVG NATIVO PARA LA LISTA DE RESEÑAS PUBLICADAS */
+                                        <svg
+                                            key={i}
+                                            width="20" 
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill={i < rev.rating ? '#a5813a' : '#e2e8f0'}
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            style={{ marginRight: '2px' }}
                                         >
-                                            star
-                                        </span>
+                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
                                     ))}
                                 </div>
                             </div>
