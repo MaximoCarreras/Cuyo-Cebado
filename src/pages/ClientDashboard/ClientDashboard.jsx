@@ -12,7 +12,7 @@ export default function ClientDashboard() {
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState([]);
 
-    // Estados para los formularios (Agregamos puntos al estado inicial)
+    // Estados para los formularios
     const [profileData, setProfileData] = useState({
         fullName: '', phone: '', address: '', city: '', zipCode: '', avatarUrl: '', puntos: 0
     });
@@ -45,7 +45,7 @@ export default function ClientDashboard() {
                 city: data.city || '',
                 zipCode: data.zip_code || '',
                 avatarUrl: data.avatar_url || '',
-                puntos: data.puntos || 0 // 🔥 Mapeamos los puntos desde Supabase
+                puntos: data.puntos || 0
             });
         }
     };
@@ -174,6 +174,33 @@ export default function ClientDashboard() {
 
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
 
+    // 🔥 FUNCIÓN RECUPERADA Y MEJORADA: Decide si muestra el estado de pago o logístico
+    const renderStatusBadge = (order) => {
+        // Si hay un estado logístico cargado (y no es nulo ni 'pending'), lo priorizamos
+        const displayStatus = (order.tracking_status && order.tracking_status !== 'pending') 
+            ? order.tracking_status 
+            : order.status;
+
+        const statusMap = {
+            'pending': { text: 'Pago Pendiente', bgColor: '#fef3c7', color: '#d97706' },
+            'approved': { text: 'Pagado ✅', bgColor: '#dcfce7', color: '#15803d' },
+            'paid': { text: 'Pagado ✅', bgColor: '#dcfce7', color: '#15803d' },
+            'en_preparacion': { text: 'En Preparación 🛠️', bgColor: '#f3e8ff', color: '#7e22ce' },
+            'en_distribucion': { text: 'En Distribución 🚚', bgColor: '#e0f2fe', color: '#0369a1' },
+            'listo_para_retirar': { text: 'Listo para Retirar 🏠', bgColor: '#fce7f3', color: '#be185d' },
+            'completed': { text: 'Entregado ✔️', bgColor: '#dcfce7', color: '#15803d' },
+            'cancelled': { text: 'Cancelado ❌', bgColor: '#fee2e2', color: '#b91c1c' }
+        };
+
+        const current = statusMap[displayStatus] || statusMap['pending'];
+        
+        return (
+            <span className="status-pill" style={{ background: current.bgColor, color: current.color }}>
+                {current.text}
+            </span>
+        );
+    };
+
     return (
         <div className="dashboard-page-modern">
             <Toaster position="top-center" />
@@ -201,7 +228,7 @@ export default function ClientDashboard() {
                     </button>
                 </header>
 
-                {/* 🔥 TARJETA PREMIUM DEL CLUB DE BENEFICIOS REINCORPORADA */}
+                {/* TARJETA PREMIUM DEL CLUB DE BENEFICIOS */}
                 <div className="club-card-premium" style={{ marginTop: '20px', marginBottom: '5px' }}>
                     <div className="club-card-content">
                         <div className="club-logo">🧉 Cuyo Cebado Club</div>
@@ -215,7 +242,7 @@ export default function ClientDashboard() {
                     </div>
                 </div>
 
-                {/* NAVEGACIÓN DE PESTAÑAS (TABS MOBILE-FRIENDLY) */}
+                {/* NAVEGACIÓN DE PESTAÑAS */}
                 <nav className="dashboard-tabs-nav">
                     <button className={`tab-link-btn ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => setActiveTab('profile')}>
                         <span className="material-symbols-outlined">person</span> Perfil
@@ -310,7 +337,10 @@ export default function ClientDashboard() {
                                                         <span className="order-id-tag">Pedido #{order.id.slice(0,8)}</span>
                                                         <p className="order-date-tag">{new Date(order.created_at).toLocaleDateString('es-AR')}</p>
                                                     </div>
-                                                    <span className={`status-pill ${order.status}`}>{order.status}</span>
+                                                    
+                                                    {/* 🔥 REEMPLAZAMOS EL RENDERIZADO DEL ESTADO ACÁ */}
+                                                    {renderStatusBadge(order)}
+
                                                 </div>
                                                 <div className="order-card-items-preview">
                                                     {order.items?.map((item, i) => (
