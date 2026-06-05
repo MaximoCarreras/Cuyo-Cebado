@@ -80,7 +80,6 @@ export default function ProductReviews({ productSlug }) {
                                     style={{
                                         cursor: 'pointer', 
                                         color: star <= rating ? '#a5813a' : '#ccc',
-                                        /* 🔥 ACÁ ESTÁ LA MAGIA PARA RELLENAR LAS ESTRELLAS */
                                         fontVariationSettings: star <= rating ? '"FILL" 1' : '"FILL" 0',
                                         fontSize: '28px'
                                     }}
@@ -116,7 +115,6 @@ export default function ProductReviews({ productSlug }) {
                         <div key={rev.id} className="review-item">
                             <div className="review-header">
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                    {/* Muestra la foto de perfil del usuario si tiene, sino un avatar por defecto */}
                                     <img 
                                         src={rev.profiles?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${rev.profiles?.full_name || 'U'}&backgroundColor=a5813a`} 
                                         alt="Avatar" 
@@ -132,6 +130,7 @@ export default function ProductReviews({ productSlug }) {
                                             style={{
                                                 color: i < rev.rating ? '#a5813a' : '#e2e8f0', 
                                                 fontSize: '18px',
+                                                /* 🔥 ACÁ ESTÁ LA MAGIA PARA RELLENAR LAS ESTRELLAS EN LA LISTA */
                                                 fontVariationSettings: i < rev.rating ? '"FILL" 1' : '"FILL" 0'
                                             }}
                                         >
