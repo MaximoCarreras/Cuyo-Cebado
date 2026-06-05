@@ -3,6 +3,9 @@
     background-color: #fdfaf7;
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
+    /* 🔥 FIX: Forzamos a que todo el dashboard quede por debajo del Navbar */
+    position: relative;
+    z-index: 1; 
 }
 
 .dashboard-layout-container {
@@ -100,6 +103,11 @@
     border-radius: 16px;
     margin: 25px 0;
     box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    
+    /* 🔥 UPGRADE: Menú pegajoso inteligente */
+    position: sticky;
+    top: 90px; /* Ajustá este número si tu navbar es un poco más alto o más bajo */
+    z-index: 10; /* Lo mantiene por encima del texto, pero por debajo del Navbar */
 }
 
 .tab-link-btn {
