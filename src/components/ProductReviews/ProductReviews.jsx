@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import './ProductReviews.css'; // Podés usar los mismos colores de tu theme
+import './ProductReviews.css';
 
 export default function ProductReviews({ productSlug }) {
     const [reviews, setReviews] = useState([]);
@@ -12,7 +12,6 @@ export default function ProductReviews({ productSlug }) {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // Verificar si hay usuario logueado
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) setUser(session.user);
         });
@@ -20,17 +19,21 @@ export default function ProductReviews({ productSlug }) {
     }, [productSlug]);
 
     const fetchReviews = async () => {
-        // Traemos las reseñas y cruzamos datos con la tabla profiles para sacar el nombre
+        // Traemos las reseñas, incluyendo nombre, foto y respuesta del admin
         const { data, error } = await supabase
             .from('reviews')
             .select(`
-                id, rating, comment, created_at,
-                profiles:user_id (full_name)
+                id, rating, comment, created_at, admin_reply,
+                profiles:user_id (full_name, avatar_url)
             `)
             .eq('product_slug', productSlug)
             .order('created_at', { ascending: false });
 
-        if (!error && data) setReviews(data);
+        if (error) {
+            console.error("Error trayendo reseñas:", error);
+        } else if (data) {
+            setReviews(data);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -49,12 +52,13 @@ export default function ProductReviews({ productSlug }) {
         setLoading(false);
 
         if (error) {
-            toast.error("Hubo un error al publicar tu reseña");
+            console.error("Error guardando reseña:", error);
+            toast.error("Hubo un error al publicar tu reseña.");
         } else {
-            toast.success("¡Gracias por tu opinión!");
+            toast.success("¡Gracias por tu opinión! 🧉");
             setComment('');
             setRating(5);
-            fetchReviews(); // Recargamos la lista
+            fetchReviews(); // Recargamos la lista automáticamente
         }
     };
 
@@ -71,9 +75,15 @@ export default function ProductReviews({ productSlug }) {
                             {[1, 2, 3, 4, 5].map((star) => (
                                 <span 
                                     key={star} 
-                                    className={`material-symbols-outlined ${star <= rating ? 'star-active' : 'star-inactive'}`}
+                                    className="material-symbols-outlined"
                                     onClick={() => setRating(star)}
-                                    style={{cursor: 'pointer', color: star <= rating ? '#a5813a' : '#ccc'}}
+                                    style={{
+                                        cursor: 'pointer', 
+                                        color: star <= rating ? '#a5813a' : '#ccc',
+                                        /* 🔥 ACÁ ESTÁ LA MAGIA PARA RELLENAR LAS ESTRELLAS */
+                                        fontVariationSettings: star <= rating ? '"FILL" 1' : '"FILL" 0',
+                                        fontSize: '28px'
+                                    }}
                                 >
                                     star
                                 </span>
@@ -82,7 +92,7 @@ export default function ProductReviews({ productSlug }) {
                         <textarea 
                             value={comment} 
                             onChange={(e) => setComment(e.target.value)} 
-                            placeholder="¿Qué te pareció este producto?" 
+                            placeholder="¿Qué te pareció este producto? Tu opinión ayuda a otros materos." 
                             rows="3"
                         />
                         <button type="submit" disabled={loading} className="btn-gold">
@@ -105,15 +115,44 @@ export default function ProductReviews({ productSlug }) {
                     reviews.map(rev => (
                         <div key={rev.id} className="review-item">
                             <div className="review-header">
-                                <strong>{rev.profiles?.full_name || 'Usuario Anónimo'}</strong>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    {/* Muestra la foto de perfil del usuario si tiene, sino un avatar por defecto */}
+                                    <img 
+                                        src={rev.profiles?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${rev.profiles?.full_name || 'U'}&backgroundColor=a5813a`} 
+                                        alt="Avatar" 
+                                        style={{ width: '35px', height: '35px', borderRadius: '50%', objectFit: 'cover' }}
+                                    />
+                                    <strong>{rev.profiles?.full_name || 'Usuario Anónimo'}</strong>
+                                </div>
                                 <div className="review-stars">
                                     {[...Array(5)].map((_, i) => (
-                                        <span key={i} className="material-symbols-outlined" style={{color: i < rev.rating ? '#a5813a' : '#ccc', fontSize: '16px'}}>star</span>
+                                        <span 
+                                            key={i} 
+                                            className="material-symbols-outlined" 
+                                            style={{
+                                                color: i < rev.rating ? '#a5813a' : '#e2e8f0', 
+                                                fontSize: '18px',
+                                                fontVariationSettings: i < rev.rating ? '"FILL" 1' : '"FILL" 0'
+                                            }}
+                                        >
+                                            star
+                                        </span>
                                     ))}
                                 </div>
                             </div>
                             <p className="review-date">{new Date(rev.created_at).toLocaleDateString('es-AR')}</p>
                             <p className="review-text">{rev.comment}</p>
+
+                            {/* RESPUESTA OFICIAL (Aparece solo si escribís algo desde Supabase en admin_reply) */}
+                            {rev.admin_reply && (
+                                <div style={{ marginTop: '15px', background: 'rgba(165, 129, 58, 0.05)', padding: '15px', borderRadius: '12px', borderLeft: '3px solid #a5813a' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                                        <span className="material-symbols-outlined" style={{ color: '#a5813a', fontSize: '18px' }}>storefront</span>
+                                        <strong style={{ color: '#a5813a', fontSize: '0.9rem' }}>Cuyo Cebado</strong>
+                                    </div>
+                                    <p style={{ margin: 0, fontSize: '0.9rem', color: '#4a403a' }}>{rev.admin_reply}</p>
+                                </div>
+                            )}
                         </div>
                     ))
                 )}
