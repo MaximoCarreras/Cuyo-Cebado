@@ -83,6 +83,7 @@ export default function ClientDashboard() {
     };
 
     // Subir imagen de perfil al Storage
+// Subir imagen de perfil al Storage
     const handleAvatarUpload = async (e) => {
         try {
             setUploading(true);
@@ -95,24 +96,36 @@ export default function ClientDashboard() {
 
             // Subir al bucket 'avatars'
             const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file);
-            if (uploadError) throw uploadError;
+            if (uploadError) {
+                console.error("Error subiendo foto:", uploadError);
+                throw new Error("No se pudo subir la imagen al servidor.");
+            }
 
             // Obtener URL pública
             const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(filePath);
 
-            // Actualizar estado local y base de datos inmediatamente
+            // Actualizar estado local
             setProfileData(prev => ({ ...prev, avatarUrl: publicUrl }));
-            await supabase.from('profiles').upsert({ id: user.id, avatar_url: publicUrl });
+            
+            // 🔥 FIX: Usamos .update en lugar de .upsert para no borrar otros datos ni fallar
+            const { error: dbError } = await supabase
+                .from('profiles')
+                .update({ avatar_url: publicUrl })
+                .eq('id', user.id);
+                
+            if (dbError) {
+                console.error("Error guardando en base de datos:", dbError);
+                throw new Error("La foto se subió, pero no se guardó en tu perfil.");
+            }
             
             toast.success("Foto de perfil actualizada");
         } catch (error) {
             console.error(error);
-            toast.error("Error al subir la imagen");
+            toast.error(error.message || "Error al procesar la imagen");
         } finally {
             setUploading(false);
         }
     };
-
     // Cambiar contraseña de forma segura
     const handleChangePassword = async (e) => {
         e.preventDefault();

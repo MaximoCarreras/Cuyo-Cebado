@@ -63,11 +63,18 @@
     color: #1a1614;
 }
 
+.user-header-text {
+    flex: 1; /* Ocupa el espacio disponible empujando lo demás */
+    padding-right: 40px; /* 🔥 FIX: Deja un margen de seguridad para que no pise el botón */
+    word-break: break-word; /* Si el nombre es muy largo, lo baja de renglón */
+}
+
 .user-header-text h2 {
     margin: 0;
     color: #fdfaf7;
     font-size: 1.3rem;
     font-weight: 800;
+    line-height: 1.2;
 }
 
 .user-email-sub {
@@ -357,7 +364,21 @@
 }
 
 @media (max-width: 480px) {
-    .dashboard-user-header { padding: 16px; }
-    .user-header-text h2 { font-size: 1.1rem; }
-    .tab-link-btn { font-size: 0.7rem; }
+    .dashboard-user-header { 
+        padding: 16px; 
+        gap: 12px; /* Reducimos la separación entre la foto y el nombre */
+    }
+    
+    .user-header-text h2 { 
+        font-size: 1.1rem; /* Achicamos un pelín la letra del nombre en celu */
+    }
+    
+    .btn-logout-dashboard {
+        top: 16px; /* 🔥 FIX: Lo bajamos un poquito para que acompañe el nuevo padding */
+        right: 16px;
+    }
+    
+    .tab-link-btn { 
+        font-size: 0.7rem; 
+    }
 }
