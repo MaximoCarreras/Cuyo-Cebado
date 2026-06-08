@@ -7,15 +7,17 @@
 
 /* SIDEBAR */
 .sidebar-mafia { background: #1a1614; padding: 35px; border-radius: 20px; color: #fdfaf7; position: sticky; top: 120px; border: 1px solid rgba(165, 129, 58, 0.2); }
+.title-left { display: flex; align-items: center; gap: 12px; }
 .sidebar__title { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
 .sidebar__title h3 { font-family: 'Noto Serif', serif; color: #a5813a; text-transform: uppercase; font-size: 1rem; letter-spacing: 2px; }
 .gold-dot { width: 6px; height: 6px; background: #a5813a; border-radius: 50%; }
+.mobile-only-icon { display: none; }
+.filter-options-wrapper { display: block; } /* Visible por defecto en escritorio */
+
 .filter-group { margin-bottom: 30px; }
 .filter-group label { display: block; font-size: 0.7rem; color: #888; margin-bottom: 15px; text-transform: uppercase; font-weight: 800; }
 .filter-group select { width: 100%; padding: 14px; background: #2b2520; border: 1px solid rgba(165, 129, 58, 0.2); color: #fdfaf7; border-radius: 10px; cursor: pointer; }
 .price-slider-mafia { width: 100%; accent-color: #a5813a; cursor: pointer; }
-
-/* ... (mantiene tus estilos anteriores de sidebar) ... */
 
 /* GRILLA UNIFORME */
 .products-grid-mafia { 
@@ -30,7 +32,7 @@
     border-radius: 15px; 
     border: 1px solid rgba(0, 0, 0, 0.05); 
     display: flex; 
-    flex-direction: column; /* Esto es clave para alinear todo verticalmente */
+    flex-direction: column; 
     height: 100%; 
     overflow: hidden; 
     position: relative;
@@ -40,7 +42,7 @@
 /* IMAGEN CUADRADA FIJA */
 .product-image-container-mafia { 
     width: 100%; 
-    aspect-ratio: 1 / 1; /* Fuerza a que sea un cuadrado perfecto */
+    aspect-ratio: 1 / 1; 
     background-color: #f9f7f5; 
     overflow: hidden;
 }
@@ -48,36 +50,43 @@
 .product-image-container-mafia img { 
     width: 100%; 
     height: 100%; 
-    object-fit: cover; /* Recorta la imagen para que llene el cuadrado sin deformarse */
+    object-fit: cover; 
     display: block; 
 }
 
 /* CUERPO DE LA TARJETA */
 .product-info-mafia { 
-    padding: 20px; 
+    padding: 25px; 
+    text-align: center; 
+    flex-grow: 1; 
     display: flex; 
     flex-direction: column; 
-    flex-grow: 1; /* Esto hace que el contenedor de texto ocupe todo el espacio disponible */
+    justify-content: space-between; 
 }
+
+.product-tag-mafia { font-size: 0.6rem; font-weight: 800; color: #a5813a; text-transform: uppercase; margin-bottom: 10px; }
+.product-name-mafia { font-family: 'Noto Serif', serif; font-size: 1.15rem; color: #1a1614; margin-bottom: 15px; }
+.product-price-mafia { font-size: 1.4rem; font-weight: 900; color: #1a1614; margin-bottom: 20px; }
 
 /* El botón se mantendrá siempre abajo gracias a que el padre es Flex */
 .btn-add-mafia { 
-    margin-top: auto; /* Empuja el botón siempre a la parte inferior de la tarjeta */
+    margin-top: auto; 
     width: 100%; 
     padding: 14px; 
     background: #1a1614; 
     color: #fdfaf7; 
-    border: none; 
-    border-radius: 8px; 
+    border: 1px solid rgba(165, 129, 58, 0.2); 
+    border-radius: 10px; 
     font-weight: 800; 
     text-transform: uppercase; 
     font-size: 0.7rem; 
     cursor: pointer; 
+    transition: 0.3s; 
 }
+.btn-add-mafia:hover:not(.btn-disabled) { background: #a5813a; color: #1a1614; }
+.btn-disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
 
-/* ... (mantén el resto de tus estilos de colores y fuentes) ... */
-
-/* BADGE BOUTIQUE (CORREGIDO) */
+/* BADGE BOUTIQUE */
 .product-badge { 
     position: absolute; top: 12px; left: 12px; 
     background: #1a1614; color: #a5813a; 
@@ -87,19 +96,19 @@
     border: 1px solid #a5813a;
 }
 
-.product-info-mafia { padding: 25px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-.product-tag-mafia { font-size: 0.6rem; font-weight: 800; color: #a5813a; text-transform: uppercase; margin-bottom: 10px; }
-.product-name-mafia { font-family: 'Noto Serif', serif; font-size: 1.15rem; color: #1a1614; margin-bottom: 15px; }
-.product-price-mafia { font-size: 1.4rem; font-weight: 900; color: #1a1614; margin-bottom: 20px; }
-
-.btn-add-mafia { width: 100%; padding: 14px; background: #1a1614; color: #fdfaf7; border: 1px solid rgba(165, 129, 58, 0.2); border-radius: 10px; font-weight: 800; text-transform: uppercase; font-size: 0.7rem; cursor: pointer; transition: 0.3s; }
-.btn-add-mafia:hover:not(.btn-disabled) { background: #a5813a; color: #1a1614; }
-.btn-disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
-
 @media (max-width: 950px) {
     .category-page__main { grid-template-columns: 1fr; }
-    .sidebar-mafia { position: relative; top: 0; margin-bottom: 20px; }
+    .sidebar-mafia { position: relative; top: 0; margin-bottom: 20px; padding: 20px; }
+    
+    /* MAGIA DEL ACORDEÓN PARA CELULAR */
+    .sidebar__title { cursor: pointer; justify-content: space-between; align-items: center; margin-bottom: 0; }
+    .desktop-only-dot { display: none; }
+    .mobile-only-icon { display: block; color: #a5813a; font-size: 1.5rem; }
+    .filter-options-wrapper { display: none; padding-top: 20px; border-top: 1px solid rgba(165, 129, 58, 0.2); margin-top: 15px; }
+    .filter-options-wrapper.open { display: block; }
 }
+
 @media (max-width: 768px) {
     .products-grid-mafia { grid-template-columns: repeat(2, 1fr) !important; gap: 12px; }
+    .product-info-mafia { padding: 15px; } /* Evita que el texto ahogue la tarjeta en celular */
 }

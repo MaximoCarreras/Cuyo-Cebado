@@ -13,6 +13,9 @@ export default function CategoryPage() {
     const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
     const [selectedType, setSelectedType] = useState('todos');
+    
+    // NUEVO: Estado para el acordeón de filtros en celular
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -79,30 +82,38 @@ export default function CategoryPage() {
             </div>
             <div className="category-page__main">
                 <aside className="sidebar-mafia">
-                    <div className="sidebar__title">
-                        <h3>Filtros</h3>
-                        <div className="gold-dot"></div>
-                    </div>
-                    <div className="filter-group">
-                        <label>Precio máximo: <b>${maxPrice.toLocaleString('es-AR')}</b></label>
-                        <input type="range" min="0" max="250000" step="5000" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} className="price-slider-mafia" />
-                    </div>
-                    {getOptions('material').length > 1 && (
-                        <div className="filter-group">
-                            <label>Material</label>
-                            <select value={selectedMaterial} onChange={(e) => setSelectedMaterial(e.target.value)}>
-                                {getOptions('material').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
-                            </select>
+                    <div className="sidebar__title" onClick={() => setIsFilterOpen(!isFilterOpen)}>
+                        <div className="title-left">
+                            <h3>Filtros</h3>
+                            <div className="gold-dot desktop-only-dot"></div>
                         </div>
-                    )}
-                    {getOptions('type').length > 1 && (
+                        <span className="material-symbols-outlined mobile-only-icon">
+                            {isFilterOpen ? 'expand_less' : 'filter_list'}
+                        </span>
+                    </div>
+                    
+                    <div className={`filter-options-wrapper ${isFilterOpen ? 'open' : ''}`}>
                         <div className="filter-group">
-                            <label>{getTypeLabel()}</label>
-                            <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
-                                {getOptions('type').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
-                            </select>
+                            <label>Precio máximo: <b>${maxPrice.toLocaleString('es-AR')}</b></label>
+                            <input type="range" min="0" max="250000" step="5000" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} className="price-slider-mafia" />
                         </div>
-                    )}
+                        {getOptions('material').length > 1 && (
+                            <div className="filter-group">
+                                <label>Material</label>
+                                <select value={selectedMaterial} onChange={(e) => setSelectedMaterial(e.target.value)}>
+                                    {getOptions('material').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
+                                </select>
+                            </div>
+                        )}
+                        {getOptions('type').length > 1 && (
+                            <div className="filter-group">
+                                <label>{getTypeLabel()}</label>
+                                <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+                                    {getOptions('type').map(o => <option key={o} value={o}>{o.toUpperCase()}</option>)}
+                                </select>
+                            </div>
+                        )}
+                    </div>
                 </aside>
 
                 <section className="products-content">

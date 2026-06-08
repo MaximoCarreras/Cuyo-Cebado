@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom'; // Agregamos useNavigate
 import { supabase } from '../../lib/supabaseClient';
 import { useCart } from '../../context/CartContext';
 import toast, { Toaster } from 'react-hot-toast';
@@ -10,6 +10,7 @@ import ProductReviews from '../../components/ProductReviews/ProductReviews';
 
 export default function ProductDetail() {
     const { slug } = useParams();
+    const navigate = useNavigate(); // Inicializamos la navegación para el botón Volver
     const [product, setProduct] = useState(null);
     const [related, setRelated] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -76,7 +77,16 @@ export default function ProductDetail() {
 
                 {/* LADO DERECHO: INFO Y COMPRA */}
                 <div className="product-info-section">
-                    <div className="breadcrumbs"><Link to="/">Inicio</Link> / <span>{product.name}</span></div>
+                    
+                    {/* BOTÓN VOLVER + BREADCRUMBS */}
+                    <div className="breadcrumbs">
+                        <button onClick={() => navigate(-1)} className="btn-back-product">
+                            <span className="material-symbols-outlined">arrow_back</span> Volver
+                        </button>
+                        <span className="breadcrumbs-path">
+                            <Link to="/">Inicio</Link> / <span>{product.name}</span>
+                        </span>
+                    </div>
                     
                     <h1 className="product-title">{product.name}</h1>
                     <p className="product-price">${product.price.toLocaleString('es-AR')}</p>
