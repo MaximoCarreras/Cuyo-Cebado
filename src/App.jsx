@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useCart } from './context/CartContext';
+import { getGlobalCatalog } from './lib/catalogStore'; // 🔥 IMPORTAMOS EL CEREBRO GLOBAL EN LA RAÍZ
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import ScrollToTop from './components/ScrollToTop';
@@ -41,7 +42,14 @@ import './App.css';
 export default function App() {
   const { clearCart } = useCart();
 
-  // DETECTOR GLOBAL DE PAGO APROBADO
+  // 🔥 MOTOR SECRETO DE VELOCIDAD GLOBAL
+  // Apenas el cliente abre Cuyo Cebado, esto descarga silenciosamente todo el catálogo en segundo plano.
+  // Cuando navegue al Home, Categorías o Mates, la carga será de 0 milisegundos.
+  useEffect(() => {
+    getGlobalCatalog();
+  }, []);
+
+  // DETECTOR GLOBAL DE PAGO APROBADO (TU LÓGICA INTACTA)
   useEffect(() => {
     if (window.location.href.includes('approved')) {
       console.log("✅ Pago aprobado global detectado. Limpiando carrito...");
