@@ -2,318 +2,164 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Serif:wght@400;700;800&display=swap');
 
-
-
 html,
-
 body {
-
   background-color: #fdfaf7;
-
   margin: 0;
-
   padding: 0;
-
   overflow-x: hidden;
-
   font-family: 'Inter', sans-serif;
-
 }
-
-
 
 #root {
-
   display: flex;
-
   flex-direction: column;
-
   min-height: 100vh;
-
 }
-
-
 
 /* --- BARRA DORADA CON MOVIMIENTO --- */
-
 .top-mafia-bar {
-
   background-color: #a5813a;
-
   color: #1a1614;
-
   overflow: hidden;
-
   padding: 12px 0;
-
   position: relative;
-
   z-index: 10;
-
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-
 }
-
-
 
 .ticker-track {
-
   display: flex;
-
   width: max-content;
-
   gap: 100px;
-
   animation: scroll-right 40s linear infinite;
-
 }
-
-
 
 @keyframes scroll-right {
-
   0% {
-
     transform: translateX(-50%);
-
   }
-
-
-
   100% {
-
     transform: translateX(0%);
-
   }
-
 }
-
-
 
 .top-bar-item {
-
   display: flex;
-
   align-items: center;
-
   gap: 10px;
-
   white-space: nowrap;
-
 }
-
-
 
 .top-bar-item span {
-
   font-size: 22px;
-
 }
-
-
 
 .top-bar-item p {
-
   margin: 0;
-
   font-size: 0.8rem;
-
   line-height: 1.2;
-
 }
-
-
 
 .top-bar-item p strong {
-
   display: inline-block;
-
   text-transform: uppercase;
-
   font-weight: 800;
-
   margin-right: 5px;
-
 }
-
-
 
 .top-bar-item p span {
-
   font-size: 0.75rem;
-
   opacity: 0.8;
-
 }
-
-
 
 /* FIX NAVBAR Y MENÚ HAMBURGUESA */
-
 nav,
-
 .navbar {
-
   position: sticky !important;
-
   top: 0 !important;
-
   z-index: 1000 !important;
-
   background-color: #1a1614;
-
 }
-
-
 
 /* El menú abierto siempre arriba de la barra dorada */
-
 .nav-menu.active,
-
 .mobile-menu-container {
-
   z-index: 2000 !important;
-
 }
-
-
 
 main {
-
   flex: 1;
-
   padding-top: 0;
-
   background-color: #fdfaf7;
-
 }
-
-
 
 .section__title {
-
   font-family: 'Noto Serif', serif;
-
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-
   color: #2b2520;
-
   text-align: center;
-
   text-transform: uppercase;
-
   letter-spacing: 2px;
-
   font-weight: 800;
-
   margin-top: 0;
-
   margin-bottom: 40px;
-
 }
-
-
 
 /* BURBUJA WHATSAPP */
-
 .whatsapp-float {
-
   position: fixed;
-
   width: 60px;
-
   height: 60px;
-
   bottom: 25px;
-
   right: 25px;
-
   background-color: #1a1614;
-
   border-radius: 50%;
-
   z-index: 9999;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-
   border: 2px solid #a5813a;
-
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
   text-decoration: none;
-
 }
-
-
 
 .whatsapp-float:hover {
-
   transform: scale(1.1) rotate(5deg);
-
   background-color: #a5813a;
-
 }
-
-
 
 .wa-icon {
-
   width: 32px;
-
   height: 32px;
-
   fill: #a5813a;
-
 }
-
-
 
 .whatsapp-float:hover .wa-icon {
-
   fill: #1a1614;
-
 }
 
-
-
+/* =======================================
+   RESPONSIVE
+   ======================================= */
 @media (max-width: 768px) {
-
   .ticker-track {
-
     animation: scroll-right 25s linear infinite;
-
     gap: 60px;
-
   }
-
-
 
   .top-bar-item p span {
-
     display: inline;
-
   }
 
-
-
+  /* 🔥 CORRECCIÓN: Levantamos la burbuja a 100px para que no tape la barra pegajosa */
   .whatsapp-float {
-
     width: 55px;
-
     height: 55px;
-
-    bottom: 20px;
-
+    bottom: 100px; 
     right: 20px;
-
   }
-
 } 
 
 /* --- ESTILOS PARA PAGINAS LEGALES --- */
