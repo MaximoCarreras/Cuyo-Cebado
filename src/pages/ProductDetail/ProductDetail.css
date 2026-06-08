@@ -5,7 +5,7 @@
 .product-detail-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 70px; background: transparent; padding: 0; box-sizing: border-box; }
 
 /* IMAGENES */
-.product-image-section { display: flex; flex-direction: column; gap: 15px; position: sticky; top: 120px; height: fit-content; }
+.product-image-section { display: flex; flex-direction: column; gap: 15px; position: sticky; top: 120px; height: fit-content; max-width: 100%; }
 .main-image-wrapper { position: relative; width: 100%; aspect-ratio: 1 / 1; border-radius: 24px; overflow: hidden; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(165, 129, 58, 0.1); }
 .product-main-image { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
 .main-image-wrapper:hover .product-main-image { transform: scale(1.05); }
@@ -18,7 +18,7 @@
 .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
 
 /* INFO GENERAL */
-.product-info-section { display: flex; flex-direction: column; padding-top: 20px; box-sizing: border-box; }
+.product-info-section { display: flex; flex-direction: column; padding-top: 20px; box-sizing: border-box; max-width: 100%; }
 
 /* BREADCRUMBS Y BOTON VOLVER */
 .breadcrumbs { display: flex; align-items: center; gap: 15px; font-size: 0.8rem; color: #8a837b; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
@@ -90,11 +90,15 @@
    ======================================= */
 @media (max-width: 900px) {
     /* Centrado perfecto, sin margenes indeseados en los lados */
-    .product-detail-page { padding: 90px 20px 120px; box-sizing: border-box; width: 100%; }
-    .product-detail-container { grid-template-columns: 1fr; gap: 30px; width: 100%; }
+    .product-detail-page { padding: 90px 20px 120px; box-sizing: border-box; width: 100vw; max-width: 100%; }
+    .product-detail-container { grid-template-columns: 1fr; gap: 30px; width: 100%; box-sizing: border-box; }
     
-    /* Configuración especial para que la imagen no se corte ni mutile */
-    .product-main-image { object-fit: contain; background: #fdfaf7; }
+    /* 🔥 CORRECCIÓN 1: LIMITAMOS EL ALTO DE LA IMAGEN PARA QUE NO SEA GIGANTE */
+    .main-image-wrapper {
+        max-height: 45vh; /* La foto no ocupará más del 45% del alto de tu pantalla */
+        aspect-ratio: auto;
+    }
+    .product-main-image { object-fit: contain; background: #fdfaf7; height: 100%; }
     
     /* Cambiamos breadcrumbs y activamos botón de regresar */
     .breadcrumbs { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -102,8 +106,19 @@
     .breadcrumbs-path { display: none; } /* Ocultamos la ruta larga para no ocupar pantalla vital */
 
     .product-image-section { position: relative; top: 0; }
-    .product-title { font-size: 2.2rem; }
-    .product-price { font-size: 1.8rem; }
+    
+    /* 🔥 CORRECCIÓN 2: TEXTO QUE NO ROMPE LA PANTALLA */
+    .product-title { 
+        font-size: 1.8rem; /* Redujimos apenas el tamaño en celulares */
+        word-wrap: break-word; /* Obliga a la palabra a bajar si es muy larga */
+        overflow-wrap: break-word; 
+        -webkit-hyphens: auto;
+        hyphens: auto;
+        max-width: 100%;
+        line-height: 1.2;
+    }
+    
+    .product-price { font-size: 1.6rem; }
     
     .purchase-block { padding: 20px; }
     .secondary-actions { flex-direction: column; gap: 15px; align-items: center; }
