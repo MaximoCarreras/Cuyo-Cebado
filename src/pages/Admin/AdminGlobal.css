@@ -408,18 +408,13 @@
     }
 }
 /* =========================================================
-   ADAPTACIÓN MÓVIL GLOBAL (TARJETAS 100% ENCAJADAS Y BLOQUEADAS)
+   ADAPTACIÓN MÓVIL DEFINITIVA (ANTIDESBORDES)
    ========================================================= */
-@media (max-width: 768px) {
-    /* 0. MATAMOS CUALQUIER DESBORDE DESDE LA RAÍZ */
-    html, body, #root, .app-container {
-        overflow-x: hidden !important;
-        max-width: 100vw !important;
-    }
-
-    /* 1. Contenedor principal sin usar "vw" problemáticos */
+@media (max-width: 900px) { /* Usamos 900px para que coincida con el menú lateral */
+    
+    /* 0. MATAMOS EL SCROLL DESDE LA RAÍZ */
     .admin-main-content {
-        width: 100% !important; 
+        width: 100vw !important;
         max-width: 100% !important;
         padding: 15px !important;
         margin: 0 !important;
@@ -427,14 +422,16 @@
         overflow-x: hidden !important;
     }
 
-    /* 2. Contenedores internos de cada sección (Ventas, Inventario, etc) */
+    .admin-main-content * {
+        box-sizing: border-box !important;
+        max-width: 100% !important; /* Ningún elemento interno puede superar el 100% */
+    }
+
     .category-refined-add, 
     .stats-refined-grid {
         width: 100% !important;
-        max-width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
-        box-sizing: border-box !important;
     }
 
     .stats-refined-grid {
@@ -443,78 +440,79 @@
         gap: 15px;
     }
 
-    /* 3. RESET TOTAL DE LA TABLA (Forzamos a que deje de comportarse como tabla) */
-    table, thead, tbody, th, td, tr, .refined-table {
+    /* 1. DESTRUIMOS LA TABLA TRADICIONAL */
+    .refined-table, 
+    .refined-table tbody, 
+    .refined-table tr, 
+    .refined-table td {
         display: block !important;
         width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-        margin: 0 !important;
     }
 
     .refined-table thead {
         display: none !important;
     }
 
-    /* 4. LA TARJETA PERFECTA */
+    /* 2. LA TARJETA ENJAULADA */
     .refined-table tr {
-        margin-bottom: 20px !important;
-        background: #fff;
-        border: 1px solid rgba(165, 129, 58, 0.3);
-        border-radius: 15px;
+        margin: 0 0 20px 0 !important;
+        background: #fff !important;
+        border: 1px solid rgba(165, 129, 58, 0.3) !important;
+        border-radius: 12px !important;
         padding: 15px !important;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        display: flex !important;
-        flex-direction: column;
-        gap: 8px;
-        /* El candado final para que nada se asome */
-        overflow: hidden !important; 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+        overflow: hidden !important; /* Corta lo que intente salir */
+        position: relative;
     }
 
-    /* 5. CELDAS: Apilamos el contenido para que no empuje a los costados */
+    /* 3. CELDAS APILADAS */
     .refined-table td {
         padding: 8px 0 !important;
         border: none !important;
         border-bottom: 1px solid #f1f5f9 !important;
-        text-align: left !important;
         display: flex !important;
-        flex-direction: column !important; /* Si hay dos textos, van uno arriba del otro */
+        flex-direction: column !important; /* Títulos arriba, datos abajo */
         align-items: flex-start !important;
+        text-align: left !important;
         white-space: normal !important;
-        word-wrap: break-word !important; /* Rompe palabras largas */
-        overflow-wrap: break-word !important;
+        word-break: break-word !important; /* Evita que palabras largas rompan la tarjeta */
     }
 
-    /* 6. ZONA DE BOTONES: La última celda de la tarjeta */
+    /* 4. LA CELDA PROBLEMÁTICA (LA DE LOS BOTONES) */
     .refined-table td:last-child {
         border-bottom: none !important;
         margin-top: 10px !important;
         padding-bottom: 0 !important;
-        flex-direction: row !important; /* Los botones sí van uno al lado del otro */
-        flex-wrap: wrap !important;
-        justify-content: space-between !important;
-        gap: 10px !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important; /* Si no entran, que bajen de renglón, NO que empujen */
+        gap: 8px !important;
     }
 
-    /* 7. BOTONES ADAPTADOS AL CELULAR */
+    /* 5. ARREGLO DE BOTONES PARA QUE NO EMPUJEN (LA MAGIA ACÁ) */
     .action-btn, 
     .refined-table td button {
-        flex: 1 1 45% !important; /* Crecen y se achican juntos, ocupando la mitad de la tarjeta */
-        min-width: 100px !important;
+        flex: 1 1 100% !important; /* Forzamos a que los botones se apilen uno debajo del otro si son muy anchos */
+        min-width: 0 !important; /* Le sacamos la rigidez */
         margin: 0 !important;
-        text-align: center !important;
+        padding: 12px !important; /* Más grandes para tocarlos fácil */
+        font-size: 0.85rem !important;
+        border-radius: 8px !important;
         justify-content: center !important;
-        height: auto !important;
-        padding: 12px 5px !important; /* Más "gorditos" para tocarlos fácil con el pulgar */
-        font-size: 0.8rem !important;
+        text-align: center !important;
     }
-    
+
+    /* Botoncitos de estado (Prep, Dist, Listo) para que bajen solos */
     .status-badge {
         display: inline-block !important;
-        width: 100% !important;
+        width: 100% !important; /* Se apilan prolijos */
         text-align: center !important;
         margin-top: 5px !important;
-        padding: 8px !important;
-        font-size: 0.8rem !important;
+    }
+
+    /* Ajuste para el selector de cantidad (- 4 +) para que no rompa */
+    .qty-selector {
+        width: 100% !important;
+        max-width: 150px !important;
+        margin: 10px 0 !important;
     }
 }
