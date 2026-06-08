@@ -408,101 +408,113 @@
     }
 }
 /* =========================================================
-   ADAPTACIÓN MÓVIL GLOBAL (TARJETAS CONTENIDAS Y CENTRADAS)
+   ADAPTACIÓN MÓVIL GLOBAL (TARJETAS 100% ENCAJADAS Y BLOQUEADAS)
    ========================================================= */
 @media (max-width: 768px) {
-    /* 0. LA REGLA DE ORO: Nada puede superar el ancho de la pantalla */
-    * {
+    /* 0. MATAMOS CUALQUIER DESBORDE DESDE LA RAÍZ */
+    html, body, #root, .app-container {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+
+    /* 1. Contenedor principal sin usar "vw" problemáticos */
+    .admin-main-content {
+        width: 100% !important; 
+        max-width: 100% !important;
+        padding: 15px !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
+    /* 2. Contenedores internos de cada sección (Ventas, Inventario, etc) */
+    .category-refined-add, 
+    .stats-refined-grid {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
         box-sizing: border-box !important;
     }
 
-    .admin-main-content {
-        width: 100vw !important;
-        max-width: 100% !important;
-        padding: 15px;
-        margin: 0;
-        overflow-x: hidden !important; /* Destruye el scroll horizontal del contenedor */
-    }
-
-    /* 1. Las tarjetas de estadísticas se apilan 1 por línea */
     .stats-refined-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 15px;
-        width: 100%;
     }
 
-    /* 2. Contenedor general centrado y con márgenes perfectos */
-    .category-refined-add {
-        width: 100%;
-        max-width: 100%;
-        padding: 0; 
-        margin: 0 auto; /* Esto asegura que el margen izquierdo sea IDÉNTICO al derecho */
+    /* 3. RESET TOTAL DE LA TABLA (Forzamos a que deje de comportarse como tabla) */
+    table, thead, tbody, th, td, tr, .refined-table {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
     }
 
-    /* 3. Forzamos a la tabla a convertirse en tarjetas cerradas */
-    .refined-table, 
-    .refined-table tbody, 
-    .refined-table tr, 
-    .refined-table td {
-        display: block;
-        width: 100%;
-        max-width: 100%;
-    }
-
-    /* Ocultamos los encabezados de las columnas */
     .refined-table thead {
-        display: none;
+        display: none !important;
     }
 
-    /* 4. LA TARJETA: Ahora sí, cerrada, visible y sin salirse */
+    /* 4. LA TARJETA PERFECTA */
     .refined-table tr {
-        margin-bottom: 20px;
+        margin-bottom: 20px !important;
         background: #fff;
         border: 1px solid rgba(165, 129, 58, 0.3);
         border-radius: 15px;
-        padding: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.04);
-        display: flex;
+        padding: 15px !important;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        display: flex !important;
         flex-direction: column;
         gap: 8px;
-        overflow: hidden; /* Corta cualquier cosa que intente asomarse por la derecha */
+        /* El candado final para que nada se asome */
+        overflow: hidden !important; 
     }
 
-    /* 5. Cada celda es un renglón adentro de la tarjeta */
+    /* 5. CELDAS: Apilamos el contenido para que no empuje a los costados */
     .refined-table td {
-        padding: 5px 0;
-        border: none; 
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        border-bottom: 1px solid #f1f5f9;
-        flex-wrap: wrap; /* El texto largo baja renglón automáticamente */
-        gap: 10px;
-        word-break: break-word; /* Si un email o texto es re largo, lo rompe para no desbordar */
+        padding: 8px 0 !important;
+        border: none !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        text-align: left !important;
+        display: flex !important;
+        flex-direction: column !important; /* Si hay dos textos, van uno arriba del otro */
+        align-items: flex-start !important;
+        white-space: normal !important;
+        word-wrap: break-word !important; /* Rompe palabras largas */
+        overflow-wrap: break-word !important;
     }
 
-    /* 6. Los botones (Editar/Eliminar) al final de la tarjeta */
+    /* 6. ZONA DE BOTONES: La última celda de la tarjeta */
     .refined-table td:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-        margin-top: 10px; 
-        justify-content: center; /* Centramos los botones para que queden prolijos */
+        border-bottom: none !important;
+        margin-top: 10px !important;
+        padding-bottom: 0 !important;
+        flex-direction: row !important; /* Los botones sí van uno al lado del otro */
+        flex-wrap: wrap !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
     }
 
-    .status-badge {
-        font-size: 0.75rem;
-        padding: 6px 12px;
-        width: fit-content;
-    }
-    
-    /* Adaptamos los botones de acción para que entren perfecto en la pantalla chica */
+    /* 7. BOTONES ADAPTADOS AL CELULAR */
     .action-btn, 
     .refined-table td button {
-        flex: 1; /* Hace que si hay dos botones (ej: editar y borrar), midan exactamente 50% cada uno */
-        margin: 2px;
-        text-align: center;
-        justify-content: center;
+        flex: 1 1 45% !important; /* Crecen y se achican juntos, ocupando la mitad de la tarjeta */
+        min-width: 100px !important;
+        margin: 0 !important;
+        text-align: center !important;
+        justify-content: center !important;
+        height: auto !important;
+        padding: 12px 5px !important; /* Más "gorditos" para tocarlos fácil con el pulgar */
+        font-size: 0.8rem !important;
+    }
+    
+    .status-badge {
+        display: inline-block !important;
+        width: 100% !important;
+        text-align: center !important;
+        margin-top: 5px !important;
+        padding: 8px !important;
+        font-size: 0.8rem !important;
     }
 }
