@@ -4,21 +4,38 @@ import { useCart } from '../../context/CartContext';
 import { supabase } from '../../lib/supabaseClient';
 import './CategoryPage.css';
 
+// 🔥 TRUCO MÁGICO 1: CACHÉ GLOBAL DE LA CATEGORÍA
+// Esto vive fuera del componente. Una vez que se descarga una categoría, 
+// queda guardada acá y la próxima vez carga en 0 segundos.
+const categoryCache = {};
+
 export default function CategoryPage() {
     const { categoryId } = useParams();
     const { addToCart } = useCart();
+    
     const [dbProducts, setDbProducts] = useState([]);
     const [currentCategory, setCurrentCategory] = useState(null);
-    const [loading, setLoading] = useState(true);
+    
+    // Si la categoría ya está en nuestro caché, loading arranca en false. ¡Magia!
+    const [loading, setLoading] = useState(!categoryCache[categoryId]);
+    
     const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
     const [selectedType, setSelectedType] = useState('todos');
     
-    // NUEVO: Estado para el acordeón de filtros en celular
+    // Estado para el acordeón de filtros en celular
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
+            // Si los datos ya están en memoria, los inyectamos al instante y cortamos la función acá.
+            if (categoryCache[categoryId]) {
+                setDbProducts(categoryCache[categoryId].products);
+                setCurrentCategory(categoryCache[categoryId].category);
+                setLoading(false);
+                return;
+            }
+
             try {
                 setLoading(true);
                 const { data: pData, error: pError } = await supabase
@@ -26,20 +43,29 @@ export default function CategoryPage() {
                     .select('*')
                     .eq('category', categoryId);
                 if (pError) throw pError;
-                setDbProducts(pData || []);
 
                 const { data: cData } = await supabase
                     .from('categories')
                     .select('*')
                     .eq('id', categoryId)
                     .single();
+
+                setDbProducts(pData || []);
                 if (cData) setCurrentCategory(cData);
+
+                // 🔥 GUARDAMOS EN CACHÉ PARA LA PRÓXIMA VEZ
+                categoryCache[categoryId] = {
+                    products: pData || [],
+                    category: cData || null
+                };
+
             } catch (error) {
                 console.error("Error en CategoryPage:", error);
             } finally {
                 setLoading(false);
             }
         };
+        
         fetchData();
         setSelectedMaterial('todos');
         setSelectedType('todos');
@@ -71,7 +97,9 @@ export default function CategoryPage() {
         addToCart(product);
     };
 
-    if (loading) return <div className="loading-view-mafia">🧉 Preparando la estantería...</div>;
+    // 🔥 TRUCO MÁGICO 2: ELIMINAMOS EL RETURN BLOQUEANTE
+    // Ya no hacemos "if (loading) return <div>Cargando...</div>"
+    // Dejamos que cargue la interfaz completa al instante siempre.
 
     return (
         <div className="category-page">
@@ -118,29 +146,47 @@ export default function CategoryPage() {
 
                 <section className="products-content">
                     <header className="category-header">
-                        <h1 className="section__title">{currentCategory ? currentCategory.label : 'Productos'}</h1>
-                        <p className="products-count">{filteredProducts.length} piezas encontradas</p>
+                        <h1 className="section__title">
+                            {/* Mostramos el nombre de la categoría si lo tenemos, sino un genérico mientras carga */}
+                            {currentCategory ? currentCategory.label : (loading ? 'Cargando...' : 'Productos')}
+                        </h1>
+                        <p className="products-count">
+                            {loading ? 'Buscando catálogo...' : `${filteredProducts.length} piezas encontradas`}
+                        </p>
                     </header>
+                    
                     <div className="products-grid-mafia">
-                        {filteredProducts.map(product => (
-                            <Link key={product.id} to={`/producto/${product.slug}`} className="product-card-link-mafia">
-                                <div className={`product-card-mafia`}>
-                                    
-                                    <div className="product-image-container-mafia">
-                                        <img src={product.image_url || '/assets/placeholder.png'} alt={product.name} />
-                                    </div>
+                        {/* 🔥 MOSTRADOR CONDICIONAL SUAVE */}
+                        {loading ? (
+                            <div style={{ gridColumn: '1 / -1', padding: '60px 20px', textAlign: 'center', color: '#a5813a', fontWeight: '800', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
+                                <span className="material-symbols-outlined" style={{ animation: 'spin 2s linear infinite', fontSize: '2rem' }}>sync</span>
+                                Trayendo catálogo...
+                            </div>
+                        ) : filteredProducts.length > 0 ? (
+                            filteredProducts.map(product => (
+                                <Link key={product.id} to={`/producto/${product.slug}`} className="product-card-link-mafia">
+                                    <div className={`product-card-mafia`}>
+                                        
+                                        <div className="product-image-container-mafia">
+                                            <img src={product.image_url || '/assets/placeholder.png'} alt={product.name} />
+                                        </div>
 
-                                    <div className="product-info-mafia">
-                                        <p className="product-tag-mafia">{product.type} {product.material ? `| ${product.material}` : ''}</p>
-                                        <h4 className="product-name-mafia">{product.name}</h4>
-                                        <p className="product-price-mafia">${Number(product.price).toLocaleString('es-AR')}</p>
-                                        <button className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`} disabled={product.stock === 0} onClick={(e) => handleQuickAdd(e, product)}>
-                                            {product.stock === 0 ? 'Sin Stock' : 'Agregar al Carrito'}
-                                        </button>
+                                        <div className="product-info-mafia">
+                                            <p className="product-tag-mafia">{product.type} {product.material ? `| ${product.material}` : ''}</p>
+                                            <h4 className="product-name-mafia">{product.name}</h4>
+                                            <p className="product-price-mafia">${Number(product.price).toLocaleString('es-AR')}</p>
+                                            <button className={`btn-add-mafia ${product.stock === 0 ? 'btn-disabled' : ''}`} disabled={product.stock === 0} onClick={(e) => handleQuickAdd(e, product)}>
+                                                {product.stock === 0 ? 'Sin Stock' : 'Agregar al Carrito'}
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            ))
+                        ) : (
+                            <div style={{ gridColumn: '1 / -1', padding: '40px', textAlign: 'center', color: '#888' }}>
+                                No encontramos productos con estos filtros.
+                            </div>
+                        )}
                     </div>
                 </section>
             </div>
