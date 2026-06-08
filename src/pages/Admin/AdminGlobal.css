@@ -407,3 +407,40 @@
         padding: 15px;
     }
 }
+/* =========================================================
+   ADAPTACIÓN MÓVIL PARA TABLAS Y TARJETAS (DASHBOARD)
+   ========================================================= */
+@media (max-width: 768px) {
+    /* 1. Las tarjetas de estadísticas se apilan 1 por línea */
+    .stats-refined-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    /* 2. La tabla de operaciones (el problema del scroll horizontal) */
+    .category-refined-add {
+        width: 100%;
+        overflow-x: auto; /* Esto permite deslizar la tabla con el dedo si no entra, pero no rompe la pantalla general */
+        padding: 15px; /* Reducimos el padding para ganar espacio */
+        border-radius: 10px;
+    }
+
+    .refined-table {
+        width: 100%;
+        min-width: 400px; /* Le decimos a la tabla "no te achiques más de esto", si no entra, se desliza */
+    }
+
+    /* Achicamos la fuente de la tabla para que entre mejor en el celu */
+    .refined-table th, 
+    .refined-table td {
+        padding: 12px 10px;
+        font-size: 0.85rem;
+    }
+
+    /* El estado (PAGADO/PENDIENTE) lo hacemos más chiquito */
+    .status-badge {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+    }
+}
