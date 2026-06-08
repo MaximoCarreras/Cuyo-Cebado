@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient';
+import { getGlobalCatalog } from '../../lib/catalogStore'; // 🔥 ACÁ IMPORTAMOS EL CEREBRO
 import { useCart } from '../../context/CartContext';
 import toast, { Toaster } from 'react-hot-toast';
 import './ProductDetail.css';
 
-// 🔥 IMPORTAMOS EL COMPONENTE DE RESEÑAS
+// IMPORTAMOS EL COMPONENTE DE RESEÑAS
 import ProductReviews from '../../components/ProductReviews/ProductReviews'; 
 
 export default function ProductDetail() {
@@ -22,17 +22,22 @@ export default function ProductDetail() {
     useEffect(() => {
         const fetchProduct = async () => {
             setLoading(true);
-            const { data, error } = await supabase.from('products').select('*').eq('slug', slug).single();
-            if (!error && data) {
-                setProduct(data);
-                setActiveImg(data.image_url);
+            
+            // 🔥 MAGIA: Pedimos el catálogo global a la memoria
+            const { products } = await getGlobalCatalog();
+            
+            // Buscamos nuestro producto específico
+            const currentProduct = products.find(p => p.slug === slug);
+            
+            if (currentProduct) {
+                setProduct(currentProduct);
+                setActiveImg(currentProduct.image_url);
 
-                const { data: relData } = await supabase.from('products')
-                    .select('*')
-                    .eq('category', data.category)
-                    .neq('id', data.id)
-                    .limit(4);
-                setRelated(relData || []);
+                // Calculamos los productos relacionados al instante
+                const relData = products
+                    .filter(p => p.category === currentProduct.category && p.id !== currentProduct.id)
+                    .slice(0, 4);
+                setRelated(relData);
             }
             setLoading(false);
         };
@@ -53,6 +58,7 @@ export default function ProductDetail() {
 
     const allImages = [product.image_url, ...(product.extra_images || [])].filter(Boolean);
 
+    // TU DISEÑO INTACTO DESDE ACÁ PARA ABAJO
     return (
         <div className="product-detail-page fade-in">
             <Toaster position="bottom-center" />
@@ -139,7 +145,6 @@ export default function ProductDetail() {
                                 <div className="out-of-stock-alert">
                                     Este producto se encuentra temporalmente agotado.
                                 </div>
-                                {/* 🔥 CORRECCIÓN: Botón envuelto en la barra blanca de protección */}
                                 <div className="purchase-controls mobile-sticky">
                                     <a href={waLinkNoStock} target="_blank" rel="noreferrer" className="btn-notify-stock">
                                         <span className="material-symbols-outlined">notifications_active</span>
@@ -152,7 +157,7 @@ export default function ProductDetail() {
                 </div>
             </div>
 
-            {/* 🔥 ACÁ INSERTAMOS LAS RESEÑAS */}
+            {/* ACÁ INSERTAMOS LAS RESEÑAS */}
             <ProductReviews productSlug={slug} />
 
             {/* PRODUCTOS RELACIONADOS */}

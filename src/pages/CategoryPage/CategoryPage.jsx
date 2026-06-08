@@ -1,13 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useMemo, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
-import { supabase } from '../../lib/supabaseClient';
+import { getGlobalCatalog } from '../../lib/catalogStore'; // 🔥 ACÁ IMPORTAMOS EL CEREBRO
 import './CategoryPage.css';
-
-// 🔥 TRUCO MÁGICO 1: CACHÉ GLOBAL DE LA CATEGORÍA
-// Esto vive fuera del componente. Una vez que se descarga una categoría, 
-// queda guardada acá y la próxima vez carga en 0 segundos.
-const categoryCache = {};
 
 export default function CategoryPage() {
     const { categoryId } = useParams();
@@ -15,9 +10,7 @@ export default function CategoryPage() {
     
     const [dbProducts, setDbProducts] = useState([]);
     const [currentCategory, setCurrentCategory] = useState(null);
-    
-    // Si la categoría ya está en nuestro caché, loading arranca en false. ¡Magia!
-    const [loading, setLoading] = useState(!categoryCache[categoryId]);
+    const [loading, setLoading] = useState(true); // Arranca cargando
     
     const [maxPrice, setMaxPrice] = useState(250000);
     const [selectedMaterial, setSelectedMaterial] = useState('todos');
@@ -28,36 +21,19 @@ export default function CategoryPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            // Si los datos ya están en memoria, los inyectamos al instante y cortamos la función acá.
-            if (categoryCache[categoryId]) {
-                setDbProducts(categoryCache[categoryId].products);
-                setCurrentCategory(categoryCache[categoryId].category);
-                setLoading(false);
-                return;
-            }
-
             try {
                 setLoading(true);
-                const { data: pData, error: pError } = await supabase
-                    .from('products')
-                    .select('*')
-                    .eq('category', categoryId);
-                if (pError) throw pError;
+                
+                // 🔥 MAGIA: Le pedimos los datos al cerebro (tarda 0 seg si ya cargó antes)
+                const { products, categories } = await getGlobalCatalog();
+                
+                // Filtramos los productos de esta categoría específica
+                const catProducts = products.filter(p => p.category === categoryId);
+                // Buscamos los datos de la categoría (título, etc)
+                const catDetails = categories.find(c => String(c.id) === String(categoryId));
 
-                const { data: cData } = await supabase
-                    .from('categories')
-                    .select('*')
-                    .eq('id', categoryId)
-                    .single();
-
-                setDbProducts(pData || []);
-                if (cData) setCurrentCategory(cData);
-
-                // 🔥 GUARDAMOS EN CACHÉ PARA LA PRÓXIMA VEZ
-                categoryCache[categoryId] = {
-                    products: pData || [],
-                    category: cData || null
-                };
+                setDbProducts(catProducts);
+                setCurrentCategory(catDetails || null);
 
             } catch (error) {
                 console.error("Error en CategoryPage:", error);
@@ -97,10 +73,7 @@ export default function CategoryPage() {
         addToCart(product);
     };
 
-    // 🔥 TRUCO MÁGICO 2: ELIMINAMOS EL RETURN BLOQUEANTE
-    // Ya no hacemos "if (loading) return <div>Cargando...</div>"
-    // Dejamos que cargue la interfaz completa al instante siempre.
-
+    // TU DISEÑO INTACTO DESDE ACÁ PARA ABAJO
     return (
         <div className="category-page">
             <div className="category-page__nav">
@@ -147,7 +120,6 @@ export default function CategoryPage() {
                 <section className="products-content">
                     <header className="category-header">
                         <h1 className="section__title">
-                            {/* Mostramos el nombre de la categoría si lo tenemos, sino un genérico mientras carga */}
                             {currentCategory ? currentCategory.label : (loading ? 'Cargando...' : 'Productos')}
                         </h1>
                         <p className="products-count">
@@ -156,7 +128,6 @@ export default function CategoryPage() {
                     </header>
                     
                     <div className="products-grid-mafia">
-                        {/* 🔥 MOSTRADOR CONDICIONAL SUAVE */}
                         {loading ? (
                             <div style={{ gridColumn: '1 / -1', padding: '60px 20px', textAlign: 'center', color: '#a5813a', fontWeight: '800', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
                                 <span className="material-symbols-outlined" style={{ animation: 'spin 2s linear infinite', fontSize: '2rem' }}>sync</span>
