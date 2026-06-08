@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom'; // Agregamos useNavigate
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import { useCart } from '../../context/CartContext';
 import toast, { Toaster } from 'react-hot-toast';
@@ -10,7 +10,7 @@ import ProductReviews from '../../components/ProductReviews/ProductReviews';
 
 export default function ProductDetail() {
     const { slug } = useParams();
-    const navigate = useNavigate(); // Inicializamos la navegación para el botón Volver
+    const navigate = useNavigate(); 
     const [product, setProduct] = useState(null);
     const [related, setRelated] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -60,6 +60,14 @@ export default function ProductDetail() {
                 
                 {/* LADO IZQUIERDO: GALERÍA */}
                 <div className="product-image-section">
+                    
+                    {/* 🔥 BOTÓN VOLVER (Solo visible en celular, arriba a la derecha) */}
+                    <div className="mobile-back-container">
+                        <button onClick={() => navigate(-1)} className="btn-back-product">
+                            <span className="material-symbols-outlined">arrow_back</span> Volver
+                        </button>
+                    </div>
+
                     <div className="main-image-wrapper">
                         {product.badge && <span className="product-badge-premium">{product.badge}</span>}
                         <img src={activeImg || '/assets/placeholder.png'} alt={product.name} className="product-main-image" />
@@ -78,11 +86,8 @@ export default function ProductDetail() {
                 {/* LADO DERECHO: INFO Y COMPRA */}
                 <div className="product-info-section">
                     
-                    {/* BOTÓN VOLVER + BREADCRUMBS */}
+                    {/* BREADCRUMBS (Visible en escritorio) */}
                     <div className="breadcrumbs">
-                        <button onClick={() => navigate(-1)} className="btn-back-product">
-                            <span className="material-symbols-outlined">arrow_back</span> Volver
-                        </button>
                         <span className="breadcrumbs-path">
                             <Link to="/">Inicio</Link> / <span>{product.name}</span>
                         </span>
