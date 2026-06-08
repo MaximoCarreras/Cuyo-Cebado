@@ -5,6 +5,15 @@
     font-family: 'Inter', sans-serif;
 }
 
+/* Ocultamos el header móvil en escritorio por defecto */
+.admin-mobile-header {
+    display: none;
+}
+
+.desktop-only {
+    display: block;
+}
+
 /* Barra Lateral (Sidebar) - FIJADA DEBAJO DE LA NAVBAR */
 .admin-sidebar {
     width: 260px;
@@ -17,10 +26,11 @@
     
     /* MAGIA ACÁ: Fijada, pero respetando la Navbar de arriba */
     position: fixed; 
-    top: 120px; /* Lo bajamos 120px para que no tape la Navbar */
+    top: 120px; 
     left: 0;
-    height: calc(100vh - 120px); /* Le restamos esos 120px a la altura total para que no se corte el botón de salir */
-    z-index: 90; /* Z-index menor a 100 para asegurar que la Navbar siempre mande por encima */
+    height: calc(100vh - 120px); 
+    z-index: 90; 
+    transition: transform 0.3s ease-in-out; /* Suave animación para el móvil */
 }
 
 .sidebar-header h2 {
@@ -43,10 +53,9 @@
     flex-direction: column;
     gap: 10px;
     flex-grow: 1;
-    overflow-y: auto; /* Por si en el futuro agregás muchos más botones, se puede scrollear solo el menú */
+    overflow-y: auto; 
 }
 
-/* Ocultar barra de scroll interna del menú */
 .sidebar-nav::-webkit-scrollbar {
     display: none;
 }
@@ -68,7 +77,6 @@
     color: #fff;
 }
 
-/* Esta clase ".active" se la pone React Router automáticamente */
 .nav-item.active {
     background-color: #a5813a;
     color: #1a1614;
@@ -104,11 +112,10 @@
 /* Área donde se inyectan las vistas - EMPUJADA A LA DERECHA */
 .admin-main-content {
     flex-grow: 1;
-    /* Le decimos que arranque justo donde termina la barra lateral (260px) */
     margin-left: 260px; 
     padding: 20px;
     width: calc(100% - 260px); 
-    min-height: 100vh; /* Asegura que el fondo cubra todo aunque haya poco contenido */
+    min-height: 100vh; 
 }
 
 /* =========================================================
@@ -119,33 +126,92 @@
         flex-direction: column;
     }
 
-    /* En celulares, la barra lateral pasa a ser una barra superior horizontal */
+    /* 🔥 MOSTRAMOS EL HEADER MÓVIL */
+    .admin-mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #1a1614;
+        padding: 15px 20px;
+        color: #fff;
+        border-bottom: 1px solid rgba(165, 129, 58, 0.2);
+    }
+
+    .admin-mobile-title h2 {
+        font-family: 'Noto Serif', serif;
+        color: #a5813a;
+        font-size: 1.2rem;
+        margin: 0;
+    }
+
+    .admin-mobile-title p {
+        color: #8a837b;
+        font-size: 0.7rem;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    .admin-mobile-toggle {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: #a5813a;
+        color: #1a1614;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 0.8rem;
+        cursor: pointer;
+    }
+
+    .desktop-only {
+        display: none;
+    }
+
+    /* 🔥 MAGIA DEL MENÚ MÓVIL (OCULTO POR DEFECTO) */
     .admin-sidebar {
         width: 100%;
         height: auto;
-        position: relative; /* En celu sí scrollea con la página */
-        top: 0; /* Reiniciamos el top para el celular */
-        padding: 20px;
+        position: relative; 
+        top: 0;
+        padding: 0;
+        /* Lo ocultamos colapsando su altura */
+        max-height: 0;
+        overflow: hidden;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
     }
 
-    .sidebar-header {
-        text-align: center;
+    /* CUANDO SE TOCA EL BOTÓN, SE DESPLIEGA */
+    .admin-sidebar.open {
+        max-height: 1000px; /* Un valor alto para que entre todo */
+        padding: 20px;
+        visibility: visible;
+        opacity: 1;
+        border-bottom: 2px solid #a5813a;
     }
 
     .sidebar-nav {
-        flex-direction: row;
-        overflow-x: auto;
-        padding-bottom: 10px;
-        margin-bottom: 20px;
+        flex-direction: column; /* Lo mantenemos en lista para que sea cómodo de leer */
+        overflow-x: hidden;
+        padding-bottom: 0;
+        margin-bottom: 10px;
     }
     
     .nav-item {
-        white-space: nowrap;
+        white-space: normal;
+        padding: 15px; /* Botones más grandes para el dedo */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 0;
     }
 
     .admin-main-content {
         margin-left: 0;
         width: 100%;
         padding: 15px;
+        /* Aseguramos que el contenido ocupe el resto de la pantalla en móvil */
+        min-height: calc(100vh - 200px); 
     }
 }

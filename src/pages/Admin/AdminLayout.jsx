@@ -8,6 +8,8 @@ import './AdminLayout.css';
 export default function AdminLayout() {
     const [isAdmin, setIsAdmin] = useState(false);
     const [initialLoading, setInitialLoading] = useState(true);
+    // 🔥 NUEVO ESTADO: Para abrir/cerrar el menú en el celular
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,6 +32,11 @@ export default function AdminLayout() {
         navigate('/'); 
     };
 
+    // Función para cerrar el menú en celular después de hacer clic en un enlace
+    const handleNavClick = () => {
+        setIsMobileMenuOpen(false);
+    };
+
     if (initialLoading) return <div style={{ padding: '50px', textAlign: 'center' }}>Abriendo la estancia...</div>;
     
     if (!isAdmin) {
@@ -46,20 +53,37 @@ export default function AdminLayout() {
         <div className="admin-layout-container">
             <Toaster position="top-right" />
             
-            <aside className="admin-sidebar">
-                <div className="sidebar-header">
+            {/* 🔥 BOTÓN EXCLUSIVO PARA CELULARES */}
+            <div className="admin-mobile-header">
+                <div className="admin-mobile-title">
+                    <h2>Cuyo Cebado</h2>
+                    <p>Panel de Control</p>
+                </div>
+                <button 
+                    className="admin-mobile-toggle" 
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                    <span className="material-symbols-outlined">
+                        {isMobileMenuOpen ? 'close' : 'menu'}
+                    </span>
+                    <span>Menú Admin</span>
+                </button>
+            </div>
+            
+            <aside className={`admin-sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
+                <div className="sidebar-header desktop-only">
                     <h2>Cuyo Cebado</h2>
                     <p>Boutique Digital Admin</p>
                 </div>
 
                 <nav className="sidebar-nav">
-                    <NavLink to="/admin" end className="nav-item">📊 Dashboard</NavLink>
-                    <NavLink to="/admin/ventas" className="nav-item">🚚 Logística y Ventas</NavLink>
-                    <NavLink to="/admin/stock" className="nav-item">📦 Catálogo e Inventario</NavLink>
-                    <NavLink to="/admin/categorias" className="nav-item">🏷️ Categorías</NavLink>
-                    <NavLink to="/admin/compras" className="nav-item">🏭 Compras Mayoristas</NavLink>
-                    <NavLink to="/admin/vitrina" className="nav-item">🎨 Diseño Vitrina</NavLink>
-                    <NavLink to="/admin/faq" className="nav-item">💬 FAQ y Guías</NavLink>
+                    <NavLink to="/admin" end className="nav-item" onClick={handleNavClick}>📊 Dashboard</NavLink>
+                    <NavLink to="/admin/ventas" className="nav-item" onClick={handleNavClick}>🚚 Logística y Ventas</NavLink>
+                    <NavLink to="/admin/stock" className="nav-item" onClick={handleNavClick}>📦 Catálogo e Inventario</NavLink>
+                    <NavLink to="/admin/categorias" className="nav-item" onClick={handleNavClick}>🏷️ Categorías</NavLink>
+                    <NavLink to="/admin/compras" className="nav-item" onClick={handleNavClick}>🏭 Compras Mayoristas</NavLink>
+                    <NavLink to="/admin/vitrina" className="nav-item" onClick={handleNavClick}>🎨 Diseño Vitrina</NavLink>
+                    <NavLink to="/admin/faq" className="nav-item" onClick={handleNavClick}>💬 FAQ y Guías</NavLink>
                 </nav>
 
                 <div className="sidebar-footer">
