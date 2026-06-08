@@ -21,7 +21,7 @@
 }
 
 .btn-back-product { 
-    display: flex; /* Ahora siempre visible, tanto en PC como en Celu */
+    display: flex;
     background: none; 
     border: none; 
     font-family: inherit; 
@@ -62,7 +62,7 @@
 .product-title { font-family: 'Noto Serif', serif; font-size: 2.8rem; margin: 0 0 15px 0; line-height: 1.1; letter-spacing: -0.5px; }
 .product-price { font-size: 2.2rem; font-weight: 800; color: #a5813a; margin-bottom: 30px; }
 
-/* BADGES DE ESPECIFICACIONES (NUEVO ESTILO ELEGANTE) */
+/* BADGES DE ESPECIFICACIONES */
 .product-quick-specs { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
 .spec-item-elegant { 
     display: flex; 
@@ -83,7 +83,7 @@
 .detailed-specs-box h4 { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #8a837b; margin-bottom: 8px; }
 .detailed-specs-box p { font-size: 0.95rem; color: #4a403a; margin: 0; line-height: 1.5; }
 
-/* CONTROLES DE COMPRA (ESTILO BOUTIQUE) */
+/* CONTROLES DE COMPRA */
 .purchase-block { background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(165, 129, 58, 0.1); }
 
 .purchase-controls { display: flex; gap: 15px; margin-bottom: 20px; }
@@ -95,15 +95,31 @@
 .btn-add-to-cart { flex: 1; background: #1a1614; color: #a5813a; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 0.9rem; letter-spacing: 1px; transition: 0.3s; text-transform: uppercase; }
 .btn-add-to-cart:hover { background: #a5813a; color: #1a1614; }
 
-/* LINKS SECUNDARIOS DISCRETOS */
+/* LINKS SECUNDARIOS */
 .secondary-actions { display: flex; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 20px; }
 .link-subtle { color: #8a837b; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid transparent; }
 .link-subtle:hover { color: #a5813a; border-bottom-color: #a5813a; }
 
 /* MANEJO DE SIN STOCK */
 .out-of-stock-alert { background: #fef2f2; color: #991b1b; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 0.95rem; text-align: center; margin-bottom: 15px; border: 1px solid #fecaca; }
-.btn-notify-stock { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; background: #fff; border: 2px solid #1a1614; color: #1a1614; padding: 16px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-.btn-notify-stock:hover { background: #1a1614; color: #fff; }
+
+/* 🔥 CORRECCIÓN: Botón idéntico en proporciones al carrito */
+.btn-notify-stock { 
+    display: flex; justify-content: center; align-items: center; gap: 10px; 
+    width: 100%; 
+    background: #1a1614; 
+    color: #fff; 
+    border: none; 
+    border-radius: 12px; 
+    font-weight: 800; 
+    text-decoration: none; 
+    font-size: 0.9rem; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    transition: 0.3s; 
+    height: 50px; 
+}
+.btn-notify-stock:hover { background: #a5813a; color: #1a1614; }
 
 /* RELACIONADOS */
 .related-products-section { max-width: 1200px; margin: 100px auto 0; }
@@ -118,30 +134,26 @@
 .related-card p { color: #a5813a; font-weight: 800; margin: 0; font-size: 1.1rem; }
 
 /* =======================================
-   RESPONSIVE (AQUÍ ESTÁ TODA LA MAGIA)
+   RESPONSIVE
    ======================================= */
 @media (max-width: 900px) {
-    /* Centrado perfecto, sin margenes indeseados en los lados */
     .product-detail-page { padding: 90px 20px 120px; box-sizing: border-box; width: 100vw; max-width: 100%; }
     .product-detail-container { grid-template-columns: 1fr; gap: 30px; width: 100%; box-sizing: border-box; }
     
-    /* Ajuste de margen para la barra superior en celular */
     .product-page-top-nav { margin-bottom: 15px; }
-    .breadcrumbs-path { display: none; } /* Ocultamos la ruta larga para dejar solo la flecha limpia */
+    .breadcrumbs-path { display: none; }
     
-    /* 🔥 CORRECCIÓN 1: LIMITAMOS EL ALTO DE LA IMAGEN PARA QUE NO SEA GIGANTE */
     .main-image-wrapper {
-        max-height: 45vh; /* La foto no ocupará más del 45% del alto de tu pantalla */
+        max-height: 45vh;
         aspect-ratio: auto;
     }
     .product-main-image { object-fit: contain; background: #fdfaf7; height: 100%; }
     
     .product-image-section { position: relative; top: 0; }
     
-    /* 🔥 CORRECCIÓN 2: TEXTO QUE NO ROMPE LA PANTALLA */
     .product-title { 
-        font-size: 1.8rem; /* Redujimos apenas el tamaño en celulares */
-        word-wrap: break-word; /* Obliga a la palabra a bajar si es muy larga */
+        font-size: 1.8rem;
+        word-wrap: break-word;
         overflow-wrap: break-word; 
         -webkit-hyphens: auto;
         hyphens: auto;
@@ -157,14 +169,16 @@
     .related-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
     .related-card { padding: 10px; }
 
-    /* BOTÓN AGREGAR AL CARRITO GORDITO Y PROPORCIONADO */
+    /* 🔥 MAGIA PARA EL CONTENEDOR FLOTANTE */
     .mobile-sticky {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
         background: #fff;
+        /* El "env" protege el botón de la barra de inicio en iPhones */
         padding: 15px 20px;
+        padding-bottom: max(15px, env(safe-area-inset-bottom)); 
         margin-bottom: 0;
         box-shadow: 0 -10px 20px rgba(0,0,0,0.06);
         z-index: 1000;
@@ -173,27 +187,21 @@
         display: flex;
         gap: 10px;
         align-items: center;
-        box-sizing: border-box; /* Fundamental para que no se salga de pantalla */
+        box-sizing: border-box;
     }
 
     .mobile-sticky .qty-selector {
         padding: 0;
         width: 100px;
-        height: 50px; /* Igualamos alturas */
+        height: 50px; 
         background: #fdfaf7;
         border: 1px solid #e2e8f0;
     }
     
     .mobile-sticky .btn-add-to-cart {
-        height: 50px; /* Hacemos el botón ancho y cómodo al dedo */
+        height: 50px;
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    .mobile-sticky.btn-notify-stock {
-        border: none;
-        background: #1a1614;
-        color: #fff;
     }
 }

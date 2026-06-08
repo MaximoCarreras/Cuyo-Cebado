@@ -57,7 +57,7 @@ export default function ProductDetail() {
         <div className="product-detail-page fade-in">
             <Toaster position="bottom-center" />
             
-            {/* 🔥 NUEVA NAVEGACIÓN SUPERIOR: Arriba a la izquierda para escritorio y celular */}
+            {/* NAVEGACIÓN SUPERIOR */}
             <div className="product-page-top-nav">
                 <button onClick={() => navigate(-1)} className="btn-back-product">
                     <span className="material-symbols-outlined">arrow_back</span> Volver
@@ -139,10 +139,13 @@ export default function ProductDetail() {
                                 <div className="out-of-stock-alert">
                                     Este producto se encuentra temporalmente agotado.
                                 </div>
-                                <a href={waLinkNoStock} target="_blank" rel="noreferrer" className="btn-notify-stock mobile-sticky">
-                                    <span className="material-symbols-outlined">notifications_active</span>
-                                    AVISARME CUANDO INGRESE
-                                </a>
+                                {/* 🔥 CORRECCIÓN: Botón envuelto en la barra blanca de protección */}
+                                <div className="purchase-controls mobile-sticky">
+                                    <a href={waLinkNoStock} target="_blank" rel="noreferrer" className="btn-notify-stock">
+                                        <span className="material-symbols-outlined">notifications_active</span>
+                                        AVISARME CUANDO INGRESE
+                                    </a>
+                                </div>
                             </>
                         )}
                     </div>
