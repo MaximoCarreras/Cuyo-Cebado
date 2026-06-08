@@ -4,11 +4,47 @@
 .product-detail-page { padding: 120px 20px 80px; background-color: #fdfaf7; min-height: 100vh; font-family: 'Inter', sans-serif; color: #1a1614; overflow-x: hidden; }
 .product-detail-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 70px; background: transparent; padding: 0; box-sizing: border-box; }
 
-/* IMAGENES Y BOTÓN VOLVER */
-.product-image-section { display: flex; flex-direction: column; gap: 15px; position: sticky; top: 120px; height: fit-content; max-width: 100%; }
-.mobile-back-container { display: none; } /* Oculto en escritorio */
-.btn-back-product { display: none; background: none; border: none; font-family: inherit; font-size: 0.8rem; color: #a5813a; font-weight: 800; cursor: pointer; text-transform: uppercase; align-items: center; gap: 5px; padding: 0; }
+/* 🔥 NAVEGACIÓN SUPERIOR (VOLVER Y BREADCRUMBS) */
+.product-page-top-nav {
+    max-width: 1100px;
+    margin: 0 auto 25px auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.8rem;
+    color: #8a837b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    width: 100%;
+    box-sizing: border-box;
+}
 
+.btn-back-product { 
+    display: flex; /* Ahora siempre visible, tanto en PC como en Celu */
+    background: none; 
+    border: none; 
+    font-family: inherit; 
+    font-size: 0.85rem; 
+    color: #a5813a; 
+    font-weight: 800; 
+    cursor: pointer; 
+    text-transform: uppercase; 
+    align-items: center; 
+    gap: 5px; 
+    padding: 0; 
+    transition: 0.3s;
+}
+.btn-back-product:hover { color: #1a1614; }
+
+.breadcrumbs-path { display: flex; align-items: center; gap: 10px; }
+.breadcrumbs-path .divider { color: #e2e8f0; margin-right: 5px; }
+.breadcrumbs-path a { color: #8a837b; text-decoration: none; transition: 0.3s; }
+.breadcrumbs-path a:hover { color: #a5813a; }
+.breadcrumbs-path span { color: #1a1614; }
+
+/* IMAGENES */
+.product-image-section { display: flex; flex-direction: column; gap: 15px; position: sticky; top: 120px; height: fit-content; max-width: 100%; }
 .main-image-wrapper { position: relative; width: 100%; aspect-ratio: 1 / 1; border-radius: 24px; overflow: hidden; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(165, 129, 58, 0.1); }
 .product-main-image { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
 .main-image-wrapper:hover .product-main-image { transform: scale(1.05); }
@@ -21,13 +57,7 @@
 .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
 
 /* INFO GENERAL */
-.product-info-section { display: flex; flex-direction: column; padding-top: 20px; box-sizing: border-box; max-width: 100%; }
-
-/* BREADCRUMBS */
-.breadcrumbs { display: flex; align-items: center; gap: 15px; font-size: 0.8rem; color: #8a837b; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-.breadcrumbs-path a { color: #8a837b; text-decoration: none; transition: 0.3s; }
-.breadcrumbs-path a:hover { color: #a5813a; }
-.breadcrumbs-path span { color: #1a1614; }
+.product-info-section { display: flex; flex-direction: column; padding-top: 0px; box-sizing: border-box; max-width: 100%; }
 
 .product-title { font-family: 'Noto Serif', serif; font-size: 2.8rem; margin: 0 0 15px 0; line-height: 1.1; letter-spacing: -0.5px; }
 .product-price { font-size: 2.2rem; font-weight: 800; color: #a5813a; margin-bottom: 30px; }
@@ -95,6 +125,10 @@
     .product-detail-page { padding: 90px 20px 120px; box-sizing: border-box; width: 100vw; max-width: 100%; }
     .product-detail-container { grid-template-columns: 1fr; gap: 30px; width: 100%; box-sizing: border-box; }
     
+    /* Ajuste de margen para la barra superior en celular */
+    .product-page-top-nav { margin-bottom: 15px; }
+    .breadcrumbs-path { display: none; } /* Ocultamos la ruta larga para dejar solo la flecha limpia */
+    
     /* 🔥 CORRECCIÓN 1: LIMITAMOS EL ALTO DE LA IMAGEN PARA QUE NO SEA GIGANTE */
     .main-image-wrapper {
         max-height: 45vh; /* La foto no ocupará más del 45% del alto de tu pantalla */
@@ -102,19 +136,6 @@
     }
     .product-main-image { object-fit: contain; background: #fdfaf7; height: 100%; }
     
-    /* 🔥 NUEVA LÓGICA DE BOTÓN VOLVER: Lo ubicamos arriba a la derecha */
-    .mobile-back-container {
-        display: flex;
-        justify-content: flex-end; /* Lo tira bien a la derecha */
-        width: 100%;
-        margin-bottom: 12px;
-    }
-    .btn-back-product { 
-        display: flex; /* Lo hace visible */
-    }
-    
-    .breadcrumbs { display: none; } /* Ocultamos la ruta en el celular para que no estorbe */
-
     .product-image-section { position: relative; top: 0; }
     
     /* 🔥 CORRECCIÓN 2: TEXTO QUE NO ROMPE LA PANTALLA */
