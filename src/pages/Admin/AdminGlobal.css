@@ -408,7 +408,7 @@
     }
 }
 /* =========================================================
-   ADAPTACIÓN MÓVIL PARA TABLAS Y TARJETAS (DASHBOARD)
+   ADAPTACIÓN MÓVIL GLOBAL PARA TABLAS (MODO TARJETAS)
    ========================================================= */
 @media (max-width: 768px) {
     /* 1. Las tarjetas de estadísticas se apilan 1 por línea */
@@ -418,29 +418,68 @@
         gap: 15px;
     }
 
-    /* 2. La tabla de operaciones (el problema del scroll horizontal) */
+    /* 2. Contenedor general sin padding extra para ganar ancho de pantalla */
     .category-refined-add {
         width: 100%;
-        overflow-x: auto; /* Esto permite deslizar la tabla con el dedo si no entra, pero no rompe la pantalla general */
-        padding: 15px; /* Reducimos el padding para ganar espacio */
-        border-radius: 10px;
+        padding: 5px; 
+        overflow: hidden !important; /* 🔥 ESTO MATA EL SCROLL HORIZONTAL PARA SIEMPRE */
     }
 
-    .refined-table {
-        width: 100%;
-        min-width: 400px; /* Le decimos a la tabla "no te achiques más de esto", si no entra, se desliza */
-    }
-
-    /* Achicamos la fuente de la tabla para que entre mejor en el celu */
-    .refined-table th, 
+    /* 3. Magia: Forzamos a la tabla a dejar de ser tabla en el celular */
+    .refined-table, 
+    .refined-table tbody, 
+    .refined-table tr, 
     .refined-table td {
-        padding: 12px 10px;
-        font-size: 0.85rem;
+        display: block;
+        width: 100%;
     }
 
-    /* El estado (PAGADO/PENDIENTE) lo hacemos más chiquito */
+    /* Ocultamos los encabezados de las columnas porque ahora serán tarjetas apiladas */
+    .refined-table thead {
+        display: none;
+    }
+
+    /* Cada fila ahora es una tarjeta blanca con bordes y sombra */
+    .refined-table tr {
+        margin-bottom: 20px;
+        background: #fff;
+        border: 1px solid rgba(165, 129, 58, 0.3);
+        border-radius: 15px;
+        padding: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* Cada celda ahora es un renglón adentro de la tarjeta */
+    .refined-table td {
+        padding: 5px 0;
+        border: none; 
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; /* Todo alineado a la izquierda para leer fácil */
+        border-bottom: 1px solid #f1f5f9;
+        flex-wrap: wrap; /* Si el texto es muy largo, baja solo */
+        gap: 10px;
+    }
+
+    .refined-table td:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-top: 10px; /* Separamos los botones de acción del texto */
+    }
+
+    /* Ajuste para los botoncitos de estado y acciones dentro de la tarjeta */
     .status-badge {
-        font-size: 0.7rem;
-        padding: 4px 8px;
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        width: fit-content;
+    }
+    
+    .action-btn {
+        width: 100%; /* Forzamos que los botones de acción (Editar, Borrar) sean grandes en celular */
+        margin-top: 5px;
     }
 }
