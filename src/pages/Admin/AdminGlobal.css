@@ -408,38 +408,54 @@
     }
 }
 /* =========================================================
-   ADAPTACIÓN MÓVIL GLOBAL PARA TABLAS (MODO TARJETAS)
+   ADAPTACIÓN MÓVIL GLOBAL (TARJETAS CONTENIDAS Y CENTRADAS)
    ========================================================= */
 @media (max-width: 768px) {
+    /* 0. LA REGLA DE ORO: Nada puede superar el ancho de la pantalla */
+    * {
+        box-sizing: border-box !important;
+    }
+
+    .admin-main-content {
+        width: 100vw !important;
+        max-width: 100% !important;
+        padding: 15px;
+        margin: 0;
+        overflow-x: hidden !important; /* Destruye el scroll horizontal del contenedor */
+    }
+
     /* 1. Las tarjetas de estadísticas se apilan 1 por línea */
     .stats-refined-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 15px;
+        width: 100%;
     }
 
-    /* 2. Contenedor general sin padding extra para ganar ancho de pantalla */
+    /* 2. Contenedor general centrado y con márgenes perfectos */
     .category-refined-add {
         width: 100%;
-        padding: 5px; 
-        overflow: hidden !important; /* 🔥 ESTO MATA EL SCROLL HORIZONTAL PARA SIEMPRE */
+        max-width: 100%;
+        padding: 0; 
+        margin: 0 auto; /* Esto asegura que el margen izquierdo sea IDÉNTICO al derecho */
     }
 
-    /* 3. Magia: Forzamos a la tabla a dejar de ser tabla en el celular */
+    /* 3. Forzamos a la tabla a convertirse en tarjetas cerradas */
     .refined-table, 
     .refined-table tbody, 
     .refined-table tr, 
     .refined-table td {
         display: block;
         width: 100%;
+        max-width: 100%;
     }
 
-    /* Ocultamos los encabezados de las columnas porque ahora serán tarjetas apiladas */
+    /* Ocultamos los encabezados de las columnas */
     .refined-table thead {
         display: none;
     }
 
-    /* Cada fila ahora es una tarjeta blanca con bordes y sombra */
+    /* 4. LA TARJETA: Ahora sí, cerrada, visible y sin salirse */
     .refined-table tr {
         margin-bottom: 20px;
         background: #fff;
@@ -450,36 +466,43 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
+        overflow: hidden; /* Corta cualquier cosa que intente asomarse por la derecha */
     }
 
-    /* Cada celda ahora es un renglón adentro de la tarjeta */
+    /* 5. Cada celda es un renglón adentro de la tarjeta */
     .refined-table td {
         padding: 5px 0;
         border: none; 
         font-size: 0.9rem;
         display: flex;
         align-items: center;
-        justify-content: flex-start; /* Todo alineado a la izquierda para leer fácil */
+        justify-content: flex-start;
         border-bottom: 1px solid #f1f5f9;
-        flex-wrap: wrap; /* Si el texto es muy largo, baja solo */
+        flex-wrap: wrap; /* El texto largo baja renglón automáticamente */
         gap: 10px;
+        word-break: break-word; /* Si un email o texto es re largo, lo rompe para no desbordar */
     }
 
+    /* 6. Los botones (Editar/Eliminar) al final de la tarjeta */
     .refined-table td:last-child {
         border-bottom: none;
         padding-bottom: 0;
-        margin-top: 10px; /* Separamos los botones de acción del texto */
+        margin-top: 10px; 
+        justify-content: center; /* Centramos los botones para que queden prolijos */
     }
 
-    /* Ajuste para los botoncitos de estado y acciones dentro de la tarjeta */
     .status-badge {
         font-size: 0.75rem;
         padding: 6px 12px;
         width: fit-content;
     }
     
-    .action-btn {
-        width: 100%; /* Forzamos que los botones de acción (Editar, Borrar) sean grandes en celular */
-        margin-top: 5px;
+    /* Adaptamos los botones de acción para que entren perfecto en la pantalla chica */
+    .action-btn, 
+    .refined-table td button {
+        flex: 1; /* Hace que si hay dos botones (ej: editar y borrar), midan exactamente 50% cada uno */
+        margin: 2px;
+        text-align: center;
+        justify-content: center;
     }
 }
