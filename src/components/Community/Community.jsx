@@ -17,7 +17,7 @@ const Community = () => {
                         </div>
                         <h3>Instagram</h3>
                         <p>El arte detrás de cada pieza y nuestra curaduría diaria.</p>
-                        <a href="https://instagram.com/cuyo.cebado" target="_blank" rel="noreferrer" className="community__btn">
+                        <a href="https://instagram.com/cuyo_cebado" target="_blank" rel="noreferrer" className="community__btn">
                             SEGUINOS
                         </a>
                     </div>
