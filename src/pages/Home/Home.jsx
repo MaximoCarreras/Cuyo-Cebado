@@ -7,8 +7,8 @@ import './Home.css';
 
 export default function Home() {
     const { addToCart } = useCart();
-    const [email, setEmail] = useState('');
-    const [status, setStatus] = useState('');
+    
+    // 🔥 Ya no necesitamos email ni status acá, el código queda más limpio
     const [featuredKit, setFeaturedKit] = useState(null);
     const [dbCategories, setDbCategories] = useState([]);
     
@@ -89,12 +89,6 @@ export default function Home() {
             });
         };
     }, [isPageLoaded, featuredKit, dbCategories]);
-
-    const handleNewsletter = (e) => {
-        e.preventDefault();
-        setStatus('enviando');
-        setTimeout(() => { setStatus('exito'); setEmail(''); }, 1000);
-    };
 
     return (
         <div className="home-main">
@@ -184,17 +178,6 @@ export default function Home() {
                     </div>
                 </section>
             )}
-
-            <section className="club-newsletter">
-                <div className="club-card">
-                    <h2 className="club-title">Unite al Club de Materos</h2>
-                    <form className="club-form" onSubmit={handleNewsletter}>
-                        <input type="email" placeholder="Tu correo electrónico" required value={email} onChange={(e) => setEmail(e.target.value)} />
-                        <button type="submit" className="btn-club">{status === 'enviando' ? 'Enviando' : 'Unirme'}</button>
-                    </form>
-                    {status === 'exito' && <p className="club-msg-ok">¡Bienvenido al Club!</p>}
-                </div>
-            </section>
 
             <InstagramCarousel />
             
