@@ -34,7 +34,7 @@ export default function ProductsPage() {
                             p.category.toLowerCase().includes(query.toLowerCase()) ||
                             (p.material && p.material.toLowerCase().includes(query.toLowerCase()))
                         );
-                        setSearchResults(filtered);
+                        searchResults(filtered);
                     }
                 } catch (error) {
                     console.error("Error buscando:", error);
@@ -121,28 +121,35 @@ export default function ProductsPage() {
         <div className="products-page">
             <h1 className="products-page__title">¿Qué estás buscando hoy?</h1>
             <div className="products-grid">
-                {/* 3. ASIGNAMOS LA REFERENCIA (ref) Y LA CLASE (spotlight-card) A CADA TARJETA */}
+                {/* 3. ESTRUCTURA IDÉNTICA AL HOME PARA LAS CATEGORÍAS */}
                 {dbCategories.map((cat, index) => (
                     <Link 
                         key={cat.id} 
                         to={`/productos/${cat.id}`} 
-                        className="product-category-card spotlight-card"
+                        className="card-cat-dark-spotlight"
                         ref={(el) => (categoryRefs.current[index] = el)}
                     >
-                        <div className="category-card__icon" style={{ display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
+                        <div className="spotlight-light-layer"></div>
+                        
+                        <div className="category-full-image-wrapper">
                             {cat.image_url ? (
                                 <img
                                     src={cat.image_url}
                                     alt={cat.label}
-                                    className="category-card-img"
+                                    className="category-card-full-img"
+                                    loading="lazy"
+                                    decoding="async"
                                 />
                             ) : (
-                                cat.icon
+                                <div className="category-fallback-icon">{cat.icon}</div>
                             )}
                         </div>
-                        <div className="category-card__info" style={{ position: 'relative', zIndex: 2 }}>
-                            <h3>{cat.label}</h3>
-                            <span>Explorar colección</span>
+
+                        <div className="card-cat-content">
+                            <div className="cat-text-display">
+                                <h3>{cat.label}</h3>
+                                <span>Explorar colección</span>
+                            </div>
                         </div>
                     </Link>
                 ))}
