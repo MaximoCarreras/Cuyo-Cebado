@@ -448,6 +448,7 @@
         text-align: center;
         position: relative;
         z-index: 10;
+        margin-top: -60px; /* 🔥 Subimos el texto un poquito para que se monte sobre la transición */
     }
 
     .hero-title {
@@ -477,10 +478,13 @@
         min-height: 300px;
         clip-path: none;
         z-index: 5;
+        /* 🔥 LA MAGIA: Máscara de transparencia real. La foto se desvanece suavemente */
+        -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+        mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
     }
 
     .hero-mobile-gradient-mask {
-        display: block;
+        display: none; /* 🔥 Apagamos el gradiente negro viejo que te generaba la línea recta */
         position: absolute;
         bottom: 0;
         left: 0;
