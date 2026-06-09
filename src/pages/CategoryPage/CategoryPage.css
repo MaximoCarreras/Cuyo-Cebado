@@ -109,48 +109,6 @@
 }
 
 @media (max-width: 768px) {
-    .products-grid-mafia { 
-        grid-template-columns: repeat(2, 1fr) !important; 
-        gap: 12px; 
-    }
-    
-    /* 🔥 LA MAGIA PANORÁMICA: Foto más ancha y bajita en celular */
-    .product-image-container-mafia { 
-        aspect-ratio: 4 / 3; 
-    }
-    
-    /* 🔥 Ajuste súper compacto para que entren más tarjetas en la pantalla */
-    .product-info-mafia { 
-        padding: 10px; 
-    } 
-
-    .product-tag-mafia { 
-        font-size: 0.55rem; 
-        margin-bottom: 5px; 
-    }
-
-    .product-name-mafia { 
-        font-size: 0.9rem; 
-        margin-bottom: 8px; 
-        line-height: 1.2;
-    }
-
-    .product-price-mafia { 
-        font-size: 1.1rem; 
-        margin-bottom: 12px; 
-    }
-
-    /* Achicamos un pelín el botón para ahorrar espacio vertical */
-    .btn-add-mafia { 
-        padding: 10px; 
-        font-size: 0.65rem; 
-    }
-    
-    /* Achicamos la etiquetita negra superior para que no tape la foto nueva */
-    .product-badge {
-        top: 8px;
-        left: 8px;
-        padding: 3px 8px;
-        font-size: 0.55rem;
-    }
+    .products-grid-mafia { grid-template-columns: repeat(2, 1fr) !important; gap: 12px; }
+    .product-info-mafia { padding: 15px; } /* Evita que el texto ahogue la tarjeta en celular */
 }
