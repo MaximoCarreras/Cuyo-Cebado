@@ -510,21 +510,27 @@
     }
 
     .card-cat-dark-spotlight {
-        padding: 0; /* Mantenemos 0 para que la foto encaje en celular también */
-        border-radius: 15px;
+        padding: 0; 
+        border-radius: 12px; /* 🔥 Borde un poco más suave para celular */
     }
 
-    /* 🔥 Ajuste para el texto en celular */
+    /* 🔥 LA MAGIA PANORÁMICA: Hace la foto más ancha y bajita en celular */
+    .category-full-image-wrapper {
+        aspect-ratio: 4 / 3; 
+    }
+
+    /* 🔥 Ajuste súper compacto para el texto en celular */
     .card-cat-content {
-        padding: 15px 10px;
+        padding: 10px; /* Reducimos el espacio en blanco */
     }
 
     .cat-text-display h3 {
-        font-size: 0.85rem;
+        font-size: 0.8rem; /* Letra un poco más chica */
+        margin-bottom: 2px; /* Menos separación con el "Explorar" */
     }
 
     .cat-text-display span {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
         letter-spacing: 0.5px;
     }
 
