@@ -677,3 +677,11 @@
     position: relative;
     z-index: 2;
 }
+
+/* 🔥 APAGAMOS EL SPOTLIGHT EN CELULARES (Porque no hay mouse) */
+@media (max-width: 768px) {
+    .hero-spotlight-layer,
+    .spotlight-light-layer {
+        display: none !important;
+    }
+}
