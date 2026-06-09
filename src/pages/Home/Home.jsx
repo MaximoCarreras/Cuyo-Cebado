@@ -122,20 +122,23 @@ export default function Home() {
                             ref={(el) => (categoryCardRefs.current[index] = el)}
                         >
                             <div className="spotlight-light-layer"></div>
+                            
+                            {/* 🔥 NUEVO: Contenedor de la imagen a Ancho Completo */}
+                            <div className="category-full-image-wrapper">
+                                {cat.image_url ? (
+                                    <img
+                                        src={cat.image_url}
+                                        alt={cat.label}
+                                        className="category-card-full-img"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                ) : (
+                                    <div className="category-fallback-icon">{cat.icon}</div>
+                                )}
+                            </div>
+
                             <div className="card-cat-content">
-                                <div className="category-card__icon" style={{ display: 'flex', justifyContent: 'center' }}>
-                                    {cat.image_url ? (
-                                        <img
-                                            src={cat.image_url}
-                                            alt={cat.label}
-                                            className="category-card-img"
-                                            loading="lazy"
-                                            decoding="async"
-                                        />
-                                    ) : (
-                                        cat.icon
-                                    )}
-                                </div>
                                 <div className="cat-text-display">
                                     <h3>{cat.label}</h3>
                                     <span>Explorar</span>
