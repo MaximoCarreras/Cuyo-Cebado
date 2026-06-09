@@ -609,3 +609,53 @@
         font-size: 0.75rem;
     }
 }
+/* =========================================================
+   EFECTO SPOTLIGHT ESTANDARIZADO (LUZ DORADA UNIFICADA)
+   ========================================================= */
+
+/* 1. Reflector del Inicio (Hero) */
+.hero-spotlight-layer {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    pointer-events: none;
+    z-index: 2; 
+    /* Haz de luz de 800px. Intensidad dorada: 15% (0.15) difuminado al 60% */
+    background: radial-gradient(
+        800px circle at var(--hero-x, 50%) var(--hero-y, 50%), 
+        rgba(165, 129, 58, 0.15), 
+        transparent 60%
+    );
+}
+
+/* 2. Reflector de las Colecciones (Tarjetas) */
+.spotlight-light-layer {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    /* Haz de luz proporcional de 500px. MISMA intensidad dorada: 15% (0.15) difuminado al 60% */
+    background: radial-gradient(
+        500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+        rgba(165, 129, 58, 0.15), 
+        transparent 60%
+    );
+    opacity: 0; 
+    transition: opacity 0.4s ease; /* Transición súper suave al entrar */
+}
+
+/* Solo prendemos la luz de la tarjeta cuando el mouse pasa por encima */
+.card-cat-dark-spotlight:hover .spotlight-light-layer {
+    opacity: 1;
+}
+
+/* Aseguramos que el contenido de la tarjeta quede siempre por encima de la luz */
+.card-cat-content {
+    position: relative;
+    z-index: 2;
+}
