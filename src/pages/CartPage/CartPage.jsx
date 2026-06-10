@@ -10,17 +10,17 @@ import mpLogo from '../../assets/mp-logo.png';
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
     
-    // Control de Vistas (1 = Carrito, 2 = Checkout)
     const [step, setStep] = useState(1);
-    
     const [loading, setLoading] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
-    const [checkoutType, setCheckoutType] = useState('guest'); // 'guest' o 'logged'
-    const [shippingMethod, setShippingMethod] = useState('pickup'); // 'pickup' o 'delivery'
-    const [paymentMethod, setPaymentMethod] = useState('mercadopago'); // 'mercadopago' o 'cash'
+    const [checkoutType, setCheckoutType] = useState('guest'); 
+    
+    // Al ser las únicas opciones por ahora, las dejamos fijas y no hace falta que el usuario las seleccione
+    const shippingMethod = 'pickup'; 
+    const paymentMethod = 'mercadopago'; 
     
     const [orderData, setOrderData] = useState({
-        name: '', email: '', phone: '', address: '' 
+        name: '', email: '', phone: ''
     });
 
     useEffect(() => {
@@ -31,12 +31,11 @@ export default function CartPage() {
                 if (profile) {
                     setUserProfile(profile);
                     setCheckoutType('logged');
-                    setOrderData(prev => ({ 
-                        ...prev, 
+                    setOrderData({ 
                         name: profile.full_name || '', 
                         email: session.user.email || '', 
                         phone: profile.phone || '' 
-                    }));
+                    });
                 }
             }
         };
@@ -45,10 +44,9 @@ export default function CartPage() {
 
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
 
-    const shippingCost = 0; // Por ahora a coordinar
+    const shippingCost = 0; 
     const finalTotal = cartTotal + shippingCost;
 
-    // 🔥 CORRECCIÓN DEL BOTÓN MENOS
     const handleDecrease = (item) => {
         if (item.quantity > 1) {
             updateQuantity(item.id, item.quantity - 1);
@@ -69,9 +67,8 @@ export default function CartPage() {
 
         try {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-            const finalAddress = shippingMethod === 'pickup' ? 'RETIRO EN LOCAL' : orderData.address;
+            const finalAddress = 'RETIRO EN LOCAL: Código Vinario (Av. Colón 701)';
 
-            // 1. Guardar orden en BD (Soporta invitados pasando user_id null)
             const { data: newOrder, error: dbError } = await supabase.from('orders').insert([{
                 customer_email: orderData.email,
                 customer_name: orderData.name,
@@ -86,33 +83,24 @@ export default function CartPage() {
 
             if (dbError) throw dbError;
 
-            // 2. Proceso de Pago
-            if (paymentMethod === 'mercadopago') {
-                const response = await fetch(`${baseUrl}/api/checkout`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        items: cart,
-                        name: orderData.name,
-                        email: orderData.email,
-                        shippingCost: shippingCost,
-                        orderId: newOrder.id 
-                    })
-                });
+            const response = await fetch(`${baseUrl}/api/checkout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    items: cart,
+                    name: orderData.name,
+                    email: orderData.email,
+                    shippingCost: shippingCost,
+                    orderId: newOrder.id 
+                })
+            });
 
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || 'Falla en Mercado Pago.');
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Falla en Mercado Pago.');
 
-                localStorage.removeItem('cart');
-                if (typeof clearCart === 'function') clearCart();
-                window.location.href = data.init_point;
-            } else {
-                // Pago en efectivo
-                localStorage.removeItem('cart');
-                if (typeof clearCart === 'function') clearCart();
-                toast.success("¡Pedido confirmado! Te contactaremos a la brevedad.");
-                setTimeout(() => window.location.href = '/', 2000);
-            }
+            localStorage.removeItem('cart');
+            if (typeof clearCart === 'function') clearCart();
+            window.location.href = data.init_point;
 
         } catch (err) {
             console.error(err);
@@ -121,7 +109,6 @@ export default function CartPage() {
         }
     };
 
-    // VISTA CARRITO VACÍO
     if (!cart || cart.length === 0) {
         return (
             <section className="cart-empty-container">
@@ -140,7 +127,9 @@ export default function CartPage() {
             
             <div className="cart-flow-container">
                 
-                {/* VISTA 1: CARRITO */}
+                {/* ===============================
+                    VISTA 1: CARRITO 
+                    =============================== */}
                 {step === 1 && (
                     <>
                         <div className="cart-header-top">
@@ -161,7 +150,6 @@ export default function CartPage() {
                                             <span className="clean-item-price-mobile">{formatCurrency(item.price)}</span>
                                         </div>
                                         
-                                        {/* CONTROLES DE CANTIDAD (VERDE EN FOTO, AQUÍ DORADO ELEGANTE) */}
                                         <div className="clean-qty-controls">
                                             <button type="button" onClick={() => handleDecrease(item)}>−</button>
                                             <span>{item.quantity}</span>
@@ -185,7 +173,7 @@ export default function CartPage() {
                                     </div>
                                     <div className="summary-row">
                                         <span>Envío</span>
-                                        <span>A coordinar</span>
+                                        <span>Retiro en local</span>
                                     </div>
                                     <div className="summary-row summary-total">
                                         <span>Total</span>
@@ -204,22 +192,31 @@ export default function CartPage() {
                     </>
                 )}
 
-                {/* VISTA 2: CHECKOUT (DATOS Y PAGO) */}
+                {/* ===============================
+                    VISTA 2: DATOS Y PAGO
+                    =============================== */}
                 {step === 2 && (
                     <>
                         <div className="checkout-header-top">
                             <h2 className="flow-title">Finalizar compra</h2>
-                            <div className="stepper">
-                                <span className="step-item active" onClick={() => setStep(1)}>✓ Carrito</span>
-                                <span className="step-line"></span>
-                                <span className="step-item current">2 Datos y Pago</span>
+                            
+                            {/* NUEVO STEPPER PREMIUM */}
+                            <div className="checkout-stepper">
+                                <div className="step-box completed" onClick={() => setStep(1)}>
+                                    <div className="step-circle"><span className="material-symbols-outlined">check</span></div>
+                                    <span className="step-text">Carrito</span>
+                                </div>
+                                <div className="step-line"></div>
+                                <div className="step-box active">
+                                    <div className="step-circle">2</div>
+                                    <span className="step-text">Datos y Pago</span>
+                                </div>
                             </div>
                         </div>
 
                         <div className="flow-grid">
                             <div className="flow-left-side">
                                 
-                                {/* TABS INVITADO / CON CUENTA */}
                                 {!userProfile && (
                                     <div className="checkout-tabs">
                                         <button className={`tab-btn ${checkoutType === 'guest' ? 'active' : ''}`} onClick={() => setCheckoutType('guest')}>Comprar sin cuenta</button>
@@ -229,7 +226,6 @@ export default function CartPage() {
 
                                 <form id="checkout-form" className="checkout-full-form" onSubmit={handleCheckoutSubmit}>
                                     
-                                    {/* SECCIÓN DATOS */}
                                     <div className="form-section">
                                         <h3 className="form-section-title">Tus datos de contacto</h3>
                                         <div className="input-group">
@@ -246,55 +242,54 @@ export default function CartPage() {
                                         </div>
                                     </div>
 
-                                    {/* SECCIÓN ENTREGA */}
+                                    {/* INFO FIJA DE ENTREGA CON MAPA */}
                                     <div className="form-section">
                                         <h3 className="form-section-title">Entrega</h3>
-                                        <div className="selector-grid">
-                                            <label className={`selector-card ${shippingMethod === 'pickup' ? 'selected' : ''}`}>
-                                                <input type="radio" name="shipping" checked={shippingMethod === 'pickup'} onChange={() => setShippingMethod('pickup')} />
-                                                <span className="material-symbols-outlined">store</span>
-                                                <strong>Retiro en sucursal</strong>
-                                                <small>Sin costo adicional</small>
-                                            </label>
-                                            <label className={`selector-card ${shippingMethod === 'delivery' ? 'selected' : ''}`}>
-                                                <input type="radio" name="shipping" checked={shippingMethod === 'delivery'} onChange={() => setShippingMethod('delivery')} />
-                                                <span className="material-symbols-outlined">local_shipping</span>
-                                                <strong>Envío a domicilio</strong>
-                                                <small>A coordinar por WhatsApp</small>
-                                            </label>
-                                        </div>
-
-                                        {shippingMethod === 'delivery' && (
-                                            <div className="input-group mt-15 animate-fade">
-                                                <label>Dirección completa de entrega *</label>
-                                                <input type="text" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} placeholder="Calle, Número, Piso, Código Postal" />
+                                        <div className="fixed-info-card">
+                                            <div className="fixed-info-header">
+                                                <span className="material-symbols-outlined icon-gold">store</span>
+                                                <div>
+                                                    <h4>Retiro en Código Vinario</h4>
+                                                    <p>Sin costo adicional</p>
+                                                </div>
                                             </div>
-                                        )}
+                                            <div className="fixed-info-body">
+                                                <p>📍 Av. Colón 701, Mendoza Capital</p>
+                                                <p>⏰ Lun a Sáb de 10:00 a 22:00 hs</p>
+                                            </div>
+                                            {/* MAPA DE GOOGLE */}
+                                            <div className="map-container">
+                                                <iframe 
+                                                    src="https://maps.google.com/maps?q=Av.%20Col%C3%B3n%20701,%20Mendoza&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                                                    width="100%" 
+                                                    height="200" 
+                                                    style={{ border: 0, borderRadius: '8px', marginTop: '15px' }} 
+                                                    allowFullScreen="" 
+                                                    loading="lazy" 
+                                                    referrerPolicy="no-referrer-when-downgrade">
+                                                </iframe>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    {/* SECCIÓN PAGO */}
+                                    {/* INFO FIJA DE PAGO */}
                                     <div className="form-section">
                                         <h3 className="form-section-title">Método de pago</h3>
-                                        <div className="selector-grid">
-                                            <label className={`selector-card ${paymentMethod === 'mercadopago' ? 'selected' : ''}`}>
-                                                <input type="radio" name="payment" checked={paymentMethod === 'mercadopago'} onChange={() => setPaymentMethod('mercadopago')} />
-                                                <span className="material-symbols-outlined">credit_card</span>
-                                                <strong>Mercado Pago</strong>
-                                                <small>Tarjetas / Dinero en cuenta</small>
-                                            </label>
-                                            <label className={`selector-card ${paymentMethod === 'cash' ? 'selected' : ''}`}>
-                                                <input type="radio" name="payment" checked={paymentMethod === 'cash'} onChange={() => setPaymentMethod('cash')} />
-                                                <span className="material-symbols-outlined">payments</span>
-                                                <strong>Efectivo / Transferencia</strong>
-                                                <small>Pagás al retirar</small>
-                                            </label>
+                                        <div className="fixed-info-card">
+                                            <div className="fixed-info-header">
+                                                <span className="material-symbols-outlined icon-gold">credit_card</span>
+                                                <div>
+                                                    <h4>Mercado Pago</h4>
+                                                    <p>Tarjetas de crédito, débito o dinero en cuenta</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
                                 </form>
                             </div>
 
-                            {/* COLUMNA DERECHA: RESUMEN CHECKOUT */}
+                            {/* RESUMEN LATERAL */}
                             <div className="flow-right-side">
                                 <div className="summary-box sticky-summary">
                                     <h3 className="summary-title">Resumen del pedido</h3>
@@ -321,12 +316,10 @@ export default function CartPage() {
                                         <span>{formatCurrency(finalTotal)}</span>
                                     </div>
                                     
-                                    {paymentMethod === 'mercadopago' && (
-                                        <p className="mp-secure-text">🔒 Pago procesado de forma segura por Mercado Pago</p>
-                                    )}
+                                    <p className="mp-secure-text">🔒 Pago procesado de forma segura por Mercado Pago</p>
 
                                     <button type="submit" form="checkout-form" className="btn-confirm-pay" disabled={loading}>
-                                        {loading ? 'Procesando...' : (paymentMethod === 'mercadopago' ? 'Ir a pagar con Mercado Pago' : 'Confirmar pedido')}
+                                        {loading ? 'Procesando...' : 'Ir a pagar con Mercado Pago'}
                                     </button>
                                 </div>
                             </div>
