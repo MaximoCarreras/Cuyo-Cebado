@@ -1,3 +1,37 @@
+/* =========================================
+   🚀 OPTIMIZACIÓN GLOBAL DE RENDIMIENTO (HARDWARE ACCELERATION)
+   ========================================= */
+
+html, body {
+    /* 1. Suavizado de fuentes premium (Elimina bordes pixelados en los textos) */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    
+    /* 2. Scroll fluido nativo en toda la página */
+    scroll-behavior: smooth;
+    
+    /* 3. Evita el rebote raro que traba el scroll en los celulares (Efecto "rubber-band") */
+    overscroll-behavior-y: none;
+}
+
+/* 4. LA MAGIA: Forzamos a la Placa de Video (GPU) a procesar todo lo que tenga animaciones o transiciones suaves */
+*, *::before, *::after {
+    /* Evita que los bordes sumen tamaño y rompan el layout (cuello de botella de recálculo) */
+    box-sizing: border-box; 
+}
+
+/* 5. Clase inyectable para destrabar elementos pesados (como tu menú hamburguesa) */
+.gpu-accelerate {
+    /* Estas tres líneas obligan al navegador a usar aceleración 3D por hardware */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    
+    /* Le avisamos al navegador qué vamos a animar para que reserve memoria VRAM */
+    will-change: transform, opacity;
+}
 /* src/App.css */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Serif:wght@400;700;800&display=swap');
