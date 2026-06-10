@@ -181,6 +181,11 @@ export default function CartPage() {
                                         <span>{formatCurrency(finalTotal)}</span>
                                     </div>
 
+                                    {/* 🔥 MENSAJE DE PUNTOS GANADOS (VISTA 1) */}
+                                    <p className="points-earned-message">
+                                        🛍️ Sumás <strong>{earnedPoints} puntos</strong> con esta compra.
+                                    </p>
+
                                     <button className="btn-go-pay" onClick={() => setStep(2)}>
                                         Ir a pagar
                                     </button>
@@ -316,6 +321,11 @@ export default function CartPage() {
                                         <span>Total</span>
                                         <span>{formatCurrency(finalTotal)}</span>
                                     </div>
+
+                                    {/* 🔥 MENSAJE DE PUNTOS GANADOS (VISTA 2) */}
+                                    <p className="points-earned-message">
+                                        🛍️ Sumás <strong>{earnedPoints} puntos</strong> con esta compra.
+                                    </p>
                                     
                                     <p className="mp-secure-text">🔒 Pago procesado de forma segura por Mercado Pago</p>
 

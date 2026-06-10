@@ -433,6 +433,27 @@
 .mp-secure-text { font-size: 0.75rem; color: #6b7280; text-align: center; margin-top: 20px; }
 
 /* =======================================
+   MENSAJE DE PUNTOS GANADOS
+   ======================================= */
+.points-earned-message {
+    font-size: 0.8rem;
+    color: #4b5563;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    text-align: center;
+    background: #fdfaf7;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px dashed #a5813a;
+    font-weight: 500;
+}
+
+.points-earned-message strong {
+    color: #a5813a;
+    font-weight: 800;
+}
+
+/* =======================================
    RESPONSIVE MÓVIL
    ======================================= */
 @media (max-width: 900px) {
