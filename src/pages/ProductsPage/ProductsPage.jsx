@@ -6,11 +6,14 @@ import './ProductsPage.css';
 export default function ProductsPage() {
     const [searchResults, setSearchResults] = useState([]);
     const [dbCategories, setDbCategories] = useState([]);
+    // 🔥 NUEVO ESTADO: Para guardar todos los productos y mostrarlos mezclados
+    const [allProducts, setAllProducts] = useState([]);
+    
     const [isSearching, setIsSearching] = useState(false);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
     
-    // 1. Creamos la referencia para "enganchar" las tarjetas
+    // 1. Creamos la referencia para "enganchar" las tarjetas de categorías
     const categoryRefs = useRef([]);
 
     // Efecto original para cargar productos o categorías
@@ -34,7 +37,7 @@ export default function ProductsPage() {
                             p.category.toLowerCase().includes(query.toLowerCase()) ||
                             (p.material && p.material.toLowerCase().includes(query.toLowerCase()))
                         );
-                        searchResults(filtered);
+                        setSearchResults(filtered);
                     }
                 } catch (error) {
                     console.error("Error buscando:", error);
@@ -42,10 +45,19 @@ export default function ProductsPage() {
             } else {
                 setIsSearching(false);
                 try {
-                    const { data } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
-                    if (data) setDbCategories(data);
+                    // Cargamos Categorías
+                    const { data: catData } = await supabase.from('categories').select('*').order('created_at', { ascending: true });
+                    if (catData) setDbCategories(catData);
+                    
+                    // 🔥 NUEVO: Cargamos TODOS los productos para la sección de abajo
+                    const { data: prodData } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+                    if (prodData) {
+                        // Opcional: Mezclarlos aleatoriamente para que siempre parezca catálogo nuevo
+                        const shuffledProducts = prodData.sort(() => 0.5 - Math.random());
+                        setAllProducts(shuffledProducts);
+                    }
                 } catch (error) {
-                    console.error("Error cargando categorías:", error);
+                    console.error("Error cargando base de datos:", error);
                 }
             }
             setLoading(false);
@@ -80,6 +92,7 @@ export default function ProductsPage() {
 
     if (loading) return <div className="catalog-loading">Preparando el catálogo...</div>;
 
+    // VISTA DE BÚSQUEDA (Se mantiene idéntica)
     if (isSearching) {
         return (
             <div className="products-page">
@@ -117,11 +130,13 @@ export default function ProductsPage() {
         );
     }
 
+    // VISTA PRINCIPAL (Categorías + Productos Destacados)
     return (
         <div className="products-page">
+            
+            {/* SECCIÓN 1: CATEGORÍAS */}
             <h1 className="products-page__title">¿Qué estás buscando hoy?</h1>
-            <div className="products-grid">
-                {/* 3. ESTRUCTURA IDÉNTICA AL HOME PARA LAS CATEGORÍAS */}
+            <div className="products-grid" style={{ marginBottom: '80px' }}>
                 {dbCategories.map((cat, index) => (
                     <Link 
                         key={cat.id} 
@@ -154,6 +169,31 @@ export default function ProductsPage() {
                     </Link>
                 ))}
             </div>
+
+            {/* 🔥 SECCIÓN 2 NUEVA: CATÁLOGO COMPLETO MEZCLADO */}
+            <h2 className="products-page__title" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)' }}>Explorar Catálogo</h2>
+            
+            <div className="catalog-grid-premium">
+                {allProducts.map(product => (
+                    <Link key={product.id} to={`/producto/${product.slug}`} className="catalog-card-premium">
+                        <div className="catalog-image-wrapper">
+                            {product.is_featured && <span className="catalog-badge">DESTACADO</span>}
+                            {product.stock <= 0 && <span className="catalog-out-of-stock">Sin Stock</span>}
+                            <img src={product.image_url || '/assets/placeholder.png'} alt={product.name} className="catalog-image" loading="lazy" />
+                        </div>
+                        <div className="catalog-info-premium">
+                            {/* Le muestra a qué categoría pertenece en chiquito arriba del nombre */}
+                            <span className="catalog-category">{product.category}</span> 
+                            <h3 className="catalog-title">{product.name}</h3>
+                            <div className="catalog-price-row">
+                                <span className="catalog-price">${product.price.toLocaleString('es-AR')}</span>
+                                <button className="btn-quick-view">Ver más</button>
+                            </div>
+                        </div>
+                    </Link>
+                ))}
+            </div>
+            
         </div>
     );
 }
