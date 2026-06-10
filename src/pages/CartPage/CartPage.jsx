@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import toast, { Toaster } from 'react-hot-toast';
 import './CartPage.css';
@@ -9,20 +9,18 @@ import mpLogo from '../../assets/mp-logo.png';
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
-    const navigate = useNavigate();
+    
+    // Control de Vistas (1 = Carrito, 2 = Checkout)
+    const [step, setStep] = useState(1);
+    
     const [loading, setLoading] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
-    const [applyPoints, setApplyPoints] = useState(false);
-
-    // NUEVO: Estados para el envío. Forzamos 'pickup' por defecto temporalmente.
+    const [checkoutType, setCheckoutType] = useState('guest'); // 'guest' o 'logged'
     const [shippingMethod, setShippingMethod] = useState('pickup'); // 'pickup' o 'delivery'
-    const [zipCode, setZipCode] = useState('');
-    const [shippingOptions, setShippingOptions] = useState([]);
-    const [selectedShipping, setSelectedShipping] = useState(null);
-    const [loadingShipping, setLoadingShipping] = useState(false);
-
+    const [paymentMethod, setPaymentMethod] = useState('mercadopago'); // 'mercadopago' o 'cash'
+    
     const [orderData, setOrderData] = useState({
-        name: '', email: '', phone: '', notes: '', address: '' // Agregado address
+        name: '', email: '', phone: '', address: '' 
     });
 
     useEffect(() => {
@@ -32,7 +30,13 @@ export default function CartPage() {
                 const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
                 if (profile) {
                     setUserProfile(profile);
-                    setOrderData(prev => ({ ...prev, name: profile.full_name || '', email: session.user.email || '', phone: profile.phone || '' }));
+                    setCheckoutType('logged');
+                    setOrderData(prev => ({ 
+                        ...prev, 
+                        name: profile.full_name || '', 
+                        email: session.user.email || '', 
+                        phone: profile.phone || '' 
+                    }));
                 }
             }
         };
@@ -41,90 +45,74 @@ export default function CartPage() {
 
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
 
-    // NUEVO: Cálculos de totales
-    const shippingCost = selectedShipping ? selectedShipping.valor : 0;
-    const discountAmount = applyPoints && userProfile?.puntos ? userProfile.puntos * 3 : 0;
-    const finalTotal = cartTotal + shippingCost - discountAmount;
-    const earnedPoints = Math.floor(cartTotal / 100);
+    const shippingCost = 0; // Por ahora a coordinar
+    const finalTotal = cartTotal + shippingCost;
 
-    // NUEVO: Función para llamar al backend de Envíopack (Intacta para el futuro)
-    const handleQuoteShipping = async () => {
-        if (!zipCode) return toast.error("Ingresá un código postal");
-        setLoadingShipping(true);
-        try {
-            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-            const res = await fetch(`${baseUrl}/api/shipping/cotizar`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ codigoPostalDestino: zipCode })
-            });
-            
-            if (!res.ok) throw new Error("Error al cotizar");
-            const data = await res.json();
-            
-            // Asumimos que Envíopack/Andreani devuelve un array de opciones
-            setShippingOptions(data);
-            setSelectedShipping(null); 
-        } catch (error) {
-            console.error(error);
-            toast.error("No se pudo cotizar el envío. Revisá el código postal.");
-        } finally {
-            setLoadingShipping(false);
+    // 🔥 CORRECCIÓN DEL BOTÓN MENOS
+    const handleDecrease = (item) => {
+        if (item.quantity > 1) {
+            updateQuantity(item.id, item.quantity - 1);
+        } else {
+            if (window.confirm("¿Quitar producto del carrito?")) removeFromCart(item.id);
         }
     };
 
-    const handleCheckout = async (e) => {
-        e.preventDefault();
-        
-        if (shippingMethod === 'delivery' && !selectedShipping) {
-            return toast.error("Por favor, cotizá y elegí una opción de envío.");
+    const handleIncrease = (item) => {
+        if (item.quantity < item.stock) {
+            updateQuantity(item.id, item.quantity + 1);
         }
+    };
 
+    const handleCheckoutSubmit = async (e) => {
+        e.preventDefault();
         setLoading(true);
 
         try {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-            const fixedAddress = 'RETIRO EN LOCAL: CÓDIGO VINARIO (Av. Colón 701)';
-            const finalAddress = shippingMethod === 'pickup' ? fixedAddress : `${orderData.address}, CP: ${zipCode}`;
-            const finalShippingMethod = shippingMethod === 'pickup' ? 'pickup' : (selectedShipping?.transporte || 'delivery');
+            const finalAddress = shippingMethod === 'pickup' ? 'RETIRO EN LOCAL' : orderData.address;
 
+            // 1. Guardar orden en BD (Soporta invitados pasando user_id null)
             const { data: newOrder, error: dbError } = await supabase.from('orders').insert([{
                 customer_email: orderData.email,
                 customer_name: orderData.name,
                 customer_phone: orderData.phone,
-                shipping_method: finalShippingMethod,
+                shipping_method: shippingMethod,
                 shipping_address: finalAddress,
                 total: finalTotal,
                 items: cart,
                 status: 'pending',
-                user_id: userProfile?.id || null,
-                puntos_ganados: earnedPoints,
-                puntos_descontados: applyPoints ? userProfile?.puntos : 0
+                user_id: userProfile?.id || null 
             }]).select().single();
 
             if (dbError) throw dbError;
 
-            const response = await fetch(`${baseUrl}/api/checkout`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    items: cart,
-                    name: orderData.name,
-                    email: orderData.email,
-                    shippingCost: shippingCost, // Mandamos el costo de envío
-                    discount: discountAmount,
-                    orderId: newOrder.id 
-                })
-            });
+            // 2. Proceso de Pago
+            if (paymentMethod === 'mercadopago') {
+                const response = await fetch(`${baseUrl}/api/checkout`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        items: cart,
+                        name: orderData.name,
+                        email: orderData.email,
+                        shippingCost: shippingCost,
+                        orderId: newOrder.id 
+                    })
+                });
 
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Falla al inicializar la pasarela.');
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Falla en Mercado Pago.');
 
-            localStorage.removeItem('cart');
-            if (typeof clearCart === 'function') clearCart();
-            toast.success("Redirigiendo a Mercado Pago...");
-
-            window.location.href = data.init_point;
+                localStorage.removeItem('cart');
+                if (typeof clearCart === 'function') clearCart();
+                window.location.href = data.init_point;
+            } else {
+                // Pago en efectivo
+                localStorage.removeItem('cart');
+                if (typeof clearCart === 'function') clearCart();
+                toast.success("¡Pedido confirmado! Te contactaremos a la brevedad.");
+                setTimeout(() => window.location.href = '/', 2000);
+            }
 
         } catch (err) {
             console.error(err);
@@ -133,181 +121,219 @@ export default function CartPage() {
         }
     };
 
+    // VISTA CARRITO VACÍO
     if (!cart || cart.length === 0) {
         return (
-            <section className="cart-page-empty-container">
+            <section className="cart-empty-container">
                 <div className="cart-empty-content">
                     <span className="material-symbols-outlined empty-icon">shopping_basket</span>
                     <h2 className="empty-title">Tu carrito está vacío</h2>
-                    <p className="empty-subtitle">Parece que todavía no elegiste tu próximo compañero de rutas.</p>
-                    <Link to="/productos" className="btn-gold-empty">EXPLORAR PRODUCTOS</Link>
+                    <Link to="/productos" className="btn-gold-mafia">EXPLORAR PRODUCTOS</Link>
                 </div>
             </section>
         );
     }
 
     return (
-        <section className="cart-page-modern">
+        <section className="cart-flow-section">
             <Toaster position="top-center" />
-            <div className="cart-container-pro">
-                <div className="cart-main-content">
-                    <div className="cart-header-actions">
-                        <h2>Mi Carrito</h2>
-                        <Link to="/productos" className="btn-continue-shopping">
-                            <span className="material-symbols-outlined">arrow_back</span> Seguir comprando
-                        </Link>
-                    </div>
-                    <div className="cart-items-list">
-                        {cart.map((item) => (
-                            <div key={item.id} className="cart-item-card">
-                                <div className="item-img">
-                                    <img src={item.image_url || '/assets/placeholder.png'} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }} />
-                                </div>
-                                <div className="item-info">
-                                    <p className="item-cat">{item.material || 'Seleccionado'}</p>
-                                    <h3>{item.name}</h3>
-                                    <div className="item-controls">
-                                        <div className="qty-box">
-                                            <button type="button" onClick={() => updateQuantity(item.id, -1)}>−</button>
+            
+            <div className="cart-flow-container">
+                
+                {/* VISTA 1: CARRITO */}
+                {step === 1 && (
+                    <>
+                        <div className="cart-header-top">
+                            <h2 className="flow-title">Tu carrito</h2>
+                            <button onClick={() => clearCart()} className="btn-clear-cart">Vaciar carrito</button>
+                        </div>
+
+                        <div className="flow-grid">
+                            <div className="flow-left-side">
+                                {cart.map((item) => (
+                                    <div key={item.id} className="clean-item-card">
+                                        <div className="clean-item-img">
+                                            <img src={item.image_url || '/assets/placeholder.png'} alt={item.name} />
+                                        </div>
+                                        <div className="clean-item-details">
+                                            <h3>{item.name}</h3>
+                                            <p className="clean-item-meta">{item.material || 'Premium'}</p>
+                                            <span className="clean-item-price-mobile">{formatCurrency(item.price)}</span>
+                                        </div>
+                                        
+                                        {/* CONTROLES DE CANTIDAD (VERDE EN FOTO, AQUÍ DORADO ELEGANTE) */}
+                                        <div className="clean-qty-controls">
+                                            <button type="button" onClick={() => handleDecrease(item)}>−</button>
                                             <span>{item.quantity}</span>
-                                            <button type="button" onClick={() => updateQuantity(item.id, 1)} disabled={item.quantity >= item.stock}>+</button>
+                                            <button type="button" onClick={() => handleIncrease(item)} disabled={item.quantity >= item.stock}>+</button>
                                         </div>
-                                        <button type="button" className="remove-link" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id) }}>Eliminar</button>
+
+                                        <div className="clean-item-total">
+                                            {formatCurrency(item.price * item.quantity)}
+                                        </div>
+                                        <button className="clean-item-remove" onClick={() => { if (window.confirm("¿Quitar?")) removeFromCart(item.id) }}>✕</button>
                                     </div>
-                                </div>
-                                <div className="item-price">{formatCurrency(item.price * item.quantity)}</div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                </div>
 
-                <aside className="cart-checkout-sidebar">
-                    <form className="checkout-form-premium" onSubmit={handleCheckout}>
-                        <h3>Opciones de Entrega</h3>
-                        
-                        {/* --- INICIO OCULTAMIENTO TEMPORAL DE ENVÍOS --- */}
-                        {/* <div className="delivery-toggle">
-                            <button type="button" className={`toggle-btn ${shippingMethod === 'pickup' ? 'active' : ''}`} onClick={() => setShippingMethod('pickup')}>
-                                <span className="material-symbols-outlined">store</span> Retiro Local
-                            </button>
-                            <button type="button" className={`toggle-btn ${shippingMethod === 'delivery' ? 'active' : ''}`} onClick={() => setShippingMethod('delivery')}>
-                                <span className="material-symbols-outlined">local_shipping</span> Envío
-                            </button>
-                        </div>
-                        */}
-                        {/* --- FIN OCULTAMIENTO TEMPORAL --- */}
+                            <div className="flow-right-side">
+                                <div className="summary-box">
+                                    <h3 className="summary-title">Resumen</h3>
+                                    <div className="summary-row">
+                                        <span>Subtotal</span>
+                                        <span>{formatCurrency(cartTotal)}</span>
+                                    </div>
+                                    <div className="summary-row">
+                                        <span>Envío</span>
+                                        <span>A coordinar</span>
+                                    </div>
+                                    <div className="summary-row summary-total">
+                                        <span>Total</span>
+                                        <span>{formatCurrency(finalTotal)}</span>
+                                    </div>
 
-                        <div className="form-inputs-group">
-                            <input type="text" placeholder="Nombre completo" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
-                            <input type="email" placeholder="Correo electrónico" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
-                            <input type="tel" placeholder="WhatsApp de contacto" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
-
-                            {/* CONDICIONAL: SI ELIGE RETIRO EN LOCAL */}
-                            {shippingMethod === 'pickup' && (
-                                <div className="pickup-info-card animate-fade" style={{ marginTop: '5px', marginBottom: '15px' }}>
-                                    <div className="pickup-header">
-                                        <span className="material-symbols-outlined">store</span>
-                                        <div>
-                                            <h4>Código Vinario</h4>
-                                            <p>Punto de Retiro Oficial</p>
-                                        </div>
-                                    </div>
-                                    <div className="pickup-details">
-                                        <p>📍 Av. Colón 701, Mendoza Capital</p>
-                                        <p>⏰ Lun a Sáb: 10:00 a 22:00</p>
-                                    </div>
-                                    <div className="map-container" style={{ width: '100%', marginTop: '15px', borderRadius: '12px', overflow: 'hidden' }}>
-                                        <iframe
-                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.627685040333!2d-68.8471271239616!3d-32.8876426736561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e090623f9b883%3A0xc3f92023d6a9926d!2sAv.%20Col%C3%B3n%20701%2C%20M5500%20Mendoza!5e0!3m2!1ses!2sar!4v1717000000000!5m2!1ses!2sar"
-                                            width="100%"
-                                            height="250"
-                                            style={{ border: 0 }}
-                                            allowFullScreen=""
-                                            loading="lazy"
-                                            referrerPolicy="no-referrer-when-downgrade">
-                                        </iframe>
-                                    </div>
+                                    <button className="btn-go-pay" onClick={() => setStep(2)}>
+                                        Ir a pagar
+                                    </button>
+                                    <Link to="/productos" className="btn-back-link">
+                                        ← Seguir comprando
+                                    </Link>
                                 </div>
-                            )}
+                            </div>
+                        </div>
+                    </>
+                )}
 
-                            {/* CONDICIONAL: SI ELIGE ENVÍO */}
-                            {shippingMethod === 'delivery' && (
-                                <div className="delivery-section animate-fade">
-                                    <input type="text" placeholder="Dirección completa (Calle, Número, Piso)" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} style={{ marginBottom: '15px' }} />
+                {/* VISTA 2: CHECKOUT (DATOS Y PAGO) */}
+                {step === 2 && (
+                    <>
+                        <div className="checkout-header-top">
+                            <h2 className="flow-title">Finalizar compra</h2>
+                            <div className="stepper">
+                                <span className="step-item active" onClick={() => setStep(1)}>✓ Carrito</span>
+                                <span className="step-line"></span>
+                                <span className="step-item current">2 Datos y Pago</span>
+                            </div>
+                        </div>
+
+                        <div className="flow-grid">
+                            <div className="flow-left-side">
+                                
+                                {/* TABS INVITADO / CON CUENTA */}
+                                {!userProfile && (
+                                    <div className="checkout-tabs">
+                                        <button className={`tab-btn ${checkoutType === 'guest' ? 'active' : ''}`} onClick={() => setCheckoutType('guest')}>Comprar sin cuenta</button>
+                                        <Link to="/login" className="tab-btn">Ingresar con mi cuenta</Link>
+                                    </div>
+                                )}
+
+                                <form id="checkout-form" className="checkout-full-form" onSubmit={handleCheckoutSubmit}>
                                     
-                                    <div className="quote-row">
-                                        <input type="text" placeholder="Código Postal" value={zipCode} onChange={e => setZipCode(e.target.value)} className="zip-input" />
-                                        <button type="button" className="btn-quote" onClick={handleQuoteShipping} disabled={loadingShipping}>
-                                            {loadingShipping ? 'Calculando...' : 'Cotizar'}
-                                        </button>
+                                    {/* SECCIÓN DATOS */}
+                                    <div className="form-section">
+                                        <h3 className="form-section-title">Tus datos de contacto</h3>
+                                        <div className="input-group">
+                                            <label>Nombre completo *</label>
+                                            <input type="text" required value={orderData.name} onChange={e => setOrderData({ ...orderData, name: e.target.value })} />
+                                        </div>
+                                        <div className="input-group">
+                                            <label>Teléfono (WhatsApp) *</label>
+                                            <input type="tel" required value={orderData.phone} onChange={e => setOrderData({ ...orderData, phone: e.target.value })} />
+                                        </div>
+                                        <div className="input-group">
+                                            <label>Email *</label>
+                                            <input type="email" required value={orderData.email} onChange={e => setOrderData({ ...orderData, email: e.target.value })} />
+                                        </div>
                                     </div>
 
-                                    {shippingOptions.length > 0 && (
-                                        <div className="shipping-options-list">
-                                            {shippingOptions.map((opt, index) => (
-                                                <label key={index} className={`shipping-option ${selectedShipping === opt ? 'selected' : ''}`}>
-                                                    <input type="radio" name="shipping" checked={selectedShipping === opt} onChange={() => setSelectedShipping(opt)} />
-                                                    <div className="shipping-info">
-                                                        <span className="carrier">{opt.transporte || 'Envío Estándar'}</span>
-                                                        <span className="time">{opt.horas_entrega ? `${opt.horas_entrega}hs hábiles` : 'A domicilio'}</span>
-                                                    </div>
-                                                    <span className="price">{formatCurrency(opt.valor)}</span>
-                                                </label>
-                                            ))}
+                                    {/* SECCIÓN ENTREGA */}
+                                    <div className="form-section">
+                                        <h3 className="form-section-title">Entrega</h3>
+                                        <div className="selector-grid">
+                                            <label className={`selector-card ${shippingMethod === 'pickup' ? 'selected' : ''}`}>
+                                                <input type="radio" name="shipping" checked={shippingMethod === 'pickup'} onChange={() => setShippingMethod('pickup')} />
+                                                <span className="material-symbols-outlined">store</span>
+                                                <strong>Retiro en sucursal</strong>
+                                                <small>Sin costo adicional</small>
+                                            </label>
+                                            <label className={`selector-card ${shippingMethod === 'delivery' ? 'selected' : ''}`}>
+                                                <input type="radio" name="shipping" checked={shippingMethod === 'delivery'} onChange={() => setShippingMethod('delivery')} />
+                                                <span className="material-symbols-outlined">local_shipping</span>
+                                                <strong>Envío a domicilio</strong>
+                                                <small>A coordinar por WhatsApp</small>
+                                            </label>
                                         </div>
+
+                                        {shippingMethod === 'delivery' && (
+                                            <div className="input-group mt-15 animate-fade">
+                                                <label>Dirección completa de entrega *</label>
+                                                <input type="text" required value={orderData.address} onChange={e => setOrderData({ ...orderData, address: e.target.value })} placeholder="Calle, Número, Piso, Código Postal" />
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* SECCIÓN PAGO */}
+                                    <div className="form-section">
+                                        <h3 className="form-section-title">Método de pago</h3>
+                                        <div className="selector-grid">
+                                            <label className={`selector-card ${paymentMethod === 'mercadopago' ? 'selected' : ''}`}>
+                                                <input type="radio" name="payment" checked={paymentMethod === 'mercadopago'} onChange={() => setPaymentMethod('mercadopago')} />
+                                                <span className="material-symbols-outlined">credit_card</span>
+                                                <strong>Mercado Pago</strong>
+                                                <small>Tarjetas / Dinero en cuenta</small>
+                                            </label>
+                                            <label className={`selector-card ${paymentMethod === 'cash' ? 'selected' : ''}`}>
+                                                <input type="radio" name="payment" checked={paymentMethod === 'cash'} onChange={() => setPaymentMethod('cash')} />
+                                                <span className="material-symbols-outlined">payments</span>
+                                                <strong>Efectivo / Transferencia</strong>
+                                                <small>Pagás al retirar</small>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                            {/* COLUMNA DERECHA: RESUMEN CHECKOUT */}
+                            <div className="flow-right-side">
+                                <div className="summary-box sticky-summary">
+                                    <h3 className="summary-title">Resumen del pedido</h3>
+                                    
+                                    <div className="mini-cart-list">
+                                        {cart.map(item => (
+                                            <div key={item.id} className="mini-cart-item">
+                                                <img src={item.image_url || '/assets/placeholder.png'} alt={item.name} />
+                                                <div className="mini-item-info">
+                                                    <p className="mini-name">{item.name}</p>
+                                                    <p className="mini-qty">x{item.quantity}</p>
+                                                </div>
+                                                <span className="mini-price">{formatCurrency(item.price * item.quantity)}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="summary-row">
+                                        <span>Subtotal</span>
+                                        <span>{formatCurrency(cartTotal)}</span>
+                                    </div>
+                                    <div className="summary-row summary-total">
+                                        <span>Total</span>
+                                        <span>{formatCurrency(finalTotal)}</span>
+                                    </div>
+                                    
+                                    {paymentMethod === 'mercadopago' && (
+                                        <p className="mp-secure-text">🔒 Pago procesado de forma segura por Mercado Pago</p>
                                     )}
-                                </div>
-                            )}
 
-                            <textarea className="notes-box" placeholder="Notas o pedido de grabado (Opcional)" value={orderData.notes} onChange={e => setOrderData({ ...orderData, notes: e.target.value })} />
+                                    <button type="submit" form="checkout-form" className="btn-confirm-pay" disabled={loading}>
+                                        {loading ? 'Procesando...' : (paymentMethod === 'mercadopago' ? 'Ir a pagar con Mercado Pago' : 'Confirmar pedido')}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                    </>
+                )}
 
-                        {userProfile && userProfile.puntos > 0 && (
-                            <div style={{ background: 'rgba(165, 129, 58, 0.1)', border: '1px solid #a5813a', padding: '15px', borderRadius: '12px', margin: '20px 0' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                                    <span style={{ fontWeight: '800', color: '#1a1614', fontSize: '0.9rem' }}>✨ TENÉS {userProfile.puntos} PUNTOS</span>
-                                    <span style={{ fontWeight: '800', color: '#a5813a' }}>- {formatCurrency(userProfile.puntos * 3)}</span>
-                                </div>
-                                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', cursor: 'pointer', fontWeight: '600' }}>
-                                    <input type="checkbox" checked={applyPoints} onChange={(e) => setApplyPoints(e.target.checked)} style={{ width: '18px', height: '18px', accentColor: '#a5813a' }} />
-                                    Aplicar descuento a esta compra
-                                </label>
-                            </div>
-                        )}
-
-                        <div className="total-summary-card">
-                            <div className="t-row sub-info" style={{ textDecoration: applyPoints ? 'line-through' : 'none', opacity: applyPoints ? 0.5 : 1 }}>
-                                <span>Subtotal</span>
-                                <span>{formatCurrency(cartTotal)}</span>
-                            </div>
-                            
-                            {shippingMethod === 'delivery' && (
-                                <div className="t-row sub-info" style={{ color: '#009ee3', marginTop: '5px' }}>
-                                    <span>Envío</span>
-                                    <span>{shippingCost > 0 ? formatCurrency(shippingCost) : 'A calcular'}</span>
-                                </div>
-                            )}
-
-                            <div className="t-row main-total" style={{ color: '#a5813a', marginTop: '15px' }}>
-                                <span>TOTAL</span>
-                                <span>{formatCurrency(finalTotal)}</span>
-                            </div>
-                            
-                            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '12px', textAlign: 'center', fontWeight: '600' }}>
-                                🛍️ Sumás <strong>{earnedPoints} puntos</strong> con esta compra.
-                            </p>
-                        </div>
-
-                        <button type="submit" className="btn-mercadopago-pro" disabled={loading}>
-                            {loading ? 'Procesando...' : (
-                                <>
-                                    <img src={mpLogo} alt="MP" style={{ height: '28px', width: 'auto' }} />
-                                    PAGAR CON MERCADO PAGO
-                                </>
-                            )}
-                        </button>
-                    </form>
-                </aside>
             </div>
         </section>
     );
