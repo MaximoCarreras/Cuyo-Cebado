@@ -23,9 +23,12 @@ export default function CartPage() {
         name: '', email: '', phone: ''
     });
 
-    // 🔥 ACÁ ESTÁ LA MAGIA: Efecto automático para scrollear hacia arriba al cambiar de paso
+    // 🔥 MAGIA REFORZADA: Un micro-retraso asegura que el celular scrollee bien
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const timeoutId = setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
+        return () => clearTimeout(timeoutId);
     }, [step]);
 
     // Efecto original para cargar los datos del usuario
@@ -47,6 +50,7 @@ export default function CartPage() {
         };
         fetchInitialData();
     }, []);
+
     const formatCurrency = (val) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0 }).format(val);
 
     const shippingCost = 0; 
