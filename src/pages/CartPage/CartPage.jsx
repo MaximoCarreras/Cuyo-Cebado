@@ -23,11 +23,16 @@ export default function CartPage() {
         name: '', email: '', phone: ''
     });
 
-    // 🔥 MAGIA REFORZADA: Un micro-retraso asegura que el celular scrollee bien
+// 🔥 MAGIA ULTRA REFORZADA: Fuerza bruta sin animación para que los celulares obedezcan
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
+            // 1. Salto instantáneo estándar
+            window.scrollTo(0, 0);
+            // 2. Refuerzo para Safari/iOS
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        }, 150); // Le damos 150ms para que dibuje todo antes de subir
+
         return () => clearTimeout(timeoutId);
     }, [step]);
 
