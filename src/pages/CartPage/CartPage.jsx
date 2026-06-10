@@ -46,6 +46,7 @@ export default function CartPage() {
 
     const shippingCost = 0; 
     const finalTotal = cartTotal + shippingCost;
+    const earnedPoints = Math.floor(cartTotal / 100);
 
     const handleDecrease = (item) => {
         if (item.quantity > 1) {
@@ -220,7 +221,7 @@ export default function CartPage() {
                                 {!userProfile && (
                                     <div className="checkout-tabs">
                                         <button className={`tab-btn ${checkoutType === 'guest' ? 'active' : ''}`} onClick={() => setCheckoutType('guest')}>Comprar sin cuenta</button>
-                                        <Link to="/login" className="tab-btn">Ingresar con mi cuenta</Link>
+                                        <Link to="/mi-cuenta" className="tab-btn">Ingresar con mi cuenta</Link>
                                     </div>
                                 )}
 
