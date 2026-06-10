@@ -466,3 +466,57 @@
         grid-template-columns: 1fr;
     }
 }
+/* =======================================
+   VISTA: CARRITO VACÍO
+   ======================================= */
+.cart-empty-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 120px 20px;
+    text-align: center;
+}
+
+.cart-empty-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    max-width: 450px;
+    width: 100%;
+}
+
+.empty-icon {
+    font-size: 5rem !important;
+    color: #a5813a;
+    opacity: 0.5;
+    margin-bottom: 20px;
+}
+
+.empty-title {
+    font-family: 'Noto Serif', serif;
+    font-size: 2rem;
+    color: #1a1614;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+.btn-gold-mafia {
+    background: #a5813a;
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-gold-mafia:hover {
+    background: #1a1614;
+    transform: translateY(-2px);
+}
