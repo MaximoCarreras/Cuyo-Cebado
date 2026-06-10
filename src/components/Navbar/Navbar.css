@@ -201,7 +201,7 @@
     align-items: center;
     justify-content: center;
     border: 1px solid #1a1614;
-    transition: transform 0.3s ease; /* Transición suave para el saltito */
+    transition: transform 0.3s ease; 
 }
 
 .navbar__hamburger-btn {
@@ -213,17 +213,11 @@
     padding: 10px;
 }
 
-/* Ocultar el menú móvil y sus fondos en la vista de escritorio */
 .navbar__mobile-menu,
 .navbar__blur-overlay {
     display: none;
 }
 
-/* =========================================
-   ANIMACIÓN DEL CARRITO (EL "SALTO")
-   ========================================= */
-
-/* Creamos la animación del rebote */
 @keyframes cartBounce {
     0% { transform: scale(1); }
     50% { transform: scale(1.3) translateY(-3px); color: #a5813a; }
@@ -236,7 +230,6 @@
     100% { transform: scale(1); background-color: #a5813a; }
 }
 
-/* Aplicamos las animaciones cuando React pone la clase 'cart-bounce' */
 .cart-bounce .cart-icon-nav {
     animation: cartBounce 0.3s ease-in-out;
 }
@@ -244,7 +237,6 @@
 .cart-bounce .cart-count-premium {
     animation: numberBounce 0.3s ease-in-out;
 }
-
 
 @media (max-width: 1000px) {
     .navbar {
@@ -273,23 +265,37 @@
         margin: 0 8px;
     }
 
+    /* 🔥 ACÁ EMPIEZA LA MAGIA DE LA GPU */
     .navbar__mobile-menu {
         display: flex;
         position: fixed;
         top: 0;
-        right: -100%;
+        right: 0; /* Clavado a la derecha */
         width: 280px;
         height: 100vh;
         background: #1a1614;
         flex-direction: column;
         padding: 100px 30px;
         gap: 25px;
-        transition: 0.4s ease;
+        
+        /* Lo empujamos fuera de la pantalla por hardware */
+        transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+        
+        /* Aceleración pura por GPU */
+        will-change: transform;
+        backface-visibility: hidden;
+        perspective: 1000px;
+        
+        /* Transición suave solo para el transform */
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         z-index: 2500;
     }
 
+    /* Cuando se activa, vuelve a su posición original */
     .navbar__mobile-menu.active {
-        right: 0;
+        transform: translateX(0);
+        -webkit-transform: translateX(0);
     }
 
     .navbar__close-btn {
