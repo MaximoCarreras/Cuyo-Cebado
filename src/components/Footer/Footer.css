@@ -1,55 +1,37 @@
-.footer-artistic {
+.footer-ultimate {
     background-color: #1a1614;
     color: #fdfaf7;
     font-family: 'Inter', sans-serif;
     position: relative;
-    overflow: visible; /* Clave para que la cordillera sobresalga */
-    margin-top: 150px; /* Espacio para que respire la invasión visual en el Home */
-    padding-top: 20px;
+    overflow: visible; /* Permite que las montañas invadan el Home */
+    margin-top: 150px; 
+    padding-top: 10px;
 }
 
-/* --- 🔥 CONTENEDOR DE LA CORDILlERA --- */
-.footer-artistic__landscape {
+/* --- ESCENARIO DE MONTAÑAS Y RÍO --- */
+.footer-ultimate__landscape {
     position: absolute;
-    top: -140px; /* Empuja las montañas hacia arriba invadiendo el Home */
+    top: -120px; /* Las empuja hacia arriba para salir del footer */
     left: 0;
     width: 100%;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 130px;
     pointer-events: none;
-}
-
-.andes-skyline {
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 100%;
     z-index: 1;
 }
 
-/* --- TEXTO GIGANTE ASIMÉTRICO Y ELEGANTE --- */
-.footer-artistic__brand-text {
-    font-family: 'Noto Serif', serif;
-    font-size: clamp(2.5rem, 8.5vw, 7.5rem); /* Tamaño masivo responsivo */
-    color: #a5813a; /* El dorado identitario */
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: 4px;
-    z-index: 2;
-    position: relative;
-    top: -10px; /* Lo abraza la silueta de los picos */
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    user-select: none;
+.footer-ultimate__landscape svg {
+    position: absolute;
+    bottom: -1px; /* Evita cualquier línea blanca de corte */
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
-/* --- DISTRIBUCIÓN DE ENLACES --- */
-.footer-artistic__container {
+/* --- GRILLA DE NAVEGACIÓN --- */
+.footer-ultimate__container {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 60px 30px 50px;
+    padding: 40px 30px 20px;
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr;
     gap: 80px;
@@ -57,14 +39,14 @@
     z-index: 3;
 }
 
-.footer-artistic__info p {
+.footer-ultimate__info p {
     color: #8a837b;
     font-size: 1rem;
     line-height: 1.7;
     margin: 0;
 }
 
-.footer-artistic__column h4 {
+.footer-ultimate__column h4 {
     color: #a5813a;
     font-family: 'Noto Serif', serif;
     font-size: 1rem;
@@ -74,7 +56,7 @@
     font-weight: 700;
 }
 
-.footer-artistic__column ul {
+.footer-ultimate__column ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -83,7 +65,7 @@
     gap: 14px;
 }
 
-.footer-artistic__column a {
+.footer-ultimate__column a {
     color: #fdfaf7;
     text-decoration: none;
     font-size: 0.95rem;
@@ -91,20 +73,43 @@
     transition: all 0.3s ease;
 }
 
-.footer-artistic__column a:hover {
+.footer-ultimate__column a:hover {
     color: #a5813a;
     opacity: 1;
-    padding-left: 4px; /* Deslizamiento sutil sofisticado */
+    padding-left: 5px;
 }
 
-/* --- COMPONENTES DE CIERRE --- */
-.footer-artistic__bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.03);
-    padding: 30px 30px;
-    background-color: rgba(0, 0, 0, 0.15);
+/* --- 🔥 EL GRAN CIERRE (EFECTO BRILLO DORADO) --- */
+.footer-ultimate__brand-finale {
+    text-align: center;
+    padding: 20px 20px 40px 20px;
+    position: relative;
+    z-index: 3;
 }
 
-.footer-artistic__bottom-content {
+.footer-ultimate__brand-finale h2 {
+    font-family: 'Noto Serif', serif;
+    font-size: clamp(2.5rem, 8vw, 6.5rem); /* Se adapta a celulares y PC */
+    color: #a5813a;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 4px;
+    /* Efecto Glow/Neon súper elegante */
+    text-shadow: 
+        0 0 10px rgba(165, 129, 58, 0.3), 
+        0 0 25px rgba(165, 129, 58, 0.15),
+        0 0 40px rgba(165, 129, 58, 0.05);
+    user-select: none;
+}
+
+/* --- COPYRIGHT Y PAGOS --- */
+.footer-ultimate__bottom {
+    border-top: 1px solid rgba(165, 129, 58, 0.15); /* Línea dorada sutil */
+    padding: 25px 30px;
+    background-color: rgba(0, 0, 0, 0.2); /* Base un poco más oscura */
+}
+
+.footer-ultimate__bottom-content {
     max-width: 1100px;
     margin: 0 auto;
     display: flex;
@@ -114,7 +119,7 @@
     color: #8a837b;
 }
 
-.footer-artistic__payments {
+.footer-ultimate__payments {
     display: flex;
     gap: 12px;
     color: #a5813a;
@@ -124,22 +129,26 @@
     letter-spacing: 1px;
 }
 
-/* RESPONSIVE MÓVIL PERMANENTE */
+/* --- RESPONSIVE MÓVIL --- */
 @media (max-width: 768px) {
-    .footer-artistic__container {
+    .footer-ultimate__container {
         grid-template-columns: 1fr;
         gap: 40px;
         text-align: center;
-        padding-top: 40px;
+        padding-top: 20px;
     }
 
-    .footer-artistic__landscape {
-        top: -70px;
-        height: 80px;
+    .footer-ultimate__landscape {
+        top: -60px;
+        height: 70px;
+    }
+    
+    .footer-ultimate__brand-finale {
+        padding-bottom: 30px;
     }
 
-    .footer-artistic__bottom-content {
+    .footer-ultimate__bottom-content {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
     }
 }
