@@ -1,17 +1,21 @@
 .footer {
-    background-color: #2b2520;
+    background-color: #1a1614; /* Oscurecí apenas el fondo para que coincida con tu web premium */
     color: #fdfaf7;
     padding-top: 60px;
     border-top: 1px solid rgba(165, 129, 58, 0.1);
+    position: relative;
+    overflow: hidden; /* Para que las montañas no se salgan del borde */
 }
 
 .footer__container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 24px 40px;
+    padding: 0 24px 60px;
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
     gap: 50px;
+    position: relative;
+    z-index: 2; /* Mantiene los textos por encima de las montañas */
 }
 
 .footer__title {
@@ -85,10 +89,47 @@
     color: #a5813a;
 }
 
+/* --- 🔥 ZONA DEL PAISAJE (MONTAÑAS + TEXTO GIGANTE) --- */
+.footer__landscape {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-top: -40px;
+}
+
+.mountain-watermark {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none; /* Para que no moleste si el usuario hace clic */
+}
+
+.footer__massive-text {
+    font-family: 'Noto Serif', serif;
+    font-size: clamp(3rem, 10vw, 9rem); /* Se adapta al tamaño de la pantalla */
+    color: rgba(253, 250, 247, 0.04); /* Blanco cremita hiper sutil */
+    margin: 0;
+    line-height: 0.8;
+    z-index: 1;
+    letter-spacing: -2px;
+    text-align: center;
+    white-space: nowrap;
+    user-select: none;
+}
+
 /* --- BARRA FINAL --- */
 .footer__bottom {
+    position: relative;
+    z-index: 2;
     text-align: center;
     padding: 25px 20px;
+    background-color: #1a1614; /* Fondo sólido para que no se pise con las montañas */
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 0.8rem;
     opacity: 0.5;
@@ -101,13 +142,13 @@
     }
 
     .footer__container {
-        grid-template-columns: 1fr 1fr; /* Dividimos en dos columnas en pantallas medias y chicas */
+        grid-template-columns: 1fr 1fr;
         gap: 30px;
         padding: 0 20px 30px;
     }
 
     .footer__brand {
-        grid-column: 1 / -1; /* Hacemos que la marca ocupe todo el ancho arriba */
+        grid-column: 1 / -1;
         text-align: center;
     }
 
@@ -120,10 +161,14 @@
     }
 
     .footer__group {
-        text-align: center; /* Centramos los links en celular */
+        text-align: center;
     }
 
     .footer__subtitle {
         margin-bottom: 15px;
+    }
+    
+    .footer__landscape {
+        height: 100px;
     }
 }
