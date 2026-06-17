@@ -1,44 +1,66 @@
-.footer-clean {
+.footer-premium-clean {
     background-color: #1a1614;
     color: #fdfaf7;
     font-family: 'Inter', sans-serif;
-    border-top: 1px solid rgba(165, 129, 58, 0.15);
-    margin-top: 80px; 
-    padding-top: 60px;
+    position: relative;
+    overflow: visible; /* Clave absoluta para permitir la invasión de picos al Home */
+    margin-top: 140px; /* Margen para que las montañas no pisen contenido del Home */
+    padding-top: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* --- GRILLA DE NAVEGACIÓN --- */
-.footer-clean__container {
-    max-width: 1100px;
+/* --- 🔥 CONTENEDOR DE LA CORDILLERA DE 5 PICOS --- */
+.footer-premium-clean__landscape {
+    position: absolute;
+    top: -115px; /* Eleva las montañas para que salgan del marco del footer */
+    left: 0;
+    width: 100%;
+    height: 120px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.andes-five-peaks {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* --- ENLACES TOTALMENTE CENTRALIZADOS --- */
+.footer-premium-clean__container {
+    max-width: 900px;
     width: 100%;
     margin: 0 auto;
-    padding: 0 30px 40px;
+    padding: 30px 24px;
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 80px;
+    grid-template-columns: 1fr 1fr; /* Dos columnas simétricas perfectas */
+    gap: 40px;
+    position: relative;
+    z-index: 3;
 }
 
-.footer-clean__info p {
-    color: #8a837b;
-    font-size: 1rem;
-    line-height: 1.7;
-    margin: 0;
+.footer-premium-clean__column {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrado interno de elementos */
+    text-align: center;
 }
 
-.footer-clean__column h4 {
+.footer-premium-clean__column h4 {
     color: #a5813a;
     font-family: 'Noto Serif', serif;
-    font-size: 1rem;
+    font-size: 1.05rem;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     margin-bottom: 20px;
     font-weight: 700;
 }
 
-.footer-clean__column ul {
+.footer-premium-clean__column ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -47,52 +69,71 @@
     gap: 14px;
 }
 
-.footer-clean__column a {
+.footer-premium-clean__column a {
     color: #fdfaf7;
     text-decoration: none;
     font-size: 0.95rem;
-    opacity: 0.6;
+    opacity: 0.65;
     transition: all 0.3s ease;
 }
 
-.footer-clean__column a:hover {
+.footer-premium-clean__column a:hover {
     color: #a5813a;
     opacity: 1;
-    padding-left: 5px;
 }
 
-/* --- EL LOGO ORIGINAL --- */
-.footer-clean__brand {
+/* --- SECCIÓN REDES SOCIALES CON ICONOS --- */
+.footer-premium-clean__socials {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 0 50px 0;
+    gap: 30px;
+    padding: 30px 20px;
     width: 100%;
+    max-width: 600px;
+    position: relative;
+    z-index: 3;
+    flex-wrap: wrap;
 }
 
-.footer-clean__logo {
-    width: 120px; /* Tamaño ideal para que se aprecien las montañas y el mate de tu logo */
-    height: auto;
-    opacity: 0.9;
-    transition: opacity 0.3s ease;
+.social-link-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fdfaf7;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
 }
 
-.footer-clean__logo:hover {
+.social-link-icon .material-symbols-outlined {
+    font-size: 1.3rem;
+    color: #a5813a; /* Iconos en tu dorado identitario */
+}
+
+.social-link-icon:hover {
     opacity: 1;
+    transform: translateY(-2px);
 }
 
-/* --- COPYRIGHT CENTRADO --- */
-.footer-clean__bottom {
+/* --- BARRA DE COPYRIGHT EN EL MEDIO --- */
+.footer-premium-clean__bottom {
     width: 100%;
     border-top: 1px solid rgba(255, 255, 255, 0.03);
     padding: 25px 30px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.15);
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    z-index: 3;
 }
 
-.footer-clean__bottom p {
+.footer-premium-clean__bottom p {
     margin: 0;
     font-size: 0.85rem;
     color: #8a837b;
@@ -101,19 +142,18 @@
 }
 
 /* --- RESPONSIVE MÓVIL --- */
-@media (max-width: 768px) {
-    .footer-clean {
-        padding-top: 40px;
+@media (max-width: 600px) {
+    .footer-premium-clean__container {
+        grid-template-columns: 1fr; /* Pasa a una sola columna en celular para no amontonar */
+        gap: 35px;
     }
 
-    .footer-clean__container {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        text-align: center;
-        padding-bottom: 30px;
+    .footer-premium-clean__landscape {
+        top: -55px;
+        height: 60px;
     }
 
-    .footer-clean__brand {
-        padding-bottom: 40px;
+    .footer-premium-clean__socials {
+        gap: 20px;
     }
 }
