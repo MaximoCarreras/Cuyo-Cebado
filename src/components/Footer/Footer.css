@@ -3,9 +3,9 @@
     color: #fdfaf7;
     font-family: 'Inter', sans-serif;
     position: relative;
-    overflow: visible; /* Clave absoluta para permitir la invasión de picos al Home */
-    margin-top: 140px; /* Margen para que las montañas no pisen contenido del Home */
-    padding-top: 40px;
+    overflow: visible; 
+    margin-top: 160px; /* Le damos buen espacio para que los picos altos no choquen con la página */
+    padding-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,13 +13,13 @@
     box-sizing: border-box;
 }
 
-/* --- 🔥 CONTENEDOR DE LA CORDILLERA DE 5 PICOS --- */
+/* --- 🔥 CONTENEDOR DE LA CORDILLERA EXACTA --- */
 .footer-premium-clean__landscape {
     position: absolute;
-    top: -115px; /* Eleva las montañas para que salgan del marco del footer */
+    top: -145px; /* Sube la montaña grande para que se meta bien en el Home */
     left: 0;
     width: 100%;
-    height: 120px;
+    height: 150px;
     pointer-events: none;
     z-index: 1;
 }
@@ -30,15 +30,16 @@
     display: block;
 }
 
-/* --- ENLACES TOTALMENTE CENTRALIZADOS --- */
+/* --- GRILLA: EXPLORAR | LOGO | CONTACTO --- */
 .footer-premium-clean__container {
-    max-width: 900px;
+    max-width: 1000px;
     width: 100%;
     margin: 0 auto;
-    padding: 30px 24px;
+    padding: 30px 24px 10px;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Dos columnas simétricas perfectas */
+    grid-template-columns: 1fr auto 1fr; /* El logo define su propio ancho en el medio */
     gap: 40px;
+    align-items: center; /* Centra todo verticalmente */
     position: relative;
     z-index: 3;
 }
@@ -46,7 +47,7 @@
 .footer-premium-clean__column {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centrado interno de elementos */
+    align-items: center; 
     text-align: center;
 }
 
@@ -82,45 +83,51 @@
     opacity: 1;
 }
 
-/* --- SECCIÓN REDES SOCIALES CON ICONOS --- */
+/* --- LOGO CENTRAL --- */
+.footer-premium-clean__logo-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.footer-center-logo {
+    width: 110px; /* Ajustá esto según veas tu logo */
+    height: auto;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    filter: drop-shadow(0 0 10px rgba(165, 129, 58, 0.1));
+}
+
+.footer-center-logo:hover {
+    opacity: 1;
+}
+
+/* --- SECCIÓN REDES SOCIALES (SOLO ICONOS) --- */
 .footer-premium-clean__socials {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
-    padding: 30px 20px;
-    width: 100%;
-    max-width: 600px;
+    gap: 35px; /* Separación amplia y limpia entre iconos */
+    padding: 20px 20px 40px;
     position: relative;
     z-index: 3;
-    flex-wrap: wrap;
 }
 
-.social-link-icon {
+.social-icon-only {
+    color: #8a837b; /* Color apagado premium */
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: #fdfaf7;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    opacity: 0.5;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
+    justify-content: center;
 }
 
-.social-link-icon .material-symbols-outlined {
-    font-size: 1.3rem;
-    color: #a5813a; /* Iconos en tu dorado identitario */
+.social-icon-only:hover {
+    color: #a5813a; /* Se prenden de dorado al pasar el mouse */
+    transform: translateY(-3px); /* Saltito sutil */
 }
 
-.social-link-icon:hover {
-    opacity: 1;
-    transform: translateY(-2px);
-}
-
-/* --- BARRA DE COPYRIGHT EN EL MEDIO --- */
+/* --- BARRA DE COPYRIGHT --- */
 .footer-premium-clean__bottom {
     width: 100%;
     border-top: 1px solid rgba(255, 255, 255, 0.03);
@@ -142,18 +149,19 @@
 }
 
 /* --- RESPONSIVE MÓVIL --- */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .footer-premium-clean__container {
-        grid-template-columns: 1fr; /* Pasa a una sola columna en celular para no amontonar */
-        gap: 35px;
+        grid-template-columns: 1fr; /* Todo en una columna */
+        gap: 40px;
+    }
+    
+    .footer-premium-clean__logo-wrapper {
+        order: -1; /* Manda el logo arriba de todo en el celular */
+        padding-bottom: 20px;
     }
 
     .footer-premium-clean__landscape {
-        top: -55px;
-        height: 60px;
-    }
-
-    .footer-premium-clean__socials {
-        gap: 20px;
+        top: -70px;
+        height: 75px; /* Escala las montañas para que no tapen media pantalla en celu */
     }
 }
