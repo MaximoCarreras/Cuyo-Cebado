@@ -1,52 +1,34 @@
-.footer-ultimate {
+.footer-clean {
     background-color: #1a1614;
     color: #fdfaf7;
     font-family: 'Inter', sans-serif;
-    position: relative;
-    overflow: visible; /* Permite que las montañas invadan el Home */
-    margin-top: 150px; 
-    padding-top: 10px;
-}
-
-/* --- ESCENARIO DE MONTAÑAS Y RÍO --- */
-.footer-ultimate__landscape {
-    position: absolute;
-    top: -120px; /* Las empuja hacia arriba para salir del footer */
-    left: 0;
-    width: 100%;
-    height: 130px;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.footer-ultimate__landscape svg {
-    position: absolute;
-    bottom: -1px; /* Evita cualquier línea blanca de corte */
-    left: 0;
-    width: 100%;
-    height: 100%;
+    border-top: 1px solid rgba(165, 129, 58, 0.15);
+    margin-top: 80px; 
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* --- GRILLA DE NAVEGACIÓN --- */
-.footer-ultimate__container {
+.footer-clean__container {
     max-width: 1100px;
+    width: 100%;
     margin: 0 auto;
-    padding: 40px 30px 20px;
+    padding: 0 30px 40px;
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr;
     gap: 80px;
-    position: relative;
-    z-index: 3;
 }
 
-.footer-ultimate__info p {
+.footer-clean__info p {
     color: #8a837b;
     font-size: 1rem;
     line-height: 1.7;
     margin: 0;
 }
 
-.footer-ultimate__column h4 {
+.footer-clean__column h4 {
     color: #a5813a;
     font-family: 'Noto Serif', serif;
     font-size: 1rem;
@@ -56,7 +38,7 @@
     font-weight: 700;
 }
 
-.footer-ultimate__column ul {
+.footer-clean__column ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -65,7 +47,7 @@
     gap: 14px;
 }
 
-.footer-ultimate__column a {
+.footer-clean__column a {
     color: #fdfaf7;
     text-decoration: none;
     font-size: 0.95rem;
@@ -73,82 +55,65 @@
     transition: all 0.3s ease;
 }
 
-.footer-ultimate__column a:hover {
+.footer-clean__column a:hover {
     color: #a5813a;
     opacity: 1;
     padding-left: 5px;
 }
 
-/* --- 🔥 EL GRAN CIERRE (EFECTO BRILLO DORADO) --- */
-.footer-ultimate__brand-finale {
-    text-align: center;
-    padding: 20px 20px 40px 20px;
-    position: relative;
-    z-index: 3;
-}
-
-.footer-ultimate__brand-finale h2 {
-    font-family: 'Noto Serif', serif;
-    font-size: clamp(2.5rem, 8vw, 6.5rem); /* Se adapta a celulares y PC */
-    color: #a5813a;
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: 4px;
-    /* Efecto Glow/Neon súper elegante */
-    text-shadow: 
-        0 0 10px rgba(165, 129, 58, 0.3), 
-        0 0 25px rgba(165, 129, 58, 0.15),
-        0 0 40px rgba(165, 129, 58, 0.05);
-    user-select: none;
-}
-
-/* --- COPYRIGHT Y PAGOS --- */
-.footer-ultimate__bottom {
-    border-top: 1px solid rgba(165, 129, 58, 0.15); /* Línea dorada sutil */
-    padding: 25px 30px;
-    background-color: rgba(0, 0, 0, 0.2); /* Base un poco más oscura */
-}
-
-.footer-ultimate__bottom-content {
-    max-width: 1100px;
-    margin: 0 auto;
+/* --- EL LOGO ORIGINAL --- */
+.footer-clean__brand {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    padding: 20px 0 50px 0;
+    width: 100%;
+}
+
+.footer-clean__logo {
+    width: 120px; /* Tamaño ideal para que se aprecien las montañas y el mate de tu logo */
+    height: auto;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.footer-clean__logo:hover {
+    opacity: 1;
+}
+
+/* --- COPYRIGHT CENTRADO --- */
+.footer-clean__bottom {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 25px 30px;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-clean__bottom p {
+    margin: 0;
     font-size: 0.85rem;
     color: #8a837b;
-}
-
-.footer-ultimate__payments {
-    display: flex;
-    gap: 12px;
-    color: #a5813a;
-    opacity: 0.7;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    text-align: center;
+    letter-spacing: 0.5px;
 }
 
 /* --- RESPONSIVE MÓVIL --- */
 @media (max-width: 768px) {
-    .footer-ultimate__container {
+    .footer-clean {
+        padding-top: 40px;
+    }
+
+    .footer-clean__container {
         grid-template-columns: 1fr;
         gap: 40px;
         text-align: center;
-        padding-top: 20px;
-    }
-
-    .footer-ultimate__landscape {
-        top: -60px;
-        height: 70px;
-    }
-    
-    .footer-ultimate__brand-finale {
         padding-bottom: 30px;
     }
 
-    .footer-ultimate__bottom-content {
-        flex-direction: column;
-        gap: 15px;
+    .footer-clean__brand {
+        padding-bottom: 40px;
     }
 }
