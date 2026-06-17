@@ -1,98 +1,111 @@
-.footer-premium {
+.footer-artistic {
     background-color: #1a1614;
     color: #fdfaf7;
     font-family: 'Inter', sans-serif;
-    border-top: 1px solid rgba(165, 129, 58, 0.15);
-    padding-top: 80px;
-    margin-top: auto; /* Empuja el footer siempre abajo */
+    position: relative;
+    overflow: visible; /* Clave para que la cordillera sobresalga */
+    margin-top: 150px; /* Espacio para que respire la invasión visual en el Home */
+    padding-top: 20px;
 }
 
-.footer-premium__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-/* --- LOGO Y BIO CENTRADOS --- */
-.footer-premium__brand {
-    margin-bottom: 70px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.footer-premium__logo {
-    width: 85px; /* Tamaño sutil pero presente */
-    height: auto;
-    margin-bottom: 25px;
-    filter: drop-shadow(0 0 15px rgba(165, 129, 58, 0.15)); /* Le da un micro brillo dorado */
-}
-
-.footer-premium__bio {
-    color: #8a837b;
-    font-size: 1.05rem;
-    line-height: 1.7;
-    max-width: 500px;
-    margin: 0;
-    font-weight: 400;
-}
-
-/* --- GRILLA DE LINKS --- */
-.footer-premium__links-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 60px;
+/* --- 🔥 CONTENEDOR DE LA CORDILlERA --- */
+.footer-artistic__landscape {
+    position: absolute;
+    top: -140px; /* Empuja las montañas hacia arriba invadiendo el Home */
+    left: 0;
     width: 100%;
-    max-width: 900px;
-    margin-bottom: 80px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
 }
 
-.footer-premium__column h4 {
+.andes-skyline {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* --- TEXTO GIGANTE ASIMÉTRICO Y ELEGANTE --- */
+.footer-artistic__brand-text {
+    font-family: 'Noto Serif', serif;
+    font-size: clamp(2.5rem, 8.5vw, 7.5rem); /* Tamaño masivo responsivo */
+    color: #a5813a; /* El dorado identitario */
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 4px;
+    z-index: 2;
+    position: relative;
+    top: -10px; /* Lo abraza la silueta de los picos */
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    user-select: none;
+}
+
+/* --- DISTRIBUCIÓN DE ENLACES --- */
+.footer-artistic__container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 30px 50px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 80px;
+    position: relative;
+    z-index: 3;
+}
+
+.footer-artistic__info p {
+    color: #8a837b;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.footer-artistic__column h4 {
     color: #a5813a;
     font-family: 'Noto Serif', serif;
-    font-size: 1.1rem;
+    font-size: 1rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 25px;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
     font-weight: 700;
 }
 
-.footer-premium__column ul {
+.footer-artistic__column ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
 }
 
-.footer-premium__column a {
+.footer-artistic__column a {
     color: #fdfaf7;
     text-decoration: none;
     font-size: 0.95rem;
-    opacity: 0.65;
+    opacity: 0.6;
     transition: all 0.3s ease;
 }
 
-.footer-premium__column a:hover {
+.footer-artistic__column a:hover {
     color: #a5813a;
     opacity: 1;
-    letter-spacing: 0.5px; /* Efecto hover elegante que estira apenas la palabra */
+    padding-left: 4px; /* Deslizamiento sutil sofisticado */
 }
 
-/* --- BARRA FINAL INFERIOR --- */
-.footer-premium__bottom {
-    background-color: rgba(0, 0, 0, 0.2); /* Oscurece un poquito la barra final */
+/* --- COMPONENTES DE CIERRE --- */
+.footer-artistic__bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.03);
-    padding: 25px 30px;
+    padding: 30px 30px;
+    background-color: rgba(0, 0, 0, 0.15);
 }
 
-.footer-premium__bottom-content {
-    max-width: 1200px;
+.footer-artistic__bottom-content {
+    max-width: 1100px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -101,51 +114,32 @@
     color: #8a837b;
 }
 
-.footer-premium__payments {
+.footer-artistic__payments {
     display: flex;
-    gap: 20px;
-}
-
-.payment-dot {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    gap: 12px;
+    color: #a5813a;
+    opacity: 0.7;
+    font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-size: 0.75rem;
-    color: #a5813a;
-    opacity: 0.8;
 }
 
-/* Puntito dorado antes de cada método de pago */
-.payment-dot::before {
-    content: '';
-    width: 4px;
-    height: 4px;
-    background-color: #a5813a;
-    border-radius: 50%;
-}
-
-/* --- RESPONSIVE CELULARES --- */
+/* RESPONSIVE MÓVIL PERMANENTE */
 @media (max-width: 768px) {
-    .footer-premium {
-        padding-top: 60px;
-    }
-
-    .footer-premium__links-wrapper {
+    .footer-artistic__container {
         grid-template-columns: 1fr;
-        gap: 45px;
-        margin-bottom: 60px;
+        gap: 40px;
+        text-align: center;
+        padding-top: 40px;
     }
 
-    .footer-premium__bottom-content {
+    .footer-artistic__landscape {
+        top: -70px;
+        height: 80px;
+    }
+
+    .footer-artistic__bottom-content {
         flex-direction: column;
         gap: 20px;
-        text-align: center;
-    }
-
-    .footer-premium__payments {
-        justify-content: center;
-        flex-wrap: wrap;
     }
 }
