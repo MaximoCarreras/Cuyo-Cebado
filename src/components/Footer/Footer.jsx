@@ -1,64 +1,62 @@
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 export default function Footer() {
   return (
-    <footer className="footer">
-      
-      {/* 🔥 MONTAÑAS Y TEXTO GIGANTE QUE EMERGEN HACIA EL HOME */}
-      <div className="footer__landscape">
-        <svg className="mountain-watermark" viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          {/* Capa de montañas que siluetean el borde superior */}
-          <path d="M0,120 L0,60 L180,20 L400,90 L650,10 L900,80 L1050,40 L1200,90 L1200,120 Z" />
-        </svg>
+    <footer className="footer-premium">
+      <div className="footer-premium__container">
         
-        {/* El único y principal título de marca en dorado premium */}
-        <h2 className="footer__massive-text">CUYO CEBADO</h2>
-      </div>
-
-      <div className="footer__container">
-
-        {/* COLUMNA 1: Identidad (Sin título repetido) */}
-        <div className="footer__brand">
-          <p className="footer__description">
-            Curaduría premium de mates imperiales y artesanales.
-            Tradición y calidad desde la cordillera hacia todo el país.
+        {/* SECCIÓN SUPERIOR: Logo y Declaración de Marca */}
+        <div className="footer-premium__brand">
+          <img src="/logo.png" alt="Cuyo Cebado" className="footer-premium__logo" />
+          <p className="footer-premium__bio">
+            Curaduría de mates imperiales y artesanales. <br/>
+            Tradición y calidad desde Mendoza hacia todo el país.
           </p>
-          {/* Métodos de Pago sutiles */}
-          <div className="footer__payments">
-            <span className="footer__payment-label">Aceptamos:</span>
-            <div className="footer__payment-icons">
-              <span className="payment-badge">Mercado Pago</span>
-              <span className="payment-badge">Tarjetas</span>
-              <span className="payment-badge">Transferencia</span>
-            </div>
+        </div>
+
+        {/* SECCIÓN MEDIA: Grilla de Navegación Perfecta */}
+        <div className="footer-premium__links-wrapper">
+          <div className="footer-premium__column">
+            <h4>Tienda</h4>
+            <ul>
+              <li><Link to="/productos">Todos los productos</Link></li>
+              <li><Link to="/productos?search=imperial">Mates Imperiales</Link></li>
+              <li><Link to="/productos?search=bombilla">Bombillas de Alpaca</Link></li>
+            </ul>
+          </div>
+          
+          <div className="footer-premium__column">
+            <h4>Comunidad</h4>
+            <ul>
+              <li><Link to="/nosotros">Nuestra Historia</Link></li>
+              <li><Link to="/guia-curado">Guía de Curado</Link></li>
+              <li><Link to="/mi-cuenta">Cuyo Puntos ✨</Link></li>
+            </ul>
+          </div>
+
+          <div className="footer-premium__column">
+            <h4>Ayuda Legal</h4>
+            <ul>
+              <li><Link to="/contacto">Contacto</Link></li>
+              <li><Link to="/envios">Envíos y Retiros</Link></li>
+              <li><Link to="/terminos">Términos y Condiciones</Link></li>
+            </ul>
           </div>
         </div>
-
-        {/* COLUMNA 2: Navegación */}
-        <div className="footer__group">
-          <h4 className="footer__subtitle">Navegación</h4>
-          <ul className="footer__list">
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/nosotros">Nosotros</a></li>
-            <li><a href="/guia-curado">Guía de Curado</a></li>
-          </ul>
-        </div>
-
-        {/* COLUMNA 3: Ayuda y Legales */}
-        <div className="footer__group">
-          <h4 className="footer__subtitle">Ayuda y Legales</h4>
-          <ul className="footer__list">
-            <li><a href="/contacto">Contacto</a></li>
-            <li><a href="/envios">Envíos y Devoluciones</a></li>
-            <li><a href="/terminos">Términos y Condiciones</a></li>
-            <li><a href="/carrito">Mi Carrito</a></li>
-          </ul>
-        </div>
-
       </div>
 
-      <div className="footer__bottom">
-        <p>&copy; {new Date().getFullYear()} Cuyo Cebado. Todos los derechos reservados.</p>
+      {/* SECCIÓN INFERIOR: Copyright y Pagos Sutiles */}
+      <div className="footer-premium__bottom">
+        <div className="footer-premium__bottom-content">
+          <p>&copy; {new Date().getFullYear()} Cuyo Cebado. Todos los derechos reservados.</p>
+          
+          <div className="footer-premium__payments">
+            <span className="payment-dot">Mercado Pago</span>
+            <span className="payment-dot">Tarjetas</span>
+            <span className="payment-dot">Transferencia</span>
+          </div>
+        </div>
       </div>
     </footer>
   );

@@ -1,178 +1,151 @@
-.footer {
-    background-color: #1a1614; /* Fondo oscuro premium */
+.footer-premium {
+    background-color: #1a1614;
     color: #fdfaf7;
-    padding-top: 50px;
-    border-top: none; /* Eliminamos la línea recta antigua */
-    position: relative;
-    
-    /* 🔥 CLAVE: Permite que las montañas y el texto floten hacia afuera e invadan el Home */
-    overflow: visible; 
-    margin-top: 100px; /* Deja el margen necesario para que las montañas respiren arriba */
+    font-family: 'Inter', sans-serif;
+    border-top: 1px solid rgba(165, 129, 58, 0.15);
+    padding-top: 80px;
+    margin-top: auto; /* Empuja el footer siempre abajo */
 }
 
-.footer__container {
+.footer-premium__container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 24px 40px;
+    padding: 0 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* --- LOGO Y BIO CENTRADOS --- */
+.footer-premium__brand {
+    margin-bottom: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-premium__logo {
+    width: 85px; /* Tamaño sutil pero presente */
+    height: auto;
+    margin-bottom: 25px;
+    filter: drop-shadow(0 0 15px rgba(165, 129, 58, 0.15)); /* Le da un micro brillo dorado */
+}
+
+.footer-premium__bio {
+    color: #8a837b;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* --- GRILLA DE LINKS --- */
+.footer-premium__links-wrapper {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 50px;
-    position: relative;
-    z-index: 5; /* Asegura que los enlaces queden siempre clickeables por encima de todo */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 60px;
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 80px;
 }
 
-.footer__description {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    opacity: 0.8;
-    margin-bottom: 25px;
-    max-width: 350px;
-    padding-top: 5px;
-}
-
-.footer__subtitle {
+.footer-premium__column h4 {
     color: #a5813a;
-    font-size: 1rem;
+    font-family: 'Noto Serif', serif;
+    font-size: 1.1rem;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     margin-bottom: 25px;
+    font-weight: 700;
 }
 
-.footer__list {
+.footer-premium__column ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.footer__list li {
-    margin-bottom: 12px;
-}
-
-.footer__list a {
+.footer-premium__column a {
     color: #fdfaf7;
     text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-    opacity: 0.7;
+    font-size: 0.95rem;
+    opacity: 0.65;
+    transition: all 0.3s ease;
 }
 
-.footer__list a:hover {
+.footer-premium__column a:hover {
     color: #a5813a;
     opacity: 1;
+    letter-spacing: 0.5px; /* Efecto hover elegante que estira apenas la palabra */
 }
 
-/* --- MÉTODOS DE PAGO --- */
-.footer__payment-label {
-    display: block;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-    opacity: 0.5;
+/* --- BARRA FINAL INFERIOR --- */
+.footer-premium__bottom {
+    background-color: rgba(0, 0, 0, 0.2); /* Oscurece un poquito la barra final */
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 25px 30px;
 }
 
-.footer__payment-icons {
+.footer-premium__bottom-content {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #8a837b;
 }
 
-.payment-badge {
-    font-size: 0.7rem;
-    padding: 4px 10px;
-    border: 1px solid rgba(165, 129, 58, 0.3);
-    border-radius: 4px;
-    color: #a5813a;
+.footer-premium__payments {
+    display: flex;
+    gap: 20px;
 }
 
-/* --- 🔥 ESCENARIO CORDILlERA (SOBRESALE AL HOME) --- */
-.footer__landscape {
-    position: absolute;
-    top: -95px; /* Sube la estructura completa para que monte sobre el Home */
-    left: 0;
-    width: 100%;
-    height: 100px;
+.payment-dot {
     display: flex;
     align-items: center;
-    justify-content: center;
-    pointer-events: none; /* Evita que interfiera con clicks del usuario en el Home */
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+    color: #a5813a;
+    opacity: 0.8;
 }
 
-.mountain-watermark {
-    position: absolute;
-    bottom: -2px; /* Pequeño ajuste para evitar luces o líneas divisorias raras */
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
+/* Puntito dorado antes de cada método de pago */
+.payment-dot::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background-color: #a5813a;
+    border-radius: 50%;
 }
 
-.mountain-watermark path {
-    fill: #1a1614; /* Mismo color del footer para lograr la silueta perfecta continuada */
-}
-
-.footer__massive-text {
-    font-family: 'Noto Serif', serif;
-    font-size: clamp(2.2rem, 7.5vw, 6.5rem); /* Escalado fluido perfecto */
-    color: #a5813a; /* 🔥 Tu dorado distintivo nítido y premium */
-    margin: 0;
-    line-height: 1;
-    z-index: 3; /* Se ubica por encima del corte de las montañas cruzando hacia el Home */
-    letter-spacing: 2px;
-    text-align: center;
-    white-space: nowrap;
-    user-select: none;
-    font-weight: 700;
-    position: relative;
-    top: -15px; /* Lo eleva un poco para que quede abrazado por los picos montañosos */
-}
-
-/* --- BARRA FINAL --- */
-.footer__bottom {
-    position: relative;
-    z-index: 5;
-    text-align: center;
-    padding: 25px 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    font-size: 0.8rem;
-    opacity: 0.5;
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    .footer__container {
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-        padding: 0 20px 30px;
+/* --- RESPONSIVE CELULARES --- */
+@media (max-width: 768px) {
+    .footer-premium {
+        padding-top: 60px;
     }
 
-    .footer__brand {
-        grid-column: 1 / -1;
+    .footer-premium__links-wrapper {
+        grid-template-columns: 1fr;
+        gap: 45px;
+        margin-bottom: 60px;
+    }
+
+    .footer-premium__bottom-content {
+        flex-direction: column;
+        gap: 20px;
         text-align: center;
     }
 
-    .footer__description {
-        margin: 0 auto 25px;
-    }
-
-    .footer__payment-icons {
+    .footer-premium__payments {
         justify-content: center;
-    }
-
-    .footer__group {
-        text-align: center;
-    }
-
-    .footer__subtitle {
-        margin-bottom: 15px;
-    }
-    
-    .footer__landscape {
-        top: -55px;
-        height: 60px;
-    }
-    
-    .footer__massive-text {
-        top: -5px;
+        flex-wrap: wrap;
     }
 }
