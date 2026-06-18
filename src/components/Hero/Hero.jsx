@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import './Hero.css';
+// 🔥 IMPORTAMOS EL VIDEO DIRECTAMENTE DESDE ASSETS
+import videoBg from '../../assets/video_principal.mp4'; 
 import Grainient from '../Backgrounds/Grainient';
 
 export default function Hero() {
@@ -22,8 +24,7 @@ export default function Hero() {
       id="hero"
       style={{ height: viewHeight, minHeight: viewHeight }}
     >
-      {/* 1. Capa de VIDEO */}
-      {/* IMPORTANTE: Mantené className="hero__video-bg" para que agarre el CSS */}
+      {/* 1. Capa de VIDEO usando el archivo importado */}
       <video
         key="video-hero" 
         className="hero__video-bg"
@@ -32,10 +33,11 @@ export default function Hero() {
         muted
         playsInline
       >
-        <source src="/images/video_principal.mp4.mp4" type="video/mp4" />
+        {/* 🔥 USAMOS LA VARIABLE DEL VIDEO IMPORTADO AQUÍ */}
+        <source src={videoBg} type="video/mp4" />
       </video>
 
-      {/* 2. Capa del fondo de madera animada (React Bits) */}
+      {/* 2. Capa del fondo de madera animada */}
       <div className="hero__shape">
         <Grainient
           color1="#140d07"
