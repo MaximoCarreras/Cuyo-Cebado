@@ -8,7 +8,6 @@ import './Home.css';
 export default function Home() {
     const { addToCart } = useCart();
     
-    // 🔥 Ya no necesitamos email ni status acá, el código queda más limpio
     const [featuredKit, setFeaturedKit] = useState(null);
     const [dbCategories, setDbCategories] = useState([]);
     
@@ -53,7 +52,6 @@ export default function Home() {
         fetchHomeData();
     }, []);
 
-    // Efecto Spotlight (Se mantiene intacto)
     useEffect(() => {
         if (!isPageLoaded) return; 
         
@@ -96,7 +94,19 @@ export default function Home() {
                 <div className="hero-spotlight-layer"></div>
                 <div className="hero-visual-block">
                     <div className="spotlight-overlay"></div>
-                    <img src="/images/fondo_hero_principal.webp" alt="Mate Cuyo Cebado" className="hero-main-image" fetchpriority="high" decoding="async" />
+                    
+                    {/* 🔥 ACÁ ESTÁ LA MAGIA: Reemplazamos la imagen WebP por el Video */}
+                    <video 
+                        className="hero-main-image" 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        style={{ objectFit: 'cover' }}
+                    >
+                        <source src="/images/video_principal.mp4" type="video/mp4" />
+                    </video>
+                    
                     <div className="hero-mobile-gradient-mask"></div>
                 </div>
                 <div className="hero-mafia__content">
@@ -123,7 +133,6 @@ export default function Home() {
                         >
                             <div className="spotlight-light-layer"></div>
                             
-                            {/* 🔥 NUEVO: Contenedor de la imagen a Ancho Completo */}
                             <div className="category-full-image-wrapper">
                                 {cat.image_url ? (
                                     <img
