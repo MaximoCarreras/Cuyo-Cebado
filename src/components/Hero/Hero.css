@@ -17,12 +17,13 @@
   height: 100%;
   object-fit: cover; /* Reemplaza a background-size: cover */
   object-position: center right; /* Reemplaza a background-position */
-  z-index: 1;
+  
+  /* 🔥 MODO DIOS: Fuerzo al video a tapar todo para saber si carga */
+  z-index: 999; 
 
-  /* --- MÁSCARA DE DEGRADADO (ESCRITORIO) --- */
-  /* El video se funde con la madera animada hacia la izquierda */
-  -webkit-mask-image: linear-gradient(to left, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
-  mask-image: linear-gradient(to left, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
+  /* --- MÁSCARA DE DEGRADADO COMENTADA TEMPORALMENTE --- */
+  /* -webkit-mask-image: linear-gradient(to left, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%); */
+  /* mask-image: linear-gradient(to left, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%); */
 }
 
 /* LA CAPA DEL GRAINIENT (MADERA ANIMADA) */
@@ -137,11 +138,13 @@
     height: 45vh;
     width: 100%;
     object-position: center top;
+    
+    /* Mantenemos el modo Dios activo también en celular */
+    z-index: 999;
 
-    /* --- MÁSCARA DE DEGRADADO (CELULAR) --- */
-    /* El video se funde hacia abajo de forma gradual */
-    -webkit-mask-image: linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
+    /* --- MÁSCARA DE DEGRADADO COMENTADA TEMPORALMENTE --- */
+    /* -webkit-mask-image: linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%); */
+    /* mask-image: linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%); */
   }
 
   /* EL ARREGLO MÓVIL: Eliminamos la forma de la tarjeta rígida */
