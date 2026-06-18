@@ -23,7 +23,10 @@ export default function Hero() {
       style={{ height: viewHeight, minHeight: viewHeight }}
     >
       {/* 1. Capa de VIDEO con la máscara de degradado aplicada en CSS */}
+      
+        {/* 1. Capa de VIDEO */}
       <video
+        key="video-hero" 
         className="hero__video-bg"
         autoPlay
         loop
@@ -31,7 +34,6 @@ export default function Hero() {
         playsInline
       >
         <source src="/images/fondo_hero_principal.mp4" type="video/mp4" />
-        Tu navegador no soporta el formato de video.
       </video>
 
       {/* 2. Capa del fondo de madera animada (React Bits) */}
