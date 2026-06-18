@@ -1,10 +1,10 @@
-.footer-layered {
+.footer-geometric {
     background-color: #1a1614;
     color: #fdfaf7;
     font-family: 'Inter', sans-serif;
     position: relative;
-    overflow: visible; /* Clave para el efecto parallax en el Home */
-    margin-top: 170px; /* Suficiente espacio para el pico gigante */
+    overflow: visible; /* Clave para que los picos sobresalgan */
+    margin-top: 180px; /* Espacio generoso para el pico central */
     padding-top: 30px;
     display: flex;
     flex-direction: column;
@@ -12,25 +12,25 @@
     width: 100%;
 }
 
-/* --- 🔥 CORDILLERA 3D (3 CAPAS) --- */
-.footer-layered__landscape {
+/* --- 🔥 CORDILLERA APLICADA EN 3 CAPAS --- */
+.footer-geometric__landscape {
     position: absolute;
-    top: -145px; /* Empuja las capas por encima del footer */
+    top: -195px; /* Sube las montañas para cortar el fondo del Home */
     left: 0;
     width: 100%;
-    height: 150px;
+    height: 200px;
     pointer-events: none;
     z-index: 1;
 }
 
-.andes-depth {
+.andes-sharp {
     width: 100%;
     height: 100%;
     display: block;
 }
 
 /* --- GRILLA: EXPLORAR | LOGO | CONTACTO --- */
-.footer-layered__container {
+.footer-geometric__container {
     max-width: 1000px;
     width: 100%;
     margin: 0 auto;
@@ -43,14 +43,14 @@
     z-index: 3;
 }
 
-.footer-layered__column {
+.footer-geometric__column {
     display: flex;
     flex-direction: column;
     align-items: center; 
     text-align: center;
 }
 
-.footer-layered__column h4 {
+.footer-geometric__column h4 {
     color: #a5813a;
     font-family: 'Noto Serif', serif;
     font-size: 1.05rem;
@@ -60,7 +60,7 @@
     font-weight: 700;
 }
 
-.footer-layered__column ul {
+.footer-geometric__column ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -69,7 +69,7 @@
     gap: 14px;
 }
 
-.footer-layered__column a {
+.footer-geometric__column a {
     color: #fdfaf7;
     text-decoration: none;
     font-size: 0.95rem;
@@ -77,58 +77,58 @@
     transition: all 0.3s ease;
 }
 
-.footer-layered__column a:hover {
+.footer-geometric__column a:hover {
     color: #a5813a;
     opacity: 1;
 }
 
 /* --- LOGO CENTRAL --- */
-.footer-layered__logo-wrapper {
+.footer-geometric__logo-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0 20px;
 }
 
-.footer-layered-logo {
-    width: 110px; /* Tamaño elegante y centrado */
+.footer-geometric-logo {
+    width: 110px;
     height: auto;
-    opacity: 0.9;
+    opacity: 0.95;
     transition: opacity 0.3s ease;
     filter: drop-shadow(0 0 15px rgba(165, 129, 58, 0.15));
 }
 
-.footer-layered-logo:hover {
+.footer-geometric-logo:hover {
     opacity: 1;
 }
 
-/* --- SECCIÓN REDES SOCIALES (SOLO ICONOS OFICIALES) --- */
-.footer-layered__socials {
+/* --- REDES SOCIALES --- */
+.footer-geometric__socials {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px; /* Separación súper limpia entre logos */
-    padding: 10px 20px 45px;
+    gap: 40px; 
+    padding: 10px 20px 50px;
     position: relative;
     z-index: 3;
 }
 
-.icon-official {
-    color: #8a837b; /* Color apagado que no distrae */
+.icon-social-sharp {
+    color: #8a837b; 
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.icon-official:hover {
-    color: #a5813a; /* Se encienden en dorado al pasar el mouse */
-    transform: translateY(-4px); /* Animación de saltito fluido */
-    filter: drop-shadow(0 4px 10px rgba(165, 129, 58, 0.3)); /* Resplandor dorado */
+.icon-social-sharp:hover {
+    color: #a5813a; 
+    transform: translateY(-4px); 
+    filter: drop-shadow(0 4px 10px rgba(165, 129, 58, 0.3)); 
 }
 
-/* --- BARRA DE COPYRIGHT --- */
-.footer-layered__bottom {
+/* --- COPYRIGHT --- */
+.footer-geometric__bottom {
     width: 100%;
     border-top: 1px solid rgba(255, 255, 255, 0.03);
     padding: 25px 30px;
@@ -140,7 +140,7 @@
     z-index: 3;
 }
 
-.footer-layered__bottom p {
+.footer-geometric__bottom p {
     margin: 0;
     font-size: 0.85rem;
     color: #8a837b;
@@ -148,25 +148,25 @@
     letter-spacing: 0.5px;
 }
 
-/* --- RESPONSIVE MÓVIL --- */
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-    .footer-layered__container {
+    .footer-geometric__container {
         grid-template-columns: 1fr;
         gap: 45px;
         padding-top: 10px;
     }
     
-    .footer-layered__logo-wrapper {
-        order: -1; /* Manda el logo arriba en el celu */
+    .footer-geometric__logo-wrapper {
+        order: -1; 
         padding-bottom: 10px;
     }
 
-    .footer-layered__landscape {
-        top: -85px;
-        height: 90px; /* Escala las 3 capas para pantallas chicas */
+    .footer-geometric__landscape {
+        top: -95px;
+        height: 100px; /* Achica las montañas en celular */
     }
     
-    .footer-layered__socials {
+    .footer-geometric__socials {
         gap: 30px;
     }
 }
