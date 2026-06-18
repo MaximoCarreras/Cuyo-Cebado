@@ -32,7 +32,7 @@ const Community = () => {
                         <h3>Club de Cebadores</h3>
                         <p>Alertas de stock y beneficios exclusivos antes que nadie.</p>
                         {/* LINK ACTUALIZADO AQUÍ */}
-                        <a href="https://whatsapp.com/channel/0029Vb7fvirADTOLBlLu1m2m" target="_blank" rel="noreferrer" className="community__btn">
+                        <a href="https://whatsapp.com/channel/0029Vb7rceD4NVipcLXtzs3C" target="_blank" rel="noreferrer" className="community__btn">
                             UNIRME
                         </a>
                     </div>
