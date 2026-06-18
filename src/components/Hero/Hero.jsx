@@ -27,7 +27,7 @@ export default function Hero() {
         {/* 1. Capa de VIDEO */}
       <video
         key="video-hero" 
-        className="hero__video-bg"
+        className="fondo_hero_principal"
         autoPlay
         loop
         muted
