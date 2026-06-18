@@ -24,7 +24,7 @@ export default function Hero() {
       id="hero"
       style={{ height: viewHeight, minHeight: viewHeight }}
     >
-      {/* 1. Capa de VIDEO usando el archivo importado */}
+      
       <video
         key="video-hero" 
         className="hero__video-bg"
