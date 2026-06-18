@@ -3,8 +3,8 @@
     color: #fdfaf7;
     font-family: 'Inter', sans-serif;
     position: relative;
-    overflow: visible; /* Clave para que los picos sobresalgan */
-    margin-top: 180px; /* Espacio generoso para el pico central */
+    overflow: visible; 
+    margin-top: 180px; 
     padding-top: 30px;
     display: flex;
     flex-direction: column;
@@ -12,10 +12,10 @@
     width: 100%;
 }
 
-/* --- 🔥 CORDILLERA APLICADA EN 3 CAPAS --- */
+/* --- 🔥 CORDILLERA APLICADA EN 3 CAPAS (Parallax real) --- */
 .footer-geometric__landscape {
     position: absolute;
-    top: -195px; /* Sube las montañas para cortar el fondo del Home */
+    top: -195px; 
     left: 0;
     width: 100%;
     height: 200px;
@@ -163,7 +163,7 @@
 
     .footer-geometric__landscape {
         top: -95px;
-        height: 100px; /* Achica las montañas en celular */
+        height: 100px; 
     }
     
     .footer-geometric__socials {
