@@ -33,8 +33,7 @@ export default function Hero() {
         muted
         playsInline
       >
-        {/* 🔥 USAMOS LA VARIABLE DEL VIDEO IMPORTADO AQUÍ */}
-        <source src={videoBg} type="video/mp4" />
+        <source src="/images/video_principal.mp4" type="video/mp4" />
       </video>
 
       {/* 2. Capa del fondo de madera animada */}
