@@ -65,7 +65,7 @@ export default function Footer() {
 
         {/* CANAL DE DIFUSIÓN */}
         {/* Reemplazá TU_LINK_DEL_CANAL por el enlace de invitación largo que te da WhatsApp */}
-        <a href="https://whatsapp.com/channel/https://whatsapp.com/channel/0029Vb7rceD4NVipcLXtzs3C" target="_blank" rel="noreferrer" title="Canal de Difusión" className="icon-social-sharp">
+        <a href="https://whatsapp.com/channel/0029Vb7rceD4NVipcLXtzs3C" target="_blank" rel="noreferrer" title="Canal de Difusión" className="icon-social-sharp">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="28" height="28">
             <path d="M18 8a3 3 0 0 1 0 6"></path>
             <path d="M10 8v11a1 1 0 0 1 -1 1h-1a1 1 0 0 1 -1 -1v-5"></path>
