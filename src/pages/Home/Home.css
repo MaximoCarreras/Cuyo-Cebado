@@ -75,12 +75,11 @@
     z-index: 5;
 }
 
-/* 🔥 ACTUALIZADO: Movimos el video a la derecha (bajamos a 40%) */
 .hero-main-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 40% center; /* Cambiá este 40% a 20% si lo querés MÁS a la derecha */
+    object-position: 40% center; 
     opacity: 0.55; 
     background-color: var(--mafia-black); 
 }
@@ -481,6 +480,11 @@
         z-index: 5;
         -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
         mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    }
+
+    /* 🔥 NUEVO: Centramos el video solo en celulares para que se vea bien el mate */
+    .hero-main-image {
+        object-position: center center; 
     }
 
     .hero-mobile-gradient-mask {
