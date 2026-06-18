@@ -9,18 +9,18 @@
   /* Color Cuyo Brown oficial */
 }
 
-.hero__image-bg {
+.hero__video-bg {
   position: absolute;
   top: 0;
   right: 0;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center right;
+  object-fit: cover; /* Reemplaza a background-size: cover */
+  object-position: center right; /* Reemplaza a background-position */
   z-index: 1;
 
   /* --- MÁSCARA DE DEGRADADO (ESCRITORIO) --- */
-  /* La imagen se funde con la madera animada hacia la izquierda */
+  /* El video se funde con la madera animada hacia la izquierda */
   -webkit-mask-image: linear-gradient(to left, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
   mask-image: linear-gradient(to left, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
 }
@@ -131,15 +131,15 @@
     min-height: 100vh;
   }
 
-  /* La imagen del mate arriba */
-  .hero__image-bg {
+  /* El video del mate arriba */
+  .hero__video-bg {
     position: relative;
     height: 45vh;
     width: 100%;
-    background-position: center top;
+    object-position: center top;
 
     /* --- MÁSCARA DE DEGRADADO (CELULAR) --- */
-    /* La imagen se funde hacia abajo de forma gradual */
+    /* El video se funde hacia abajo de forma gradual */
     -webkit-mask-image: linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%);
   }

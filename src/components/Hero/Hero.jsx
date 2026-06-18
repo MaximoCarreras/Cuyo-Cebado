@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import './Hero.css';
-import heroBgImage from '../../assets/fondo_hero_principal.png';
 import Grainient from '../Backgrounds/Grainient';
 
 export default function Hero() {
@@ -23,11 +22,17 @@ export default function Hero() {
       id="hero"
       style={{ height: viewHeight, minHeight: viewHeight }}
     >
-      {/* 1. Capa de imagen con la máscara de degradado aplicada en CSS */}
-      <div
-        className="hero__image-bg"
-        style={{ backgroundImage: `url(${heroBgImage})` }}
-      ></div>
+      {/* 1. Capa de VIDEO con la máscara de degradado aplicada en CSS */}
+      <video
+        className="hero__video-bg"
+        autoPlay
+        loop
+        muted
+        playsInline
+      >
+        <source src="/images/fondo_hero_principal.mp4" type="video/mp4" />
+        Tu navegador no soporta el formato de video.
+      </video>
 
       {/* 2. Capa del fondo de madera animada (React Bits) */}
       <div className="hero__shape">
