@@ -6,49 +6,17 @@
   align-items: center;
   overflow: hidden;
   background-color: #2b2520;
-  /* Color Cuyo Brown oficial */
 }
 
 .hero__video-bg {
   position: absolute;
   top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Reemplaza a background-size: cover */
-  object-position: center right; /* Reemplaza a background-position */
-  
-  /* 🔥 MODO DIOS: Fuerzo al video a tapar todo para saber si carga */
-  z-index: 999; 
-
-  /* --- MÁSCARA DE DEGRADADO COMENTADA TEMPORALMENTE --- */
-  /* -webkit-mask-image: linear-gradient(to left, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%); */
-  /* mask-image: linear-gradient(to left, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%); */
-}
-
-/* LA CAPA DEL GRAINIENT (MADERA ANIMADA) */
-.hero__shape {
-  position: absolute;
-  top: -10%;
-  left: -20%;
-  width: 75%;
-  height: 120%;
-  z-index: 2;
-  overflow: hidden;
-
-  /* --- RESTAURADO: SEMICÍRCULO GRANDE ORIGINAL (Escritorio) --- */
-  /* Es una curva amplia para un flujo premium */
-  border-top-right-radius: 50%;
-  border-bottom-right-radius: 50%;
-  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
-}
-
-.hero__grainient {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1; /* Al fondo de todo */
+  opacity: 0.6; /* Un poco oscuro para que el texto se lea */
 }
 
 .hero__container {
@@ -59,10 +27,9 @@
   padding: 0 24px;
 }
 
-/* --- VISTA ESCRITORIO --- */
 .hero__content {
   max-width: 1000px;
-  padding-left: 35%;
+  padding-left: 10%;
 }
 
 .hero__title {
@@ -90,7 +57,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* BOTONES (Con separación) */
 .hero__actions {
   display: flex;
   gap: 32px;
@@ -121,67 +87,21 @@
   border: 2px solid #a5813a;
 }
 
-/* =========================================
-   === ADAPTACIÓN MÓVIL (FUNDIDO COMPLETO) === 
-   ========================================= */
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
-    justify-content: flex-start;
-    height: auto !important;
+    justify-content: center;
     min-height: 100vh;
-  }
-
-  /* El video del mate arriba */
-  .hero__video-bg {
-    position: relative;
-    height: 45vh;
-    width: 100%;
-    object-position: center top;
-    
-    /* Mantenemos el modo Dios activo también en celular */
-    z-index: 999;
-
-    /* --- MÁSCARA DE DEGRADADO COMENTADA TEMPORALMENTE --- */
-    /* -webkit-mask-image: linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%); */
-    /* mask-image: linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0.3) 90%, transparent 100%); */
-  }
-
-  /* EL ARREGLO MÓVIL: Eliminamos la forma de la tarjeta rígida */
-  .hero__shape {
-    position: absolute;
-    top: 35vh;
-    /* Sube la forma para el fundido invisible */
-    left: 0;
-    width: 100%;
-    height: calc(100% - 35vh);
-
-    /* FIX DEFINITIVO: Sin curvas, fondo continuo e inmersivo */
-    border-radius: 0;
-    margin-bottom: 0;
-    box-shadow: none;
-  }
-
-  .hero__container {
-    z-index: 3;
-    padding-top: 40px;
-    padding-bottom: 80px;
   }
 
   .hero__content {
     padding: 0 24px;
     text-align: center;
-    max-width: 100%;
     padding-left: 0;
   }
 
   .hero__title {
     font-size: clamp(2.3rem, 9vw, 3rem);
-  }
-
-  .hero__subtitle {
-    font-size: 1rem;
-    margin-bottom: 30px;
   }
 
   .hero__actions {

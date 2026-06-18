@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import './Hero.css';
-// 🔥 IMPORTAMOS EL VIDEO DIRECTAMENTE DESDE ASSETS
-import videoBg from '../../assets/video_principal.mp4'; 
-import Grainient from '../Backgrounds/Grainient';
+// import Grainient from '../Backgrounds/Grainient'; // Lo apagamos un segundo
 
 export default function Hero() {
   const [viewHeight, setViewHeight] = useState('100svh');
@@ -24,36 +22,21 @@ export default function Hero() {
       id="hero"
       style={{ height: viewHeight, minHeight: viewHeight }}
     >
-      
+      {/* 🔥 VIDEO DIRECTO (Sin etiqueta source) */}
       <video
-        key="video-hero" 
         className="hero__video-bg"
         autoPlay
         loop
         muted
         playsInline
-      >
-        <source src="/images/video_principal.mp4" type="video/mp4" />
-      </video>
+        src="/images/video_principal.mp4"
+      ></video>
 
-      {/* 2. Capa del fondo de madera animada */}
-      <div className="hero__shape">
-        <Grainient
-          color1="#140d07"
-          color2="#3e2715"
-          color3="#26170d"
-          timeSpeed={0.18}
-          warpStrength={1.5}
-          warpFrequency={3}
-          warpSpeed={1.2}
-          rotationAmount={100}
-          noiseScale={1.5}
-          grainAmount={0.06}
-          grainAnimated={true}
-          zoom={1}
-          className="hero__grainient"
-        />
-      </div>
+      {/* FONDO DE MADERA APAGADO PARA PROBAR */}
+      {/* <div className="hero__shape">
+        <Grainient ... />
+      </div> 
+      */}
 
       <div className="hero__container">
         <div className="hero__content">
