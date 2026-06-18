@@ -75,11 +75,14 @@
     z-index: 5;
 }
 
+/* 🔥 ACTUALIZADO: Estilo para el video de fondo hero */
 .hero-main-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: 80% center; 
+    opacity: 0.55; /* Bajamos la opacidad para que el texto resalte más */
+    background-color: var(--mafia-black); /* Fondo de seguridad */
 }
 
 .spotlight-overlay {
@@ -123,7 +126,7 @@
 .card-cat-dark-spotlight {
     background: var(--mafia-gray);
     border-radius: 25px;
-    padding: 0; /* 🔥 Eliminamos el padding para que la foto ocupe todo */
+    padding: 0; 
     text-decoration: none;
     border: 1px solid rgba(165, 129, 58, 0.2);
     transition: 0.4s ease;
@@ -152,14 +155,13 @@
     opacity: 1;
 }
 
-/* 🔥 NUEVO: BLOQUE PARA LA IMAGEN ANCHO COMPLETO */
 .category-full-image-wrapper {
     width: 100%;
-    aspect-ratio: 1 / 1; /* Cuadrado perfecto arriba */
+    aspect-ratio: 1 / 1; 
     overflow: hidden;
     position: relative;
     z-index: 2; 
-    border-bottom: 1px solid rgba(165, 129, 58, 0.2); /* Separador sutil */
+    border-bottom: 1px solid rgba(165, 129, 58, 0.2);
 }
 
 .category-card-full-img {
@@ -170,7 +172,7 @@
 }
 
 .card-cat-dark-spotlight:hover .category-card-full-img {
-    transform: scale(1.08); /* Zoom sutil e inmersivo al pasar el mouse */
+    transform: scale(1.08); 
 }
 
 .category-fallback-icon {
@@ -184,7 +186,6 @@
     background: rgba(0, 0, 0, 0.2);
 }
 
-/* 🔥 ACTUALIZADO: Contenedor de texto con su propio relleno inferior */
 .card-cat-content {
     z-index: 2;
     position: relative;
@@ -193,7 +194,7 @@
     align-items: center;
     text-align: center;
     width: 100%;
-    padding: 30px 20px; /* Le devolvemos espacio de respiro a las letras */
+    padding: 30px 20px;
 }
 
 .cat-text-display h3 {
@@ -448,7 +449,7 @@
         text-align: center;
         position: relative;
         z-index: 10;
-        margin-top: -60px; /* 🔥 Subimos el texto un poquito para que se monte sobre la transición */
+        margin-top: -60px;
     }
 
     .hero-title {
@@ -478,20 +479,12 @@
         min-height: 300px;
         clip-path: none;
         z-index: 5;
-        /* 🔥 LA MAGIA: Máscara de transparencia real. La foto se desvanece suavemente */
         -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
         mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
     }
 
     .hero-mobile-gradient-mask {
-        display: none; /* 🔥 Apagamos el gradiente negro viejo que te generaba la línea recta */
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 40%;
-        background: linear-gradient(to top, var(--mafia-black) 0%, transparent 100%);
-        z-index: 6;
+        display: none; 
     }
 
     .home-categories-section {
@@ -511,22 +504,20 @@
 
     .card-cat-dark-spotlight {
         padding: 0; 
-        border-radius: 12px; /* 🔥 Borde un poco más suave para celular */
+        border-radius: 12px;
     }
 
-    /* 🔥 LA MAGIA PANORÁMICA: Hace la foto más ancha y bajita en celular */
     .category-full-image-wrapper {
         aspect-ratio: 4 / 3; 
     }
 
-    /* 🔥 Ajuste súper compacto para el texto en celular */
     .card-cat-content {
-        padding: 10px; /* Reducimos el espacio en blanco */
+        padding: 10px;
     }
 
     .cat-text-display h3 {
-        font-size: 0.8rem; /* Letra un poco más chica */
-        margin-bottom: 2px; /* Menos separación con el "Explorar" */
+        font-size: 0.8rem;
+        margin-bottom: 2px;
     }
 
     .cat-text-display span {
@@ -631,11 +622,11 @@
         font-size: 0.75rem;
     }
 }
+
 /* =========================================================
    EFECTO SPOTLIGHT ESTANDARIZADO (ALTA INTENSIDAD)
    ========================================================= */
 
-/* 1. Reflector del Inicio (Hero) */
 .hero-spotlight-layer {
     position: absolute;
     top: 0; 
@@ -644,7 +635,6 @@
     bottom: 0;
     pointer-events: none;
     z-index: 2; 
-    /* Centro fuerte al 50%, halo medio al 15%, y difuminado */
     background: radial-gradient(
         800px circle at var(--hero-x, 50%) var(--hero-y, 50%), 
         rgba(165, 129, 58, 0.50) 0%, 
@@ -653,7 +643,6 @@
     );
 }
 
-/* 2. Reflector de las Colecciones (Tarjetas) */
 .spotlight-light-layer {
     position: absolute;
     top: 0; 
@@ -662,7 +651,6 @@
     bottom: 0;
     pointer-events: none;
     z-index: 1;
-    /* Misma configuración de intensidad, adaptada al tamaño de la tarjeta */
     background: radial-gradient(
         500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
         rgba(165, 129, 58, 0.50) 0%, 
@@ -670,21 +658,18 @@
         transparent 70%
     );
     opacity: 0; 
-    transition: opacity 0.3s ease; /* Transición un poco más rápida para que reaccione al toque */
+    transition: opacity 0.3s ease; 
 }
 
-/* Solo prendemos la luz de la tarjeta cuando el mouse pasa por encima */
 .card-cat-dark-spotlight:hover .spotlight-light-layer {
     opacity: 1;
 }
 
-/* Aseguramos que el contenido de la tarjeta quede siempre por encima de la luz */
 .card-cat-content {
     position: relative;
     z-index: 2;
 }
 
-/* 🔥 APAGAMOS EL SPOTLIGHT EN CELULARES (Porque no hay mouse) */
 @media (max-width: 768px) {
     .hero-spotlight-layer,
     .spotlight-light-layer {
